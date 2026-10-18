@@ -1,0 +1,56 @@
+/* Mother Machine · 05 Home: regole della home sopra la pagina approvata.
+   Soprattutto il telefono: gerarchia dell'apertura, film visibile, 05.2 una scheda alla volta, 05.4 senza tagli. */
+
+/* ---- 05.1 · la copertina del film: su telefono e tablet, dove la finestra del film non c'e' ---- */
+.h3pf{display:none}
+@media (max-width:999px){
+  .h3pf{all:unset;box-sizing:border-box;display:grid;cursor:pointer;width:calc(100% - 2*clamp(16px,4vw,56px));margin:clamp(32px,8vw,48px) auto clamp(40px,10vw,64px);-webkit-tap-highlight-color:transparent}
+  .h3pfv{position:relative;display:grid;place-items:center;aspect-ratio:16/9;background:#F4F2EC;overflow:hidden}
+  .h3pfl{width:58%;color:#121211;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+  .h3pfl .mm{display:block;width:100%;height:auto;fill:currentColor}
+  .h3pfv .grain{position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:radial-gradient(rgba(18,18,17,.12) 1px,transparent 1px);background-size:3px 3px}
+  .h3pfb{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#1A1A18;color:#F4F2EC}
+  .h3pfb .pl{width:0;height:0;border-left:9px solid var(--sig);border-top:6px solid transparent;border-bottom:6px solid transparent}
+  .h3pfb em{margin-left:auto;font-style:normal;opacity:.6}
+  .h3pf:active .h3pfl{transform:scale(.97)}
+  .h3pf:focus-visible{outline:2px solid #F4F2EC;outline-offset:3px}
+  /* la copertina sta subito sotto "Free first call.": il vuoto sotto il testo lo fa lei */
+  .h3x>.in{padding-bottom:0}
+  /* il link piccolo "Watch the film" accanto a "Free first call." non serve piu': c'e' la copertina */
+  .h3wf{display:none!important}
+}
+
+/* ---- 05.1 · gerarchia su telefono: la frase sotto il titolo piu' piccola e piu' tenue ---- */
+@media (max-width:700px){
+  .hm .h3b .lead{font-size:16px;line-height:1.45;color:var(--mut);max-width:34ch}
+  .h3b{gap:18px;padding-top:18px}
+}
+
+/* ---- 05.1 · "Start a project" su telefono come su desktop: carta con il quadrato nero; al tocco sale il pomodoro ----
+   Prima era sempre arancione (il pomodoro va solo su cio' che risponde, manuale). */
+@media (hover:none){
+  .h3cta .fl{transform:translateY(101%)}
+  .h3cta .gq i{transform:scale(0)}
+  .h3cta:active .fl{transform:none;transition-duration:.25s}
+  .h3cta:active .gq i{transform:none}
+}
+
+/* ---- 05.2 · su telefono una scheda alla volta, scelta con due tasti quadrati come la pulsantiera ---- */
+.mtabs{display:none}
+@media (max-width:760px){
+  .mtabs{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:-8px}
+  .mtabs button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px 10px 8px 8px;border:1.5px solid rgba(18,18,17,.22);background:rgba(255,255,255,.22);color:#121211;font:500 11.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;transition:background-color .25s,color .25s,border-color .25s;-webkit-tap-highlight-color:transparent}
+  .mtabs .sq{display:grid;place-items:center;width:32px;height:32px;box-sizing:border-box;border:1.5px solid currentColor;font-size:11px;flex:none}
+  .mtabs button[aria-selected="true"]{background:#121211;border-color:#121211;color:#F4F2EC}
+  .mtabs button[aria-selected="true"] .sq{background:#F4F2EC;color:#121211;border-color:#F4F2EC}
+  .mtabs button:focus-visible{outline:2px solid #121211;outline-offset:2px}
+  .mcards .gc:not(.on){display:none}
+  .mcards .gc.on{animation:mtin .35s cubic-bezier(.2,.8,.2,1)}
+  @keyframes mtin{from{opacity:0;translate:0 10px}to{opacity:1;translate:0 0}}
+}
+
+/* ---- 05.4 · la fila che scorre di lato non taglia piu' la scheda sollevata ne' la sua ombra ---- */
+@media (max-width:620px){
+  .vrw{padding-top:14px!important;padding-bottom:58px!important;margin-top:-14px;margin-bottom:-42px}
+}
+@media (prefers-reduced-motion:reduce){.mcards .gc.on{animation:none}}

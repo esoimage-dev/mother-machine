@@ -105,6 +105,21 @@ def ritocchi(nome, t):
         t = una(t, '<div class="wm mo"><span>No. 011</span><span>Brand</span></div>', '<div class="wm mo"><span>Study 02</span><span>Brand</span></div>', 'Study 02')
         t = una(t, '<span class="mo mut">Concepts · example figures</span>', '<span class="mo mut">Studies use example figures</span>', 'nota lavori')
         t = una(t, '<span class="mo mut">14 projects in the register</span>', '<span class="mo mut">The full register</span>', 'conteggio')
+        # 05.1 su telefono: la copertina del film sotto il bottone (fuori dalla griglia che misura il titolo)
+        t = una(t, '<div class="h3fly" id="h3fly" aria-hidden="true"></div>',
+                '<button class="h3pf" id="h3pf" type="button" aria-label="Watch the film, with sound">'
+                '<span class="h3pfv"><span class="h3pfl" data-a="heroS"></span><span class="grain"></span></span>'
+                '<span class="h3pfb mo"><i class="pl"></i>Watch the film<em>0:38</em></span></button>'
+                '<div class="h3fly" id="h3fly" aria-hidden="true"></div>', 'copertina film')
+        # 05.1 su telefono: il titolo si misura a peso medio (non al 900), cosi' riempie la larghezza
+        t = una(t, "make();h.style.fontSize='100px';CH.forEach(function(c){c.el.style.fontWeight=tileOn()?560:HI});",
+                "make();h.style.fontSize='100px';CH.forEach(function(c){c.el.style.fontWeight=tileOn()?560:(innerWidth<700?600:HI)});", 'peso titolo')
+        # 05.2 su telefono: i due tasti
+        t = una(t, '<div class="mcards">',
+                '<div class="mtabs" role="tablist" aria-label="What we build">'
+                '<button type="button" role="tab" aria-selected="true"><span class="sq">02</span>Systems</button>'
+                '<button type="button" role="tab" aria-selected="false"><span class="sq">03</span>Brand</button></div>'
+                '<div class="mcards">', 'tasti 05.2')
 
     if nome == 'brand':
         # via la prima sezione (titolo e vetrina): l'apertura diventa la leva "Assembled / Taken apart"
@@ -287,9 +302,12 @@ def monta(nome, src):
         assert s > 0 and e > s, 'script del caso'
         t = t[:s] + t[e:]
 
+    if nome == 'home':
+        t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/home.css">', 'stile home')
+
     # 6. coda
     i = t.rfind('</body>')
-    coda = CODA + ('<script src="/js/work.js"></script>' if nome == 'work' else '')
+    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'home': '<script src="/js/home.js"></script>'}.get(nome, '')
     t = t[:i] + coda + t[i:] if i > 0 else t + coda
     (OUT / f'{nome}.html').write_text(t, encoding='utf8')
     return luce

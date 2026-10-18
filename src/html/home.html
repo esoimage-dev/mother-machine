@@ -1116,7 +1116,7 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
 .lsug-off .lsug{opacity:0;pointer-events:none}
 @media (prefers-reduced-motion:reduce){.lsug{transition:opacity .2s}}
 
-</style><link rel="stylesheet" href="/css/mm-sito.css">
+</style><link rel="stylesheet" href="/css/mm-sito.css"><link rel="stylesheet" href="/css/home.css">
 <header class="bar" id="bar" data-luce="notte"><a class="blogo" href="#top" aria-label="Mother Machine, home"><span class="lgB" data-a="heroS"><i class="lgF" aria-hidden="true">&#xE000;</i></span><span class="lgS" data-a="heroW"><i class="lgF" aria-hidden="true">&#xE000;</i></span></a><button class="dispB disp3" id="dispB" aria-label="Floors: you are on 05, Home. Open the floors panel" aria-expanded="false" aria-controls="navLift"><span class="dn"><span class="dir" id="bA"></span><span class="rl nw" id="bN"><b>05</b></span></span><span class="rl nm" id="bL"><b>Home</b></span><span class="kb" id="bK" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span></button></header><script>(function(){var R=document.documentElement,b=document.getElementById('bar');if(R.classList.contains('mm-arr')){b.classList.add('riding');if(R.classList.contains('mm-arr-fold'))b.classList.add('fold')}})();</script>
 <div class="navdim" id="navDim"></div>
 <nav class="flr navlift" id="navLift" data-luce="notte" aria-label="Floors"></nav>
@@ -1134,7 +1134,7 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
           <span class="h3lk mo"><span>Free first call.</span><button class="h3wf mo" id="h3wf"><i class="pl"></i>Watch the film</button></span></div>
       </div>
     </div>
-    <div class="h3fly" id="h3fly" aria-hidden="true"></div>
+    <button class="h3pf" id="h3pf" type="button" aria-label="Watch the film, with sound"><span class="h3pfv"><span class="h3pfl" data-a="heroS"></span><span class="grain"></span></span><span class="h3pfb mo"><i class="pl"></i>Watch the film<em>0:38</em></span></button><div class="h3fly" id="h3fly" aria-hidden="true"></div>
   </section>
   <div class="h3ov" id="h3ov" data-luce="notte" aria-hidden="true"><div class="h3ovb"><span class="mo"><span class="x">Mother Machine · </span>The film</span><span class="sp"></span><button class="mo" id="h3snd">Sound on</button><button class="mo" id="h3x">Close</button></div><div class="h3ovp"><i id="h3pr"></i></div></div>
 <script src="/js/lg-8d8e0751.js"></script>
@@ -1145,7 +1145,7 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
       <canvas class="mfield" aria-hidden="true"></canvas>
       <div class="mgrain" aria-hidden="true"></div>
       <div class="mtop"><span class="mo"><i class="run"></i>05.2 · What we build</span><h2>One studio. The inside and the outside.</h2></div>
-      <div class="mcards">
+      <div class="mtabs" role="tablist" aria-label="What we build"><button type="button" role="tab" aria-selected="true"><span class="sq">02</span>Systems</button><button type="button" role="tab" aria-selected="false"><span class="sq">03</span>Brand</button></div><div class="mcards">
         <div class="glass gc">
           <canvas class="gcopy" aria-hidden="true"></canvas>
           <div class="gh"><span class="mo">Inside · custom software</span><span class="mo gfl">Floor 02</span></div>
@@ -1426,7 +1426,7 @@ function fit(){var W=mid.clientWidth,g=sec.querySelector('.h3g'),cs=getComputedS
   var Hav=sec.offsetHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-g.children[0].offsetHeight-g.children[2].offsetHeight-2*parseFloat(cs.rowGap||cs.gap||24);
   /* se c'è il film a destra, la frase gli lascia il suo spazio */
   var Wt=tileOn()?W-fig.offsetWidth-56:W;
-  make();h.style.fontSize='100px';CH.forEach(function(c){c.el.style.fontWeight=tileOn()?560:HI});
+  make();h.style.fontSize='100px';CH.forEach(function(c){c.el.style.fontWeight=tileOn()?560:(innerWidth<700?600:HI)});
   var mw=0;[].forEach.call(h.children,function(d){mw=Math.max(mw,d.scrollWidth)});
   fs=Math.min(100*Wt/mw*.97,Hav*.93/(LINES.length*.86));h.style.fontSize=fs.toFixed(1)+'px';CH.forEach(function(c){c.el.style.fontWeight=c.w});
   placeTile()}
@@ -2011,4 +2011,4 @@ if('IntersectionObserver' in window){new IntersectionObserver(function(es){vis=e
 })();
 
 </script>
-<script src="/js/mm-sito.js"></script>
+<script src="/js/mm-sito.js"></script><script src="/js/home.js"></script>

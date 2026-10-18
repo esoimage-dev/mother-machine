@@ -64,6 +64,13 @@ html.mm-arr #ride .pg,html.mm-arr #ride .disp{visibility:hidden}
 .ftr nav a,.flf a{text-decoration:none!important;border-bottom:1px solid transparent;padding-bottom:1px;transition:border-color .2s,opacity .2s}
 .ftr nav a:hover,.ftr nav a:focus-visible,.ftr nav a[aria-current],.flf a:hover,.flf a:focus-visible,.flf a[aria-current]{border-bottom-color:currentColor;opacity:1}
 
+/* ---- footer su telefono: pagine in due colonne, poi le lingue a sinistra, poi il copyright ---- */
+@media (max-width:760px){
+  .ftr .row{display:grid;justify-content:start;gap:26px}
+  .ftr nav{display:grid;grid-template-columns:repeat(2,max-content);gap:14px 40px}
+  .flf{margin:0!important}
+}
+
 /* ---- la freccia nel quadrato (See all work, Read the case, Start a work order) ----
    Sfondo e frecce con la stessa curva e tempi brevi: passando veloci non resta il quadrato arancione vuoto a meta'. */
 .arq{transition:background-color .2s ease-out,color .2s ease-out}
