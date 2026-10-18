@@ -1,0 +1,14 @@
+Mother Machine - lavori approvati (aggiornato il 14 ottobre 2026, sera)
+
+01 Manuale      mother-machine-manuale.html: il manuale completo, versione 38: testata, pulsantiera con la chiave, cursore e regole del vetro come la home
+02 Film         mother-machine-film-16x9.html: il film orizzontale in codice, con la musica J
+                mother-machine-film-9x16.html: il film verticale per il telefono, in codice, stessa musica
+03 Sito         mother-machine-home.html: la home approvata. Hero 3 (il carattere che respira), i lavori,
+                il momento di vetro (What we build), la testata con la colonna dei piani,
+                il cursore a presa, la pulsantiera con la chiave per LG ("Staff only")
+04 Marchio      kit del marchio, il logo nella barra, i caratteri (scelti Hanken Grotesk e DM Mono)
+_versioni vecchie   quello che e' stato sostituito (anche i vecchi hero: palazzo, raggi X, prima home)
+
+I film si aprono con il browser: premi play e accendi Sound.
+Attenzione: l'MP4 nella cartella MotherMachine e' della versione precedente del 16:9 (prima della m che nasce dalla pioggia e della nuova frase finale).
+Il codice per rifare tutto e le versioni precedenti sono in "Backup 2026-10-13".
