@@ -35,7 +35,7 @@ META = {
     'systems': ('/systems', 'Mother Machine · Systems',
                 'Back offices, apps and automations, built around how your team actually works. Not a template bent into shape.', '#BEC2BF'),
     'brand': ('/brand', 'Mother Machine · Brand',
-              'Identity, websites and interfaces that hold together, from the logo to the last button.', '#FBFAF7'),
+              'Identity, websites and interfaces that hold together, from the logo to the last button.', '#0F0F0E'),
     'studio': ('/studio', 'Mother Machine · Studio',
                'A small studio. On purpose. The people who design your system are the people who build it.', '#EEC3B1'),
     'contact': ('/contact', 'Mother Machine · Contact',
@@ -69,6 +69,57 @@ def testa_meta(nome):
             '<meta name="twitter:card" content="summary_large_image">'
             f'<meta name="twitter:title" content="{e(titolo)}"><meta name="twitter:description" content="{e(desc)}">'
             f'<meta name="twitter:image" content="{img}">')
+
+
+CORRENTE = {'home': '05 Home', 'work': '04 Work', 'progetto': '04 Work', 'brand': '03 Brand', 'systems': '02 Systems',
+            'studio': '01 Studio', 'contact': 'G Contact'}
+
+VITALIA_HOME = (
+    '<a class="wc" href="/work/project" data-go="4" data-dest="/work/project">'
+    '<div class="wv" style="--c:#C8462D"><div class="wph"><b>Vitalia\'s</b><span class="mo">Cover · the truck at an event</span></div>'
+    '<span class="wcta mo"><i></i>View project</span></div>'
+    '<div class="wm mo"><span>No. 012</span><span>Brand · Systems</span></div>'
+    '<h3>Vitalia\'s Pizza on Wheels</h3>'
+    '<p>A new business, built from zero: the brand, the website and the system that runs it.</p>'
+    '<div class="wn"><b data-v="12" data-s=" h">12 h</b><span>a week nobody spends on the phone or in DMs</span></div></a>')
+
+
+def ritocchi(nome, t):
+    """Modifiche decise con Eso sopra le pagine approvate (19 ottobre 2026)."""
+    # footer: la pagina dove sei e' sottolineata come la lingua scelta
+    if nome in CORRENTE:
+        voce = CORRENTE[nome]
+        t, n = re.subn(r'(<footer class="ftr"[^>]*>.*?<nav aria-label="Floors">.*?)(<a [^>]*>)(' + re.escape(voce) + r'</a>)',
+                       lambda m: m.group(1) + m.group(2)[:-1] + ' aria-current="page">' + m.group(3), t, count=1, flags=re.S)
+        assert n == 1, f'footer {nome}'
+
+    if nome == 'home':
+        # i lavori in home: Vitalia's (vero) al posto di Lumen Lab; i concept si chiamano Study come nel registro
+        s = t.find('<a class="wc" href="#" data-go="4">', t.find('Forno Nove'))
+        e = t.find('</a>', t.find('Lumen Lab', s)) + len('</a>')
+        assert 'Lumen Lab' in t[s:e] and 'Forno Nove' not in t[s:e], 'scheda Lumen Lab'
+        t = t[:s] + t[e:]
+        s = t.find('<div class="wkg">') + len('<div class="wkg">')
+        t = t[:s] + '\n      ' + VITALIA_HOME + t[s:]
+        t = una(t, '<div class="wm mo"><span>No. 014</span><span>Systems</span></div>', '<div class="wm mo"><span>Study 03</span><span>Systems</span></div>', 'Study 03')
+        t = una(t, '<div class="wm mo"><span>No. 011</span><span>Brand</span></div>', '<div class="wm mo"><span>Study 02</span><span>Brand</span></div>', 'Study 02')
+        t = una(t, '<span class="mo mut">Concepts · example figures</span>', '<span class="mo mut">Studies use example figures</span>', 'nota lavori')
+        t = una(t, '<span class="mo mut">14 projects in the register</span>', '<span class="mo mut">The full register</span>', 'conteggio')
+
+    if nome == 'brand':
+        # via la prima sezione (titolo e vetrina): l'apertura diventa la leva "Assembled / Taken apart"
+        s = t.find('<section class="hs bro"'); e = t.find('</section>', s) + len('</section>')
+        assert s > 0, 'sezione bro'
+        t = t[:s] + t[e:]
+        s = t.find('  /* 1 · tre marchi, un solo componente */'); e = t.find('  /* 2 · la leva smonta lo schermo */')
+        assert 0 < s < e, 'script vetrina'
+        t = t[:s] + t[e:]
+        t = una(t, '<section class="hs brx" data-luce="notte" data-f="03.1" data-n="The system" id="b2">',
+                '<section class="hs brx brhero" data-luce="notte" data-f="03" data-n="Brand" id="b2">', 'apertura brand')
+        t = una(t, '<div class="brh2"><span class="mo mut">The system underneath</span><h2>Every brand is a machine too. <span>Pull the lever.</span></h2></div>',
+                '<div class="brh2"><span class="mo mut">03 · Brand · Outside</span><h1>Every brand is a machine too. <span>Pull the lever.</span></h1>'
+                '<p class="brlede">Identity, websites and interfaces that hold together, from the logo to the last button.</p></div>', 'titolo brand')
+    return t
 
 
 def una(t, old, new, cosa):
@@ -122,9 +173,9 @@ DOPO_TESTATA = ("<script>(function(){var R=document.documentElement,b=document.g
 
 # ---------- 4. ascensore ----------
 ASCENSORE = ("var MM_PAGES=" + INDIRIZZI + ";"
-             "var MM_LEAVE=function(k){if(!MM_PAGES[k])return false;"
-             "try{sessionStorage.setItem('mm-arrive',JSON.stringify({to:MM_PAGES[k],fold:bar.classList.contains('fold')}))}catch(e){}"
-             "location.href=MM_PAGES[k];return true};"
+             "var MM_LEAVE=function(k){if(!MM_PAGES[k])return false;var to=window.MM_DEST||MM_PAGES[k];window.MM_DEST=null;"
+             "try{sessionStorage.setItem('mm-arrive',JSON.stringify({to:to,fold:bar.classList.contains('fold')}))}catch(e){}"
+             "location.href=to;return true};"
              "var MM_PRE=function(k){if(!MM_PAGES[k]||document.querySelector('link[data-mm=\"'+k+'\"]'))return;"
              "var l=document.createElement('link');l.rel='prefetch';l.href=MM_PAGES[k];l.setAttribute('data-mm',k);document.head.appendChild(l)};")
 
@@ -166,13 +217,25 @@ def registro():
         assert f'class="art {cov}"' in corpo and vecchio in corpo, cov
         corpo = corpo.replace('<span class="wcta mo"><i></i>View project</span>', '').replace(f'<span>{vecchio}</span>', f'<span>{nuovo}</span>')
         out.append(f'<div class="wc" data-s="{settore}" data-cov="{cov}">{corpo}</div>')
-    return una(t, '<!-- MM:COPERTINE-STUDI -->', '\n      '.join(out), 'segnaposto copertine')
+    t = una(t, '<!-- MM:COPERTINE-STUDI -->', '\n      '.join(out), 'segnaposto copertine')
+    # la porta per G: la stessa della home, testo approvato
+    s = home.find('<section class="hs gd"'); e = home.find('</section>', s) + len('</section>')
+    t = una(t, '<!-- MM:PORTA-G -->', home[s:e], 'porta G')
+    # la targhetta si conta dalle righe del registro: niente numeri da aggiornare a mano
+    reg = t[t.find('<ol class="wkl">'):t.find('</ol>', t.find('<ol class="wkl">'))]
+    serie = sorted(int(n) for n in re.findall(r'<span class="wk-no mo">No\. (\d+)</span>', reg))
+    t = una(t, '<!-- MM:SERIE -->', f'No. {serie[0]:03d} · {serie[-1]:03d}', 'serie')
+    t = una(t, '<!-- MM:RUNNING -->', str(reg.count('wk-sg wk-run')), 'running')
+    t = una(t, '<!-- MM:BUILD -->', str(reg.count('wk-sg wk-bld')), 'in build')
+    t = una(t, '<!-- MM:STUDIES -->', str(reg.count('wk-sg wk-std')), 'studi')
+    return t
 
 
 def monta(nome, src):
     t = (PROTO / f'{src}.html').read_text(encoding='utf8')
     t = font_esterni(t)
     t = dati_esterni(t)
+    t = ritocchi(nome, t)
 
     # 2. la testata nasce con la luce della prima sezione
     prima = re.search(r'<section[^>]*\bdata-f\b[^>]*>', t)
@@ -197,7 +260,7 @@ def monta(nome, src):
     t = una(t, "await S.open();S.busy=false;return true};",
             "if(window.MM_LEAVE&&MM_LEAVE(to))return new Promise(function(){});await (window.MM_DOORS?MM_DOORS.open(S.open()):S.open());S.busy=false;return true};", 'apertura porte')
     t = una(t, "function go(k){if(SH.busy||k===onFloor)return;", "function go(k){if(SH.busy||k===onFloor)return;MM_PRE(k);document.documentElement.classList.add('mm-riding');", 'go')
-    t = una(t, "}).then(function(){onFloor=k;", "}).then(function(){if(MM_PAGES[k]){location.href=MM_PAGES[k];return}document.documentElement.classList.remove('mm-riding');onFloor=k;", 'fine corsa')
+    t = una(t, "}).then(function(){onFloor=k;", "}).then(function(){if(MM_PAGES[k]){location.href=window.MM_DEST||MM_PAGES[k];return}document.documentElement.classList.remove('mm-riding');onFloor=k;", 'fine corsa')
     t, n = re.subn(r"(\n  if\(k===-?\d+)\)\{pg\.innerHTML='';return\}", r"\1||MM_PAGES[k]){pg.innerHTML='';return}", t)
     assert n == 1, 'segnaposto'
 

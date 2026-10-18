@@ -74,6 +74,12 @@
     }
   };
 
+  /* ---- una scheda puo' portare dritta alla pagina di un progetto (data-dest), sempre con l'ascensore ---- */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-dest]');
+    if (a) window.MM_DEST = a.getAttribute('data-dest');
+  }, true);
+
   /* ---- il logo e "05 Home" nel footer portano alla home, con l'ascensore ---- */
   var p = location.pathname;
   if (p !== '/' && p !== '/index.html') {

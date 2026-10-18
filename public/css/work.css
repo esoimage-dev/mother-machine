@@ -30,12 +30,6 @@
 .wkfl{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:30px;padding-top:18px;border-top:1.5px solid var(--ink)}
 .wkfl b{font:600 clamp(20px,1.6vw,24px)/1 var(--f-body);letter-spacing:-.02em}
 
-/* copertina segnaposto: colore del cliente, nome in grande, didascalia mono */
-.wph{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;gap:14px;color:#F4F2EC;transition:scale .7s cubic-bezier(.2,.8,.2,1)}
-.wph b{font:700 clamp(40px,6vw,96px)/.9 var(--f-body);letter-spacing:-.05em}
-.wph span{position:absolute;left:16px;top:14px;opacity:.7}
-.wv .wph b{font-size:clamp(34px,4vw,60px)}
-
 /* ---- 04.2 · il registro ---- */
 .wkr{padding-block:clamp(40px,5vw,72px) clamp(72px,9vw,128px)}
 .wkrh{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;padding-bottom:22px}
@@ -95,15 +89,6 @@
 .wkcov>[hidden]{display:none}
 .wkcov .wc p{color:var(--mut);font-size:16px;margin:0;max-width:30ch}
 .wkcov div.wc .wv{cursor:default}
-
-/* ---- G · la porta ---- */
-.wkg0{padding-block:clamp(96px,11vw,160px)}
-.wkg0 h2{margin:18px 0 clamp(32px,4vw,52px);font:650 clamp(44px,6.4vw,104px)/.9 var(--f-body);letter-spacing:-.05em;max-width:16ch;text-wrap:balance}
-.wkg0 .b{gap:18px;padding:0 0 0 22px}
-.wkg0 .b .arq{width:56px;height:56px}
-.wkg0 .b .arq svg{left:16px;top:16px}
-.wkg0 .b .arq svg+svg{transform:translateX(-56px)}
-.wkg0 .b:hover .arq svg:first-child{transform:translateX(56px)}
 
 /* ---- telefono e tablet ---- */
 @media (max-width:1080px){

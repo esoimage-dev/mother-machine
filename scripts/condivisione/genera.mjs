@@ -30,7 +30,7 @@ const LUCE = {
 export const PAGINE = {
   home: { piano: '05 · Home', luce: 'notte', titolo: 'The machine behind your business.', leggero: true },
   work: { piano: '04 · Work', luce: 'notte', titolo: 'Results, not deliverables.' },
-  brand: { piano: '03 · Brand', luce: 'carta', titolo: 'So the company looks as good as it runs.' },
+  brand: { piano: '03 · Brand', luce: 'notte', titolo: 'So the company looks as good as it runs.' },
   systems: { piano: '02 · Systems', luce: 'macchina', titolo: 'The tools your company runs on.' },
   studio: { piano: '01 · Studio', luce: 'rosa2', titolo: 'A small studio. On purpose.' },
   contact: { piano: 'G · Contact', luce: 'rosa2', titolo: 'Tell us what slows you down.' },
