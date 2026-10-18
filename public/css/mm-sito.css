@@ -1,0 +1,75 @@
+/* Mother Machine · regole del sito vero sopra le pagine approvate (prototipo/).
+   Caricato in testa a ogni pagina, subito dopo lo stile della pagina: vale prima del primo disegno.
+   Ogni blocco dice cosa corregge e perche'. */
+
+/* ---- avvio: niente transizioni finche' la pagina non ha preso il suo stato iniziale ----
+   Al caricamento (o ricaricando a meta' pagina) testata e logo partono gia' giusti, senza animarsi. */
+html.mm-boot .bar,html.mm-boot .bar *{transition:none!important}
+
+/* ---- testata ----
+   Quando il logo e' grande la testata e' trasparente: e' dello stesso colore della pagina sotto,
+   cosi' il velo della pulsantiera copre tutto e non compare nessuna riga. */
+.bar{z-index:41}
+.bar:not(.fold){background:transparent}
+.navdim{top:0}
+
+/* ---- logo grande e logo piccolo: si muovono insieme ----
+   Sono due disegni (il piccolo ha il tratto piu' pieno). Invece di scambiarli alla fine, viaggiano
+   sovrapposti con la stessa curva e la stessa durata: il grande scende sul piccolo, il piccolo parte
+   ingrandito sopra il grande. Il passaggio di peso avviene in movimento, dove i due hanno quasi la stessa
+   misura (verso la fine quando si piega, all'inizio quando si riapre): mai a corsa finita, mai a disegno fermo.
+   Le posizioni sono misurate al pixel (scarto sotto il mezzo pixel). */
+.bar .lgS{transform-origin:0 0}
+.bar.fold .lgB{transform:translate(.5px,-8.69px) scale(.4877);opacity:0;transition:transform .6s var(--e-carro),opacity .1s .48s}
+.bar.fold .lgS{transform:none;opacity:1;transition:transform .6s var(--e-carro),opacity .12s .36s}
+.bar:not(.fold) .lgB{transform:none;opacity:1;transition:transform .6s var(--e-carro),opacity .08s}
+.bar:not(.fold) .lgS{transform:translate(-1.025px,9.415px) scale(2.0504);opacity:0;transition:transform .6s var(--e-carro),opacity .12s .08s}
+@media (max-width:620px){
+  .bar.fold .lgB{transform:translate(.42px,-6.07px) scale(.6391)}
+  .bar:not(.fold) .lgS{transform:translate(-.657px,6.11px) scale(1.5647)}
+}
+
+/* ---- l'ascensore ----
+   Durante la corsa restano solo logo e contatore, chiari sulle porte scure: niente fascia della testata. */
+.bar.riding{background:transparent!important;border-bottom-color:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;color:#F4F2EC!important;transition:none!important}
+/* fascia e colore cambiano nello stesso istante, a porte chiuse: niente logo scuro sulle porte scure */
+/* durante la corsa (e all'arrivo) le porte stanno sopra a tutto, tranne testata e cursore */
+html.mm-riding #ride,html.mm-arr #ride{z-index:2147483000}
+html.mm-riding .bar,html.mm-arr .bar{z-index:2147483001}
+html.mm-riding .mmc,html.mm-arr .mmc{z-index:2147483002}
+/* le porte sono piu' alte del vano: il rimbalzo di fine corsa non scopre lo sfondo */
+.ride.shaft .door{top:-12px;bottom:-12px}
+/* arrivo da un'altra pagina: porte chiuse da subito, la pagina resta nascosta finche' le porte non si aprono */
+html.mm-hide{background:#121211}
+html.mm-hide body{visibility:hidden}
+html.mm-hide #ride,html.mm-hide #bar{visibility:visible}
+html.mm-arr #ride{visibility:visible;background:transparent}
+html.mm-arr #ride .door.l,html.mm-arr #ride .door.r{transform:translateX(0)}
+html.mm-arr #ride .pg,html.mm-arr #ride .disp{visibility:hidden}
+
+/* ---- pulsantiera: il piano corrente e' acceso tutto, senza ombra sotto ---- */
+.flr .fb.cur .fbt{box-shadow:0 0 0 4px rgba(244,242,236,.07),0 0 22px rgba(244,242,236,.28)}
+
+/* ---- footer: le lingue si sottolineano al passaggio come le pagine ---- */
+.flf a:hover{opacity:1;text-decoration:underline}
+
+/* ---- film nella home: il disegno deborda di 1px, niente filo chiaro sul bordo con larghezze decimali ---- */
+.h3st>:not(.grain){width:calc(100% + 2px)!important;height:calc(100% + 2px)!important;margin:-1px}
+
+/* ---- suggerimento della lingua nella testata ("Italiano?") ---- */
+.bar .lhint{all:unset;box-sizing:border-box;cursor:pointer;margin-left:auto;margin-right:22px;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 10px;font:500 11px var(--f-mono);letter-spacing:.1em;color:inherit;opacity:0;transform:translateY(-4px);transition:opacity .35s cubic-bezier(.2,.8,.2,1),transform .45s cubic-bezier(.2,.8,.2,1);-webkit-tap-highlight-color:transparent}
+.bar .lhint[hidden]{display:none}
+.bar .lhint.in{opacity:.7;transform:none}
+.bar .lhint.in:hover,.bar .lhint.in:focus-visible{opacity:1}
+.bar .lhint.out{opacity:0;transform:translateY(-4px)}
+.bar .lhint span{text-transform:uppercase;border-bottom:1px solid transparent;transition:border-color .2s}
+.bar .lhint:hover span,.bar .lhint:focus-visible span{border-bottom-color:currentColor}
+.bar .lhint:focus-visible{outline:1px solid currentColor}
+.bar .lhint i{width:6px;height:6px;background:currentColor;flex:none}
+.bar .lhint.in i{animation:lhb 1.1s steps(1) .25s 1}
+.bar .lhint.calm.in i{animation:none}
+@keyframes lhb{0%,50%{background:var(--sig)}25%,75%{background:transparent}100%{background:currentColor}}
+.bar .lhint:not([hidden])+.dispB{margin-left:0}
+@media (max-width:620px){.bar .lhint{margin-right:10px;padding:0 6px}}
+
+@media (prefers-reduced-motion:reduce){.bar .lhint,.bar .lhint.in i{transition:none;animation:none}}

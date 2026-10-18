@@ -1,6 +1,6 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Mother Machine · Privacy and terms</title>
-<script>/* ascensore tra pagine: se arriviamo da una corsa, le porte partono chiuse */try{var a=sessionStorage.getItem('mm-arrive'),p=location.pathname.replace(/\.html$/,'').replace(/\/$/,'')||'/';if(a&&a===p)document.documentElement.classList.add('mm-arr');sessionStorage.removeItem('mm-arrive')}catch(e){}</script><style>html.mm-arr #ride{visibility:visible;background:transparent}html.mm-arr #ride .door.l,html.mm-arr #ride .door.r{transform:translateX(0)}html.mm-arr #ride .pg,html.mm-arr #ride .disp{visibility:hidden}</style><style>
+<script>/* avvio: niente transizioni finche' la pagina non e' pronta; se arriviamo con l'ascensore, porte chiuse */(function(){var R=document.documentElement;R.classList.add('mm-boot');try{var a=sessionStorage.getItem('mm-arrive'),p=location.pathname.replace(/\.html$/,'').replace(/\/$/,'')||'/';sessionStorage.removeItem('mm-arrive');if(a){a=JSON.parse(a);if(a.to===p){R.classList.add('mm-arr','mm-hide');if(a.fold)R.classList.add('mm-arr-fold')}}}catch(e){}})();</script><style>
 @font-face{font-family:'Hanken';src:url(/fonts/hanken-100-900-38c3847f.woff2) format('woff2');font-weight:100 900}
 @font-face{font-family:'DMMono';src:url(/fonts/dmmono-400-1a0430d4.woff2) format('woff2');font-weight:400}
 
@@ -952,7 +952,7 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
 /* footer */
 .flf{display:inline-flex;align-items:baseline;gap:8px;margin-left:auto;margin-right:28px}
 .flf a{color:inherit;text-decoration:none;opacity:.5;transition:opacity .2s}
-.flf a:hover{opacity:1;text-decoration:underline}.flf a[aria-current]{opacity:1;border-bottom:1px solid currentColor}
+.flf a:hover{opacity:1}.flf a[aria-current]{opacity:1;border-bottom:1px solid currentColor}
 .flf i{font-style:normal;opacity:.3}
 
 /* il cartellino: vetro scuro come la pulsantiera, una volta sola */
@@ -973,8 +973,8 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
 .lsug-off .lsug{opacity:0;pointer-events:none}
 @media (prefers-reduced-motion:reduce){.lsug{transition:opacity .2s}}
 
-</style>
-<header class="bar" id="bar" data-luce="carta"><a class="blogo" href="#top" aria-label="Mother Machine, home"><span class="lgB" data-a="heroS"><i class="lgF" aria-hidden="true">&#xE000;</i></span><span class="lgS" data-a="heroW"><i class="lgF" aria-hidden="true">&#xE000;</i></span></a><button class="dispB disp3" id="dispB" aria-label="Floors: you are on G, Privacy. Open the floors panel" aria-expanded="false" aria-controls="navLift"><span class="dn"><span class="dir" id="bA"></span><span class="rl nw" id="bN"><b>G</b></span></span><span class="rl nm" id="bL"><b>Privacy</b></span><span class="kb" id="bK" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span></button></header>
+</style><link rel="stylesheet" href="/css/mm-sito.css">
+<header class="bar" id="bar" data-luce="carta"><a class="blogo" href="#top" aria-label="Mother Machine, home"><span class="lgB" data-a="heroS"><i class="lgF" aria-hidden="true">&#xE000;</i></span><span class="lgS" data-a="heroW"><i class="lgF" aria-hidden="true">&#xE000;</i></span></a><button class="dispB disp3" id="dispB" aria-label="Floors: you are on G, Privacy. Open the floors panel" aria-expanded="false" aria-controls="navLift"><span class="dn"><span class="dir" id="bA"></span><span class="rl nw" id="bN"><b>G</b></span></span><span class="rl nm" id="bL"><b>Privacy</b></span><span class="kb" id="bK" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span></button></header><script>(function(){var R=document.documentElement,b=document.getElementById('bar');if(R.classList.contains('mm-arr')){b.classList.add('riding');if(R.classList.contains('mm-arr-fold'))b.classList.add('fold')}})();</script>
 <div class="navdim" id="navDim"></div>
 <nav class="flr navlift" id="navLift" data-luce="notte" aria-label="Floors"></nav>
 <main class="hm lg" id="top">
@@ -1159,7 +1159,7 @@ function Shaft(sh,FL,draw){
     if(S.busy||to===S.cur)return false;S.busy=true;var from=S.cur,dir=to>from?1:-1,n=Math.abs(to-from);
     if(reduce){S.set(to);S.busy=false;onStep&&onStep(to,0);return true}
     U.classList.toggle('on',dir>0);Dn.classList.toggle('on',dir<0);onStep&&onStep(from,dir);
-    await S.close(false);
+    await S.close(false);window.MM_RIDE&&MM_RIDE(true);
     await A(disp,[{opacity:0},{opacity:1}],{duration:160});
     for(var i=1;i<=n;i++){var d=n===1?560:Math.round(Math.max(110,Math.min(300,1300/n)));var lv=from+dir*i;await step(lv,dir,d);nm.textContent=(FL[lv]||[''])[0];onStep&&onStep(lv,dir)}
     S.cur=to;draw(pg,to);
@@ -1235,14 +1235,14 @@ var FLS=[].slice.call(document.querySelectorAll('section[data-f]')),bar=$('bar')
 function openNav(on){navL.classList.toggle('on',on);navDim.classList.toggle('on',on);document.body.classList.toggle('navopen',on);HDR.open(on);if(on&&innerWidth<=620)bar.classList.add('fold');else mini()}
 navDim.addEventListener('click',function(){openNav(false)});
 /* la corsa tra le pagine: le altre pagine sono segnaposto */
-var MM_PAGES={5:'/',3:'/brand',2:'/systems',1:'/studio',0:'/contact'};var MM_LEAVE=function(k){if(!MM_PAGES[k])return false;try{sessionStorage.setItem('mm-arrive',MM_PAGES[k])}catch(e){}location.href=MM_PAGES[k];return true};var MM_PRE=function(k){if(!MM_PAGES[k]||document.querySelector('link[data-mm="'+k+'"]'))return;var l=document.createElement('link');l.rel='prefetch';l.href=MM_PAGES[k];l.setAttribute('data-mm',k);document.head.appendChild(l)};var ride=$('ride');
+var MM_PAGES={5:'/',3:'/brand',2:'/systems',1:'/studio',0:'/contact'};var MM_RIDE=function(on){bar.classList.toggle('riding',on);if(!on)document.documentElement.classList.remove('mm-riding')};var MM_LEAVE=function(k){if(!MM_PAGES[k])return false;try{sessionStorage.setItem('mm-arrive',JSON.stringify({to:MM_PAGES[k],fold:bar.classList.contains('fold')}))}catch(e){}location.href=MM_PAGES[k];return true};var MM_PRE=function(k){if(!MM_PAGES[k]||document.querySelector('link[data-mm="'+k+'"]'))return;var l=document.createElement('link');l.rel='prefetch';l.href=MM_PAGES[k];l.setAttribute('data-mm',k);document.head.appendChild(l)};var ride=$('ride');
 function drawFloor(pg,k){var d=SITE[k];pg.className='pg';pg.setAttribute('data-luce',d[1]);
   if(k===0||MM_PAGES[k]){pg.innerHTML='';return}
   pg.innerHTML='<div class="pin hm"><div style="display:grid;gap:28px;align-content:center"><div class="fno">'+LT[two(k)]+'</div><h2>'+d[2]+'</h2></div><div class="bk"><button class="b p" data-back>Back to 05 · Home</button><span class="mo mut">This floor is next on the build list.</span></div></div>';
   pg.querySelector('[data-back]').addEventListener('click',function(){go(5)})}
 var SH=Shaft(ride,SITE,drawFloor);SH.set(0);
-function go(k){if(SH.busy||k===onFloor)return;MM_PRE(k);openNav(false);ride.classList.add('on');ride.setAttribute('aria-hidden','false');nav.call(k);
-  SH.ride(k,function(lv,dir){nav.dir(dir);nav.show(two(lv),SITE[lv][0]);HDR.dir(dir);HDR.floor(lv,SITE[lv][0])}).then(function(){if(MM_PAGES[k]){location.href=MM_PAGES[k];return}onFloor=k;nav.dir(0);nav.cur(k,two(k),SITE[k][0]);bar.setAttribute('data-luce',SITE[k][1]);
+function go(k){if(SH.busy||k===onFloor)return;MM_PRE(k);document.documentElement.classList.add('mm-riding');openNav(false);ride.classList.add('on');ride.setAttribute('aria-hidden','false');nav.call(k);
+  SH.ride(k,function(lv,dir){nav.dir(dir);nav.show(two(lv),SITE[lv][0]);HDR.dir(dir);HDR.floor(lv,SITE[lv][0])}).then(function(){if(MM_PAGES[k]){location.href=MM_PAGES[k];return}MM_RIDE(false);onFloor=k;nav.dir(0);nav.cur(k,two(k),SITE[k][0]);bar.setAttribute('data-luce',SITE[k][1]);
     HDR.dir(0);HDR.floor(k,SITE[k][0]);
     if(k===0){ride.classList.remove('on');ride.setAttribute('aria-hidden','true');curI=-1;pickNav()}})}
 var nav=Floors(navL,SITEF,{onPick:function(k){k=+k;if(k===onFloor){openNav(false);if(k===0)scrollTo({top:0,behavior:reduce?'auto':'smooth'});return}var tt=nav.call(k);setTimeout(function(){go(k)},reduce?0:tt)}});
@@ -1251,7 +1251,7 @@ document.querySelectorAll('[data-go]').forEach(function(a){a.addEventListener('c
 $('dispB').addEventListener('click',function(e){e.stopPropagation();openNav(!navL.classList.contains('on'))});
 addEventListener('keydown',function(e){if(e.key==='Escape')openNav(false)});
 if(document.fonts&&document.fonts.load){Promise.all([document.fonts.load('20px MMLogoS',''),document.fonts.load('20px MMLogoW','')]).then(function(){if(document.fonts.check('20px MMLogoS','')&&document.fonts.check('20px MMLogoW',''))document.documentElement.classList.add('mmfont')}).catch(function(){})}
-function mini(){bar.classList.toggle('fold',scrollY>30||onFloor!==0)}addEventListener('scroll',mini,{passive:true});mini();
+function mini(){if(document.documentElement.classList.contains('mm-arr-fold'))return;bar.classList.toggle('fold',scrollY>30||onFloor!==0)}addEventListener('scroll',mini,{passive:true});mini();
 function setNav(i){var s=FLS[i];curI=i;var l=s.dataset.luce;bar.setAttribute('data-luce',l)}
 function pickNav(){if(onFloor!==0)return;var y=scrollY+innerHeight*0.4,i=0;FLS.forEach(function(s,j){if(s.offsetTop<=y)i=j});if(i!==curI)setNav(i)}
 addEventListener('scroll',pickNav,{passive:true});
@@ -1390,13 +1390,12 @@ pickNav();
   function foot(){if(fl)fl.innerHTML=ORDER.map(function(c){return '<a href="#" data-l="'+c+'"'+(c===cur?' aria-current="true"':'')+'>'+c.toUpperCase()+'</a>'}).join('<i>/</i>')}
   foot();
 
-  /* il suggerimento della lingua vive nella testata, accanto al numero del piano: "IT?" per qualche secondo.
-     Il quadratino lampeggia una volta in pomodoro (risponde), poi torna inchiostro. Una volta per visita,
-     solo se il browser parla una lingua che abbiamo e non e' quella in cui sei. */
-  /* la scelta salvata vince su tutto: si riapplica subito, senza animazioni */
+  /* il suggerimento della lingua vive nella testata: "Italiano?", "Español?", "Français?".
+     Solo se il browser parla una lingua del lancio diversa dall'inglese e non c'e' gia' una scelta.
+     La prima volta nella visita lampeggia; nelle pagine dopo e' gia' li', fermo. Dura 3 minuti di visita.
+     La scelta salvata vince su tutto e si riapplica subito, senza animazioni. */
   var saved=null;try{saved=localStorage.getItem('mm-lang')}catch(e){}
   if(saved&&ORDER.indexOf(saved)>=0&&saved!==cur){var rm0=RM;RM=true;try{apply(saved)}catch(e){}RM=rm0}
-  /* solo le lingue del lancio diverse dall'inglese, e solo se non c'e' gia' una scelta */
   var want=saved?null:(navigator.languages||[navigator.language||'']).map(function(x){return (x||'').slice(0,2)}).filter(function(x){return ORDER.indexOf(x)>0&&x!==cur})[0];
   var hb=document.getElementById('dispB'),first=true;try{first=sessionStorage.getItem('mm-lhint')!=='1'}catch(e){}
   var sg=null;
@@ -1407,8 +1406,7 @@ pickNav();
     sg.innerHTML='<i aria-hidden="true"></i><span aria-hidden="true"></span>';
     hb.parentNode.insertBefore(sg,hb);
     sg.addEventListener('click',function(){apply(want)});
-    var word=L[want].self+'?';
-    var T=180000,t0=Date.now();try{t0=+sessionStorage.getItem('mm-lhint-t0')||t0}catch(e){}
+    var word=L[want].self+'?',T=180000,t0=Date.now();try{t0=+sessionStorage.getItem('mm-lhint-t0')||t0}catch(e){}
     setTimeout(function(){if(cur===want)return;var left=T-(Date.now()-t0);if(left<=0)return;
       try{sessionStorage.setItem('mm-lhint','1');sessionStorage.setItem('mm-lhint-t0',String(t0))}catch(e){}
       setTimeout(hideSug,left);sg.hidden=false;if(!first)sg.classList.add('calm');void sg.offsetWidth;sg.classList.add('in');
@@ -1417,8 +1415,4 @@ pickNav();
 })();
 
 </script>
-<script>/* arrivo: la pagina e' pronta, le porte si aprono su di lei */(function(){var R=document.documentElement;if(!R.classList.contains('mm-arr'))return;var done=false;function end(){if(done)return;done=true;var r=document.getElementById('ride');SH.open().then(function(){R.classList.remove('mm-arr');r.classList.remove('on');r.setAttribute('aria-hidden','true')})}(document.fonts?document.fonts.ready:Promise.resolve()).then(function(){requestAnimationFrame(function(){requestAnimationFrame(end)})});setTimeout(end,2500)})();</script><style>.bar .lhint{all:unset;box-sizing:border-box;cursor:pointer;margin-left:auto;margin-right:6px;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 10px;font:500 11px var(--f-mono);letter-spacing:.1em;color:inherit;opacity:0;transform:translateY(-4px);transition:opacity .35s cubic-bezier(.2,.8,.2,1),transform .45s cubic-bezier(.2,.8,.2,1);-webkit-tap-highlight-color:transparent}.bar .lhint.in{opacity:.7;transform:none}.bar .lhint.in:hover,.bar .lhint.in:focus-visible{opacity:1}.bar .lhint.out{opacity:0;transform:translateY(-4px)}.bar .lhint span{border-bottom:1px solid transparent;transition:border-color .2s}.bar .lhint:hover span,.bar .lhint:focus-visible span{border-bottom-color:currentColor}.bar .lhint:focus-visible{outline:1px solid currentColor}.bar .lhint i{width:6px;height:6px;background:currentColor;flex:none}.bar .lhint.in i{animation:lhb 1.1s steps(1) .25s 1}@keyframes lhb{0%,50%{background:var(--sig)}25%,75%{background:transparent}100%{background:currentColor}}.bar .lhint:not([hidden])+.dispB{margin-left:0}.bar .lhint[hidden]{display:none}.bar .lhint.calm.in i{animation:none}.bar .lhint span{text-transform:uppercase}@media (prefers-reduced-motion:reduce){.bar .lhint,.bar .lhint.in i{transition:none;animation:none}}</style><script>/* il logo e "05 Home" nel footer portano alla home, con l'ascensore */
-(function(){var p=location.pathname;if(p==='/'||p==='/index.html')return;
-[].forEach.call(document.querySelectorAll('a.blogo,footer a[href="#top"]'),function(a){a.setAttribute('href','/');
-a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;e.preventDefault();e.stopImmediatePropagation();
-if(typeof go==='function'&&typeof SH!=='undefined'&&!SH.busy)go(5);else location.href='/'},true)})})();</script><style>/* ritocchi 18 ottobre */.bar .lhint{margin-right:22px}.flr .fb.cur .fbt{box-shadow:0 0 0 4px rgba(244,242,236,.07),0 0 22px rgba(244,242,236,.28)}.ride.shaft .door{top:-12px;bottom:-12px}.bar:not(.fold) .lgB{transition:transform .6s var(--e-carro) .1s,opacity 0s}.bar:not(.fold) .lgS{transition:opacity .12s}.bar.fold .lgS{transition:opacity .1s .52s}.bar.fold .lgB{transition:transform .6s var(--e-carro),opacity .08s .62s}.bar{z-index:41}.bar:not(.fold){background:transparent}.navdim{top:0}.bar.fold .lgB{transform:translate(.5px,-8.69px) scale(.4877)}@media (max-width:620px){.bar .lhint{margin-right:10px;padding:0 6px}.bar.fold .lgB{transform:translate(.42px,-6.07px) scale(.6391)}}</style>
+<script src="/js/mm-sito.js"></script>
