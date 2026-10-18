@@ -6,12 +6,14 @@ import brand from '../html/brand.html?raw';
 import progetto from '../html/progetto.html?raw';
 import contact from '../html/contact.html?raw';
 import privacy from '../html/privacy.html?raw';
+import work from '../html/work.html?raw';
 
 const pages: Record<string, string> = {
   index: home,
   studio,
   systems,
   brand,
+  work,
   'work/project': progetto,
   contact,
   privacy,

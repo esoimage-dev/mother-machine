@@ -87,6 +87,17 @@
     });
   }
 
+  /* ---- al piano 04 le pagine dei progetti portano al registro (stesso piano: niente corsa) ---- */
+  if (p.indexOf('/work/') === 0) {
+    [].forEach.call(document.querySelectorAll('a[data-go="4"]'), function (a) {
+      a.setAttribute('href', '/work');
+      a.addEventListener('click', function (e) {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+        e.preventDefault(); e.stopImmediatePropagation(); location.href = '/work';
+      }, true);
+    });
+  }
+
   /* ---- caricamento normale: la pagina prende il suo stato, poi le transizioni si accendono ---- */
   if (!R.classList.contains('mm-arr')) {
     ready.then(function () { frames(2, unboot) });

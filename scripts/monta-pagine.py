@@ -22,8 +22,9 @@ JS = ROOT / 'public/js'
 PAGINE = {  # pagina del sito <- pagina approvata
     'home': 'home', 'studio': 'studio', 'systems': 'systems', 'brand': 'brand',
     'contact': 'contact', 'progetto': 'progetto', 'privacy': 'privacy-termini',
+    'work': 'progetto',  # 04 Work: nasce dalla pagina progetto (stesso piano), con il registro al posto del caso
 }
-INDIRIZZI = "{5:'/',3:'/brand',2:'/systems',1:'/studio',0:'/contact'}"
+INDIRIZZI = "{5:'/',4:'/work',3:'/brand',2:'/systems',1:'/studio',0:'/contact'}"
 
 
 SITO = 'https://mothermachine.studio'
@@ -41,6 +42,8 @@ META = {
                 'Tell us what slows you down. The first conversation is free, and a real person reads every order.', '#EEC3B1'),
     'progetto': ('/work/project', "Mother Machine · Vitalia's Pizza on Wheels",
                  'A new business, built from zero: the brand, the website and the system that runs it.', '#0F0F0E'),
+    'work': ('/work', 'Mother Machine · Work',
+             'The register: every machine we deliver gets a serial number. Who it was for, what we built, what changed.', '#0F0F0E'),
     'privacy': ('/privacy', 'Mother Machine · Privacy and terms',
                 'We collect only what we need to answer you and run a project with you. No ads, no tracking cookies, no selling data.', '#FBFAF7'),
 }
@@ -150,6 +153,22 @@ LINGUA = r"""  /* il suggerimento della lingua vive nella testata: "Italiano?", 
 """
 
 
+def registro():
+    """Il contenuto di 04 Work (src/sezioni/work.html) con le copertine degli studi prese identiche dalla home."""
+    t = (ROOT / 'src/sezioni/work.html').read_text(encoding='utf8')
+    home = (PROTO / 'home.html').read_text(encoding='utf8')
+    g = home[home.find('<div class="wkg">') + len('<div class="wkg">'):home.find('<a class="wall"')]
+    schede = re.findall(r'<a class="wc" href="#" data-go="4">(.*?)</a>', g, re.S)
+    assert len(schede) == 3, 'copertine della home'
+    studi = [('a1', 'hospitality', 'No. 014', 'Study 03'), ('a2', 'retail', 'No. 011', 'Study 02'), ('a3', 'services', 'No. 009', 'Study 01')]
+    out = []
+    for corpo, (cov, settore, vecchio, nuovo) in zip(schede, studi):
+        assert f'class="art {cov}"' in corpo and vecchio in corpo, cov
+        corpo = corpo.replace('<span class="wcta mo"><i></i>View project</span>', '').replace(f'<span>{vecchio}</span>', f'<span>{nuovo}</span>')
+        out.append(f'<div class="wc" data-s="{settore}" data-cov="{cov}">{corpo}</div>')
+    return una(t, '<!-- MM:COPERTINE-STUDI -->', '\n      '.join(out), 'segnaposto copertine')
+
+
 def monta(nome, src):
     t = (PROTO / f'{src}.html').read_text(encoding='utf8')
     t = font_esterni(t)
@@ -193,9 +212,22 @@ def monta(nome, src):
         t = una(t, "function apply(c){var from=L[cur],t=L[c];cur=c;",
                 "function apply(c){var from=L[cur],t=L[c];cur=c;try{localStorage.setItem('mm-lang',c)}catch(e){}", 'scelta lingua')
 
+    # 04 Work: il registro al posto del caso, piu' il suo stile e il suo script
+    if nome == 'work':
+        s = t.find('<main class="hm cs" id="top">'); e = t.find('</main>', s) + len('</main>')
+        assert s > 0 and e > s, 'main'
+        t = t[:s] + registro() + t[e:]
+        t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/work.css">', 'stile work')
+        # lo script della demo Control Room (e dei numeri del caso) serve solo alla pagina progetto
+        s = t.find('/* pagina progetto v3: il Control Room in miniatura')
+        e = t.find('\n})();', t.find(".cfn b[data-n]", s)) + len('\n})();')
+        assert s > 0 and e > s, 'script del caso'
+        t = t[:s] + t[e:]
+
     # 6. coda
     i = t.rfind('</body>')
-    t = t[:i] + CODA + t[i:] if i > 0 else t + CODA
+    coda = CODA + ('<script src="/js/work.js"></script>' if nome == 'work' else '')
+    t = t[:i] + coda + t[i:] if i > 0 else t + coda
     (OUT / f'{nome}.html').write_text(t, encoding='utf8')
     return luce
 
