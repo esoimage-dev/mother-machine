@@ -35,6 +35,7 @@ export const PAGINE = {
   studio: { piano: '01 · Studio', luce: 'rosa2', titolo: 'A small studio. On purpose.' },
   contact: { piano: 'G · Contact', luce: 'rosa2', titolo: 'Tell us what slows you down.' },
   progetto: { piano: '04 · Work', luce: 'notte', titolo: "Vitalia's Pizza on Wheels" },
+  lg: { piano: 'LG · Machine Room', luce: 'notte', titolo: 'The lab under the studio.' },
   privacy: { piano: 'Privacy and terms', luce: 'carta', titolo: 'Privacy and terms.' },
 };
 

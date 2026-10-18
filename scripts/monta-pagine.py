@@ -23,8 +23,9 @@ PAGINE = {  # pagina del sito <- pagina approvata
     'home': 'home', 'studio': 'studio', 'systems': 'systems', 'brand': 'brand',
     'contact': 'contact', 'progetto': 'progetto', 'privacy': 'privacy-termini',
     'work': 'progetto',  # 04 Work: nasce dalla pagina progetto (stesso piano), con il registro al posto del caso
+    'lg': 'progetto',    # LG Machine Room: stessa luce notte, il laboratorio al posto del caso
 }
-INDIRIZZI = "{5:'/',4:'/work',3:'/brand',2:'/systems',1:'/studio',0:'/contact'}"
+INDIRIZZI = "{5:'/',4:'/work',3:'/brand',2:'/systems',1:'/studio',0:'/contact','-1':'/lg'}"
 
 
 SITO = 'https://mothermachine.studio'
@@ -44,6 +45,8 @@ META = {
                  'A new business, built from zero: the brand, the website and the system that runs it.', '#0F0F0E'),
     'work': ('/work', 'Mother Machine · Work',
              'The register: every machine we deliver gets a serial number. Who it was for, what we built, what changed.', '#0F0F0E'),
+    'lg': ('/lg', 'Mother Machine · Machine Room',
+           'LG, the lab under the studio. Every floor above runs on what we build down here.', '#0F0F0E'),
     'privacy': ('/privacy', 'Mother Machine · Privacy and terms',
                 'We collect only what we need to answer you and run a project with you. No ads, no tracking cookies, no selling data.', '#FBFAF7'),
 }
@@ -270,6 +273,14 @@ def registro():
     return t
 
 
+def laboratorio():
+    """Il contenuto di LG (src/sezioni/lg.html) con la porta per G presa identica dalla home."""
+    t = (ROOT / 'src/sezioni/lg.html').read_text(encoding='utf8')
+    home = (PROTO / 'home.html').read_text(encoding='utf8')
+    s = home.find('<section class="hs gd"'); e = home.find('</section>', s) + len('</section>')
+    return una(t, '<!-- MM:PORTA-G -->', home[s:e], 'porta G')
+
+
 def monta(nome, src):
     t = (PROTO / f'{src}.html').read_text(encoding='utf8')
     t = font_esterni(t)
@@ -326,12 +337,31 @@ def monta(nome, src):
         assert s > 0 and e > s, 'script del caso'
         t = t[:s] + t[e:]
 
+    # LG Machine Room: il laboratorio al posto del caso; la pagina sta al piano LG (testata, pulsantiera, corsa)
+    if nome == 'lg':
+        s = t.find('<main class="hm cs" id="top">'); e = t.find('</main>', s) + len('</main>')
+        assert s > 0 and e > s, 'main'
+        t = t[:s] + laboratorio() + t[e:]
+        t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/mr.css">', 'stile lg')
+        s = t.find('/* pagina progetto v3: il Control Room in miniatura')
+        e = t.find('\n})();', t.find(".cfn b[data-n]", s)) + len('\n})();')
+        assert s > 0 and e > s, 'script del caso'
+        t = t[:s] + t[e:]
+        t = una(t, "fl=4,nm='Work'", "fl=-1,nm='Machine Room'", 'testata: piano')
+        t = una(t, 'aria-label="Floors: you are on 04, Work', 'aria-label="Floors: you are on LG, Machine Room', 'testata: aria')
+        t = una(t, '<b>04</b></span></span><span class="rl nm" id="bL"><b>Work</b>',
+                '<b>LG</b></span></span><span class="rl nm" id="bL"><b>Machine Room</b>', 'testata: numero')
+        t = una(t, 'onFloor=4', 'onFloor=-1', 'piano corrente')
+        t = una(t, "nav.cur(4,'04','Work')", "nav.cur(-1,'LG','Machine Room')", 'pulsantiera')
+        assert t.count('if(k===4') == 3, 'k===4'
+        t = t.replace('if(k===4', 'if(k===-1')
+
     if nome == 'home':
         t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/home.css">', 'stile home')
 
     # 6. coda
     i = t.rfind('</body>')
-    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'home': '<script src="/js/home.js"></script>'}.get(nome, '')
+    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>'}.get(nome, '')
     t = t[:i] + coda + t[i:] if i > 0 else t + coda
     (OUT / f'{nome}.html').write_text(t, encoding='utf8')
     return luce

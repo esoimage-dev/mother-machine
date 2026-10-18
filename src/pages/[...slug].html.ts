@@ -7,6 +7,7 @@ import progetto from '../html/progetto.html?raw';
 import contact from '../html/contact.html?raw';
 import privacy from '../html/privacy.html?raw';
 import work from '../html/work.html?raw';
+import lg from '../html/lg.html?raw';
 
 const pages: Record<string, string> = {
   index: home,
@@ -17,6 +18,7 @@ const pages: Record<string, string> = {
   'work/project': progetto,
   contact,
   privacy,
+  lg,
 };
 
 export const getStaticPaths: GetStaticPaths = () =>
