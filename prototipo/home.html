@@ -1073,6 +1073,49 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
 /* nelle prove del manuale: la stessa pulsantiera, appoggiata sulla pagina */
 .flr.fdemo{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0) 40%),#1A1A18;color:#F4F2EC;border-radius:3px;padding:20px 20px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 0 0 1px rgba(255,255,255,.1),0 24px 50px -20px rgba(0,0,0,.45);width:300px;box-sizing:border-box;display:grid;gap:4px;align-self:start}
 
+/* ---- la lingua: la targhetta incisa in fondo alla placca ---- */
+.flr .flng{position:relative;display:flex;justify-content:center;margin:12px -4px -8px;height:22px}
+.flr .flng button{all:unset;box-sizing:border-box;position:relative;cursor:pointer;display:block;overflow:hidden;white-space:nowrap;max-width:0;padding:6px 0;
+  font:400 10px/1 var(--f-mono);letter-spacing:.16em;color:#F4F2EC;opacity:0;-webkit-tap-highlight-color:transparent;
+  transition:max-width .5s cubic-bezier(.7,0,.2,1),padding .5s cubic-bezier(.7,0,.2,1),opacity .3s}
+.flr .flng button span{display:inline-block;min-width:2.3ch}
+.flr .flng button.on{max-width:60px;padding:6px 6px 6px 14px;opacity:.9}
+.flr .flng.open button{max-width:60px;padding:6px 6px 6px 14px;opacity:.36}
+.flr .flng.open button.on{opacity:.95}
+.flr .flng.open button:hover,.flr .flng.open button:focus-visible{opacity:.8;outline:none}
+.flr .flng button:focus-visible span{text-decoration:underline;text-underline-offset:4px}
+.flr .flng button.on{cursor:pointer}.flr .flng.open button.on{cursor:default}
+.flr .flng .lit{position:absolute;left:1px;top:calc(50% - 2px);width:4px;height:4px;background:#F4F2EC;box-shadow:0 0 6px rgba(244,242,236,.6);transition:background-color .2s}
+.flr .flng .lit.free{left:0;top:0;transition:transform .45s cubic-bezier(.7,0,.2,1),background-color .2s}
+.flr .flng .lit.mv{background:var(--sig);box-shadow:0 0 8px rgba(255,91,58,.7)}
+.flr.on .flng{animation:fin .5s cubic-bezier(.2,.8,.2,1) .25s both}
+@media (max-width:620px){.flr .flng{position:absolute;left:0;right:0;bottom:calc(4px + env(safe-area-inset-bottom,0px));margin:0;height:44px}.flr .flng button{font-size:11px;padding:16px 0;min-height:44px}.flr .flng button.on,.flr .flng.open button{padding:16px 14px 16px 22px;max-width:80px}.flr .flng .lit{left:7px}}
+@media (prefers-reduced-motion:reduce){.flr .flng button,.flr .flng .lit{transition:none}}
+
+/* footer */
+.flf{display:inline-flex;align-items:baseline;gap:8px;margin-left:auto;margin-right:28px}
+.flf a{color:inherit;text-decoration:none;opacity:.5;transition:opacity .2s}
+.flf a:hover{opacity:1}.flf a[aria-current]{opacity:1;border-bottom:1px solid currentColor}
+.flf i{font-style:normal;opacity:.3}
+
+/* il cartellino: vetro scuro come la pulsantiera, una volta sola */
+.lsug{position:fixed;left:16px;bottom:16px;z-index:60;display:flex;align-items:center;gap:14px;max-width:calc(100vw - 32px);box-sizing:border-box;padding:10px 10px 10px 10px;color:#F4F2EC;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0) 40%),rgba(18,18,17,.84);-webkit-backdrop-filter:blur(30px) saturate(1.9) brightness(.7);backdrop-filter:blur(30px) saturate(1.9) brightness(.7);
+  box-shadow:inset 0 0 0 1px rgba(244,242,236,.1),0 20px 40px -20px rgba(0,0,0,.5);
+  transform:translateY(calc(100% + 24px));opacity:0;pointer-events:none;transition:transform .6s cubic-bezier(.7,0,.2,1),opacity .4s}
+.lsug.on{transform:none;opacity:1;pointer-events:auto}
+.lsug .fbt{display:grid;place-items:center;flex:none;width:36px;height:36px;box-sizing:border-box;border:1.5px solid rgba(244,242,236,.5);font:500 11px var(--f-mono);letter-spacing:.06em}
+.lsug p{margin:0;font:400 14px/1.3 var(--f-body);white-space:nowrap}
+.lsug .lsw{all:unset;cursor:pointer;padding:9px 13px;background:#F4F2EC;color:#121211;font:600 13.5px var(--f-body);letter-spacing:-.01em;white-space:nowrap;transition:background-color .25s}
+.lsug .lsw:hover,.lsug .lsw:focus-visible{background:#fff}
+.lsug .lx{all:unset;cursor:pointer;position:relative;width:36px;height:36px;flex:none}
+.lsug .lx i::before,.lsug .lx i::after{content:"";position:absolute;left:11px;right:11px;top:50%;height:1.5px;background:currentColor;opacity:.6;transform:rotate(45deg)}
+.lsug .lx i::after{transform:rotate(-45deg)}
+.lsug .lx:hover i::before,.lsug .lx:hover i::after{opacity:1}
+@media (max-width:620px){.lsug{left:12px;right:12px;bottom:12px;flex-wrap:wrap;gap:10px 12px}.lsug p{white-space:normal;flex:1;min-width:0}.lsug .lx{order:2}.lsug .lsw{order:3;flex:1 1 100%;box-sizing:border-box;text-align:center;padding:12px}}
+.lsug-off .lsug{opacity:0;pointer-events:none}
+@media (prefers-reduced-motion:reduce){.lsug{transition:opacity .2s}}
+
 </style>
 <header class="bar" id="bar" data-luce="carta"><a class="blogo" href="#top" aria-label="Mother Machine, home"><span class="lgB" data-a="heroS"><i class="lgF" aria-hidden="true">&#xE000;</i></span><span class="lgS" data-a="heroW"><i class="lgF" aria-hidden="true">&#xE000;</i></span></a><button class="dispB disp3" id="dispB" aria-label="Floors: you are on 05, Home. Open the floors panel" aria-expanded="false" aria-controls="navLift"><span class="dn"><span class="dir" id="bA"></span><span class="rl nw" id="bN"><b>05</b></span></span><span class="rl nm" id="bL"><b>Home</b></span><span class="kb" id="bK" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span></button></header>
 <div class="navdim" id="navDim"></div>
@@ -3495,7 +3538,7 @@ var HDR=(function(){var b=$('dispB'),N=$('bN'),A=$('bA'),L=$('bL'),K=[].slice.ca
     var d=dir>0?1:-1,o={duration:420,easing:'cubic-bezier(.7,0,.2,1)'};
     cur.animate([{transform:'translateY(0)'},{transform:'translateY('+(-110*d)+'%)'}],o).onfinish=function(){if(cur.parentNode)el.removeChild(cur)};
     nb.animate([{transform:'translateY('+(110*d)+'%)'},{transform:'translateY(0)'}],o)}
-  function label(){roll(L,op?'Close':hv?'All floors':nm,op||hv?1:-1)}
+  function label(){var T=window.MMT||{};roll(L,op?(T.close||'Close'):hv?(T.all||'All floors'):nm,op||hv?1:-1)}
   function lit(k){K.forEach(function(i,j){i.classList.toggle('lit',j===5-k)})}
   function aria(){b.setAttribute('aria-label',(op?'Close the floors panel':'Floors: you are on '+two(fl)+', '+nm+'. Open the floors panel'))}
   lit(5);
@@ -4044,6 +4087,118 @@ function apply(){ANIMS.forEach(function(x){if(vis&&!reduce)x[0].play();else x[0]
 if('IntersectionObserver' in window){new IntersectionObserver(function(es){vis=es[0].isIntersecting;st.classList.toggle('in',vis);apply()},{rootMargin:'120px'}).observe(st)}else{vis=true;st.classList.add('in')}
 (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(function(){setTimeout(function(){tint();apply()},0)});
 [].forEach.call(st.querySelectorAll('.vcta,.vfl'),function(a){a.addEventListener('click',function(e){e.preventDefault();if(typeof go==='function')go(+a.dataset.floor)})});
+})();
+
+/* la lingua: un tasto di servizio in fondo alla pulsantiera, sotto LG.
+   Chiuso mostra solo la lingua dove sei. Lo premi e il tasto si apre in due: gli altri escono da dietro, ognuno col suo nome nella sua lingua.
+   Scegli: il tasto risponde come un piano chiamato, poi ogni parola cambia. I testi mono si ricompongono lettera per lettera, i nomi girano come il contatore.
+   Bozza: qui cambiano pulsantiera, testata e footer. Nel sito vero ogni pagina ha il suo indirizzo per lingua (/it/). */
+(function(){
+  var RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var L={
+    en:{self:'English',lang:'Language',names:{'-1':'Machine room',0:'Contact',1:'Studio',2:'Systems',3:'Brand',4:'Work',5:'Home'},
+      desc:{5:'Back to the start',4:'Selected projects',3:'Identity, websites, UI and UX',2:'Software, apps, private AI',1:'Who we are, how we work',0:'Start a project'},
+      ko:{'Staff only':'Staff only','Not without the key.':'Not without the key.','Going down.':'Going down.','You found it.':'You found it.'},
+      close:'Close',all:'All floors',sug:'This site is also in English.',sw:'Switch to English',no:'No thanks'},
+    it:{self:'Italiano',lang:'Lingua',names:{'-1':'Machine room',0:'Contatti',1:'Studio',2:'Sistemi',3:'Brand',4:'Lavori',5:'Home'},
+      desc:{5:"Torna all'inizio",4:'Progetti scelti',3:'Identità, siti, UI e UX',2:'Software, app, AI privata',1:'Chi siamo, come lavoriamo',0:'Inizia un progetto'},
+      ko:{'Staff only':'Solo personale','Not without the key.':'Non senza la chiave.','Going down.':'Si scende.','You found it.':"L'hai trovata."},
+      close:'Chiudi',all:'Tutti i piani',sug:'Questo sito è anche in italiano.',sw:"Passa all'italiano",no:'No, grazie'},
+    /* spagnolo e francese al lancio; il tedesco è pronto ma spento (basta aggiungere 'de' a ORDER) */
+    es:{self:'Español',lang:'Idioma',names:{'-1':'Machine room',0:'Contacto',1:'Studio',2:'Sistemas',3:'Brand',4:'Trabajos',5:'Home'},
+      desc:{5:'Volver al principio',4:'Proyectos elegidos',3:'Identidad, webs, UI y UX',2:'Software, apps, IA privada',1:'Quiénes somos, cómo trabajamos',0:'Empezar un proyecto'},
+      ko:{'Staff only':'Solo personal','Not without the key.':'No sin la llave.','Going down.':'Bajamos.','You found it.':'La encontraste.'},
+      close:'Cerrar',all:'Todas las plantas',sug:'Este sitio también está en español.',sw:'Ver en español',no:'No, gracias'},
+    fr:{self:'Français',lang:'Langue',names:{'-1':'Machine room',0:'Contact',1:'Studio',2:'Systèmes',3:'Brand',4:'Projets',5:'Home'},
+      desc:{5:'Retour au début',4:'Projets choisis',3:'Identité, sites, UI et UX',2:'Software, apps, IA privée',1:'Qui nous sommes, notre méthode',0:'Lancer un projet'},
+      ko:{'Staff only':'Réservé au personnel','Not without the key.':'Pas sans la clé.','Going down.':'On descend.','You found it.':'Vous l\'avez trouvée.'},
+      close:'Fermer',all:'Tous les étages',sug:'Ce site existe aussi en français.',sw:'Passer en français',no:'Non merci'},
+    de:{self:'Deutsch',lang:'Sprache',names:{'-1':'Machine room',0:'Kontakt',1:'Studio',2:'Systeme',3:'Brand',4:'Arbeiten',5:'Home'},
+      desc:{5:'Zurück zum Anfang',4:'Ausgewählte Projekte',3:'Identität, Websites, UI und UX',2:'Software, Apps, private KI',1:'Wer wir sind, wie wir arbeiten',0:'Projekt starten'},
+      ko:{'Staff only':'Nur Personal','Not without the key.':'Nicht ohne Schlüssel.','Going down.':'Es geht runter.','You found it.':'Gefunden.'},
+      close:'Schließen',all:'Alle Etagen',sug:'Diese Seite gibt es auch auf Deutsch.',sw:'Auf Deutsch lesen',no:'Nein, danke'}
+  };
+  var ORDER=['en','it','es','fr'],cur='en'; /* le lingue al lancio; per aggiungerne una basta il suo dizionario qui sopra e la sigla qui */
+  window.MMT=L[cur];
+  var root=document.querySelector('.flr.navlift');if(!root)return;
+  /* la targhetta: in fondo alla placca, tra le due viti, come l'incisione di una cabina vera. Non è un tasto, non è un piano.
+     Chiusa dice solo la lingua dove sei, col quadratino acceso. Ci passi sopra (o la tocchi) e l'incisione si allunga dai due lati:
+     le altre lingue si scrivono lettera per lettera. Scegli: il quadratino corre, pomodoro mentre corre, poi la targhetta si richiude.
+     Regge due lingue come cinque: chiusa è sempre larga una parola. */
+  var box=document.createElement('div');box.className='flng';box.setAttribute('role','group');box.setAttribute('aria-label','Language');
+  box.innerHTML=ORDER.map(function(c){return '<button type="button" data-l="'+c+'" lang="'+c+'" aria-label="'+L[c].self+'" title="'+L[c].self+'"><span>'+c.toUpperCase()+'</span></button>'}).join('')+'<i class="lit" aria-hidden="true"></i>';
+  root.appendChild(box);
+  var lit=box.querySelector('.lit'),BS=[].slice.call(box.querySelectorAll('button')),busy=false,open=false,ft;
+  function btn(c){return box.querySelector('[data-l="'+c+'"]')}
+  function mark(){BS.forEach(function(x){var on=x.dataset.l===cur;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on?'true':'false');x.tabIndex=on||open?0:-1});
+    var b=btn(cur);if(lit.parentNode!==b){b.appendChild(lit)}lit.style.transform=''}
+  function setOpen(on){if(on===open)return;open=on;box.classList.toggle('open',on);
+    if(on)BS.forEach(function(x,i){if(x.dataset.l!==cur){var sp=x.firstChild;sp.textContent='';scramble(sp,x.dataset.l.toUpperCase(),60+Math.abs(i-ORDER.indexOf(cur))*55)}});
+    mark()}
+  function keys(){mark()}function caption(){}function place(){mark()}
+  function fold(ms){clearTimeout(ft);ft=setTimeout(function(){if(!busy)setOpen(false)},ms)}
+  var fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
+  var ot;if(fine){box.addEventListener('pointerenter',function(){clearTimeout(ft);clearTimeout(ot);ot=setTimeout(function(){setOpen(true)},120)});box.addEventListener('pointerleave',function(){clearTimeout(ot)});box.addEventListener('pointerleave',function(){fold(450)})}
+  box.addEventListener('focusin',function(){clearTimeout(ft);setOpen(true)});
+  box.addEventListener('focusout',function(e){if(!box.contains(e.relatedTarget))fold(200)});
+  box.addEventListener('keydown',function(e){var i=ORDER.indexOf(document.activeElement&&document.activeElement.dataset.l);
+    if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();e.stopPropagation();var j=Math.max(0,Math.min(ORDER.length-1,i+(e.key==='ArrowRight'?1:-1)));btn(ORDER[j]).focus()}
+    if(e.key==='Escape'&&open){e.stopPropagation();setOpen(false)}});
+  var was=null;box.addEventListener('pointerdown',function(){was=open});
+  box.addEventListener('click',function(e){var b=e.target.closest('button');if(!b||busy)return;var o=was===null?open:was;was=null;
+    if(!o){setOpen(true);return}
+    if(b.dataset.l===cur){setOpen(false);return}
+    /* il quadratino corre dalla lingua di prima a quella nuova */
+    busy=true;var c=b.dataset.l,a=lit.getBoundingClientRect(),z=b.getBoundingClientRect(),bx=box.getBoundingClientRect();
+    box.appendChild(lit);lit.style.transform='translate('+(a.left-bx.left)+'px,'+(a.top-bx.top)+'px)';lit.classList.add('free');void lit.offsetWidth;
+    lit.classList.add('mv');lit.style.transform='translate('+(z.left-bx.left+1)+'px,'+(a.top-bx.top)+'px)';
+    setTimeout(function(){lit.classList.remove('mv','free');apply(c);busy=false;fold(700)},RM?0:460)});
+  new MutationObserver(function(){if(!root.classList.contains('on'))setOpen(false)}).observe(root,{attributes:true,attributeFilter:['class']});
+  mark();
+  new MutationObserver(function(){var on=root.classList.contains('on');document.body.classList.toggle('lsug-off',on)}).observe(root,{attributes:true,attributeFilter:['class']});
+
+  /* le parole cambiano: mono = si ricompone lettera per lettera; nomi = girano */
+  var GL='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  function scramble(el,to,delay){if(RM){el.textContent=to;return}var from=el.textContent,n=Math.max(from.length,to.length),t0=null,dur=520;
+    function f(ts){if(t0===null)t0=ts;var p=Math.min(1,(ts-t0-delay)/dur);if(p<0){requestAnimationFrame(f);return}
+      var k=Math.floor(p*n),s='';for(var i=0;i<n;i++){var ch=to[i]||'';s+=i<k?ch:(ch===' '||!ch?ch:GL[(Math.random()*GL.length)|0])}
+      el.textContent=s;if(p<1)requestAnimationFrame(f);else el.textContent=to}
+    requestAnimationFrame(f)}
+  function roll(el,to,delay){if(RM||!el.animate||el.textContent===to){el.textContent=to;return}var o={duration:260,easing:'cubic-bezier(.7,0,.2,1)',delay:delay,fill:'forwards'};
+    el.animate([{transform:'none',opacity:1},{transform:'translateY(-40%)',opacity:0}],o).onfinish=function(){el.textContent=to;el.animate([{transform:'translateY(40%)',opacity:0},{transform:'none',opacity:1}],{duration:300,easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'})}}
+  function apply(c){var from=L[cur],t=L[c];cur=c;window.MMT=t;document.documentElement.lang=c;
+    var rows=[].slice.call(root.querySelectorAll('.flist .fb,.flg .fb'));
+    rows.forEach(function(b,i){var k=b.dataset.k,nm=b.querySelector('.ftx b'),ds=b.querySelector('.ftx span');
+      if(t.names[k])roll(nm,t.names[k],i*40);
+      if(k==='-1'){var ko=b.querySelector('.fko');if(ko){var en=Object.keys(from.ko).filter(function(x){return from.ko[x]===ko.textContent})[0]||'Staff only';scramble(ko,t.ko[en],i*40)}}
+      else if(t.desc[k])scramble(ds,t.desc[k].toUpperCase()===t.desc[k]?t.desc[k]:t.desc[k],i*40);
+      if(t.names[k])b.setAttribute('aria-label',(k==='-1'?'Floor LG, ':'Floor '+two(+k)+', ')+t.names[k])});
+    /* il giro dell'ascensore e la testata usano i nomi nuovi */
+    try{Object.keys(t.names).forEach(function(k){if(SITE[k])SITE[k][0]=t.names[k]});HDR.floor(onFloor,t.names[onFloor])}catch(e){}
+    try{if(root.classList.contains('on'))HDR.open(true)}catch(e){}
+    var fa=[].slice.call(document.querySelectorAll('nav[aria-label="Floors"] a'));[5,4,3,2,1,0].forEach(function(k,i){if(fa[i])roll(fa[i],(k?two(k):'G')+' '+t.names[k],i*30)});
+    place();
+    foot();hideSug()}
+  /* la chiave di LG riscrive il suo testo in inglese: lo riportiamo nella lingua scelta */
+  var ko=root.querySelector('.fko');
+  if(ko)new MutationObserver(function(){if(cur==='en')return;var v=ko.textContent,t=L[cur].ko;if(t[v]&&t[v]!==v)ko.textContent=t[v]}).observe(ko,{childList:true,characterData:true,subtree:true});
+
+  /* footer: la stessa scelta, in mono */
+  var fr=document.querySelector('footer .row.mo>span.mut,.ft .row.mo>span.mut')||[].slice.call(document.querySelectorAll('.row.mo>span.mut')).pop(),fl=null;
+  if(fr){fl=document.createElement('span');fl.className='flf';fr.parentNode.insertBefore(fl,fr);
+    fl.addEventListener('click',function(e){var a=e.target.closest('a');if(!a)return;e.preventDefault();if(a.dataset.l!==cur)apply(a.dataset.l)})}
+  function foot(){if(fl)fl.innerHTML=ORDER.map(function(c){return '<a href="#" data-l="'+c+'"'+(c===cur?' aria-current="true"':'')+'>'+c.toUpperCase()+'</a>'}).join('<i>/</i>')}
+  foot();
+
+  /* il cartellino: una volta sola, se il browser parla un'altra lingua che abbiamo. Bozza: lo mostriamo sempre in italiano per vederlo */
+  var want=(navigator.languages||[navigator.language||'']).map(function(x){return (x||'').slice(0,2)}).filter(function(x){return L[x]&&x!==cur})[0]||'it';
+  var sg=document.createElement('div');sg.className='lsug';sg.setAttribute('role','dialog');sg.setAttribute('aria-label',L[want].sug);
+  sg.innerHTML='<span class="fbt" aria-hidden="true">'+want.toUpperCase()+'</span><p>'+L[want].sug+'</p><button type="button" class="lsw">'+L[want].sw+'</button><button type="button" class="lx" aria-label="'+L[want].no+'"><i></i></button>';
+  document.body.appendChild(sg);
+  var st;function hideSug(){sg.classList.remove('on');clearTimeout(st)}
+  sg.querySelector('.lsw').addEventListener('click',function(){apply(want)});
+  sg.querySelector('.lx').addEventListener('click',hideSug);
+  setTimeout(function(){if(cur!==want){sg.classList.add('on');st=setTimeout(hideSug,12000)}},RM?600:2200);
 })();
 
 </script>
