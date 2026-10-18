@@ -93,6 +93,12 @@ def ritocchi(nome, t):
                        lambda m: m.group(1) + m.group(2)[:-1] + ' aria-current="page">' + m.group(3), t, count=1, flags=re.S)
         assert n == 1, f'footer {nome}'
 
+    # footer: Privacy e Terms in fondo, sulla riga del copyright (la pagina sta fuori dai piani, ci si arriva da qui)
+    vecchia = '<span class="mut">mothermachine.studio · © 2026 Mother Machine</span>'
+    cur = ' aria-current="page"' if nome == 'privacy' else ''
+    t = una(t, vecchia, '<span class="mut flg"><span class="flgc"><span>mothermachine.studio</span><i> · </i><span>© 2026 Mother Machine</span></span>'
+            f'<span class="flgl"><a href="/privacy"{cur}>Privacy</a><a href="/privacy#terms">Terms</a></span></span>', 'riga legale')
+
     if nome == 'home':
         # i lavori in home: Vitalia's (vero) al posto di Lumen Lab; i concept si chiamano Study come nel registro
         s = t.find('<a class="wc" href="#" data-go="4">', t.find('Forno Nove'))

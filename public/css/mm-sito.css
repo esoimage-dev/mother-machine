@@ -63,6 +63,12 @@ html.mm-arr #ride .pg,html.mm-arr #ride .disp{visibility:hidden}
    con la stessa riga alla stessa distanza (prima il passaggio aggiungeva una seconda riga sotto quella della lingua). */
 .ftr nav a,.flf a{text-decoration:none!important;border-bottom:1px solid transparent;padding-bottom:1px;transition:border-color .2s,opacity .2s}
 .ftr nav a:hover,.ftr nav a:focus-visible,.ftr nav a[aria-current],.flf a:hover,.flf a:focus-visible,.flf a[aria-current]{border-bottom-color:currentColor;opacity:1}
+/* riga legale: Privacy e Terms accanto al copyright, stesso tono tenue, stessa sottolineatura delle voci */
+.flg .flgl{display:inline-flex;gap:20px;margin-left:20px}
+.flg .flgl a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;padding-bottom:1px;transition:border-color .2s,color .2s}
+.flg .flgl a:hover,.flg .flgl a:focus-visible,.flg .flgl a[aria-current]{border-bottom-color:currentColor;color:var(--ink)}
+.flgc i{font-style:normal}
+@media (max-width:760px){.flg{display:grid;gap:14px}.flg .flgl{margin-left:0;gap:28px}.flgc{display:grid;gap:4px}.flgc i{display:none}}
 
 /* ---- footer su telefono: pagine in due colonne, poi le lingue a sinistra, poi il copyright ---- */
 @media (max-width:760px){

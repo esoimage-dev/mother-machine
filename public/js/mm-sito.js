@@ -104,6 +104,22 @@
     });
   }
 
+  /* ---- sulla pagina legale, Privacy e Terms nel footer cambiano scheda (stessa pagina) ---- */
+  if (p === '/privacy' || p === '/privacy.html') {
+    var legal = [].slice.call(document.querySelectorAll('.flgl a'));
+    var mark = function (k) { legal.forEach(function (a) { if ((a.hash === '#terms' ? 'terms' : 'privacy') === k) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current') }) };
+    mark(location.hash === '#terms' ? 'terms' : 'privacy');
+    [].forEach.call(document.querySelectorAll('.lgt button'), function (b) { b.addEventListener('click', function () { mark(b.dataset.d) }) });
+    legal.forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var b = document.querySelector('.lgt button[data-d="' + (a.hash === '#terms' ? 'terms' : 'privacy') + '"]');
+        if (!b) return;
+        e.preventDefault();
+        if (b.classList.contains('on')) scrollTo({ top: 0, behavior: 'smooth' }); else b.click();
+      });
+    });
+  }
+
   /* ---- caricamento normale: la pagina prende il suo stato, poi le transizioni si accendono ---- */
   if (!R.classList.contains('mm-arr')) {
     ready.then(function () { frames(2, unboot) });
