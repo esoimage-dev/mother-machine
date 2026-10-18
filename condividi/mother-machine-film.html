@@ -16,7 +16,7 @@ body{margin:0;background:var(--notte);color:var(--carta);font:16px/1.5 var(--f);
 .top b{color:var(--carta);font-weight:500}
 .frame{position:relative;background:#000}
 .stage{position:relative;aspect-ratio:16/9;background:var(--carta);overflow:hidden}
-.grain{position:absolute;inset:0;pointer-events:none;z-index:2}
+.grain{position:absolute;inset:0;pointer-events:none;z-index:2}#st>:not(.grain){width:calc(100% + 2px)!important;height:calc(100% + 2px)!important;margin:-1px}
 .go{position:absolute;inset:0;z-index:5;display:grid;place-items:center;align-content:center;gap:16px;background:rgba(15,15,14,.66);border:0;color:var(--carta);cursor:pointer;transition:opacity .45s cubic-bezier(.33,1,.68,1);font:500 12px var(--m);letter-spacing:.12em;text-transform:uppercase}
 .go .bt{width:96px;height:96px;background:var(--carta);color:var(--ink);display:grid;place-items:center;transition:transform .35s cubic-bezier(.34,1.56,.64,1),background-color .2s}
 .go:hover .bt,.go:focus-visible .bt{transform:scale(1.06);background:var(--tom)}
