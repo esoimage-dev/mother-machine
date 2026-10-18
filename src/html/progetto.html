@@ -1520,4 +1520,8 @@ pickNav();
 })();
 
 </script>
-<script>/* arrivo: la pagina e' pronta, le porte si aprono su di lei */(function(){var R=document.documentElement;if(!R.classList.contains('mm-arr'))return;var done=false;function end(){if(done)return;done=true;var r=document.getElementById('ride');SH.open().then(function(){R.classList.remove('mm-arr');r.classList.remove('on');r.setAttribute('aria-hidden','true')})}(document.fonts?document.fonts.ready:Promise.resolve()).then(function(){requestAnimationFrame(function(){requestAnimationFrame(end)})});setTimeout(end,2500)})();</script>
+<script>/* arrivo: la pagina e' pronta, le porte si aprono su di lei */(function(){var R=document.documentElement;if(!R.classList.contains('mm-arr'))return;var done=false;function end(){if(done)return;done=true;var r=document.getElementById('ride');SH.open().then(function(){R.classList.remove('mm-arr');r.classList.remove('on');r.setAttribute('aria-hidden','true')})}(document.fonts?document.fonts.ready:Promise.resolve()).then(function(){requestAnimationFrame(function(){requestAnimationFrame(end)})});setTimeout(end,2500)})();</script><script>/* il logo e "05 Home" nel footer portano alla home, con l'ascensore */
+(function(){var p=location.pathname;if(p==='/'||p==='/index.html')return;
+[].forEach.call(document.querySelectorAll('a.blogo,footer a[href="#top"]'),function(a){a.setAttribute('href','/');
+a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;e.preventDefault();e.stopImmediatePropagation();
+if(typeof go==='function'&&typeof SH!=='undefined'&&!SH.busy)go(5);else location.href='/'},true)})})();</script>
