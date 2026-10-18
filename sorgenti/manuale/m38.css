@@ -1,0 +1,57 @@
+/* ===== giro 37: bianco, pomodoro, bottone col quadrato, cursore, la home dal vivo ===== */
+:root,[data-luce="carta"]{--bg:#FBFAF7;--sf:#FFFFFF;--sf2:#F4F2EC;--mut:#6B6963;--ln:rgba(18,18,17,.12);--inv-ink:#FBFAF7;--acc-ink:#FBFAF7;--ui:#E4E1D8}
+[data-luce="notte"]{--ink:#F4F2EC;--inv:#F4F2EC}
+.chips{grid-template-columns:repeat(7,minmax(0,1fr))}
+@media (max-width:1000px){.chips{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}}
+.rules{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))!important}
+.dd{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:800px){.dd{grid-template-columns:1fr 1fr}}
+/* il bottone principale: testo e la presa */
+.mmb{position:relative;display:inline-flex;align-items:center;justify-content:space-between;gap:26px;height:56px;min-width:240px;padding:0 9px 0 20px;background:var(--inv);color:var(--inv-ink);font:600 15px var(--f-body);letter-spacing:-.01em;text-decoration:none;overflow:hidden;isolation:isolate}
+.mmb::before{content:"";position:absolute;inset:0;background:#FF5B3A;transform:translateY(101%);transition:transform .5s cubic-bezier(.7,0,.2,1);z-index:-1}
+.mmb .sq{width:38px;height:38px;display:grid;place-items:center;background:var(--inv-ink)}
+.mmb:hover .sq,.mmb:focus-visible .sq{background:#121211}
+.mmb .sq i{width:26px;height:26px;background:#FF5B3A;transform:scale(0);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.mmb:hover,.mmb:focus-visible{color:#121211}
+.mmb:hover::before,.mmb:focus-visible::before{transform:none}
+.mmb:hover .sq i,.mmb:focus-visible .sq i{transform:none;transition-delay:.22s}
+.mml{display:inline-flex;align-items:center;gap:14px;color:var(--ink);text-decoration:none;font:600 22px/1 var(--f-body);letter-spacing:-.03em}
+.mml i{width:40px;height:40px;display:grid;place-items:center;background:var(--ink);color:var(--bg);transition:background .35s,color .35s}
+.mml svg{width:46%;transition:transform .45s cubic-bezier(.7,0,.2,1)}
+.mml:hover i{background:#FF5B3A;color:#121211}.mml:hover svg{transform:translateX(3px)}
+/* il cursore, spiegato */
+.curd{display:grid;gap:14px;width:100%;max-width:340px}
+.curd>div{display:grid;grid-template-columns:44px 1fr;column-gap:14px;align-items:center;padding:10px 12px;background:#FBFAF7;color:#121211}
+.curd>div span{grid-column:2;font-size:13px;opacity:.8}.curd>div b{font:600 15px var(--f-body)}
+.curd i{grid-row:span 2;justify-self:center;width:10px;height:10px;background:#121211}
+.curd i.c2{width:30px;height:30px;background:none;box-shadow:inset 0 0 0 1.5px #121211}
+.curd .nb{background:#0F0F0E;color:#F4F2EC;outline:1px solid rgba(244,242,236,.2)}.curd .nb i{background:#F4F2EC}
+/* il punto, ridotto */
+.pdemo{display:grid;gap:26px;justify-items:start}
+.pw{font:300 54px/1 var(--f-body);letter-spacing:-.05em;color:var(--ink);display:inline-flex;align-items:baseline}
+.pdot{display:inline-block;width:.12em;height:.12em;background:#FF5B3A;margin-left:.04em;animation:pdr 3.2s steps(1) infinite;transition:opacity .2s}
+@keyframes pdr{0%,60%,100%{opacity:1}64%,72%{opacity:.2}68%,76%{opacity:1}}
+.pdemo:has(.mmb:hover) .pdot{animation:none;opacity:0}
+/* la home dal vivo */
+.livehome{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:end}
+.livehome figure{margin:0;display:grid;gap:10px}
+.lhd-in{position:relative;aspect-ratio:1440/900;overflow:hidden;background:#0F0F0E;outline:1px solid var(--ln)}
+.lhm-in{position:relative;width:300px;aspect-ratio:390/844;overflow:hidden;background:#0F0F0E;border-radius:34px;box-shadow:0 0 0 9px #121211,0 0 0 10px rgba(18,18,17,.3)}
+.livehome iframe{position:absolute;left:0;top:0;border:0;transform-origin:0 0;background:#0F0F0E}
+.lhd-in iframe{width:1440px;height:900px}.lhm-in iframe{width:390px;height:844px}
+.lhl{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#8C887F;pointer-events:none}
+.livehome .on+.lhl{display:none}
+.wcm{width:min(270px,100%)}
+.wcm .wn b{font-size:54px}
+.livehome figure{min-width:0}
+@media (max-width:900px){.livehome{grid-template-columns:minmax(0,1fr)}.lhm{justify-self:center}.lhm-in{width:min(300px,78vw)}}
+/* v38: il cursore a presa nella prova, la colonna dei piani nella testata della prova del piano 03 */
+.curd i.c2{position:relative;width:22px;height:22px;background:none;box-shadow:inset 0 0 0 1.5px #121211}
+.curd i.c2::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px 0 0 -4px;background:var(--sig,#FF5B3A)}
+.bld .hdr .kbm{display:grid;gap:2px;margin-left:10px}
+.bld .hdr .kbm i{display:block;width:3px;height:3px;background:currentColor;opacity:.3}
+.bld .hdr .kbm i.lit{background:var(--sig,#FF5B3A);opacity:1}
+.ldemo .flr.fdemo .fscr{display:none}
+.ldemo{grid-template-columns:300px minmax(0,1fr)}
+@media (max-width:760px){.ldemo{grid-template-columns:1fr}.ldemo .flr.fdemo{width:100%}}
+@media (max-width:620px){.flr.navlift{left:10px;right:10px;max-height:calc(100svh - 80px);overflow:auto}}

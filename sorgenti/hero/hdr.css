@@ -1,0 +1,25 @@
+/* ---- la testata: niente hamburger e niente frecce. Il display dell'ascensore e la colonna dei sei piani ---- */
+.dispB.disp3{box-sizing:border-box;display:flex;align-items:center;gap:14px;height:44px;padding:0 4px 0 12px;font:500 13px var(--f-mono);letter-spacing:.04em;-webkit-tap-highlight-color:transparent}
+.disp3 .rl{display:inline-grid;grid-template-columns:auto;gap:0;margin:0;padding:0;border:0;overflow:hidden;line-height:1.2;height:1.2em}
+.disp3 .rl>b{grid-area:1/1;font:inherit;letter-spacing:inherit;white-space:nowrap}
+.disp3 .dn{display:flex;align-items:baseline}
+.disp3 .nw{font-size:20px;font-weight:500}
+.disp3 .dn{position:relative}
+/* la freccia della corsa: a riposo non c'è, non si preme. Compare a sinistra del numero solo mentre l'ascensore si muove */
+.disp3 .dir{position:absolute;right:100%;top:50%;margin:-4px 8px 0 0;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:7px solid currentColor;opacity:0;transform:translateY(3px);transition:opacity .25s,transform .35s cubic-bezier(.2,.8,.2,1)}
+.disp3 .dir.dw{border-bottom:0;border-top:7px solid currentColor;transform:translateY(-3px)}
+.disp3 .dir.on{opacity:1;transform:none;animation:dirb .5s steps(1) infinite}
+@keyframes dirb{0%{opacity:1}50%{opacity:.35}}.disp3 .nm{font:400 10.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;opacity:.7;min-width:13.5ch}
+.disp3:hover .nm,.disp3.open .nm{opacity:1}
+/* la colonna: sei quadrati, uno per piano, quello acceso è dove sei. Al passaggio diventano le righe della pulsantiera */
+.disp3 .kb{display:grid;gap:2.5px;width:16px;justify-items:end;padding:4px 0}
+.disp3 .kb i{display:block;width:4px;height:4px;background:currentColor;opacity:.3;transform-origin:100% 50%;transition:transform .4s cubic-bezier(.2,.8,.2,1),opacity .25s,background-color .25s}
+.disp3 .kb i.lit{opacity:1;background:var(--sig)}
+.disp3:hover .kb i,.disp3:focus-visible .kb i,.disp3.open .kb i{transform:scaleX(4);opacity:.8}
+.disp3:hover .kb i.lit,.disp3:focus-visible .kb i.lit,.disp3.open .kb i.lit{opacity:1}
+.disp3 .kb i:nth-child(5){transition-delay:30ms}.disp3 .kb i:nth-child(4){transition-delay:60ms}.disp3 .kb i:nth-child(3){transition-delay:90ms}.disp3 .kb i:nth-child(2){transition-delay:120ms}.disp3 .kb i:nth-child(1){transition-delay:150ms}
+.disp3:focus-visible{outline:1px solid currentColor;outline-offset:4px}
+/* sul telefono non c'è il passaggio del mouse: la colonna è già aperta in righe, si capisce che si preme */
+@media (hover:none){.disp3 .kb i{transform:scaleX(4);opacity:.75}}
+@media (max-width:620px){.disp3 .nm{display:none}.dispB.disp3{gap:12px;height:48px}}
+@media (prefers-reduced-motion:reduce){.disp3 .kb i{transition:none}}

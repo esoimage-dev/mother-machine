@@ -1,0 +1,89 @@
+/* ---- la pulsantiera: vetro scuro pulito, bottoni da ascensore ---- */
+.flr.navlift{box-sizing:border-box;display:grid;font:400 14px var(--f-body);color:#F4F2EC}
+.flr .ftx{display:grid;gap:4px;min-width:0;text-align:left}
+.flr .ftx b{font:430 19px/1.05 var(--f-body);letter-spacing:-.02em;transition:font-weight .45s cubic-bezier(.2,.8,.2,1),letter-spacing .45s cubic-bezier(.2,.8,.2,1)}
+.flr .ftx span{font:400 9.5px var(--f-mono);letter-spacing:.09em;text-transform:uppercase;opacity:.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.flr .ftx em{font-style:normal}
+/* il bottone: un quadrato col numero nel lettering del marchio. Acceso = il piano dove sei */
+.flr .fb{all:unset;box-sizing:border-box;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.flr .fbt{position:relative;flex:none;display:grid;place-items:center;width:44px;height:44px;border:1.5px solid rgba(244,242,236,.5);border-radius:1px;box-sizing:border-box;font:500 13px var(--f-mono);letter-spacing:.02em;transition:border-color .25s,background-color .35s cubic-bezier(.2,.8,.2,1),color .35s}
+.flr .fbt::after{content:"";position:absolute;inset:4px;border:1.5px solid currentColor;opacity:0;transform:scale(.8);transition:opacity .2s,transform .3s cubic-bezier(.2,.8,.2,1)}
+.flr .fb:hover .fbt,.flr .fb:focus-visible .fbt{border-color:#F4F2EC}
+.flr .fb:hover .fbt::after,.flr .fb:focus-visible .fbt::after{opacity:.35;transform:none}
+.flr .fb.cur .fbt{background:#F4F2EC;border-color:#F4F2EC;color:#121211}
+.flr .fb.cur .fbt::after{display:none}
+/* chiamato: l'anello dentro il bottone lampeggia pomodoro. È l'unico pomodoro del pannello */
+.flr .fb.call .fbt::after{border-color:var(--sig);opacity:1;transform:none;animation:fcall .45s steps(1) infinite}
+@keyframes fcall{50%{opacity:.2}}
+.flr .fb:hover .ftx b,.flr .fb:focus-visible .ftx b,.flr .fb.cur .ftx b{font-weight:720;letter-spacing:-.03em}
+.flr .fb:hover .ftx span,.flr .fb:focus-visible .ftx span{opacity:.8}
+.flr .fb:focus-visible{outline:none}
+.flr .fb:focus-visible .fbt{outline:1px solid #F4F2EC;outline-offset:3px}
+.flr .fb.cur{cursor:default}
+/* LG: un bottone uguale agli altri, chiuso. Accanto il cilindro del manuale, con le due tacche: in alto chiuso, a destra aperto.
+   Premi LG da chiuso: il bottone lampeggia, la scritta dice di girare la chiave e il cilindro lampeggia. Giri la chiave: resta girata, la tacca si accende, LG si apre */
+.flr .flg{display:flex;align-items:center;gap:12px;margin-top:10px;padding-top:14px;border-top:1px dashed rgba(244,242,236,.18)}
+.flr .flg .fb{flex:1;min-width:0}
+.flr .flg .ftx em{font-style:normal}
+.flr .flg.open .ftx span{opacity:.8}
+
+.flr .cyl{width:44px;height:44px;margin-right:2px;border-color:rgba(244,242,236,.55);transition:border-color .25s}
+.flr .cyl:hover,.flr .cyl:focus-visible{border-color:#F4F2EC}
+.flr .cyl i{transition:transform .6s cubic-bezier(.3,1.3,.5,1)}
+.flr .cyl::after{opacity:.3;transition:opacity .3s .25s}
+.flr .cyl:hover i,.flr .cyl:focus-visible i{transform:rotate(14deg)}
+.flr .flg.open .cyl i{transform:rotate(90deg)}
+.flr .flg.open .cyl:hover i{transform:rotate(80deg)}
+.flr .flg.open .cyl::after{opacity:1}
+.flr .flg.deny .fbt{animation:fdeny .9s steps(1)}
+@keyframes fdeny{0%,30%,60%{background:rgba(244,242,236,.85);color:#121211}15%,45%,75%{background:transparent;color:#F4F2EC}}
+.flr .flg.deny .fko{animation:fko .9s steps(1)}
+.flr .flg.deny .cyl{animation:fkey .9s steps(1)}
+@keyframes fkey{0%,30%,60%{border-color:#F4F2EC}15%,45%{border-color:rgba(244,242,236,.15)}}
+@keyframes fno{20%{transform:translateX(-4px)}45%{transform:translateX(3px)}70%{transform:translateX(-2px)}100%{transform:none}}
+@keyframes fko{0%,30%,60%{opacity:1}15%,45%{opacity:.15}}
+.flr .ftri{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:6px solid currentColor}
+.flr .ftri.dw{border-bottom:0;border-top:6px solid currentColor}
+/* apertura: i bottoni si accendono dal basso, uno dopo l'altro, come la colonna della testata */
+.flr.on .fb{animation:fin .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*35ms)}
+@keyframes fin{from{opacity:0;transform:translate3d(0,8px,0)}}
+
+/* ---- A: la colonna ---- */
+.flr.pa{width:320px;padding:16px;gap:4px}
+.flr.pa .flist{display:grid;gap:8px}
+.flr.pa .fb{display:flex;align-items:center;gap:16px;padding:2px 0}
+
+@media (max-width:620px){
+  .flr.navlift,.flr.fc.navlift{width:auto;padding:18px 16px calc(22px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0) 30%),rgba(18,18,17,.9)!important}
+  .flr.pa .flist{gap:12px}
+  .flr .fbt{width:52px;height:52px}
+  .flr.pa .ftx b{font-size:23px}
+  .flr .cyl{width:52px;height:52px}
+  .flr .flg .fbt{width:52px;height:52px}
+  .flr .fbt{font-size:15px}
+}
+@media (prefers-reduced-motion:reduce){.flr.on .fb{animation:none}.flr .cyl i{transition:none}}
+
+/* ---- il pizzico di cabina ---- */
+/* le quattro viti della placca */
+.flr .fscr{position:absolute;inset:0;pointer-events:none}
+.flr .fscr b{position:absolute;width:7px;height:7px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(244,242,236,.28),inset 0 1px 1px rgba(255,255,255,.18);background:linear-gradient(135deg,transparent 44%,rgba(244,242,236,.38) 44%,rgba(244,242,236,.38) 58%,transparent 58%)}
+.flr .fscr b:nth-child(1){left:7px;top:7px}.flr .fscr b:nth-child(2){right:7px;top:7px;transform:rotate(60deg)}.flr .fscr b:nth-child(3){left:7px;bottom:7px;transform:rotate(-30deg)}.flr .fscr b:nth-child(4){right:7px;bottom:7px;transform:rotate(100deg)}
+.flr.navlift.pa{padding:20px 20px 18px}
+.flr:not(.navlift){position:relative}
+/* il bottone ha una corsa: si vede il bordo, si schiaccia */
+.flr .fbt{box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -2px 0 rgba(0,0,0,.28);transition:border-color .25s,background-color .35s cubic-bezier(.2,.8,.2,1),color .35s,transform .12s,box-shadow .12s}
+.flr .fb:active .fbt{transform:scale(.93);box-shadow:inset 0 2px 4px rgba(0,0,0,.35)}
+/* acceso: il bottone del piano dove sei è retroilluminato */
+.flr .fb.cur .fbt{box-shadow:inset 0 -2px 0 rgba(0,0,0,.12),0 0 0 4px rgba(244,242,236,.07),0 0 22px rgba(244,242,236,.28)}
+
+/* compatta: per pulsantiere lunghe, come quella del manuale */
+.flr.fc{width:340px}
+.flr.fc .flist{gap:5px}
+.flr.fc .fbt{width:36px;height:36px;font-size:12px}
+.flr.fc .ftx b{font-size:16px}
+.flr.fc .fb{gap:12px}
+.flr.fc .flg{margin-top:8px;padding-top:10px}
+.flr.fc .cyl{width:36px;height:36px}
+/* nelle prove del manuale: la stessa pulsantiera, appoggiata sulla pagina */
+.flr.fdemo{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0) 40%),#1A1A18;color:#F4F2EC;border-radius:3px;padding:20px 20px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 0 0 1px rgba(255,255,255,.1),0 24px 50px -20px rgba(0,0,0,.45);width:300px;box-sizing:border-box;display:grid;gap:4px;align-self:start}
