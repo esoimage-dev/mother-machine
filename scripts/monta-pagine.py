@@ -24,6 +24,7 @@ PAGINE = {  # pagina del sito <- pagina approvata
     'contact': 'contact', 'progetto': 'progetto', 'privacy': 'privacy-termini',
     'work': 'progetto',  # 04 Work: nasce dalla pagina progetto (stesso piano), con il registro al posto del caso
     'lg': 'progetto',    # LG Machine Room: stessa luce notte, il laboratorio al posto del caso
+    'room': 'contact',   # LG, dietro la chiave: il back office (scena 5 del prototipo di Contact)
 }
 INDIRIZZI = "{5:'/',4:'/work',3:'/brand',2:'/systems',1:'/studio',0:'/contact','-1':'/lg'}"
 
@@ -47,6 +48,7 @@ META = {
              'The register: every machine we deliver gets a serial number. Who it was for, what we built, what changed.', '#0F0F0E'),
     'lg': ('/lg', 'Mother Machine · Machine Room',
            'LG, the lab under the studio. Every floor above runs on what we build down here.', '#0F0F0E'),
+    'room': ('/lg/room', 'Mother Machine · Machine Room', 'Staff only.', '#0F0F0E'),
     'privacy': ('/privacy', 'Mother Machine · Privacy and terms',
                 'We collect only what we need to answer you and run a project with you. No ads, no tracking cookies, no selling data.', '#FBFAF7'),
 }
@@ -57,7 +59,8 @@ def testa_meta(nome):
     url, titolo, desc, colore = META[nome]
     e = lambda s: html.escape(s, quote=True)
     img = f'{SITO}/og/{nome}.png'
-    return (f'<title>{e(titolo)}</title>'
+    robots = '<meta name="robots" content="noindex,nofollow">' if nome == 'room' else ''
+    return robots + (f'<title>{e(titolo)}</title>'
             f'<meta name="description" content="{e(desc)}">'
             f'<link rel="canonical" href="{SITO}{url}">'
             f'<meta name="theme-color" content="{colore}">'
@@ -129,6 +132,28 @@ def ritocchi(nome, t):
                 '<button type="button" role="tab" aria-selected="true"><span class="sq">02</span>Systems</button>'
                 '<button type="button" role="tab" aria-selected="false"><span class="sq">03</span>Brand</button></div>'
                 '<div class="mcards">', 'tasti 05.2')
+
+    if nome == 'room':
+        # il back office: dalla pagina approvata di Contact resta solo la scena 5, accesa, al piano LG
+        s = t.find('<nav class="scenes mo"'); e = t.find('</nav>', s) + len('</nav>')
+        assert s > 0 and 'Percorso' in t[s:e], 'barra percorso'
+        t = t[:s] + t[e:]
+        s = t.find('<!-- 1 · CONTACT -->'); e = t.find('<!-- 5 · MACHINE ROOM -->', s)
+        assert s > 0 and e > s, 'scene 1-4'
+        t = t[:s] + t[e:]
+        t = una(t, '<section class="hs view mr" data-v="mr" data-luce="notte">',
+                '<section class="hs view mr on" data-v="mr" data-luce="notte" data-f="LG" data-n="Machine Room">', 'scena 5')
+        s = t.find('  /* scene */'); e = t.find('  /* la lingua della call', s)
+        assert s > 0 and e > s and '/* 5 · machine room */' in t[s:e], 'script delle scene'
+        t = t[:s] + (ROOT / 'src/sezioni/room.js').read_text(encoding='utf8') + t[e:]
+        t = una(t, "fl=0,nm='Contact'", "fl=-1,nm='Machine Room'", 'testata: piano')
+        t = una(t, 'aria-label="Floors: you are on G, Contact', 'aria-label="Floors: you are on LG, Machine Room', 'testata: aria')
+        t = una(t, '<b>G</b></span></span><span class="rl nm" id="bL"><b>Contact</b>',
+                '<b>LG</b></span></span><span class="rl nm" id="bL"><b>Machine Room</b>', 'testata: numero')
+        t = una(t, 'onFloor=0', 'onFloor=-1', 'piano corrente')
+        t = una(t, "nav.cur(0,'G','Contact')", "nav.cur(-1,'LG','Machine Room')", 'pulsantiera')
+        assert t.count('if(k===0') == 3, 'k===0'
+        t = t.replace('if(k===0', 'if(k===-1')
 
     if nome == 'contact':
         # nel sito c'e' solo il modulo. La barra "Percorso" e le scene 2-5 (mail, conferma, call, Machine Room) restano
@@ -361,7 +386,7 @@ def monta(nome, src):
 
     # 6. coda
     i = t.rfind('</body>')
-    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>'}.get(nome, '')
+    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script><script src="/js/mm-chiave.js"></script>', 'home': '<script src="/js/home.js"></script>'}.get(nome, '')
     t = t[:i] + coda + t[i:] if i > 0 else t + coda
     (OUT / f'{nome}.html').write_text(t, encoding='utf8')
     return luce

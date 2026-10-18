@@ -58,3 +58,13 @@ Reply, Move call, Make quote; lo stato delle mail automatiche; la storia; la not
 Cloudflare Worker (API), D1 (ordini, slot, token), Turnstile (anti-spam), Resend (mail, serve il dominio collegato
 e verificato), Daily (call), Cloudflare Access (protezione vera della Machine Room), Cron del Worker per i promemoria
 e per liberare gli orari non confermati dopo 24 ore.
+
+## LG · come si entra (costruito il 18 ottobre)
+- `/lg` è la faccia pubblica: "The lab under the studio." Ci si arriva dalla pulsantiera girando la chiave e premendo LG.
+- A LG, con la pulsantiera aperta, si **tiene premuta la chiave 3 secondi**: gira piano fino alla seconda tacca, la
+  pulsantiera si allunga e i bottoni dei piani diventano un tastierino (anche da tastiera: 1-5 e G).
+- Codice: **01 · 05 · 05 · G**. Giusto: OPEN, le porte si chiudono con il simbolo e si aprono su `/lg/room`, il back
+  office (scena 5, dati di prova). Sbagliato: il display trema e si riparte. Un tocco sulla chiave o 20 secondi e si esce.
+- Nella pagina c'è solo l'impronta SHA-256 del codice (`public/js/mm-chiave.js`). È la porta di scena: `/lg/room`
+  è ancora un indirizzo aperto, con noindex e Disallow in robots.txt. Prima di metterci dati veri va protetto con
+  Cloudflare Access.

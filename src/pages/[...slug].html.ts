@@ -8,6 +8,7 @@ import contact from '../html/contact.html?raw';
 import privacy from '../html/privacy.html?raw';
 import work from '../html/work.html?raw';
 import lg from '../html/lg.html?raw';
+import room from '../html/room.html?raw';
 
 const pages: Record<string, string> = {
   index: home,
@@ -19,6 +20,7 @@ const pages: Record<string, string> = {
   contact,
   privacy,
   lg,
+  'lg/room': room,
 };
 
 export const getStaticPaths: GetStaticPaths = () =>

@@ -154,3 +154,32 @@
   .mrd .in{grid-template-columns:1fr}
   .mrdoor{width:140px}
 }
+
+/* ---- la chiave del personale (solo a LG): tenuta 3 secondi, la pulsantiera diventa un tastierino ---- */
+#navLift .cyl{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:none}
+#navLift .cyl .n3{transition:opacity .4s}
+#navLift .cyl.mm-holding .n3{opacity:.9;transition:opacity 3s linear}
+#navLift.mm-code .cyl i{transform:rotate(135deg)!important}
+#navLift.mm-code .cyl .n3{opacity:1;background:var(--sig,#FF5B3A)}
+#navLift.mm-code .cyl::after{opacity:.3!important}
+/* i piani diventano tasti: restano i quadrati, i nomi si spengono */
+#navLift .flist .ftx,#navLift .flg .fb{transition:opacity .35s}
+#navLift.mm-code .flist .ftx{opacity:.18}
+#navLift.mm-code .flg .fb{opacity:.3}
+#navLift .fb.mm-hit .fbt{animation:mmhit .32s steps(1)}
+@keyframes mmhit{0%{background:#FF5B3A;border-color:#FF5B3A;color:#121211}}
+/* la fascia del codice esce sotto la chiave: la pulsantiera si allunga */
+.mmkp{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s cubic-bezier(.7,0,.2,1)}
+.mm-code .mmkp{grid-template-rows:1fr}
+.mmkpi{min-height:0;overflow:hidden;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:6px 16px;color:#F4F2EC}
+.mm-code .mmkpi{margin-top:12px;padding:16px 4px 4px;border-top:1px dashed rgba(244,242,236,.18)}
+.mmkpi>.mo{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+.mmkpd{display:flex;gap:10px;justify-self:end}
+.mmkpd i{width:16px;height:16px;border:1.5px solid rgba(244,242,236,.55);box-sizing:border-box;transition:background-color .15s,border-color .15s}
+.mmkpd i.mm-on{background:#F4F2EC;border-color:#F4F2EC}
+.mm-open .mmkpd i{background:#FF5B3A;border-color:#FF5B3A}
+.mmkpm{grid-column:1/-1;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.6;min-height:1.2em}
+.mm-open .mmkpm{opacity:1}
+.mmkp.mm-no .mmkpd{animation:mmno .5s cubic-bezier(.3,0,.3,1)}
+@keyframes mmno{20%{translate:-8px 0}40%{translate:7px 0}60%{translate:-5px 0}80%{translate:3px 0}}
+@media (prefers-reduced-motion:reduce){.mmkp{transition:none}.mmkp.mm-no .mmkpd{animation:none}}
