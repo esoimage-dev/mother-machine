@@ -1344,14 +1344,14 @@ var FLS=[].slice.call(document.querySelectorAll('section[data-f]')),bar=$('bar')
 function openNav(on){navL.classList.toggle('on',on);navDim.classList.toggle('on',on);document.body.classList.toggle('navopen',on);HDR.open(on);if(on&&innerWidth<=620)bar.classList.add('fold');else mini()}
 navDim.addEventListener('click',function(){openNav(false)});
 /* la corsa tra le pagine: le altre pagine sono segnaposto */
-var ride=$('ride');
+var MM_PAGES={5:'/',3:'/brand',2:'/systems',1:'/studio',0:'/contact'};var ride=$('ride');
 function drawFloor(pg,k){var d=SITE[k];pg.className='pg';pg.setAttribute('data-luce',d[1]);
   if(k===3){pg.innerHTML='';return}
   pg.innerHTML='<div class="pin hm"><div style="display:grid;gap:28px;align-content:center"><div class="fno">'+LT[two(k)]+'</div><h2>'+d[2]+'</h2></div><div class="bk"><button class="b p" data-back>Back to 05 · Home</button><span class="mo mut">This floor is next on the build list.</span></div></div>';
   pg.querySelector('[data-back]').addEventListener('click',function(){go(5)})}
 var SH=Shaft(ride,SITE,drawFloor);SH.set(3);
 function go(k){if(SH.busy||k===onFloor)return;openNav(false);ride.classList.add('on');ride.setAttribute('aria-hidden','false');nav.call(k);
-  SH.ride(k,function(lv,dir){nav.dir(dir);nav.show(two(lv),SITE[lv][0]);HDR.dir(dir);HDR.floor(lv,SITE[lv][0])}).then(function(){onFloor=k;nav.dir(0);nav.cur(k,two(k),SITE[k][0]);bar.setAttribute('data-luce',SITE[k][1]);
+  SH.ride(k,function(lv,dir){nav.dir(dir);nav.show(two(lv),SITE[lv][0]);HDR.dir(dir);HDR.floor(lv,SITE[lv][0])}).then(function(){if(MM_PAGES[k]){location.href=MM_PAGES[k];return}onFloor=k;nav.dir(0);nav.cur(k,two(k),SITE[k][0]);bar.setAttribute('data-luce',SITE[k][1]);
     HDR.dir(0);HDR.floor(k,SITE[k][0]);
     if(k===3){ride.classList.remove('on');ride.setAttribute('aria-hidden','true');curI=-1;pickNav()}})}
 var nav=Floors(navL,SITEF,{onPick:function(k){k=+k;if(k===onFloor){openNav(false);if(k===3)scrollTo({top:0,behavior:reduce?'auto':'smooth'});return}var tt=nav.call(k);setTimeout(function(){go(k)},reduce?0:tt)}});
