@@ -1358,7 +1358,7 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
 <div class="navdim" id="navDim"></div>
 <nav class="flr navlift" id="navLift" data-luce="notte" aria-label="Floors"></nav>
 <main class="hm ct fl3" id="top">
-  <nav class="scenes mo" aria-label="Bozza: il percorso"><span>Percorso</span><button data-v="contact" class="on">1 Contact</button><button data-v="inbox">2 Mail</button><button data-v="ok">3 Confermata</button><button data-v="room">4 La call</button><button data-v="mr">5 Machine Room</button></nav>
+  
 
   <!-- 1 · CONTACT -->
   <section class="hs ctm view on" data-v="contact" data-luce="rosa2" data-f="G" data-n="Contact"><div class="in">
@@ -1436,128 +1436,13 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
         <div class="wokey mo"><span><b>G</b>ground floor</span><span><b>2610</b>October 2026</span><span><b>07</b>your order</span></div>
         <p class="okt"></p>
         <div class="okc"><span class="mo mut">Your call · 30 min, your time</span><b class="okw"></b><span class="mo pend"><i></i>Waiting for your confirmation</span><span class="calang" hidden></span></div>
-        <button type="button" class="go goinbox"><b class="lbl">Open the email (bozza)</b><i class="arq" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 11 L4 13 L16.59 13 L12.29 17.29 L13.71 18.71 L20.41 12 L13.71 5.29 L12.29 6.71 L16.59 11Z"/></svg><svg viewBox="0 0 24 24"><path d="M4 11 L4 13 L16.59 13 L12.29 17.29 L13.71 18.71 L20.41 12 L13.71 5.29 L12.29 6.71 L16.59 11Z"/></svg><span class="ld"><i></i><i></i><i></i></span></i></button>
+        
       </div>
     </form></div>
   </div>
   </section>
 
-  <!-- 2 · LE MAIL -->
-  <section class="hs view inb" data-v="inbox" data-luce="carta"><div class="in">
-    <div class="inh"><span class="mo mut">Bozza · le mail che riceve il cliente, da hello@mothermachine.studio con Resend</span></div>
-    <div class="mail">
-      <aside class="mlist">
-        <button class="on" data-m="0"><b>Confirm your call · G-2610-07</b><span>Subito dopo l'invio</span></button>
-        <button data-m="1"><b>Tomorrow, 11:00 · our call</b><span>24 ore prima</span></button>
-        <button data-m="2"><b>In one hour · join here</b><span>1 ora prima</span></button>
-        <button data-m="3"><b>We got it · G-2610-07</b><span>Subito dopo l'invio, senza call</span></button>
-      </aside>
-      <article class="mview">
-        <div class="em on" data-m="0">
-          <div class="emh"><span class="emlogo" data-a="heroS" aria-label="Mother Machine"></span><span class="mo mut">G-2610-07</span></div>
-          <h3>Hi Sarah, one tap to confirm your call.</h3>
-          <p>You picked <b class="emw">Tue 20 Oct, 11:00</b>, your time. Confirm it and the time is yours. If we don't hear from you in 24 hours, we free it up.</p>
-          <button class="embtn" data-scene="ok">Confirm my call</button>
-          <p class="emsm calang" hidden></p>
-          <p class="emsm">Need another time? <a href="#">Pick a new one</a>.</p>
-          <div class="emord"><span class="mo mut">Your work order</span><p><span class="bneed">Back office</span><span class="bdet"></span><i class="bpain"></i></p></div>
-          <p class="emft mo mut"><span>Just reply, a person reads it.</span><span>mothermachine.studio</span></p>
-        </div>
-        <div class="em" data-m="1">
-          <div class="emh"><span class="emlogo" data-a="heroS" aria-label="Mother Machine"></span><span class="mo mut">G-2610-07</span></div>
-          <h3>See you tomorrow at 11:00.</h3>
-          <p>30 minutes, here on our site. No app to install, just your browser. Bring one thing that slows you down.</p>
-          <button class="embtn" data-scene="room">Your call room</button>
-          <p class="emsm"><a href="#">Add to calendar</a> · <a href="#">Move the call</a></p>
-          <p class="emft mo mut"><span>Just reply, a person reads it.</span><span>mothermachine.studio</span></p>
-        </div>
-        <div class="em" data-m="2">
-          <div class="emh"><span class="emlogo" data-a="heroS" aria-label="Mother Machine"></span><span class="mo mut">G-2610-07</span></div>
-          <h3>In one hour. The room is ready.</h3>
-          <p>Tap the button a minute before <span class="emt">11:00</span>. Camera optional.</p>
-          <button class="embtn" data-scene="room">Join the call</button>
-          <p class="emft mo mut"><span>Just reply, a person reads it.</span><span>mothermachine.studio</span></p>
-        </div>
-        <div class="em" data-m="3">
-          <div class="emh"><span class="emlogo" data-a="heroS" aria-label="Mother Machine"></span><span class="mo mut">G-2610-07</span></div>
-          <h3>Hi Sarah, your order is in.</h3>
-          <p>We read it today. Within one working day you get a first idea and, if we know enough, a rough range. The exact quote comes after a short call.</p>
-          <div class="emord"><span class="mo mut">Your work order</span><p><span class="bneed">Back office</span><span class="bdet"></span><i class="bpain"></i></p></div>
-          <p class="emsm">Rather talk? <a href="#">Book a free call</a>.</p>
-          <p class="emft mo mut"><span>Just reply, a person reads it.</span><span>mothermachine.studio</span></p>
-        </div>
-      </article>
-    </div>
-  </div></section>
-
-  <!-- 3 · CONFERMATA -->
-  <section class="hs view okp" data-v="ok" data-luce="carta"><div class="in okin">
-    <div class="okmain">
-    <span class="mo ctk">G · Your call</span>
-    <h1>Your call is confirmed.</h1>
-    <div class="okg">
-      <div class="okbig"><span class="mo mut">G-2610-07</span><b class="okw2">Tue 20 Oct</b><b class="okh">11:00</b><span class="mo mut okz">your time · 30 min</span></div>
-      <div class="okr">
-        <p>We'll send a reminder the day before and one hour before, with your link. The call opens here, on our site.</p>
-        <p class="calang" hidden></p>
-        <div class="okcal"><span class="mo mut">Add to calendar</span><div><button class="b">Google</button><button class="b">Apple</button><button class="b">Outlook</button></div></div>
-        <button class="wob">Can't make it? Pick another time</button>
-      </div>
-    </div>
-    </div>
-    <figure class="okposter" aria-label="Poster: ground floor">
-      <div class="pf gfp"><span class="g">G</span><h3>Ground floor. Tell us what slows you down.</h3><div class="foot"><span>Mother Machine</span><span>See you on the call</span></div></div>
-    </figure>
-  </div></section>
-
-  <!-- 4 · LA CALL -->
-  <section class="hs view room" data-v="room" data-luce="notte"><div class="in">
-    <div class="lob on">
-      <div class="lobv"><div class="cam"><span>S</span><i class="mo">Camera preview</i></div>
-        <div class="tgl"><button class="on" data-t="mic">Mic on</button><button class="on" data-t="cam">Camera on</button></div></div>
-      <div class="lobi">
-        <span class="mo mut">G-2610-07 · <span class="roomw">Tue 20 Oct, 11:00</span></span>
-        <h2>Your call is ready.</h2>
-        <p>30 minutes about what slows you down. Nothing to install, camera optional.</p>
-        <button class="b p join"><i class="dot" aria-hidden="true"></i>Join the call</button>
-        <span class="mo mut inroom"><i class="live" aria-hidden="true"></i>We are in the room</span>
-      </div>
-    </div>
-    <div class="inc">
-      <div class="tiles">
-        <div class="tile big"><span class="av mm1">m</span><b class="nm">Mother Machine</b><i class="spk" aria-hidden="true"></i></div>
-        <div class="tile me"><span class="av">S</span><b class="nm">You</b></div>
-      </div>
-      <aside class="side"><span class="mo mut">On the table</span><b>G-2610-07</b><p class="bneed">Back office</p><p class="q bpain"></p><span class="mo mut tm">00:00</span></aside>
-      <div class="ctrl"><button class="on" data-t="mic">Mic</button><button class="on" data-t="cam">Camera</button><button>Share screen</button><button class="leave">Leave</button></div>
-    </div>
-    <p class="rnote mo mut">Bozza · nel sito vero questo riquadro è Daily, vestito da Mother Machine. Il link personale arriva solo per mail.</p>
-  </div></section>
-
-  <!-- 5 · MACHINE ROOM -->
-  <section class="hs view mr" data-v="mr" data-luce="notte"><div class="in">
-    <div class="mrapp">
-      <nav class="mrnav"><span class="mo">LG · Machine Room</span><button class="on">Orders <i>1</i></button><button>Calls</button><button>Inbox</button><button>Quotes</button></nav>
-      <div class="mrmain">
-        <div class="mrk"><div><b>1</b><span>New orders</span></div><div><b>1</b><span>To confirm</span></div><div><b>3</b><span>Calls this week</span></div><div><b>2</b><span>Quotes out</span></div></div>
-        <div class="mrwk">
-          <div class="mrh"><b class="mrwl">Week of 19 Oct</b><span class="mrlg mo"><i class="c"></i>Confirmed<i class="r"></i>To confirm<i class="f"></i>Free</span></div>
-          <div class="wk"></div>
-        </div>
-      </div>
-      <aside class="mrord">
-        <span class="mo st new"><i></i>New · 2 min ago</span>
-        <b class="on1">G-2610-07</b><h4>Sarah Miller · Bloom Café</h4>
-        <dl><div><dt>Needs</dt><dd class="bneed">Back office</dd></div><div class="mrdet"><dt>Brief</dt><dd class="bdet"></dd></div><div><dt>Call</dt><dd class="mrc">Tue 20 Oct, 11:00 · <em>waiting for confirmation</em></dd></div></dl>
-        <p class="q bpain"></p>
-        <div class="mra"><button class="b p">Reply</button><button class="b">Move call</button><button class="b">Make quote</button></div>
-        <div class="mrauto"><span class="mo mut">Automatic emails</span><div class="d1"><i></i>Confirm request · sent 11:42</div><div class="d2"><i></i>Reminder · day before</div><div class="d3"><i></i>Reminder · one hour before</div></div>
-        <div class="mrhist"><span class="mo mut">History</span><div><span>11:42</span>Work order received</div><div><span>11:42</span>Push sent to your phone</div></div>
-      </aside>
-    </div>
-    <div class="push" role="status"><b>New work order · G-2610-07</b><span>Sarah Miller, Bloom Café · call Tue 11:00</span></div>
-  </div></section>
-</main>
+  </main>
 <footer class="ftr" data-luce="carta"><div class="in">
   <div class="lg" data-a="heroS"></div>
   <div class="row mo"><nav aria-label="Floors"><a href="#top">05 Home</a><a href="#" data-go="4">04 Work</a><a href="#" data-go="3">03 Brand</a><a href="#" data-go="2">02 Systems</a><a href="#" data-go="1">01 Studio</a><a href="#" data-go="0" aria-current="page">G Contact</a></nav><span class="mut flg"><span class="flgc"><span>mothermachine.studio</span><i> · </i><span>© 2026 Mother Machine</span></span><span class="flgl"><a href="/privacy">Privacy</a><a href="/privacy#terms">Terms</a></span></span></div>
@@ -1833,35 +1718,7 @@ pickNav();
   function done(){bind();f.classList.add('sent');var ok=f.querySelector('.wook');ok.hidden=false;bar0.style.width='100%';fit();rollify(f.querySelector('.woNum .roll'));rollify(f.querySelector('.woh .roll'));
     ok.querySelector('.okt').innerHTML=S.nocall?'Thanks, '+S.name+'. We read your brief today and reply by email within one working day, with a first idea and the next step.':'Thanks, '+S.name+'. One last step: tap <b>Confirm</b> in the email we sent to <b>'+S.email+'</b>.';
     ok.querySelector('.okc').hidden=S.nocall;ok.querySelector('.okw').textContent=when();}
-  f.querySelector('.goinbox').addEventListener('click',function(){go('inbox')});
   show('need');
-
-  /* 2 · le mail */
-  var ml=[].slice.call(document.querySelectorAll('.mlist button')),ems=[].slice.call(document.querySelectorAll('.em'));
-  ml.forEach(function(b){b.addEventListener('click',function(){ml.forEach(function(o){o.classList.toggle('on',o===b)});ems.forEach(function(e){e.classList.toggle('on',e.dataset.m===b.dataset.m)})})});
-  function fillMail(){var w=when()||'Tue 20 Oct, 11:00';[].slice.call(document.querySelectorAll('.emw')).forEach(function(e){e.textContent=w});[].slice.call(document.querySelectorAll('.em h3')).forEach(function(h){h.textContent=h.textContent.replace('Sarah',S.name)});
-    var t=(S.slot&&window.__when)?window.__when().split(', ')[1]:'11:00';ml[1].querySelector('b').textContent='Tomorrow, '+t+' · our call';ems[1].querySelector('h3').textContent='See you tomorrow at '+t+'.';[].slice.call(document.querySelectorAll('.emt')).forEach(function(e){e.textContent=t});
-    ml.forEach(function(b){b.style.display=(b.dataset.m==='3')===S.nocall?'':'none'});var first=ml.filter(function(b){return b.style.display!=='none'})[0];if(!first.classList.contains('on')||ml.some(function(b){return b.classList.contains('on')&&b.style.display==='none'}))first.click()}
-  /* 3 · confermata */
-  function fillOk(){var dd=S.day||cur[1];document.querySelector('.okw2').textContent=W[dd.getDay()]+' '+dd.getDate()+' '+M[dd.getMonth()];document.querySelector('.okh').textContent=(window.__when&&S.slot)?window.__when().split(', ')[1]:'11:00'}
-  /* 4 · la call */
-  var room=document.querySelector('.room'),lob=room.querySelector('.lob'),inc=room.querySelector('.inc'),tm=room.querySelector('.side .tm'),tick;
-  [].slice.call(room.querySelectorAll('[data-t]')).forEach(function(b){b.addEventListener('click',function(){var on=!b.classList.contains('on');[].slice.call(room.querySelectorAll('[data-t="'+b.dataset.t+'"]')).forEach(function(x){x.classList.toggle('on',on);x.textContent=(b.dataset.t==='mic'?'Mic':'Camera')+(x.closest('.tgl')?(on?' on':' off'):'')});
-    if(b.dataset.t==='cam')room.querySelector('.cam').classList.toggle('off',!on)})});
-  room.querySelector('.join').addEventListener('click',function(){lob.classList.remove('on');inc.classList.add('on');var s=0;clearInterval(tick);tick=setInterval(function(){s++;tm.textContent=('0'+Math.floor(s/60)).slice(-2)+':'+('0'+s%60).slice(-2)},1000)});
-  room.querySelector('.leave').addEventListener('click',function(){clearInterval(tick);tm.textContent='00:00';inc.classList.remove('on');lob.classList.add('on')});
-  /* 5 · machine room */
-  var BUSY={'0-0':'Kai · Reef Dive','2-2':'Lena · Tablelands Farm','3-1':'Marco · Esplanade Bar'};
-  function mr(){var days=S.day?(function(){var w=Math.floor((S.day-mon)/864e5/7);return week(w)})():week(0);document.querySelector('.mrwl').textContent='Week of '+days[0].getDate()+' '+M[days[0].getMonth()];var wk=document.querySelector('.wk'),h='<div class="hd"></div>'+days.map(function(x){return '<div class="hd">'+W[x.getDay()]+' '+x.getDate()+'</div>'}).join('');
-    var si=S.slot?SL.indexOf(S.slot):1,di=S.day?days.map(String).indexOf(String(S.day)):1;
-    SL.forEach(function(s,r){h+='<div class="tm">'+s+'</div>';days.forEach(function(x,c){var k=c+'-'+r;
-      if(c===di&&r===si&&!S.nocall)h+='<div><span class="sl '+(S.confirmed?'c':'r')+'">'+S.name+' · '+(S.confirmed?'confirmed':'to confirm')+'</span></div>';
-      else if(BUSY[k])h+='<div><span class="sl c">'+BUSY[k]+'</span></div>';else if(free(x).indexOf(s)<0)h+='<div><span class="sl bk">Booked</span></div>';else h+='<div><span class="fr"></span></div>'})});
-    wk.innerHTML=h;var c=document.querySelector('.mrc');c.innerHTML=S.nocall?'First idea by email · <em>no call yet</em>':window.__studio()+(new Date().getTimezoneOffset()===-600?'':' <small>('+when().split(', ')[1]+' for the client)</small>')+' · <em>'+(S.confirmed?'confirmed':'waiting for confirmation')+'</em>';c.classList.toggle('ok',S.confirmed);
-    document.querySelector('.mrord h4').textContent=(val('name')||'Sarah Miller')+(val('biz')?' · '+val('biz'):'');
-    var hi=document.querySelector('.mrhist');if(S.confirmed&&!hi.querySelector('.cf'))hi.insertAdjacentHTML('beforeend','<div class="cf"><span>11:51</span>Call confirmed by the client</div>');
-    var au=document.querySelector('.mrauto');au.querySelector('.d2').style.display=au.querySelector('.d3').style.display=S.nocall?'none':'';[].slice.call(document.querySelectorAll('.mrord button')).forEach(function(b){if(b.textContent==='Move call')b.style.display=S.nocall?'none':''});if(S.nocall){au.querySelector('.d1').className='d1 done';au.querySelector('.d1').lastChild.textContent='Order received · sent 11:42'}else au.querySelector('.d1').className='d1 done';au.querySelector('.d2').className='d2'+(S.confirmed?' next':'');au.querySelector('.d2').lastChild.textContent=S.confirmed?'Reminder · day before, scheduled':'Reminder · day before, after confirmation';au.querySelector('.d3').lastChild.textContent=S.confirmed?'Reminder · one hour before, scheduled':'Reminder · one hour before';
-    var p=document.querySelector('.push');p.querySelector('span').textContent=(val('name')||'Sarah Miller')+(val('biz')?', '+val('biz'):'')+(S.nocall?' · brief, reply by email':' · call '+(when()||'Tue 20 Oct, 11:00'));p.classList.remove('on');setTimeout(function(){p.classList.add('on')},500);setTimeout(function(){p.classList.remove('on')},4800)}
 
   /* la lingua della call: in inglese non si dice niente, in italiano si offre l'italiano, nelle altre lingue si dice che è in inglese */
   var CL={it:'La call può essere in italiano o in inglese.',es:'La llamada es en inglés.',fr:"L'appel se fait en anglais.",de:'Das Gespräch findet auf Englisch statt.'};

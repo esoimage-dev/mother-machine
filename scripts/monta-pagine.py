@@ -127,6 +127,24 @@ def ritocchi(nome, t):
                 '<button type="button" role="tab" aria-selected="false"><span class="sq">03</span>Brand</button></div>'
                 '<div class="mcards">', 'tasti 05.2')
 
+    if nome == 'contact':
+        # nel sito c'e' solo il modulo. La barra "Percorso" e le scene 2-5 (mail, conferma, call, Machine Room) restano
+        # in prototipo/contact.html: sono il progetto di quello che costruiamo dopo (docs/percorso-contatto.md).
+        s = t.find('<nav class="scenes mo"'); e = t.find('</nav>', s) + len('</nav>')
+        assert s > 0 and 'Percorso' in t[s:e], 'barra percorso'
+        t = t[:s] + t[e:]
+        s = t.find('<!-- 2 · LE MAIL -->'); e = t.find('</main>', s)
+        assert s > 0 and '<!-- 5 · MACHINE ROOM -->' in t[s:e], 'scene 2-5'
+        t = t[:s] + t[e:]
+        s = t.find('<button type="button" class="go goinbox">'); e = t.find('</button>', s) + len('</button>')
+        assert s > 0 and 'Open the email' in t[s:e], 'bottone bozza'
+        t = t[:s] + t[e:]
+        # e i loro script: la scena delle mail, la conferma, la call e la Machine Room (resta la lingua della call, che usa il modulo)
+        t = una(t, "  f.querySelector('.goinbox').addEventListener('click',function(){go('inbox')});\n", '', 'script bottone bozza')
+        s = t.find('  /* 2 · le mail */'); e = t.find('  /* la lingua della call', s)
+        assert s > 0 and e > s and '/* 5 · machine room */' in t[s:e], 'script scene 2-5'
+        t = t[:s] + t[e:]
+
     if nome == 'brand':
         # via la prima sezione (titolo e vetrina): l'apertura diventa la leva "Assembled / Taken apart"
         s = t.find('<section class="hs bro"'); e = t.find('</section>', s) + len('</section>')
