@@ -77,7 +77,6 @@ DOPO_TESTATA = ("<script>(function(){var R=document.documentElement,b=document.g
 
 # ---------- 4. ascensore ----------
 ASCENSORE = ("var MM_PAGES=" + INDIRIZZI + ";"
-             "var MM_RIDE=function(on){bar.classList.toggle('riding',on);if(!on)document.documentElement.classList.remove('mm-riding')};"
              "var MM_LEAVE=function(k){if(!MM_PAGES[k])return false;"
              "try{sessionStorage.setItem('mm-arrive',JSON.stringify({to:MM_PAGES[k],fold:bar.classList.contains('fold')}))}catch(e){}"
              "location.href=MM_PAGES[k];return true};"
@@ -127,11 +126,11 @@ def monta(nome, src):
 
     # 4. ascensore
     t = una(t, "var ride=$('ride');", ASCENSORE + "var ride=$('ride');", 'ride')
-    t = una(t, "await S.close(false);", "await S.close(false);window.MM_RIDE&&MM_RIDE(true);", 'chiusura porte')
+    t = una(t, "await S.close(false);", "await (window.MM_DOORS?MM_DOORS.close(S.close(false)):S.close(false));", 'chiusura porte')
     t = una(t, "await S.open();S.busy=false;return true};",
-            "if(window.MM_LEAVE&&MM_LEAVE(to))return new Promise(function(){});await S.open();S.busy=false;return true};", 'apertura porte')
+            "if(window.MM_LEAVE&&MM_LEAVE(to))return new Promise(function(){});await (window.MM_DOORS?MM_DOORS.open(S.open()):S.open());S.busy=false;return true};", 'apertura porte')
     t = una(t, "function go(k){if(SH.busy||k===onFloor)return;", "function go(k){if(SH.busy||k===onFloor)return;MM_PRE(k);document.documentElement.classList.add('mm-riding');", 'go')
-    t = una(t, "}).then(function(){onFloor=k;", "}).then(function(){if(MM_PAGES[k]){location.href=MM_PAGES[k];return}MM_RIDE(false);onFloor=k;", 'fine corsa')
+    t = una(t, "}).then(function(){onFloor=k;", "}).then(function(){if(MM_PAGES[k]){location.href=MM_PAGES[k];return}document.documentElement.classList.remove('mm-riding');onFloor=k;", 'fine corsa')
     t, n = re.subn(r"(\n  if\(k===-?\d+)\)\{pg\.innerHTML='';return\}", r"\1||MM_PAGES[k]){pg.innerHTML='';return}", t)
     assert n == 1, 'segnaposto'
 

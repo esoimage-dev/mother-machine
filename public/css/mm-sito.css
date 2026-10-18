@@ -8,8 +8,9 @@ html.mm-boot .bar,html.mm-boot .bar *{transition:none!important}
 
 /* ---- testata ----
    Quando il logo e' grande la testata e' trasparente: e' dello stesso colore della pagina sotto,
-   cosi' il velo della pulsantiera copre tutto e non compare nessuna riga. */
-.bar{z-index:41}
+   cosi' il velo della pulsantiera copre tutto e non compare nessuna riga.
+   Fascia e colore cambiano svelti (0,2-0,3 s): risalendo veloci in cima la fascia sparisce prima che il logo sia cresciuto. */
+.bar{z-index:41;transition:border-color .2s,background-color .25s,color .3s}
 .bar:not(.fold){background:transparent}
 .navdim{top:0}
 
@@ -29,13 +30,20 @@ html.mm-boot .bar,html.mm-boot .bar *{transition:none!important}
   .bar:not(.fold) .lgS{transform:translate(-.657px,6.11px) scale(1.5647)}
 }
 
+/* ---- logo: la versione disegnata (si vede finche' il font del logo non e' caricato) coincide con quella a carattere ----
+   Prima stava 3,5 px piu' a destra: quando arrivava il font il logo scattava di lato. Scarti misurati al quarto di pixel. */
+.bar .lgB>.mm{transform:translate(-3.4px,-.4px)}
+.bar .lgS>.mm{transform:translate(-1.6px,-.5px)}
+@media (max-width:620px){.bar .lgB>.mm{transform:translate(-2.5px,-1.25px)}.bar .lgS>.mm{transform:translate(-1.5px,-.6px)}}
+
 /* ---- l'ascensore ----
    Durante la corsa restano solo logo e contatore, chiari sulle porte scure: niente fascia della testata. */
 .bar.riding{background:transparent!important;border-bottom-color:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;color:#F4F2EC!important;transition:none!important}
-/* fascia e colore cambiano nello stesso istante, a porte chiuse: niente logo scuro sulle porte scure */
-/* durante la corsa (e all'arrivo) le porte stanno sopra a tutto, tranne testata e cursore */
+/* la testata "in corsa" e' ritagliata sulla sagoma delle porte (public/js/mm-sito.js); sotto, una copia normale sulla pagina */
+/* durante la corsa (e all'arrivo) le porte stanno sopra a tutto, tranne la testata in corsa e il cursore */
 html.mm-riding #ride,html.mm-arr #ride{z-index:2147483000}
-html.mm-riding .bar,html.mm-arr .bar{z-index:2147483001}
+.bar.riding{z-index:2147483001}
+.bar.mm-copy{pointer-events:none;z-index:1}
 html.mm-riding .mmc,html.mm-arr .mmc{z-index:2147483002}
 /* le porte sono piu' alte del vano: il rimbalzo di fine corsa non scopre lo sfondo */
 .ride.shaft .door{top:-12px;bottom:-12px}
