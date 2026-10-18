@@ -26,6 +26,48 @@ PAGINE = {  # pagina del sito <- pagina approvata
 INDIRIZZI = "{5:'/',3:'/brand',2:'/systems',1:'/studio',0:'/contact'}"
 
 
+SITO = 'https://mothermachine.studio'
+# meta per Google e anteprime dei link: titolo e descrizione presi dai testi approvati di ogni pagina
+META = {
+    'home': ('/', 'Mother Machine · The machine behind your business.',
+             "A design and engineering studio. We design and build the software companies run on, and the brands they're known by.", '#0F0F0E'),
+    'systems': ('/systems', 'Mother Machine · Systems',
+                'Back offices, apps and automations, built around how your team actually works. Not a template bent into shape.', '#BEC2BF'),
+    'brand': ('/brand', 'Mother Machine · Brand',
+              'Identity, websites and interfaces that hold together, from the logo to the last button.', '#FBFAF7'),
+    'studio': ('/studio', 'Mother Machine · Studio',
+               'A small studio. On purpose. The people who design your system are the people who build it.', '#EEC3B1'),
+    'contact': ('/contact', 'Mother Machine · Contact',
+                'Tell us what slows you down. The first conversation is free, and a real person reads every order.', '#EEC3B1'),
+    'progetto': ('/work/project', "Mother Machine · Vitalia's Pizza on Wheels",
+                 'A new business, built from zero: the brand, the website and the system that runs it.', '#0F0F0E'),
+    'privacy': ('/privacy', 'Mother Machine · Privacy and terms',
+                'We collect only what we need to answer you and run a project with you. No ads, no tracking cookies, no selling data.', '#FBFAF7'),
+}
+
+
+def testa_meta(nome):
+    import html
+    url, titolo, desc, colore = META[nome]
+    e = lambda s: html.escape(s, quote=True)
+    img = f'{SITO}/og/{nome}.png'
+    return (f'<title>{e(titolo)}</title>'
+            f'<meta name="description" content="{e(desc)}">'
+            f'<link rel="canonical" href="{SITO}{url}">'
+            f'<meta name="theme-color" content="{colore}">'
+            '<link rel="icon" href="/favicon.svg" type="image/svg+xml">'
+            '<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">'
+            '<link rel="apple-touch-icon" href="/apple-touch-icon.png">'
+            '<meta property="og:type" content="website"><meta property="og:site_name" content="Mother Machine">'
+            f'<meta property="og:title" content="{e(titolo)}"><meta property="og:description" content="{e(desc)}">'
+            f'<meta property="og:url" content="{SITO}{url}"><meta property="og:image" content="{img}">'
+            '<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">'
+            f'<meta property="og:image:alt" content="{e(titolo)}"><meta property="og:locale" content="en_US">'
+            '<meta name="twitter:card" content="summary_large_image">'
+            f'<meta name="twitter:title" content="{e(titolo)}"><meta name="twitter:description" content="{e(desc)}">'
+            f'<meta name="twitter:image" content="{img}">')
+
+
 def una(t, old, new, cosa):
     n = t.count(old)
     assert n == 1, f'{cosa}: trovato {n} volte'
@@ -119,6 +161,12 @@ def monta(nome, src):
     t = una(t, '<header class="bar" id="bar" data-luce="carta">', f'<header class="bar" id="bar" data-luce="{luce}">', 'testata')
 
     i = t.find('</header>', t.find('id="bar"')) + len('</header>'); t = t[:i] + DOPO_TESTATA + t[i:]
+
+    # meta per Google e anteprime dei link (al posto del titolo della pagina approvata)
+    t, n = re.subn(r'<title>[^<]*</title>', lambda m: testa_meta(nome), t, count=1)
+    assert n == 1, 'titolo'
+    # lingua della pagina (le pagine approvate non hanno ne' doctype ne' <html>: aggiungere il doctype cambierebbe la resa)
+    t = '<html lang="en">' + t
 
     # 3. testa: avvio prima dello stile della pagina, foglio del sito subito dopo
     i = t.find('<style'); t = t[:i] + AVVIO + t[i:]
