@@ -6,6 +6,7 @@ Lista viva del progetto. Si spunta quando una cosa è fatta, si aggiunge quando 
 - [ ] Segreti della porta di LG su Cloudflare: Workers & Pages → mother-machine → Settings → Variables and Secrets,
       tipo Secret, sia Production sia Preview: `MM_DOOR_CODE` (i bottoni separati da trattini) e `MM_DOOR_KEY`
       (stringa lunga e casuale, almeno 40 caratteri). Poi un nuovo deploy. Senza, la porta dice sempre "Try again".
+      Controllo: aprire `/api/porta` sul sito deve dare `"pronta":true`.
 - [ ] Rendere privata la repository GitHub (Settings → Change visibility → Private). Oggi è pubblica.
 
 ## Sicurezza, prima di mettere dati veri nel back office
