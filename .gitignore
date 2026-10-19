@@ -7,3 +7,4 @@ scripts/condivisione/.tmp.html
 
 # segreti locali per wrangler (mai nella repository)
 .dev.vars
+.wrangler/
