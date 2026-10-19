@@ -106,7 +106,7 @@
 
   /* ---- sulla pagina legale, Privacy e Terms nel footer cambiano scheda (stessa pagina) ---- */
   if (p === '/privacy' || p === '/privacy.html') {
-    var legal = [].slice.call(document.querySelectorAll('.flgl a'));
+    var legal = [].slice.call(document.querySelectorAll('.fleg a'));
     var mark = function (k) { legal.forEach(function (a) { if ((a.hash === '#terms' ? 'terms' : 'privacy') === k) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current') }) };
     mark(location.hash === '#terms' ? 'terms' : 'privacy');
     [].forEach.call(document.querySelectorAll('.lgt button'), function (b) { b.addEventListener('click', function () { mark(b.dataset.d) }) });
@@ -131,20 +131,24 @@
     var pomodoro = function (s) { return s.backgroundColor === 'rgb(255, 91, 58)' && s.display !== 'none' && s.visibility !== 'hidden' && +s.opacity > .5 };
     var taglia = function (a, b) { return { l: Math.max(a.l, b.l), t: Math.max(a.t, b.t), r: Math.min(a.r, b.r), b: Math.min(a.b, b.b) } };
     var box = function (r) { return { l: r.left, t: r.top, r: r.right, b: r.bottom } };
-    /* dove sta il pomodoro dentro l'elemento: l'elemento stesso, il suo riempimento (::before / ::after) o un figlio */
-    var zona = function (h) {
-      var cs = getComputedStyle(h), r = h.getBoundingClientRect();
+    /* dove sta il pomodoro: nell'elemento stesso, nel suo riempimento (::before / ::after) o in un figlio, anche nel suo riempimento */
+    var riempito = function (el) {
+      var cs = getComputedStyle(el), r = el.getBoundingClientRect();
       if (pomodoro(cs)) return box(r);
       var dentro = { l: r.left + parseFloat(cs.borderLeftWidth), t: r.top + parseFloat(cs.borderTopWidth), r: r.right - parseFloat(cs.borderRightWidth), b: r.bottom - parseFloat(cs.borderBottomWidth) };
       for (var k = 0, ps = ['::before', '::after']; k < 2; k++) {
-        var s = getComputedStyle(h, ps[k]);
+        var s = getComputedStyle(el, ps[k]);
         if (s.content !== 'none' && pomodoro(s)) {
           var m = new DOMMatrix(s.transform === 'none' ? undefined : s.transform);
           return taglia({ l: dentro.l + m.e, t: dentro.t + m.f, r: dentro.r + m.e, b: dentro.b + m.f }, dentro);
         }
       }
-      var figli = h.querySelectorAll('*');
-      for (var i = 0; i < figli.length && i < 40; i++) if (pomodoro(getComputedStyle(figli[i]))) return taglia(box(figli[i].getBoundingClientRect()), box(r));
+      return null;
+    };
+    var zona = function (h) {
+      var z = riempito(h); if (z) return z;
+      var figli = h.querySelectorAll('*'), r = box(h.getBoundingClientRect());
+      for (var i = 0; i < figli.length && i < 40; i++) { z = riempito(figli[i]); if (z) return taglia(z, r) }
       return null;
     };
     var passo = function () {
