@@ -59,12 +59,17 @@ Cloudflare Worker (API), D1 (ordini, slot, token), Turnstile (anti-spam), Resend
 e verificato), Daily (call), Cloudflare Access (protezione vera della Machine Room), Cron del Worker per i promemoria
 e per liberare gli orari non confermati dopo 24 ore.
 
-## LG · come si entra (costruito il 18 ottobre)
+## LG · come si entra
 - `/lg` è la faccia pubblica: "The lab under the studio." Ci si arriva dalla pulsantiera girando la chiave e premendo LG.
-- A LG, con la pulsantiera aperta, si **tiene premuta la chiave 3 secondi**: gira piano fino alla seconda tacca, la
-  pulsantiera si allunga e i bottoni dei piani diventano un tastierino (anche da tastiera: 1-5 e G).
-- Codice: **01 · 05 · 05 · G**. Giusto: OPEN, le porte si chiudono con il simbolo e si aprono su `/lg/room`, il back
-  office (scena 5, dati di prova). Sbagliato: il display trema e si riparte. Un tocco sulla chiave o 20 secondi e si esce.
-- Nella pagina c'è solo l'impronta SHA-256 del codice (`public/js/mm-chiave.js`). È la porta di scena: `/lg/room`
-  è ancora un indirizzo aperto, con noindex e Disallow in robots.txt. Prima di metterci dati veri va protetto con
-  Cloudflare Access.
+- Da **qualsiasi piano**, con la pulsantiera aperta, si **tiene premuta la chiave 3 secondi**: gira piano fino alla
+  seconda tacca, la pulsantiera si allunga e i bottoni dei piani diventano un tastierino da 5 (anche da tastiera: 1-5 e G).
+- **Il codice non è in questa repository né nel sito.** Lo conosce solo il server: è il segreto `MM_DOOR_CODE` su
+  Cloudflare. Il browser manda la sequenza a `/api/porta` (`functions/api/porta.js`); se è giusta il server lascia un
+  gettone firmato con `MM_DOOR_KEY` in un cookie HttpOnly di 8 ore. Ogni tentativo costa quasi un secondo.
+- `/lg/room` (il back office, scena 5 con dati di prova) si apre solo con quel gettone (`functions/lg/_middleware.js`);
+  senza, si torna a `/lg`. Codice giusto: OPEN, porte con il simbolo, Machine Room.
+- Segreti da impostare su Cloudflare (Workers & Pages → mother-machine → Settings → Variables and Secrets, tipo
+  Secret, sia Production sia Preview): `MM_DOOR_CODE` (i bottoni separati da trattini, come 01-02-03-04-G) e
+  `MM_DOOR_KEY` (una stringa lunga e casuale). Senza, la porta resta chiusa.
+- In locale: `.dev.vars` (ignorato da git) e `npx wrangler@3 pages dev dist`.
+- Prima di metterci dati veri: Cloudflare Access davanti a `/lg/room` e una regola di Rate Limiting su `/api/porta`.
