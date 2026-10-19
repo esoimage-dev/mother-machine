@@ -87,9 +87,9 @@ footer.ftr .fsq{position:relative;overflow:hidden;isolation:isolate;display:grid
    chiamato, l'anello lampeggia pomodoro */
 footer.ftr .fsq::after{content:"";position:absolute;inset:4px;border:1.5px solid currentColor;opacity:0;transform:scale(.8);transition:opacity .2s,transform .3s cubic-bezier(.2,.8,.2,1)}
 footer.ftr .fnm{font-size:9.5px;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);white-space:nowrap;text-align:center;transition:color .25s}
-footer.ftr .fdir a:hover .fsq,footer.ftr .fdir a:focus-visible .fsq,footer.ftr .fkey.open .flgb:hover .fsq,footer.ftr .fkey.open .flgb:focus-visible .fsq{border-color:#F4F2EC}
-footer.ftr .fdir a:hover .fsq::after,footer.ftr .fdir a:focus-visible .fsq::after,footer.ftr .fkey.open .flgb:hover .fsq::after,footer.ftr .fkey.open .flgb:focus-visible .fsq::after{opacity:.35;transform:none}
-footer.ftr .fdir a:active .fsq,footer.ftr .fkey.open .flgb:active .fsq{transform:scale(.93);box-shadow:inset 0 2px 4px rgba(0,0,0,.35)}
+footer.ftr .fdir a:hover .fsq,footer.ftr .fdir a:focus-visible .fsq,footer.ftr .flgb:hover .fsq,footer.ftr .flgb:focus-visible .fsq{border-color:#F4F2EC}
+footer.ftr .fdir a:hover .fsq::after,footer.ftr .fdir a:focus-visible .fsq::after,footer.ftr .flgb:hover .fsq::after,footer.ftr .flgb:focus-visible .fsq::after{opacity:.35;transform:none}
+footer.ftr .fdir a:active .fsq,footer.ftr .flgb:active .fsq{transform:scale(.93);box-shadow:inset 0 2px 4px rgba(0,0,0,.35)}
 footer.ftr .fdir .call .fsq::after{border-color:var(--sig);opacity:1;transform:none;animation:mm-fcall .45s steps(1) infinite}
 @keyframes mm-fcall{50%{opacity:.25}}
 footer.ftr .fdir a:hover .fnm,footer.ftr .fdir a:focus-visible .fnm,footer.ftr .flgb:hover .fnm,footer.ftr .fcylb:hover .fnm{color:var(--ink)}
@@ -99,10 +99,8 @@ footer.ftr .fdir [aria-current] .fsq{background:#F4F2EC;border-color:#F4F2EC;col
 footer.ftr .fdir [aria-current] .fnm{color:var(--ink)}
 footer.ftr .fdir [aria-current]{cursor:default}
 footer.ftr .fdir [aria-current] .fsq::after{display:none}
-/* LG: chiuso e tratteggiato finche' la chiave non gira */
+/* LG: un bottone come gli altri, sotto la linea tratteggiata; senza la chiave non si lascia premere */
 footer.ftr .fkey{padding-top:18px;border-top:1px dashed rgba(244,242,236,.18)}
-footer.ftr .flgb .fsq{border-style:dashed;opacity:.5}
-footer.ftr .fkey.open .flgb .fsq{border-style:solid;opacity:1}
 footer.ftr .fkey.deny .flgb .fsq{animation:mm-fdeny .5s cubic-bezier(.3,0,.3,1)}
 @keyframes mm-fdeny{20%{translate:-5px 0}40%{translate:4px 0}60%{translate:-3px 0}80%{translate:2px 0}}
 footer.ftr .fko{align-self:start;height:50px;display:grid;place-items:center;text-align:center;font-size:9.5px;line-height:1.35;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
