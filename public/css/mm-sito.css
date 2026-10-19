@@ -269,3 +269,14 @@ html.mm-riding #ride .pg{visibility:hidden}
   html .disp3.open .kb i{transform:scaleX(4);opacity:.8}
   html .disp3.open .kb i.lit{opacity:1}
 }
+
+/* ---- su telefono, a pulsantiera aperta, accanto al numero compare "Close" ----
+   La casella si allarga (la larghezza la porta mm-sito.js) insieme allo spazio che la separa dal numero: il numero
+   scivola a sinistra invece di saltare. Da chiusa la scritta non c'e'. */
+@media (max-width:620px){
+  html .disp3 .nm{display:inline-grid;min-width:0;width:0;margin-left:-14px;opacity:0;
+    transition:width .42s cubic-bezier(.7,0,.2,1),margin-left .42s cubic-bezier(.7,0,.2,1),opacity .12s}
+  html .disp3:hover:not(.open) .nm,html .disp3:focus-visible:not(.open) .nm{opacity:0}   /* l'hover che resta dopo un tocco non conta */
+  html .disp3.open .nm{margin-left:0;opacity:1;transition:width .42s cubic-bezier(.7,0,.2,1),margin-left .42s cubic-bezier(.7,0,.2,1),opacity .3s .2s}
+}
+@media (max-width:620px) and (prefers-reduced-motion:reduce){html .disp3 .nm{transition:none}}

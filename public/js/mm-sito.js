@@ -175,13 +175,18 @@
   var lab = document.getElementById('bL');
   if (lab) {
     var misura = function (b) { var r = document.createRange(); r.selectNodeContents(b); return r.getBoundingClientRect().width };
+    var tel = matchMedia('(max-width:620px)'), disp = document.getElementById('dispB');
     var adatta = function () {
       var b = lab.lastElementChild; if (!b || !lab.offsetParent) return;
+      /* su telefono la scritta c'e' solo a pulsantiera aperta ("Close"): da chiusa la casella e' larga zero */
+      if (tel.matches) { lab.style.width = disp && disp.classList.contains('open') ? Math.ceil(misura(b)) + 'px' : '0px'; return }
       var min = parseFloat(getComputedStyle(lab).minWidth) || 0;
       lab.style.width = Math.ceil(Math.max(min, misura(b))) + 'px';
     };
     var prima = lab.style.transition; lab.style.transition = 'none'; adatta(); void lab.offsetWidth; lab.style.transition = prima;
     new MutationObserver(function (ms) { if (ms.some(function (m) { return m.addedNodes.length })) adatta() }).observe(lab, { childList: true });
+    if (disp) new MutationObserver(adatta).observe(disp, { attributes: true, attributeFilter: ['class'] });
+    if (tel.addEventListener) tel.addEventListener('change', adatta);
     addEventListener('resize', adatta);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(adatta);
   }
