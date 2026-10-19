@@ -1,9 +1,5 @@
-/* Mother Machine · 05 Home: copertina del film su telefono, 05.2 una scheda alla volta su telefono. */
+/* Mother Machine · 05 Home: 05.2 una scheda alla volta su telefono. */
 (function () {
-  /* la copertina apre il film come il vecchio link "Watch the film" */
-  var pf = document.getElementById('h3pf'), wf = document.getElementById('h3wf');
-  if (pf && wf) pf.addEventListener('click', function () { wf.click() });
-
   /* 05.2: due tasti, una scheda alla volta (solo dove i tasti si vedono). Al cambio si ridisegna il vetro. */
   var tabs = [].slice.call(document.querySelectorAll('.mtabs button'));
   var cards = [].slice.call(document.querySelectorAll('.mcards .gc'));

@@ -14,17 +14,29 @@
   .h3pfb em{margin-left:auto;font-style:normal;opacity:.6}
   .h3pf:active .h3pfl{transform:scale(.97)}
   .h3pf:focus-visible{outline:2px solid #F4F2EC;outline-offset:3px}
-  /* la copertina sta subito sotto "Free first call.": il vuoto sotto il testo lo fa lei */
+  /* la copertina sta subito sotto il bottone: il vuoto sotto lo fa lei */
   .h3x>.in{padding-bottom:0}
-  /* il link piccolo "Watch the film" accanto a "Free first call." non serve piu': c'e' la copertina */
-  .h3wf{display:none!important}
 }
 
-/* ---- 05.1 · gerarchia su telefono: la frase sotto il titolo piu' piccola e piu' tenue ---- */
-@media (max-width:700px){
-  .hm .h3b .lead{font-size:16px;line-height:1.45;color:var(--mut);max-width:34ch}
-  .h3b{gap:18px;padding-top:18px}
+/* ---- 05.1 · solo titolo, bottone e film (19 ottobre). L'indicatore del peso a sinistra, sopra il titolo ---- */
+.h3spec{border-bottom:0;padding-bottom:0}
+.h3g{grid-template-rows:auto minmax(0,1fr)}   /* la riga sotto il titolo non c'e' piu' */
+.h3go .h3cta{width:100%;box-sizing:border-box}
+@media (min-width:1000px){
+  /* a destra una colonna sola: la finestra del film in alto, il bottone in basso sulla linea di "business." */
+  .h3go{position:absolute;right:0;top:0;width:var(--tw);z-index:2}
+  /* l'indicatore del peso sta attaccato al titolo: il gruppo intero sta al centro dello schermo, niente vuoto in mezzo */
+  .h3g{grid-template-rows:auto auto;align-content:center}
 }
+@media (max-width:999px){
+  /* su tablet e telefono niente schermo pieno forzato: titolo, bottone e copertina in fila, senza buchi */
+  .h3x,.h3g{min-height:0}
+  .h3g{padding-top:clamp(120px,21vw,170px);padding-bottom:0;gap:28px}
+  .h3mid{gap:clamp(32px,5vw,48px)}
+  .h3pf{margin-top:clamp(40px,6vw,56px)}
+  .h3go{width:min(100%,360px)}
+}
+@media (max-width:700px){.h3go{width:100%}}
 
 /* ---- 05.1 · "Start a project" su telefono come su desktop: carta con il quadrato nero; al tocco sale il pomodoro ----
    Prima era sempre arancione (il pomodoro va solo su cio' che risponde, manuale). */

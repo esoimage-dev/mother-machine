@@ -1123,15 +1123,11 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
 <main class="hm" id="top">
   <section class="hs h3x" data-luce="notte" data-f="05.1" data-n="Opening" id="s1">
     <div class="in h3g">
-      <div class="h3spec mo" aria-hidden="true"><span class="h3pos">A design and engineering studio</span><span class="h3ax"><span>wght</span><i><b id="h3bar"></b></i><b id="h3w">400</b></span></div>
+      <div class="h3spec mo" aria-hidden="true"><span class="h3ax"><span>wght</span><i><b id="h3bar"></b></i><b id="h3w">400</b></span></div>
       <div class="h3mid" id="h3mid">
         <h1 class="h3t" id="h3t" aria-label="The machine behind your business.">The machine behind your business.</h1>
         <figure class="h3film" id="h3f"><div class="h3fb" id="h3fb" role="button" tabindex="0" aria-label="Watch the film, with sound"><div class="h3slot" id="h3slot" data-luce="carta"><div class="h3st" id="st"><div class="grain" id="gr"></div></div></div><div class="h3fp mo"><i class="pl"></i><span>Watch the film</span><em id="h3dur">0:38</em></div></div></figure>
-      </div>
-      <div class="h3b">
-        <p class="lead">We design and build the software companies run on, and the brands they're known by.</p>
-        <div class="ctas"><a class="h3cta" id="h3cta" href="#g" data-cur="#121211"><span class="fl" aria-hidden="true"></span><span class="lb"><span>Start a project</span><span aria-hidden="true">Start a project</span></span><span class="gq" aria-hidden="true"><i></i></span></a>
-          <span class="h3lk mo"><span>Free first call.</span><button class="h3wf mo" id="h3wf"><i class="pl"></i>Watch the film</button></span></div>
+        <div class="h3go" id="h3go"><a class="h3cta" id="h3cta" href="/contact" data-go="0" data-cur="#121211"><span class="fl" aria-hidden="true"></span><span class="lb"><span>Start a project</span><span aria-hidden="true">Start a project</span></span><span class="gq" aria-hidden="true"><i></i></span></a></div>
       </div>
     </div>
     <button class="h3pf" id="h3pf" type="button" aria-label="Watch the film, with sound"><span class="h3pfv"><span class="h3pfl" data-a="heroS"></span><span class="grain"></span></span><span class="h3pfb mo"><i class="pl"></i>Watch the film<em>0:38</em></span></button><div class="h3fly" id="h3fly" aria-hidden="true"></div>
@@ -1420,14 +1416,14 @@ function make(){h.innerHTML='';CH=[];
     var m=document.createElement('i');m.className='bm';d.appendChild(m);h.appendChild(d)})}
 function tileOn(){return getComputedStyle(fig).display!=='none'}
 function fit(){var W=mid.clientWidth,g=sec.querySelector('.h3g'),cs=getComputedStyle(g);
-  var Hav=sec.offsetHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-g.children[0].offsetHeight-g.children[2].offsetHeight-2*parseFloat(cs.rowGap||cs.gap||24);
+  var Hav=sec.offsetHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-g.children[0].offsetHeight-parseFloat(cs.rowGap||cs.gap||24);
   /* se c'è il film a destra, la frase gli lascia il suo spazio */
   var Wt=tileOn()?W-fig.offsetWidth-56:W;
   make();h.style.fontSize='100px';CH.forEach(function(c){c.el.style.fontWeight=tileOn()?560:(innerWidth<700?600:HI)});
-  var mw=0;[].forEach.call(h.children,function(d){mw=Math.max(mw,d.scrollWidth)});
+  var mw=0,x0=h.getBoundingClientRect().left;[].forEach.call(h.children,function(d){mw=Math.max(mw,d.querySelector('.bm').getBoundingClientRect().left-x0)});
   fs=Math.min(100*Wt/mw*.97,Hav*.93/(LINES.length*.86));h.style.fontSize=fs.toFixed(1)+'px';CH.forEach(function(c){c.el.style.fontWeight=c.w});
   placeTile()}
-function placeTile(){if(!tileOn())return;var l1=h.children[0];fig.style.top=(l1.getBoundingClientRect().top-mid.getBoundingClientRect().top+fs*.12).toFixed(1)+'px'}
+function placeTile(){var go=$('h3go');if(!tileOn()){go.style.top='';return}var l1=h.children[0],mt=mid.getBoundingClientRect().top;fig.style.top=(l1.getBoundingClientRect().top-mt+fs*.12).toFixed(1)+'px';go.style.top=(h.lastChild.querySelector('.bm').getBoundingClientRect().top-mt-go.offsetHeight).toFixed(1)+'px'}
 function at(e){ptr={x:e.clientX,y:e.clientY};lastMove=performance.now()}
 addEventListener('pointermove',at,{passive:true});
 addEventListener('touchmove',function(e){var t=e.touches[0];if(t)at(t)},{passive:true});
@@ -1499,7 +1495,7 @@ function closeF(){if(!open)return;open=false;MMS.disable();sb.textContent='Sound
   var done=function(){st.classList.remove('big');st.removeAttribute('style');slot.appendChild(st);play=true;ft=L0};
   if(tileOn()&&!reduce){var r0=slot.getBoundingClientRect(),r1=st.getBoundingClientRect();st.animate([{transform:'none',transformOrigin:'0 0'},{transform:'translate('+(r0.left-r1.left)+'px,'+(r0.top-r1.top)+'px) scale('+(r0.width/r1.width)+')',transformOrigin:'0 0'}],{duration:520,easing:EZ}).onfinish=done}
   else done()}
-$('h3fb').addEventListener('click',openF);$('h3fb').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openF()}});$('h3wf').addEventListener('click',openF);$('h3x').addEventListener('click',closeF);
+$('h3fb').addEventListener('click',openF);$('h3fb').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openF()}});$('h3pf').addEventListener('click',openF);$('h3x').addEventListener('click',closeF);
 ov.addEventListener('click',function(e){if(e.target===ov)closeF()});
 addEventListener('keydown',function(e){if(e.key==='Escape')closeF()});
 sb.addEventListener('click',function(){if(MMS.isOn()){MMS.disable();sb.textContent='Sound on'}else if(MMS.enable(ft)){MMS.seek(ft);sb.textContent='Sound off'}});
