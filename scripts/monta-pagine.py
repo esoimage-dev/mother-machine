@@ -90,27 +90,24 @@ VITALIA_HOME = (
     '<div class="wn"><b data-v="12" data-s=" h">12 h</b><span>a week nobody spends on the phone or in DMs</span></div></a>')
 
 
-# il footer e' l'elenco del palazzo, come nell'atrio di un edificio: un piano per riga, dall'alto in basso, con il quadrato
-# del numero (come i bottoni della pulsantiera), il nome e cosa c'e' (le descrizioni della pulsantiera). Il piano dove sei
-# e' acceso; LG c'e' ma e' chiuso. In fondo una fascia: copyright e sito, lingue (le mette lo script delle lingue prima di
-# span.mut), Privacy e Terms.
-PIANI = [(5, '05', 'Home', 'Back to the start', 'href="#top"'), (4, '04', 'Work', 'Selected projects', 'href="#" data-go="4"'),
-         (3, '03', 'Brand', 'Identity, websites, UI and UX', 'href="#" data-go="3"'),
-         (2, '02', 'Systems', 'Software, apps, private AI', 'href="#" data-go="2"'),
-         (1, '01', 'Studio', 'Who we are, how we work', 'href="#" data-go="1"'), (0, 'G', 'Contact', 'Start a project', 'href="#" data-go="0"')]
+# il footer e' la pulsantiera dell'ascensore, in fondo alla pagina: una fila di bottoni quadrati, dal piano piu' alto al
+# piu' basso, con il nome sotto, come la placca accanto alle porte. Il piano dove sei e' acceso; LG c'e' ma e' chiuso.
+# A sinistra il logo. In fondo una fascia: copyright e sito, lingue (le mette lo script delle lingue prima di span.mut),
+# Privacy e Terms.
+PIANI = [('05', 'Home', 'href="#top"'), ('04', 'Work', 'href="#" data-go="4"'), ('03', 'Brand', 'href="#" data-go="3"'),
+         ('02', 'Systems', 'href="#" data-go="2"'), ('01', 'Studio', 'href="#" data-go="1"'), ('G', 'Contact', 'href="#" data-go="0"')]
 
 
 def footer(nome):
     voce = CORRENTE.get(nome, '')
-    righe = ''.join(
-        f'<li><a {attr}{" aria-current=\"page\"" if voce == f"{lab} {nm}" else ""}><span class="fsq">{lab}</span>'
-        f'<span class="fnm"><b>{nm}</b><em>{ds}</em></span></a></li>' for _, lab, nm, ds, attr in PIANI)
-    righe += ('<li class="fkey"><span aria-label="LG, Machine room, key only"><span class="fsq">LG</span>'
-              '<span class="fnm"><b>Machine room</b><em>Key only</em></span></span></li>')
+    tasti = ''.join(
+        f'<li><a {attr} aria-label="Floor {lab}, {nm}"{" aria-current=\"page\"" if voce == f"{lab} {nm}" else ""}>'
+        f'<span class="fsq">{lab}</span><span class="fnm">{nm}</span></a></li>' for lab, nm, attr in PIANI)
+    tasti += '<li class="fkey"><span aria-label="Floor LG, Machine room, key only"><span class="fsq">LG</span><span class="fnm">Key only</span></span></li>'
     priv = ' aria-current="page"' if nome == 'privacy' else ''
     return ('<footer class="ftr" data-luce="carta"><div class="in">'
             '<div class="fid"><div class="lg" data-a="heroS"></div><p class="mo mut">A design and engineering studio</p></div>'
-            f'<nav class="fdir" aria-label="Floors"><span class="mo mut fh">Floors</span><ol>{righe}</ol></nav>'
+            f'<nav class="fdir mo" aria-label="Floors"><ol>{tasti}</ol></nav>'
             '<div class="row mo fbar"><span class="mut fcopy"><span>© 2026 Mother Machine</span><i> · </i><span>mothermachine.studio</span></span>'
             f'<span class="fleg"><a href="/privacy"{priv}>Privacy</a><a href="/privacy#terms">Terms</a></span></div>'
             '</div></footer>')
