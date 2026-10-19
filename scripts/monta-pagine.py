@@ -11,7 +11,7 @@
 #  5. lingua: suggerimento nella testata ("Italiano?"), scelta ricordata tra le pagine
 #  6. fondo pagina: public/js/mm-sito.js
 # Le regole visive stanno in public/css/mm-sito.css, i comportamenti in public/js/mm-sito.js.
-import base64, hashlib, pathlib, re
+import base64, hashlib, json, pathlib, re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PROTO = ROOT / 'prototipo'
@@ -226,11 +226,41 @@ def dati_esterni(t):
     return re.sub(r'<script>(var (AS|LG)=.*?)</script>', fix, t, flags=re.S)
 
 
+def testata_fissa(t):
+    """La testata e' identica dal primo disegno, su ogni pagina: niente da aspettare, niente da scambiare.
+    Il logo e' scritto nella pagina (prima lo inseriva uno script in fondo, e per un attimo la testata era vuota) e resta
+    sempre disegno: tolto il passaggio al carattere del logo, che arrivava quando voleva. I caratteri del testo si
+    caricano subito (preload)."""
+    i = t.find('var AS=')
+    AS, _ = json.JSONDecoder().raw_decode(t, i + len('var AS='))
+    t = una(t, '<span class="lgB" data-a="heroS">', '<span class="lgB">' + AS['heroS'], 'logo grande')
+    t = una(t, '<span class="lgS" data-a="heroW">', '<span class="lgS">' + AS['heroW'], 'logo piccolo')
+    s = t.find("if(document.fonts&&document.fonts.load){Promise.all([document.fonts.load('20px MMLogoS'")
+    fine = "document.documentElement.classList.add('mmfont')}).catch(function(){})}"
+    e = t.find(fine, s) + len(fine)
+    assert s > 0 and e > s, 'carattere del logo'
+    t = t[:s] + t[e:]
+    voci = sorted(set(re.findall(r"url\((/fonts/(?:dmmono-400|dmmono-500|hanken)[^)'\"]*\.woff2)\)", t)))
+    assert len(voci) >= 2, 'caratteri'
+    pre = ''.join(f'<link rel="preload" href="{v}" as="font" type="font/woff2" crossorigin>' for v in voci)
+    i = t.find('<style'); t = t[:i] + pre + t[i:]
+    return t
+
+
 # ---------- 3. testa ----------
 AVVIO = ("<script>/* avvio: niente transizioni finche' la pagina non e' pronta; se arriviamo con l'ascensore, porte chiuse */"
          "(function(){var R=document.documentElement;R.classList.add('mm-boot');"
          "try{var a=sessionStorage.getItem('mm-arrive'),p=location.pathname.replace(/\\.html$/,'').replace(/\\/$/,'')||'/';"
-         "sessionStorage.removeItem('mm-arrive');if(a){a=JSON.parse(a);if(a.to===p){R.classList.add('mm-arr','mm-hide');if(a.fold)R.classList.add('mm-arr-fold')}}}catch(e){}})();</script>")
+         "sessionStorage.removeItem('mm-arrive');if(a){a=JSON.parse(a);if(a.to===p){R.classList.add('mm-arr','mm-hide');if(a.fold)R.classList.add('mm-arr-fold')}}}catch(e){}"
+         # passaggio tra le pagine (View Transitions): resta l'ultimo fotogramma della pagina di prima finche' questa non e'
+         # pronta con i suoi caratteri, poi si scambiano nello stesso istante. MM_READY dice alle porte quando possono aprirsi.
+         "var res;window.MM_READY=new Promise(function(r){res=r});"
+         "function fonts(){var F=document.fonts;if(!F||!F.load)return Promise.resolve();"
+         "return Promise.all(['400 15px DMMono','500 15px DMMono','400 20px Hanken','650 20px Hanken'].map(function(f){return F.load(f).catch(function(){})}))}"
+         "if('onpagereveal' in window)addEventListener('pagereveal',function(e){var vt=e.viewTransition,done=0;"
+         "function go(){if(done)return;done=1;requestAnimationFrame(function(){requestAnimationFrame(function(){if(vt)try{vt.skipTransition()}catch(x){}res()})})}"
+         "if(!vt){res();return}fonts().then(go,go);setTimeout(go,900)});else res()"
+         "})();</script>")
 FOGLIO = '<link rel="stylesheet" href="/css/mm-sito.css">'
 CODA = '<script src="/js/mm-sito.js"></script>'
 # subito dopo la testata: se arriviamo con l'ascensore la testata nasce gia' "in corsa" (chiara sulle porte, senza fascia)
@@ -309,6 +339,7 @@ def laboratorio():
 def monta(nome, src):
     t = (PROTO / f'{src}.html').read_text(encoding='utf8')
     t = font_esterni(t)
+    t = testata_fissa(t)
     t = dati_esterni(t)
     t = ritocchi(nome, t)
 

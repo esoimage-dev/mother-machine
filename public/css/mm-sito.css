@@ -120,3 +120,18 @@ html.mm-arr #ride .pg,html.mm-arr #ride .disp{visibility:hidden}
 @media (max-width:620px){.bar .lhint{margin-right:10px;padding:0 6px}}
 
 @media (prefers-reduced-motion:reduce){.bar .lhint,.bar .lhint.in i{transition:none;animation:none}}
+
+/* ---- passaggio tra le pagine come in un'app (View Transitions tra documenti) ----
+   L'ultimo fotogramma della pagina di prima (porte chiuse) resta davanti finche' la nuova non e' pronta: lo script d'avvio
+   chiude la transizione appena i caratteri ci sono. Nessun fotogramma a meta', nessuna dissolvenza. Dove il browser non
+   le conosce (Firefox), il passaggio resta quello di prima. */
+@view-transition{navigation:auto}
+::view-transition-group(root){animation:none}
+::view-transition-old(root){animation:mm-vt-old 1s steps(1,end) both}
+::view-transition-new(root){animation:mm-vt-new 1s steps(1,end) both}
+@keyframes mm-vt-old{from{opacity:1}to{opacity:0}}
+@keyframes mm-vt-new{from{opacity:0}to{opacity:1}}
+/* la corsa parte dalla pagina vera: la cabina e' trasparente finche' le porte non sono chiuse (prima per un attimo
+   mostrava il piano col colore del vecchio prototipo: bianco sulla home, che ora apre al buio) */
+html.mm-riding #ride{background:transparent}
+html.mm-riding #ride .pg{visibility:hidden}

@@ -145,6 +145,7 @@
       });
     });
   }
-  ready.then(function () { frames(2, open) });
+  /* le porte si aprono quando la pagina e' pronta e il passaggio dalla pagina di prima e' finito */
+  Promise.all([ready, window.MM_READY]).then(function () { frames(2, open) });
   setTimeout(open, 2500);
 })();
