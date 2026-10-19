@@ -1934,7 +1934,7 @@ if('IntersectionObserver' in window){new IntersectionObserver(function(es){vis=e
   function keys(){mark()}function caption(){}function place(){mark()}
   function fold(ms){clearTimeout(ft);ft=setTimeout(function(){if(!busy)setOpen(false)},ms)}
   var fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
-  var ot;if(fine){box.addEventListener('pointerenter',function(){clearTimeout(ft);clearTimeout(ot);ot=setTimeout(function(){setOpen(true)},60)});box.addEventListener('pointerleave',function(){clearTimeout(ot)});box.addEventListener('pointerleave',function(){fold(450)})}
+  var ot;if(fine){box.addEventListener('pointerenter',function(){clearTimeout(ft);clearTimeout(ot);ot=setTimeout(function(){setOpen(true)},95)});box.addEventListener('pointerleave',function(){clearTimeout(ot)});box.addEventListener('pointerleave',function(){fold(450)})}
   box.addEventListener('focusin',function(){clearTimeout(ft);setOpen(true)});
   box.addEventListener('focusout',function(e){if(!box.contains(e.relatedTarget))fold(200)});
   box.addEventListener('keydown',function(e){var i=ORDER.indexOf(document.activeElement&&document.activeElement.dataset.l);
