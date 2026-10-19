@@ -63,6 +63,8 @@ Ogni pagina è un piano. Si naviga con la pulsantiera (il menu) e si scende come
 - Testata: numero del piano (solo il piano, mai "05.1"), nome, colonna di sei quadratini. Niente hamburger.
 - Pulsantiera: vetro scuro, quattro viti, bottoni quadrati col numero, piano corrente retroilluminato, LG con la chiave ("Staff only", "Not without the key.", "Going down.", "You found it.").
 - Cursore: quadrato pieno; sulla presa diventa cornice con luce pomodoro.
+- **Bottoni pieni** (deciso il 19 ottobre): al passaggio il pomodoro sale e riempie **tutto** il bottone, nessun bordo scuro resta. È la stessa logica del bottone dell'apertura e vale ovunque, per ogni bottone nuovo.
+- **Cursore sopra il pomodoro**: il quadratino interno diventa nero nella parte che sta sopra l'arancione (anche solo in parte, mentre il riempimento sale).
 
 ## Il piano di costruzione
 **Stack:** Astro (output statico) su Cloudflare Pages. Repository GitHub `esoimage-dev/mother-machine`, Cloudflare pubblica a ogni push. Poi Workers + D1 + R2 + Access per modulo contatti e back office, tutto nel piano gratuito. Dominio mothermachine.studio comprato su GoDaddy (18 ottobre 2026: non ancora collegato); i nameserver andranno spostati su Cloudflare. Email: Cloudflare Email Routing verso Gmail in entrata; invio come hello@mothermachine.studio con Resend.

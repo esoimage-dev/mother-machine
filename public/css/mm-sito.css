@@ -176,3 +176,13 @@ html.mm-riding #ride .pg{visibility:hidden}
    la larghezza la porta mm-sito.js, alla stessa velocita' del testo che gira */
 .disp3 #bL{transition:width .42s cubic-bezier(.7,0,.2,1)}
 @media (prefers-reduced-motion:reduce){.disp3 #bL{transition:none}}
+
+/* ---- bottoni pieni: al passaggio il pomodoro riempie tutto il bottone, nessun bordo scuro resta (come in apertura) ----
+   Il bordo diventa trasparente e il fondo si ferma dentro: a riposo il bottone e' identico, il riempimento lo copre tutto. */
+.b.p{border-color:transparent;background-clip:padding-box}
+
+/* ---- cursore sopra il pomodoro: il quadratino interno diventa nero solo nella parte che sta sopra l'arancione ---- */
+.mmc i b{position:absolute;left:50%;top:50%;width:0;height:0;transform:translate(-50%,-50%);background:#121211;z-index:1;
+  clip-path:inset(0 0 100% 0);transition:width .22s cubic-bezier(.2,.8,.2,1),height .22s cubic-bezier(.2,.8,.2,1)}
+.mmc.hit i b{width:8px;height:8px}
+.mmc.hit.dn i b{width:14px;height:14px}

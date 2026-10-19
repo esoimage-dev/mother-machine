@@ -120,6 +120,50 @@
     });
   }
 
+  /* ---- il cursore sopra il pomodoro ----
+     Sopra un bottone il cursore e' una cornice con un quadratino pomodoro dentro: sopra un riempimento pomodoro spariva.
+     Un quadratino nero gli sta sopra, ritagliato a ogni fotogramma sulla parte che copre l'arancione: mentre il
+     riempimento sale, il nero sale con lui. Gira solo mentre il cursore e' sopra qualcosa da premere. */
+  var cur = document.querySelector('.mmc');
+  if (cur && cur.firstElementChild) {
+    var nero = document.createElement('b'); cur.firstElementChild.appendChild(nero);
+    var HIT = 'a,button,[role=button],[role=link],label,select,summary', px = 0, py = 0, sopra = null, gira = 0;
+    var pomodoro = function (s) { return s.backgroundColor === 'rgb(255, 91, 58)' && s.display !== 'none' && s.visibility !== 'hidden' && +s.opacity > .5 };
+    var taglia = function (a, b) { return { l: Math.max(a.l, b.l), t: Math.max(a.t, b.t), r: Math.min(a.r, b.r), b: Math.min(a.b, b.b) } };
+    var box = function (r) { return { l: r.left, t: r.top, r: r.right, b: r.bottom } };
+    /* dove sta il pomodoro dentro l'elemento: l'elemento stesso, il suo riempimento (::before / ::after) o un figlio */
+    var zona = function (h) {
+      var cs = getComputedStyle(h), r = h.getBoundingClientRect();
+      if (pomodoro(cs)) return box(r);
+      var dentro = { l: r.left + parseFloat(cs.borderLeftWidth), t: r.top + parseFloat(cs.borderTopWidth), r: r.right - parseFloat(cs.borderRightWidth), b: r.bottom - parseFloat(cs.borderBottomWidth) };
+      for (var k = 0, ps = ['::before', '::after']; k < 2; k++) {
+        var s = getComputedStyle(h, ps[k]);
+        if (s.content !== 'none' && pomodoro(s)) {
+          var m = new DOMMatrix(s.transform === 'none' ? undefined : s.transform);
+          return taglia({ l: dentro.l + m.e, t: dentro.t + m.f, r: dentro.r + m.e, b: dentro.b + m.f }, dentro);
+        }
+      }
+      var figli = h.querySelectorAll('*');
+      for (var i = 0; i < figli.length && i < 40; i++) if (pomodoro(getComputedStyle(figli[i]))) return taglia(box(figli[i].getBoundingClientRect()), box(r));
+      return null;
+    };
+    var passo = function () {
+      gira = 0;
+      if (!sopra || !cur.classList.contains('hit')) { nero.style.clipPath = ''; return }
+      var q = nero.getBoundingClientRect(), z = zona(sopra), cp = 'inset(0 0 100% 0)';
+      if (z && q.width) {
+        var x = taglia(z, box(q));
+        if (x.r > x.l && x.b > x.t) cp = 'inset(' + (x.t - q.top) + 'px ' + (q.right - x.r) + 'px ' + (q.bottom - x.b) + 'px ' + (x.l - q.left) + 'px)';
+      }
+      nero.style.clipPath = cp;
+      gira = requestAnimationFrame(passo);
+    };
+    addEventListener('pointermove', function (e) {
+      sopra = e.target && e.target.closest ? e.target.closest(HIT) : null;
+      if (sopra && !gira) gira = requestAnimationFrame(passo);
+    }, { passive: true });
+  }
+
   /* ---- la scritta della testata cambia larghezza con dolcezza ----
      Accanto al numero del piano gira il nome ("Systems"), e al passaggio del mouse "All floors" o "Close". In altre lingue
      la scritta e' piu' lunga della sua misura minima ("Todas las plantas"): prima la casella si allargava di colpo e il
