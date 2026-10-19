@@ -259,3 +259,13 @@ html.mm-riding #ride .pg{visibility:hidden}
   clip-path:inset(0 0 100% 0);transition:width .22s cubic-bezier(.2,.8,.2,1),height .22s cubic-bezier(.2,.8,.2,1)}
 .mmc.hit i b{width:8px;height:8px}
 .mmc.hit.dn i b{width:14px;height:14px}
+
+/* ---- la colonna dei piani nella testata, anche su telefono: a riposo sei quadratini, al tocco si aprono a ventaglio ----
+   Il prototipo sul telefono la lasciava gia' aperta in righe (non c'e' il passaggio del mouse); deciso il 19 ottobre:
+   anche li' quadratini, che si aprono a ventaglio quando si apre la pulsantiera, come su desktop. */
+@media (hover:none){
+  html .disp3 .kb i,html .disp3:hover:not(.open) .kb i,html .disp3:focus-visible:not(.open) .kb i{transform:none;opacity:.3}
+  html .disp3 .kb i.lit,html .disp3:hover:not(.open) .kb i.lit{opacity:1}   /* dopo un tocco il telefono resta "sopra": non conta */
+  html .disp3.open .kb i{transform:scaleX(4);opacity:.8}
+  html .disp3.open .kb i.lit{opacity:1}
+}
