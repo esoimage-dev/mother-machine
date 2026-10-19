@@ -64,6 +64,7 @@ Ogni pagina è un piano. Si naviga con la pulsantiera (il menu) e si scende come
 - Pulsantiera: vetro scuro, quattro viti, bottoni quadrati col numero, piano corrente retroilluminato, LG con la chiave ("Staff only", "Not without the key.", "Going down.", "You found it.").
 - Cursore: quadrato pieno; sulla presa diventa cornice con luce pomodoro.
 - **Bottoni pieni** (deciso il 19 ottobre): al passaggio il pomodoro sale e riempie **tutto** il bottone, nessun bordo scuro resta. È la stessa logica del bottone dell'apertura e vale ovunque, per ogni bottone nuovo.
+- **Bottoni dei piani** (pulsantiera e footer): al passaggio il bordo si accende e dentro compare l'anello; chiamati, l'anello lampeggia pomodoro. Stessa logica ovunque ci sia un bottone di piano.
 - **Cursore sopra il pomodoro**: il quadratino interno diventa nero nella parte che sta sopra l'arancione (anche solo in parte, mentre il riempimento sale).
 
 ## Il piano di costruzione

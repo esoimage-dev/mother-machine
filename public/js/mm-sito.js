@@ -200,6 +200,10 @@
       vista.observe(flogo);
     }
   }
+  /* un piano del footer premuto e' "chiamato", come nella pulsantiera: l'anello lampeggia mentre parte la corsa */
+  [].forEach.call(document.querySelectorAll('footer .fdir li>a:not([aria-current])'), function (a) {
+    a.addEventListener('click', function () { a.classList.add('call') });
+  });
   var fk = document.querySelector('footer .fkey');
   if (fk) {
     var fcyl = fk.querySelector('.fcylb'), flgb = fk.querySelector('.flgb'), fko = fk.querySelector('.fko'), quiLG = flgb.hasAttribute('aria-current');

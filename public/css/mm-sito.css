@@ -82,18 +82,23 @@ footer.ftr .fdir ol{list-style:none;margin:0;padding:0;row-gap:18px}
 footer.ftr .fdir li>a,footer.ftr .flgb,footer.ftr .fcylb{all:unset;box-sizing:border-box;display:grid;justify-items:center;align-content:start;gap:9px;color:var(--ink);text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
 footer.ftr .fsq{position:relative;overflow:hidden;isolation:isolate;display:grid;place-items:center;width:50px;height:50px;box-sizing:border-box;
   border:1.5px solid rgba(244,242,236,.5);font:500 13px/1 var(--f-mono);letter-spacing:.02em;color:var(--ink);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -2px 0 rgba(0,0,0,.3);transition:border-color .4s cubic-bezier(.3,.7,.2,1),color .25s,opacity .3s}
-footer.ftr .fsq::before{content:"";position:absolute;inset:0;background:var(--sig);transform:translateY(101%);transition:transform .4s cubic-bezier(.3,.7,.2,1);z-index:-1}
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -2px 0 rgba(0,0,0,.3);transition:border-color .25s,color .25s,opacity .3s,transform .12s,box-shadow .12s}
+/* come i bottoni della pulsantiera: al passaggio si accende il bordo e dentro compare l'anello; premuto si schiaccia;
+   chiamato, l'anello lampeggia pomodoro */
+footer.ftr .fsq::after{content:"";position:absolute;inset:4px;border:1.5px solid currentColor;opacity:0;transform:scale(.8);transition:opacity .2s,transform .3s cubic-bezier(.2,.8,.2,1)}
 footer.ftr .fnm{font-size:9.5px;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);white-space:nowrap;text-align:center;transition:color .25s}
-footer.ftr .fdir a:hover .fsq,footer.ftr .fdir a:focus-visible .fsq,footer.ftr .fkey.open .flgb:hover .fsq,footer.ftr .fkey.open .flgb:focus-visible .fsq{border-color:var(--sig);color:#121211}
-footer.ftr .fdir a:hover .fsq::before,footer.ftr .fdir a:focus-visible .fsq::before,footer.ftr .fkey.open .flgb:hover .fsq::before,footer.ftr .fkey.open .flgb:focus-visible .fsq::before{transform:none}
+footer.ftr .fdir a:hover .fsq,footer.ftr .fdir a:focus-visible .fsq,footer.ftr .fkey.open .flgb:hover .fsq,footer.ftr .fkey.open .flgb:focus-visible .fsq{border-color:#F4F2EC}
+footer.ftr .fdir a:hover .fsq::after,footer.ftr .fdir a:focus-visible .fsq::after,footer.ftr .fkey.open .flgb:hover .fsq::after,footer.ftr .fkey.open .flgb:focus-visible .fsq::after{opacity:.35;transform:none}
+footer.ftr .fdir a:active .fsq,footer.ftr .fkey.open .flgb:active .fsq{transform:scale(.93);box-shadow:inset 0 2px 4px rgba(0,0,0,.35)}
+footer.ftr .fdir .call .fsq::after{border-color:var(--sig);opacity:1;transform:none;animation:mm-fcall .45s steps(1) infinite}
+@keyframes mm-fcall{50%{opacity:.25}}
 footer.ftr .fdir a:hover .fnm,footer.ftr .fdir a:focus-visible .fnm,footer.ftr .flgb:hover .fnm,footer.ftr .fcylb:hover .fnm{color:var(--ink)}
 footer.ftr .fdir :focus-visible{outline:none}
 footer.ftr .fdir :focus-visible>.fsq,footer.ftr .fcylb:focus-visible .fcyl{outline:2px solid var(--ink);outline-offset:3px}
 footer.ftr .fdir [aria-current] .fsq{background:#F4F2EC;border-color:#F4F2EC;color:#121211;box-shadow:0 0 0 4px rgba(244,242,236,.07),0 0 22px rgba(244,242,236,.22)}
 footer.ftr .fdir [aria-current] .fnm{color:var(--ink)}
 footer.ftr .fdir [aria-current]{cursor:default}
-footer.ftr .fdir [aria-current]:hover .fsq::before{transform:translateY(101%)}
+footer.ftr .fdir [aria-current] .fsq::after{display:none}
 /* LG: chiuso e tratteggiato finche' la chiave non gira */
 footer.ftr .fkey{padding-top:18px;border-top:1px dashed rgba(244,242,236,.18)}
 footer.ftr .flgb .fsq{border-style:dashed;opacity:.5}
@@ -119,7 +124,7 @@ footer.ftr .fbar .flf{grid-area:lang;margin:0!important}
 footer.ftr .fleg{grid-area:legal;justify-self:end;display:flex;gap:22px}
 footer.ftr .fleg a,footer.ftr .flf a{color:inherit;text-decoration:none!important;border-bottom:1px solid transparent;padding-bottom:1px;transition:border-color .2s,opacity .2s,color .2s}
 footer.ftr .fleg a:hover,footer.ftr .fleg a:focus-visible,footer.ftr .fleg a[aria-current],footer.ftr .flf a:hover,footer.ftr .flf a:focus-visible,footer.ftr .flf a[aria-current]{border-bottom-color:currentColor;color:var(--ink);opacity:1}
-@media (prefers-reduced-motion:reduce){footer.ftr .fsq,footer.ftr .fsq::before,footer.ftr .fcyl b{transition:none}footer.ftr .flogo.fpress .car,footer.ftr .fkey.deny .flgb .fsq{animation:none}}
+@media (prefers-reduced-motion:reduce){footer.ftr .fsq,footer.ftr .fsq::after,footer.ftr .fcyl b{transition:none}footer.ftr .flogo.fpress .car,footer.ftr .fkey.deny .flgb .fsq{animation:none}}
 
 /* ---- footer su telefono: la placca in colonna. Marchio e frase; i bottoni 3 per 2 a tutta larghezza; LG, messaggio e
    chiave sulle stesse colonne; in fondo lingue e legale sulla stessa riga, poi il copyright. Viti lontane dal testo. ---- */
