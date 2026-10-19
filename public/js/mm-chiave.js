@@ -68,17 +68,18 @@
     show(code.length, code.length < LEN ? 'Enter the code' : '');
     if (code.length < LEN) return;
     var tried = code; code = null; busy = true; msg.textContent = 'Checking';
-    check(tried).then(function (ok) {
-      if (ok) { open(); return }
+    check(tried).then(function (r) {
+      if (r === true) { open(); return }
       kp.classList.remove('mm-no'); void kp.offsetWidth; kp.classList.add('mm-no');
-      setTimeout(function () { busy = false; code = []; show(0, 'Try again') }, RM ? 0 : 520);
+      /* codice sbagliato, oppure porta non collegata (segreti mancanti su Cloudflare): lo dice il display */
+      setTimeout(function () { busy = false; code = []; show(0, r === 'off' ? 'Door offline' : 'Try again') }, RM ? 0 : 520);
     });
   }
   /* la verifica la fa il server: se va bene, lascia un gettone (cookie) che apre /lg/room */
   function check(seq) {
     return fetch('/api/porta', { method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ seq: seq }) })
-      .then(function (r) { return r.ok ? r.json() : { ok: false } })
-      .then(function (d) { return !!(d && d.ok) }, function () { return false });
+      .then(function (r) { return r.ok ? r.json() : (r.status === 403 ? { ok: false } : { off: true }) })
+      .then(function (d) { return d && d.ok ? true : d && d.off ? 'off' : false }, function () { return 'off' });
   }
   /* i bottoni dei piani, nel tastierino, sono tasti: niente corsa */
   root.addEventListener('click', function (e) {
