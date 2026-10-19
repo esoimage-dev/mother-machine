@@ -5,6 +5,11 @@ import { uguali, gettone } from '../../server/firma.js';
 const json = (dati, init = {}) =>
   new Response(JSON.stringify(dati), { ...init, headers: { 'content-type': 'application/json', 'cache-control': 'no-store', ...init.headers } });
 
+// GET /api/porta · dice solo se la porta e' montata (segreti presenti), niente altro
+export function onRequestGet({ env }) {
+  return json({ porta: true, pronta: !!(env.MM_DOOR_CODE && env.MM_DOOR_KEY) });
+}
+
 export async function onRequestPost({ request, env }) {
   if (!env.MM_DOOR_CODE || !env.MM_DOOR_KEY) return json({ ok: false }, { status: 503 });
   let seq;

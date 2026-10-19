@@ -9,12 +9,12 @@
   var cyl = root.querySelector('.flg .cyl'), flg = root.querySelector('.flg'), slot = cyl && cyl.querySelector('i');
   if (!cyl) return;
   var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var HOLD = 3000, LEN = 5, IDLE = 20000;
+  var HOLD = 3000, LEN = 4, IDLE = 20000;
 
   /* il tastierino: una fascia che esce sotto la chiave */
   var kp = document.createElement('div');
   kp.className = 'mmkp'; kp.setAttribute('aria-hidden', 'true');
-  kp.innerHTML = '<div class="mmkpi"><span class="mo">Code</span><span class="mmkpd"><i></i><i></i><i></i><i></i><i></i></span><span class="mmkpm mo" aria-live="polite">Staff only</span></div>';
+  kp.innerHTML = '<div class="mmkpi"><div class="mmkpc"><span class="mo">Code</span><span class="mmkpd"><i></i><i></i><i></i><i></i></span><span class="mmkpm mo" aria-live="polite">Staff only</span></div></div>';
   flg.parentNode.insertBefore(kp, flg.nextSibling);
   var dots = [].slice.call(kp.querySelectorAll('.mmkpd i')), msg = kp.querySelector('.mmkpm');
 
@@ -52,14 +52,14 @@
   function show(n, txt) { dots.forEach(function (d, i) { d.className = i < n ? 'mm-on' : '' }); msg.textContent = txt }
   function enter() {
     code = [];
-    if (turn) { turn.cancel(); turn = null }
-    cyl.classList.remove('mm-holding');
+    cyl.classList.remove('mm-holding');   /* la rotazione resta ferma a 135 gradi finche' si esce */
     root.classList.add('mm-code'); kp.setAttribute('aria-hidden', 'false');
     show(0, 'Enter the code'); arm();
   }
   function leave() {
     code = null; clearTimeout(idle);
     root.classList.remove('mm-code', 'mm-open'); kp.setAttribute('aria-hidden', 'true');
+    if (turn) { turn.cancel(); turn = null }   /* dalla seconda tacca la chiave torna indietro con la sua transizione */
   }
   function press(label, b) {
     if (!code || busy) return;

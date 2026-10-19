@@ -147,14 +147,19 @@ html.mm-riding #ride .pg{visibility:hidden}
 #navLift .flist .ftx,#navLift .flg .fb{transition:opacity .35s}
 #navLift.mm-code .flist .ftx{opacity:.18}
 #navLift.mm-code .flg .fb{opacity:.3}
+/* nel tastierino nessun piano e' acceso: sono tutti tasti uguali */
+#navLift.mm-code .fb.cur .fbt{background:transparent;border-color:rgba(244,242,236,.5);color:inherit;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -2px 0 rgba(0,0,0,.28)}
+#navLift.mm-code .fb.cur .ftx b{font-weight:inherit;letter-spacing:inherit}
 #navLift .fb.mm-hit .fbt{animation:mmhit .32s steps(1)}
 @keyframes mmhit{0%{background:#FF5B3A;border-color:#FF5B3A;color:#121211}}
 /* la fascia del codice esce sotto la chiave: la pulsantiera si allunga */
-.mmkp{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s cubic-bezier(.7,0,.2,1)}
+.mmkp{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s cubic-bezier(.7,0,.2,1)}
 .mm-code .mmkp{grid-template-rows:1fr}
-.mmkpi{min-height:0;overflow:hidden;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:6px 16px;color:#F4F2EC}
-.mm-code .mmkpi{margin-top:12px;padding:16px 4px 4px;border-top:1px dashed rgba(244,242,236,.18)}
-.mmkpi>.mo{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+/* tutto lo spazio della fascia sta dentro la parte che cresce: si allunga in un solo movimento, senza scatti */
+.mmkpi{min-height:0;overflow:hidden}
+.mmkpc{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:6px 16px;margin-top:12px;padding:16px 4px 4px;border-top:1px dashed rgba(244,242,236,.18);color:#F4F2EC;opacity:0;transition:opacity .2s}
+.mm-code .mmkpc{opacity:1;transition:opacity .35s .15s}
+.mmkpc>.mo{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
 .mmkpd{display:flex;gap:10px;justify-self:end}
 .mmkpd i{width:16px;height:16px;border:1.5px solid rgba(244,242,236,.55);box-sizing:border-box;transition:background-color .15s,border-color .15s}
 .mmkpd i.mm-on{background:#F4F2EC;border-color:#F4F2EC}
