@@ -182,17 +182,6 @@
     };
     var prima = lab.style.transition; lab.style.transition = 'none'; adatta(); void lab.offsetWidth; lab.style.transition = prima;
     new MutationObserver(function (ms) { if (ms.some(function (m) { return m.addedNodes.length })) adatta() }).observe(lab, { childList: true });
-    /* su telefono la scritta della testata non c'e': a pulsantiera aperta compare solo "Close", ferma, che si rivela
-       da destra verso sinistra (la casella .mcl si allarga e spinge il numero) */
-    var disp = document.getElementById('dispB'), kb = document.getElementById('bK');
-    if (disp && kb) {
-      var mcl = document.createElement('span'), dentro = document.createElement('span');
-      mcl.className = 'mcl'; mcl.setAttribute('aria-hidden', 'true'); mcl.appendChild(dentro); disp.insertBefore(mcl, kb);
-      new MutationObserver(function () {
-        if (disp.classList.contains('open')) { dentro.textContent = lab.lastElementChild ? lab.lastElementChild.textContent : 'Close'; mcl.style.width = (dentro.scrollWidth + 14) + 'px' }
-        else mcl.style.width = '0px';
-      }).observe(disp, { attributes: true, attributeFilter: ['class'] });
-    }
     addEventListener('resize', adatta);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(adatta);
   }
