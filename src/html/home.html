@@ -1134,7 +1134,7 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
           <span class="h3lk mo"><button class="h3wf mo" id="h3wf"><i class="pl"></i>Watch the film</button></span></div>
       </div>
     </div>
-    <button class="h3pf" id="h3pf" type="button" aria-label="Watch the film, with sound"><span class="h3pfv"><span class="h3pfl" data-a="heroS"></span><span class="grain"></span></span><span class="h3pfb mo"><i class="pl"></i>Watch the film<em>0:38</em></span></button><div class="h3fly" id="h3fly" aria-hidden="true"></div>
+    <div class="h3ic" data-luce="notte"><i class="rv"></i><i class="rv"></i><i class="rv"></i><i class="rv"></i><button class="h3icS" id="h3pf" type="button" aria-label="Watch the film, with sound"><span class="h3icV" id="h3icV"></span><span class="h3icT mo"><i class="pl"></i>Watch the film<em>0:38</em></span></button><a class="h3icC" href="/contact" data-go="0" aria-label="Start a project. Floor G, Contact"><span class="h3icL"><b>Start a project</b><span class="mo">Floor G · Contact</span></span><span class="h3icB mo" aria-hidden="true">G</span></a></div><div class="h3fly" id="h3fly" aria-hidden="true"></div>
   </section>
   <div class="h3ov" id="h3ov" data-luce="notte" aria-hidden="true"><div class="h3ovb"><span class="mo"><span class="x">Mother Machine · </span>The film</span><span class="sp"></span><button class="mo" id="h3snd">Sound on</button><button class="mo" id="h3x">Close</button></div><div class="h3ovp"><i id="h3pr"></i></div></div>
 <script src="/js/lg-8d8e0751.js"></script>
@@ -1496,7 +1496,7 @@ function openF(){if(open)return;var k=tileOn()?'h':kind();var r0=tileOn()?slot.g
   else st.animate([{opacity:0},{opacity:1}],{duration:300});
   open=true;play=true;ft=0;if(MMS.enable(0)){MMS.seek(0);sb.textContent='Sound off'}}
 function closeF(){if(!open)return;open=false;MMS.disable();sb.textContent='Sound on';ov.classList.remove('on');ov.setAttribute('aria-hidden','true');document.documentElement.style.overflow='';
-  var done=function(){st.classList.remove('big');st.removeAttribute('style');slot.appendChild(st);play=true;ft=L0};
+  var done=function(){st.classList.remove('big');st.removeAttribute('style');slot.appendChild(st);ensure('h');play=true;ft=L0};
   if(tileOn()&&!reduce){var r0=slot.getBoundingClientRect(),r1=st.getBoundingClientRect();st.animate([{transform:'none',transformOrigin:'0 0'},{transform:'translate('+(r0.left-r1.left)+'px,'+(r0.top-r1.top)+'px) scale('+(r0.width/r1.width)+')',transformOrigin:'0 0'}],{duration:520,easing:EZ}).onfinish=done}
   else done()}
 $('h3fb').addEventListener('click',openF);$('h3fb').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openF()}});$('h3pf').addEventListener('click',openF);$('h3x').addEventListener('click',closeF);
@@ -1509,10 +1509,10 @@ function floop(ts){requestAnimationFrame(floop);if(!M)return;
   /* nella finestra il film va a 30 fotogrammi: si vede uguale e costa la metà */
   if(!open&&(fk=(fk+1)%2))return;
   var dt=last===null?0:Math.min(.1,(ts-last)/1000);last=ts;
-  if(!open){if(!tileOn())return;var rr=slot.getBoundingClientRect();if(rr.bottom<0||rr.top>innerHeight)return}
+  if(!open){var rr=slot.getBoundingClientRect();if(!rr.width||rr.bottom<0||rr.top>innerHeight)return}
   if(play){ft+=dt;if(open){if(ft>=M.DUR){ft=M.DUR;play=false;MMS.end()}else MMS.update(ft,true,1)}else if(ft>L1)ft=L0}
   M.render(A,Math.min(ft,M.DUR));if(open)pr.style.width=(Math.min(1,ft/M.DUR)*100).toFixed(2)+'%'}
-var fgo=function(){if(tileOn())ensure('h');requestAnimationFrame(floop)},fdone=false;function fonce(){if(!fdone){fdone=true;fgo()}}
+var fgo=function(){ensure('h');requestAnimationFrame(floop)},fdone=false;function fonce(){if(!fdone){fdone=true;fgo()}}
 try{Promise.all(['700 100px "Hanken Grotesk"','100 100px "Hanken Grotesk"','900 100px "Hanken Grotesk"','500 20px "DM Mono"'].map(function(x){return document.fonts.load(x)})).then(fonce,fonce)}catch(e){fonce()}setTimeout(fonce,900);
 })();
 

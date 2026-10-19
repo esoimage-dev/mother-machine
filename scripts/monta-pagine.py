@@ -155,12 +155,23 @@ def ritocchi(nome, t):
         t = una(t, '<div class="wm mo"><span>No. 011</span><span>Brand</span></div>', '<div class="wm mo"><span>Study 02</span><span>Brand</span></div>', 'Study 02')
         t = una(t, '<span class="mo mut">Concepts · example figures</span>', '<span class="mo mut">Studies use example figures</span>', 'nota lavori')
         t = una(t, '<span class="mo mut">14 projects in the register</span>', '<span class="mo mut">The full register</span>', 'conteggio')
-        # 05.1 su telefono: la copertina del film sotto il bottone (fuori dalla griglia che misura il titolo)
+        # 05.1 su telefono e tablet: il citofono del palazzo. Una piastra sola con quattro viti: in alto lo schermo con il
+        # film vero che gira muto (al tocco si apre a tutto schermo con il suono), in basso, sotto il pollice, il bottone G
+        # della chiamata: premuto lampeggia come i bottoni dei piani e l'ascensore scende a Contact.
         t = una(t, '<div class="h3fly" id="h3fly" aria-hidden="true"></div>',
-                '<button class="h3pf" id="h3pf" type="button" aria-label="Watch the film, with sound">'
-                '<span class="h3pfv"><span class="h3pfl" data-a="heroS"></span><span class="grain"></span></span>'
-                '<span class="h3pfb mo"><i class="pl"></i>Watch the film<em>0:38</em></span></button>'
-                '<div class="h3fly" id="h3fly" aria-hidden="true"></div>', 'copertina film')
+                '<div class="h3ic" data-luce="notte"><i class="rv"></i><i class="rv"></i><i class="rv"></i><i class="rv"></i>'
+                '<button class="h3icS" id="h3pf" type="button" aria-label="Watch the film, with sound">'
+                '<span class="h3icV" id="h3icV"></span>'
+                '<span class="h3icT mo"><i class="pl"></i>Watch the film<em>0:38</em></span></button>'
+                '<a class="h3icC" href="/contact" data-go="0" aria-label="Start a project. Floor G, Contact">'
+                '<span class="h3icL"><b>Start a project</b><span class="mo">Floor G · Contact</span></span>'
+                '<span class="h3icB mo" aria-hidden="true">G</span></a></div>'
+                '<div class="h3fly" id="h3fly" aria-hidden="true"></div>', 'citofono')
+        # il film gira dovunque sia la sua finestra (sul telefono dentro il citofono), solo quando si vede
+        t = una(t, "if(!open){if(!tileOn())return;var rr=slot.getBoundingClientRect();if(rr.bottom<0||rr.top>innerHeight)return}",
+                "if(!open){var rr=slot.getBoundingClientRect();if(!rr.width||rr.bottom<0||rr.top>innerHeight)return}", 'film nel citofono')
+        t = una(t, "var fgo=function(){if(tileOn())ensure('h');", "var fgo=function(){ensure('h');", 'film sempre pronto')
+        t = una(t, "slot.appendChild(st);play=true;ft=L0}", "slot.appendChild(st);ensure('h');play=true;ft=L0}", 'film richiuso')
         # 05.1 piu' asciutta (audit del 19 ottobre): solo il titolo, Start a project e il film.
         # Via l'etichetta "A design and engineering studio" (resta nei meta per Google), la frase sotto e "Free first call.".
         # L'indicatore del peso resta, a sinistra. Il bottone entra nel blocco del titolo: su desktop sotto la finestra
