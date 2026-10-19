@@ -166,20 +166,10 @@ def ritocchi(nome, t):
         # L'indicatore del peso resta, a sinistra. Il bottone entra nel blocco del titolo: su desktop sotto la finestra
         # del film, col bordo basso sulla linea di "business."; su telefono subito sotto il titolo. Porta dritto a Contact.
         t = una(t, '<span class="h3pos">A design and engineering studio</span>', '', 'etichetta apertura')
-        s = t.find('      <div class="h3b">'); e = t.find('</div>', t.find('id="h3wf"')) + len('</div>')
-        e = t.find('</div>', e) + len('</div>')
-        assert s > 0 and 'class="lead"' in t[s:e] and t[s:e].count('<div') == t[s:e].count('</div>'), 'blocco sotto il titolo'
-        cta = t[t.find('<a class="h3cta"', s):t.find('</a>', s) + len('</a>')]
-        t = t[:s].rstrip() + '\n' + t[e:].lstrip('\n')
-        cta2 = cta.replace('href="#g"', 'href="/contact" data-go="0"')
-        assert cta2 != cta, 'bottone verso Contact'
-        t = una(t, '</figure>\n      </div>', '</figure>\n        <div class="h3go" id="h3go">' + cta2 + '</div>\n      </div>', 'bottone nel titolo')
-        # il titolo si misura senza la riga di sotto; la finestra del film e il bottone si allineano alla frase
-        t = una(t, "-g.children[0].offsetHeight-g.children[2].offsetHeight-2*parseFloat(cs.rowGap||cs.gap||24);",
-                "-g.children[0].offsetHeight-parseFloat(cs.rowGap||cs.gap||24);", 'misura titolo')
-        t = una(t, "function placeTile(){if(!tileOn())return;var l1=h.children[0];fig.style.top=(l1.getBoundingClientRect().top-mid.getBoundingClientRect().top+fs*.12).toFixed(1)+'px'}",
-                "function placeTile(){var go=$('h3go');if(!tileOn()){go.style.top='';return}var l1=h.children[0],mt=mid.getBoundingClientRect().top;fig.style.top=(l1.getBoundingClientRect().top-mt+fs*.12).toFixed(1)+'px';"
-                "go.style.top=(h.lastChild.querySelector('.bm').getBoundingClientRect().top-mt-go.offsetHeight).toFixed(1)+'px'}", 'posto del bottone')
+        t = una(t, "We design and build the software companies run on, and the brands they're known by.",
+                'Custom software and brands, from one studio.', 'frase sotto')
+        t = una(t, '<span>Free first call.</span>', '', 'free first call')
+        t = una(t, '<a class="h3cta" id="h3cta" href="#g"', '<a class="h3cta" id="h3cta" href="/contact" data-go="0"', 'bottone verso Contact')
         # la riga si misura dove finiscono le lettere (il segno .bm), non con scrollWidth, che dava la larghezza del
         # contenitore: il titolo veniva il 15% piu' piccolo dello spazio che ha
         t = una(t, "var mw=0;[].forEach.call(h.children,function(d){mw=Math.max(mw,d.scrollWidth)});",

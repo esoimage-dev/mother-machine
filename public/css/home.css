@@ -4,12 +4,12 @@
 /* ---- 05.1 · la copertina del film: su telefono e tablet, dove la finestra del film non c'e' ---- */
 .h3pf{display:none}
 @media (max-width:999px){
-  .h3pf{all:unset;box-sizing:border-box;display:grid;cursor:pointer;width:calc(100% - 2*clamp(16px,4vw,56px));margin:clamp(32px,8vw,48px) auto clamp(40px,10vw,64px);-webkit-tap-highlight-color:transparent}
+  .h3pf{all:unset;box-sizing:border-box;display:grid;grid-template-columns:132px 1fr;align-items:stretch;border:1px solid var(--ln);cursor:pointer;width:calc(100% - 2*clamp(16px,4vw,56px));margin:clamp(32px,8vw,48px) auto clamp(40px,10vw,64px);-webkit-tap-highlight-color:transparent}
   .h3pfv{position:relative;display:grid;place-items:center;aspect-ratio:16/9;background:#F4F2EC;overflow:hidden}
   .h3pfl{width:58%;color:#121211;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
   .h3pfl .mm{display:block;width:100%;height:auto;fill:currentColor}
   .h3pfv .grain{position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:radial-gradient(rgba(18,18,17,.12) 1px,transparent 1px);background-size:3px 3px}
-  .h3pfb{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#1A1A18;color:#F4F2EC}
+  .h3pfb{display:flex;align-items:center;gap:12px;padding:0 16px;color:#F4F2EC}
   .h3pfb .pl{width:0;height:0;border-left:9px solid var(--sig);border-top:6px solid transparent;border-bottom:6px solid transparent}
   .h3pfb em{margin-left:auto;font-style:normal;opacity:.6}
   .h3pf:active .h3pfl{transform:scale(.97)}
@@ -18,25 +18,17 @@
   .h3x>.in{padding-bottom:0}
 }
 
-/* ---- 05.1 · solo titolo, bottone e film (19 ottobre). L'indicatore del peso a sinistra, sopra il titolo ---- */
-.h3spec{border-bottom:0;padding-bottom:0}
-.h3g{grid-template-rows:auto minmax(0,1fr)}   /* la riga sotto il titolo non c'e' piu' */
-.h3go .h3cta{width:100%;box-sizing:border-box}
-@media (min-width:1000px){
-  /* a destra una colonna sola: la finestra del film in alto, il bottone in basso sulla linea di "business." */
-  .h3go{position:absolute;right:0;top:0;width:var(--tw);z-index:2}
-  /* l'indicatore del peso sta attaccato al titolo: il gruppo intero sta al centro dello schermo, niente vuoto in mezzo */
-  .h3g{grid-template-rows:auto auto;align-content:center}
-}
+/* ---- 05.1 · variante B: struttura del prototipo, testi ridotti ---- */
+.h3ax{order:-1}
+.hm .h3b .lead{text-wrap:balance}
+@media (max-width:999px){.h3wf,.h3lk{display:none!important}}
 @media (max-width:999px){
   /* su tablet e telefono niente schermo pieno forzato: titolo, bottone e copertina in fila, senza buchi */
   .h3x,.h3g{min-height:0}
   .h3g{padding-top:clamp(120px,21vw,170px);padding-bottom:0;gap:28px}
   .h3mid{gap:clamp(32px,5vw,48px)}
   .h3pf{margin-top:clamp(40px,6vw,56px)}
-  .h3go{width:min(100%,360px)}
 }
-@media (max-width:700px){.h3go{width:100%}}
 
 /* ---- 05.1 · "Start a project" su telefono come su desktop: carta con il quadrato nero; al tocco sale il pomodoro ----
    Prima era sempre arancione (il pomodoro va solo su cio' che risponde, manuale). */
