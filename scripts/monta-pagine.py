@@ -412,6 +412,15 @@ def monta(nome, src):
         assert t.count('if(k===4') == 3, 'k===4'
         t = t.replace('if(k===4', 'if(k===-1')
 
+    # lingue nella pulsantiera: si aprono un po' prima e un po' piu' svelte (resta un piccolo respiro)
+    s = t.find("ot=setTimeout(function(){setOpen(true)},120)")
+    if s >= 0:
+        t = una(t, "ot=setTimeout(function(){setOpen(true)},120)", "ot=setTimeout(function(){setOpen(true)},60)", 'lingue: ritardo')
+        t = una(t, "transition:max-width .5s cubic-bezier(.7,0,.2,1),padding .5s cubic-bezier(.7,0,.2,1),opacity .3s}",
+                "transition:max-width .38s cubic-bezier(.7,0,.2,1),padding .38s cubic-bezier(.7,0,.2,1),opacity .25s}", 'lingue: apertura')
+        t = una(t, "scramble(sp,x.dataset.l.toUpperCase(),60+Math.abs(i-ORDER.indexOf(cur))*55)",
+                "scramble(sp,x.dataset.l.toUpperCase(),30+Math.abs(i-ORDER.indexOf(cur))*40)", 'lingue: lettere')
+
     if nome == 'home':
         t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/home.css">', 'stile home')
 

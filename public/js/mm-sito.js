@@ -120,6 +120,24 @@
     });
   }
 
+  /* ---- la scritta della testata cambia larghezza con dolcezza ----
+     Accanto al numero del piano gira il nome ("Systems"), e al passaggio del mouse "All floors" o "Close". In altre lingue
+     la scritta e' piu' lunga della sua misura minima ("Todas las plantas"): prima la casella si allargava di colpo e il
+     numero saltava a sinistra. Ora la larghezza va alla misura del testo nuovo con una transizione. */
+  var lab = document.getElementById('bL');
+  if (lab) {
+    var misura = function (b) { var r = document.createRange(); r.selectNodeContents(b); return r.getBoundingClientRect().width };
+    var adatta = function () {
+      var b = lab.lastElementChild; if (!b || !lab.offsetParent) return;
+      var min = parseFloat(getComputedStyle(lab).minWidth) || 0;
+      lab.style.width = Math.ceil(Math.max(min, misura(b))) + 'px';
+    };
+    var prima = lab.style.transition; lab.style.transition = 'none'; adatta(); void lab.offsetWidth; lab.style.transition = prima;
+    new MutationObserver(function (ms) { if (ms.some(function (m) { return m.addedNodes.length })) adatta() }).observe(lab, { childList: true });
+    addEventListener('resize', adatta);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(adatta);
+  }
+
   /* ---- caricamento normale: la pagina prende il suo stato, poi le transizioni si accendono ---- */
   if (!R.classList.contains('mm-arr')) {
     ready.then(function () { frames(2, unboot) });

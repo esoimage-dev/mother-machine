@@ -1077,7 +1077,7 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
 .flr .flng{position:relative;display:flex;justify-content:center;margin:12px -4px -8px;height:22px}
 .flr .flng button{all:unset;box-sizing:border-box;position:relative;cursor:pointer;display:block;overflow:hidden;white-space:nowrap;max-width:0;padding:6px 0;
   font:400 10px/1 var(--f-mono);letter-spacing:.16em;color:#F4F2EC;opacity:0;-webkit-tap-highlight-color:transparent;
-  transition:max-width .5s cubic-bezier(.7,0,.2,1),padding .5s cubic-bezier(.7,0,.2,1),opacity .3s}
+  transition:max-width .38s cubic-bezier(.7,0,.2,1),padding .38s cubic-bezier(.7,0,.2,1),opacity .25s}
 .flr .flng button span{display:inline-block;min-width:2.3ch}
 .flr .flng button.on{max-width:60px;padding:6px 6px 6px 14px;opacity:.9}
 .flr .flng.open button{max-width:60px;padding:6px 6px 6px 14px;opacity:.36}
@@ -1929,12 +1929,12 @@ if('IntersectionObserver' in window){new IntersectionObserver(function(es){vis=e
   function mark(){BS.forEach(function(x){var on=x.dataset.l===cur;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on?'true':'false');x.tabIndex=on||open?0:-1});
     var b=btn(cur);if(lit.parentNode!==b){b.appendChild(lit)}lit.style.transform=''}
   function setOpen(on){if(on===open)return;open=on;box.classList.toggle('open',on);
-    if(on)BS.forEach(function(x,i){if(x.dataset.l!==cur){var sp=x.firstChild;sp.textContent='';scramble(sp,x.dataset.l.toUpperCase(),60+Math.abs(i-ORDER.indexOf(cur))*55)}});
+    if(on)BS.forEach(function(x,i){if(x.dataset.l!==cur){var sp=x.firstChild;sp.textContent='';scramble(sp,x.dataset.l.toUpperCase(),30+Math.abs(i-ORDER.indexOf(cur))*40)}});
     mark()}
   function keys(){mark()}function caption(){}function place(){mark()}
   function fold(ms){clearTimeout(ft);ft=setTimeout(function(){if(!busy)setOpen(false)},ms)}
   var fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
-  var ot;if(fine){box.addEventListener('pointerenter',function(){clearTimeout(ft);clearTimeout(ot);ot=setTimeout(function(){setOpen(true)},120)});box.addEventListener('pointerleave',function(){clearTimeout(ot)});box.addEventListener('pointerleave',function(){fold(450)})}
+  var ot;if(fine){box.addEventListener('pointerenter',function(){clearTimeout(ft);clearTimeout(ot);ot=setTimeout(function(){setOpen(true)},60)});box.addEventListener('pointerleave',function(){clearTimeout(ot)});box.addEventListener('pointerleave',function(){fold(450)})}
   box.addEventListener('focusin',function(){clearTimeout(ft);setOpen(true)});
   box.addEventListener('focusout',function(e){if(!box.contains(e.relatedTarget))fold(200)});
   box.addEventListener('keydown',function(e){var i=ORDER.indexOf(document.activeElement&&document.activeElement.dataset.l);

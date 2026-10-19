@@ -140,6 +140,8 @@ html.mm-riding #ride .pg{visibility:hidden}
 #navLift .cyl{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:none}
 #navLift .cyl .n3{transition:opacity .4s}
 #navLift .cyl.mm-holding .n3{opacity:.9;transition:opacity 3s linear}
+/* girata su LG, la tacca di mezzo si accende pomodoro, come la seconda nel tastierino */
+#navLift .flg.open .cyl::after{background:#FF5B3A}
 #navLift.mm-code .cyl i{transform:rotate(135deg)!important}
 #navLift.mm-code .cyl .n3{opacity:1;background:var(--sig,#FF5B3A)}
 #navLift.mm-code .cyl::after{opacity:.3!important}
@@ -169,3 +171,8 @@ html.mm-riding #ride .pg{visibility:hidden}
 .mmkp.mm-no .mmkpd{animation:mmno .5s cubic-bezier(.3,0,.3,1)}
 @keyframes mmno{20%{translate:-8px 0}40%{translate:7px 0}60%{translate:-5px 0}80%{translate:3px 0}}
 @media (prefers-reduced-motion:reduce){.mmkp{transition:none}.mmkp.mm-no .mmkpd{animation:none}}
+
+/* la scritta accanto al numero del piano ("All floors", "Tutti i piani", "Todas las plantas") si allarga con dolcezza:
+   la larghezza la porta mm-sito.js, alla stessa velocita' del testo che gira */
+.disp3 #bL{transition:width .42s cubic-bezier(.7,0,.2,1)}
+@media (prefers-reduced-motion:reduce){.disp3 #bL{transition:none}}

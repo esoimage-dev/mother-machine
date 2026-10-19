@@ -9,7 +9,7 @@
   var cyl = root.querySelector('.flg .cyl'), flg = root.querySelector('.flg'), slot = cyl && cyl.querySelector('i');
   if (!cyl) return;
   var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var HOLD = 3000, LEN = 4, IDLE = 20000;
+  var HOLD = 2200, WAIT = 250, LEN = 4, IDLE = 20000;   /* WAIT: prima di questo la pressione e' un tocco, la chiave non si muove */
 
   /* il tastierino: una fascia che esce sotto la chiave */
   var kp = document.createElement('div');
@@ -18,23 +18,26 @@
   flg.parentNode.insertBefore(kp, flg.nextSibling);
   var dots = [].slice.call(kp.querySelectorAll('.mmkpd i')), msg = kp.querySelector('.mmkpm');
 
-  var code = null, idle = 0, held = 0, turn = null, t0 = 0, eat = false, busy = false;
+  var code = null, idle = 0, held = 0, vis = 0, turn = null, t0 = 0, eat = false, busy = false;
 
   /* ---- tenere premuto ---- */
   function start(e) {
     if (code || busy || (e.button != null && e.button !== 0)) return;
     t0 = performance.now(); eat = false;
-    cyl.classList.add('mm-holding');
-    var da = flg.classList.contains('open') ? 90 : 0;   /* chiusa (0) o gia' girata su LG (90) */
-    if (slot && !RM) turn = slot.animate([{ transform: 'rotate(' + da + 'deg)' }, { transform: 'rotate(135deg)' }], { duration: HOLD, easing: 'cubic-bezier(.4,0,.6,1)', fill: 'forwards' });
+    /* un tocco veloce gira la chiave su LG come sempre: la discesa verso la seconda tacca parte solo se si tiene premuto */
+    vis = setTimeout(function () {
+      vis = 0; cyl.classList.add('mm-holding');
+      var m = new DOMMatrix(getComputedStyle(slot).transform), da = Math.atan2(m.b, m.a) * 180 / Math.PI;   /* parte da dove e' ora */
+      if (slot && !RM) turn = slot.animate([{ transform: 'rotate(' + da + 'deg)' }, { transform: 'rotate(135deg)' }], { duration: HOLD - WAIT, easing: 'cubic-bezier(.4,0,.6,1)', fill: 'forwards' });
+    }, WAIT);
     held = setTimeout(function () { held = 0; eat = true; enter() }, HOLD);
   }
   function stop() {
     if (!held) return;
-    clearTimeout(held); held = 0;
+    clearTimeout(held); held = 0; clearTimeout(vis); vis = 0;
     cyl.classList.remove('mm-holding');
-    if (performance.now() - t0 > 350) eat = true;   /* una pressione lunga lasciata a meta' non e' un tocco */
-    if (turn) { var a = turn; turn = null; a.reverse(); a.updatePlaybackRate(4); a.finished.then(function () { a.cancel() }) }
+    if (performance.now() - t0 > WAIT) eat = true;   /* una pressione lunga lasciata a meta' non e' un tocco */
+    if (turn) { var a = turn; turn = null; a.updatePlaybackRate(-4); a.finished.then(function () { a.cancel() }) }   /* torna indietro, veloce */
   }
   cyl.addEventListener('pointerdown', start);
   ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (n) { cyl.addEventListener(n, stop) });
