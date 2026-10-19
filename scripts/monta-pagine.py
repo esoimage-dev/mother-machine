@@ -90,9 +90,9 @@ VITALIA_HOME = (
     '<div class="wn"><b data-v="12" data-s=" h">12 h</b><span>a week nobody spends on the phone or in DMs</span></div></a>')
 
 
-# il footer e' la pulsantiera dell'ascensore, in fondo alla pagina: una fila di bottoni quadrati, dal piano piu' alto al
-# piu' basso, con il nome sotto, come la placca accanto alle porte. Il piano dove sei e' acceso; LG c'e' ma e' chiuso.
-# A sinistra il logo. In fondo una fascia: copyright e sito, lingue (le mette lo script delle lingue prima di span.mut),
+# il footer: in alto la frase dello studio e la pulsantiera dell'ascensore (una fila di bottoni quadrati col nome sotto,
+# come la placca accanto alle porte; il piano dove sei e' acceso, LG c'e' ma e' chiuso). Sotto, la firma: il marchio a
+# tutta larghezza. In fondo una fascia: copyright e sito, lingue (le mette lo script delle lingue prima di span.mut),
 # Privacy e Terms.
 PIANI = [('05', 'Home', 'href="#top"'), ('04', 'Work', 'href="#" data-go="4"'), ('03', 'Brand', 'href="#" data-go="3"'),
          ('02', 'Systems', 'href="#" data-go="2"'), ('01', 'Studio', 'href="#" data-go="1"'), ('G', 'Contact', 'href="#" data-go="0"')]
@@ -106,8 +106,9 @@ def footer(nome):
     tasti += '<li class="fkey"><span aria-label="Floor LG, Machine room, key only"><span class="fsq">LG</span><span class="fnm">Key only</span></span></li>'
     priv = ' aria-current="page"' if nome == 'privacy' else ''
     return ('<footer class="ftr" data-luce="carta"><div class="in">'
-            '<div class="fid"><div class="lg" data-a="heroS"></div><p class="mo mut">A design and engineering studio</p></div>'
+            '<p class="ftag mo mut">A design and engineering studio</p>'
             f'<nav class="fdir mo" aria-label="Floors"><ol>{tasti}</ol></nav>'
+            '<div class="lg flogo" data-a="heroS"></div>'
             '<div class="row mo fbar"><span class="mut fcopy"><span>© 2026 Mother Machine</span><i> · </i><span>mothermachine.studio</span></span>'
             f'<span class="fleg"><a href="/privacy"{priv}>Privacy</a><a href="/privacy#terms">Terms</a></span></div>'
             '</div></footer>')

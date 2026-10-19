@@ -58,23 +58,23 @@ html.mm-arr #ride .pg,html.mm-arr #ride .disp{visibility:hidden}
 /* ---- pulsantiera: il piano corrente e' acceso tutto, senza ombra sotto ---- */
 .flr .fb.cur .fbt{box-shadow:0 0 0 4px rgba(244,242,236,.07),0 0 22px rgba(244,242,236,.28)}
 
-/* ---- footer: la pulsantiera dell'ascensore, in fondo alla pagina ----
-   Una fila di bottoni quadrati con il nome sotto, come la placca accanto alle porte. Acceso il piano dove sei; al passaggio
-   il pomodoro sale e riempie tutto il quadrato (bordo compreso); LG tratteggiato e spento. A sinistra il logo.
-   Sotto, una fascia sottile: copyright e sito, lingue, Privacy e Terms. */
-footer.ftr{padding-block:clamp(48px,6vw,80px) 26px}
-footer.ftr .in{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"id dir" "bar bar";gap:clamp(40px,5vw,64px) 48px;align-items:end}
-footer.ftr .fid{grid-area:id;display:grid;gap:14px}
-footer.ftr .fid .lg{width:clamp(170px,15vw,220px)}
-footer.ftr .fid p,footer.ftr .fbar{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}
-footer.ftr .fid p{margin:0}
+/* ---- footer: la pulsantiera e la firma ----
+   In alto una riga che serve: la frase dello studio e la pulsantiera (bottoni quadrati col nome sotto, acceso il piano dove
+   sei, al passaggio il pomodoro riempie tutto il quadrato, LG tratteggiato e spento). Sotto la firma: il marchio a tutta
+   larghezza, da margine a margine. In fondo una fascia sottile: copyright e sito, lingue, Privacy e Terms. */
+footer.ftr{padding-block:clamp(56px,7vw,96px) 26px}
+footer.ftr .in{display:grid;grid-template-columns:1fr auto;grid-template-areas:"tag dir" "logo logo" "bar bar";gap:0 48px;align-items:end}
+footer.ftr .ftag,footer.ftr .fbar{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}
+footer.ftr .ftag{grid-area:tag;margin:0;align-self:end;padding-bottom:30px}
+footer.ftr .flogo{grid-area:logo;width:100%;margin:clamp(40px,5vw,72px) 0 clamp(36px,4vw,56px)}
+footer.ftr .flogo .mm{display:block;width:100%;height:auto}
 footer.ftr .fdir{grid-area:dir;justify-self:end;display:block}
 footer.ftr .fdir ol{list-style:none;margin:0;padding:0;display:flex;gap:6px}
 footer.ftr .fdir li>a,footer.ftr .fdir li>span{display:grid;justify-items:center;gap:9px;width:66px;color:var(--ink);text-decoration:none}
 footer.ftr .fsq{position:relative;overflow:hidden;isolation:isolate;display:grid;place-items:center;width:44px;height:44px;box-sizing:border-box;
   border:1.5px solid var(--ink);font:500 12px/1 var(--f-mono);letter-spacing:.02em;transition:border-color .4s cubic-bezier(.3,.7,.2,1),color .25s}
 footer.ftr .fsq::before{content:"";position:absolute;inset:0;background:var(--sig);transform:translateY(101%);transition:transform .4s cubic-bezier(.3,.7,.2,1);z-index:-1}
-footer.ftr .fnm{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);text-align:center;transition:color .25s}
+footer.ftr .fnm{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);text-align:center;white-space:nowrap;transition:color .25s}
 footer.ftr .fdir a:hover .fsq,footer.ftr .fdir a:focus-visible .fsq{border-color:var(--sig);color:#121211}
 footer.ftr .fdir a:hover .fsq::before,footer.ftr .fdir a:focus-visible .fsq::before{transform:none}
 footer.ftr .fdir a:hover .fnm,footer.ftr .fdir a:focus-visible .fnm{color:var(--ink)}
@@ -96,19 +96,26 @@ footer.ftr .fleg a,footer.ftr .flf a{color:inherit;text-decoration:none!importan
 footer.ftr .fleg a:hover,footer.ftr .fleg a:focus-visible,footer.ftr .fleg a[aria-current],footer.ftr .flf a:hover,footer.ftr .flf a:focus-visible,footer.ftr .flf a[aria-current]{border-bottom-color:currentColor;color:var(--ink);opacity:1}
 @media (prefers-reduced-motion:reduce){footer.ftr .fsq,footer.ftr .fsq::before{transition:none}}
 
-/* ---- footer su tablet stretto e telefono: logo, la fila dei bottoni a tutta larghezza, poi lingue, legale, copyright ---- */
-@media (max-width:860px){
-  footer.ftr .in{grid-template-columns:1fr;grid-template-areas:"id" "dir" "bar";gap:36px}
+/* ---- footer su tablet stretto: la pulsantiera sotto la frase, a tutta larghezza ---- */
+@media (max-width:900px){
+  footer.ftr .in{grid-template-columns:1fr;grid-template-areas:"tag" "dir" "logo" "bar"}
+  footer.ftr .ftag{padding-bottom:24px}
   footer.ftr .fdir{justify-self:stretch}
   footer.ftr .fdir ol{justify-content:space-between;gap:0}
-  footer.ftr .fdir li>a,footer.ftr .fdir li>span{width:auto}
   footer.ftr .fdir .fkey{margin-left:0}
 }
-@media (max-width:760px){
-  footer.ftr .fid .lg{width:160px}
-  footer.ftr .fsq{width:40px;height:40px;font-size:11px}
-  footer.ftr .fnm{font-size:8.5px;letter-spacing:.06em}
-  footer.ftr .fbar{grid-template-columns:1fr;grid-template-areas:"lang" "legal" "copy";gap:18px;padding-top:24px}
+/* ---- footer su telefono: la pulsantiera diventa la placca di un ascensore vero, 4 bottoni per riga, grandi e leggibili;
+   sotto la firma a tutta larghezza, poi lingue, legale, copyright ---- */
+@media (max-width:620px){
+  footer.ftr{padding-top:48px}
+  footer.ftr .in{grid-template-areas:"dir" "logo" "tag" "bar"}
+  footer.ftr .fdir ol{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px 0}
+  footer.ftr .fdir li>a,footer.ftr .fdir li>span{width:auto;gap:10px}
+  footer.ftr .fsq{width:56px;height:56px;font-size:14px}
+  footer.ftr .fnm{font-size:10.5px;letter-spacing:.08em}
+  footer.ftr .flogo{margin:48px 0 14px}
+  footer.ftr .ftag{padding-bottom:32px}
+  footer.ftr .fbar{grid-template-columns:1fr;grid-template-areas:"lang" "legal" "copy";gap:20px;padding-top:24px}
   footer.ftr .fleg{justify-self:start;gap:28px}
   footer.ftr .fcopy i{display:none}
   footer.ftr .fcopy{display:grid;gap:4px}
