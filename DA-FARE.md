@@ -1,6 +1,31 @@
 # Da fare
 
 Lista viva del progetto. Si spunta quando una cosa è fatta, si aggiunge quando nasce. Mai scrivere qui codici o segreti.
+Il piano di lancio in 3 giorni, con le decisioni e l'ordine, è in `docs/PIANO.md`.
+
+## Lancio · giorno 1
+- [ ] Nameserver del dominio da GoDaddy a Cloudflare (Eso, la mattina: la propagazione blocca le mail).
+- [ ] Materiali e permessi dei quattro lavori veri: No. 012, No. 011, No. 001, Mother Machine (Eso).
+- [ ] Pagine progetto: No. 012, Mother Machine, No. 011, No. 001.
+- [ ] Work in home: due proposte con screenshot, poi costruire la scelta.
+
+## Lancio · giorno 2
+- [ ] Contact vero: Worker, D1, Turnstile, Resend (conferma al cliente, avviso a noi), call con stanza Daily standard.
+- [ ] Machine Room v1: lista e dettaglio degli ordini veri da D1.
+- [ ] Testi: Studio a 3 sezioni, Brand e Systems piu' corti, riga sicurezza in Systems, un solo "free", via i doppioni.
+- [ ] Ordine della home (Work subito dopo l'apertura): screenshot e conferma.
+
+## Lancio · giorno 3
+- [ ] Privacy con nome legale, ABN, indirizzo; ABN nel footer; SEO; Open Graph; doctype.
+- [ ] Controllo finale su tutte le pagine e i dispositivi; modulo e mail provati davvero.
+- [ ] Merge su `main`, dominio attivo, repository privata, Rate Limiting su `/api/porta`.
+
+## Dopo il lancio
+- [ ] Machine Room completa e Cloudflare Access.
+- [ ] Stanza Daily vestita Mother Machine, pagina "Your call is confirmed", promemoria.
+- [ ] LG laboratorio: le provette (i nostri prodotti), la sala macchine (server e sicurezza), il gioco.
+- [ ] Animazioni allo scroll; film nuovo; footer ripensato.
+- [ ] Apertura della home: decidere dopo Work (citofono su telefono, versione B su desktop per ora).
 
 ## Subito (Eso, su Cloudflare e GitHub)
 - [x] Segreti della porta di LG su Cloudflare (fatto il 19 ottobre, Produzione e Anteprima): Workers & Pages → mother-machine → Settings → Variables and Secrets,
