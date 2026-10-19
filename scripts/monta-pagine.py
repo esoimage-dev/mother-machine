@@ -90,10 +90,10 @@ VITALIA_HOME = (
     '<div class="wn"><b data-v="12" data-s=" h">12 h</b><span>a week nobody spends on the phone or in DMs</span></div></a>')
 
 
-# il footer: in alto la frase dello studio e la pulsantiera dell'ascensore (una fila di bottoni quadrati col nome sotto,
-# come la placca accanto alle porte; il piano dove sei e' acceso, LG c'e' ma e' chiuso). Sotto, la firma: il marchio a
-# tutta larghezza. In fondo una fascia: copyright e sito, lingue (le mette lo script delle lingue prima di span.mut),
-# Privacy e Terms.
+# il footer e' la placca dell'ascensore montata sul muro: una targa scura con quattro viti, lo stesso linguaggio della
+# pulsantiera. Dentro: il marchio con la frase dello studio; i sei piani come bottoni in una griglia 3 per 2 (acceso il
+# piano dove sei); sotto, separata, la riga di LG con il cilindro della chiave; in fondo lingue (le mette lo script delle
+# lingue prima di span.mut), Privacy e Terms, copyright.
 PIANI = [('05', 'Home', 'href="#top"'), ('04', 'Work', 'href="#" data-go="4"'), ('03', 'Brand', 'href="#" data-go="3"'),
          ('02', 'Systems', 'href="#" data-go="2"'), ('01', 'Studio', 'href="#" data-go="1"'), ('G', 'Contact', 'href="#" data-go="0"')]
 
@@ -103,15 +103,17 @@ def footer(nome):
     tasti = ''.join(
         f'<li><a {attr} aria-label="Floor {lab}, {nm}"{" aria-current=\"page\"" if voce == f"{lab} {nm}" else ""}>'
         f'<span class="fsq">{lab}</span><span class="fnm">{nm}</span></a></li>' for lab, nm, attr in PIANI)
-    tasti += '<li class="fkey"><span aria-label="Floor LG, Machine room, key only"><span class="fsq">LG</span><span class="fnm">Key only</span></span></li>'
     priv = ' aria-current="page"' if nome == 'privacy' else ''
+    viti = ''.join(f'<i class="rv" style="{p}"></i>' for p in ('left:14px;top:14px', 'right:14px;top:14px', 'left:14px;bottom:14px', 'right:14px;bottom:14px'))
     return ('<footer class="ftr" data-luce="carta"><div class="in">'
-            '<p class="ftag mo mut">A design and engineering studio</p>'
-            f'<nav class="fdir mo" aria-label="Floors"><ol>{tasti}</ol></nav>'
-            '<div class="lg flogo" data-a="heroS"></div>'
+            f'<div class="fplate" data-luce="notte">{viti}'
+            '<div class="fbrand"><div class="lg flogo" data-a="heroS"></div><p class="ftag mo">A design and engineering studio</p></div>'
+            f'<nav class="fdir mo" aria-label="Floors"><ol>{tasti}</ol>'
+            '<div class="fkey" aria-label="Floor LG, Machine room, key only"><span class="fsq">LG</span>'
+            '<span class="fkt"><b>Machine room</b><em>Key only</em></span><i class="fcyl" aria-hidden="true"></i></div></nav>'
             '<div class="row mo fbar"><span class="mut fcopy"><span>© 2026 Mother Machine</span><i> · </i><span>mothermachine.studio</span></span>'
             f'<span class="fleg"><a href="/privacy"{priv}>Privacy</a><a href="/privacy#terms">Terms</a></span></div>'
-            '</div></footer>')
+            '</div></div></footer>')
 
 
 def ritocchi(nome, t):
