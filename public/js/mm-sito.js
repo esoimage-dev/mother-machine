@@ -186,6 +186,36 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(adatta);
   }
 
+  /* ---- footer: il carroponte e la chiave ----
+     Il marchio della placca fa il carroponte del manuale (una corsa) quando entra nello schermo e al passaggio del mouse.
+     La chiave funziona come nella pulsantiera: girata sblocca LG ("Going down."), senza "Not without the key.";
+     LG sbloccato scende con l'ascensore. Il tastierino del personale sta solo nella pulsantiera. */
+  var flogo = document.querySelector('footer .flogo');
+  if (flogo && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var corsa = function () { if (flogo.classList.contains('fpress')) return; flogo.classList.add('fpress') };
+    flogo.addEventListener('animationend', function () { flogo.classList.remove('fpress') });
+    flogo.addEventListener('pointerenter', corsa);
+    if ('IntersectionObserver' in window) {
+      var vista = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { corsa(); vista.disconnect() } }, { threshold: .6 });
+      vista.observe(flogo);
+    }
+  }
+  var fk = document.querySelector('footer .fkey');
+  if (fk) {
+    var fcyl = fk.querySelector('.fcylb'), flgb = fk.querySelector('.flgb'), fko = fk.querySelector('.fko'), quiLG = flgb.hasAttribute('aria-current');
+    var gira = function (on) {
+      fk.classList.toggle('open', on); fcyl.setAttribute('aria-pressed', on ? 'true' : 'false');
+      fko.textContent = quiLG ? 'You found it.' : on ? 'Going down.' : 'Staff only';
+      flgb.setAttribute('aria-label', 'Floor LG, Machine room' + (on ? '' : ', locked'));
+    };
+    fcyl.addEventListener('click', function () { if (!quiLG) gira(!fk.classList.contains('open')) });
+    flgb.addEventListener('click', function () {
+      if (quiLG) return;
+      if (!fk.classList.contains('open')) { fko.textContent = 'Not without the key.'; fk.classList.remove('deny'); void fk.offsetWidth; fk.classList.add('deny'); return }
+      if (typeof go === 'function') go(-1); else location.href = '/lg';
+    });
+  }
+
   /* ---- caricamento normale: la pagina prende il suo stato, poi le transizioni si accendono ---- */
   if (!R.classList.contains('mm-arr')) {
     ready.then(function () { frames(2, unboot) });

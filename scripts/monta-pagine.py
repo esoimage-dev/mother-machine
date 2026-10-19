@@ -93,9 +93,23 @@ VITALIA_HOME = (
 # il footer e' la placca dell'ascensore montata sul muro: una targa scura con quattro viti, lo stesso linguaggio della
 # pulsantiera. Dentro: il marchio con la frase dello studio; i sei piani come bottoni in una griglia 3 per 2 (acceso il
 # piano dove sei); sotto, separata, la riga di LG con il cilindro della chiave; in fondo lingue (le mette lo script delle
-# lingue prima di span.mut), Privacy e Terms, copyright.
+# lingue prima di span.mut), Privacy e Terms, copyright. Il marchio ha il carroponte.
 PIANI = [('05', 'Home', 'href="#top"'), ('04', 'Work', 'href="#" data-go="4"'), ('03', 'Brand', 'href="#" data-go="3"'),
          ('02', 'Systems', 'href="#" data-go="2"'), ('01', 'Studio', 'href="#" data-go="1"'), ('G', 'Contact', 'href="#" data-go="0"')]
+
+
+_MARCHIO = None
+
+
+def marchio_mobile():
+    """Il marchio con il carroponte (il piano inferiore della m e' un pezzo a parte, .car): sta nei dati del manuale."""
+    global _MARCHIO
+    if _MARCHIO is None:
+        m = (PROTO / 'manuale.html').read_text(encoding='utf8')
+        AS, _ = json.JSONDecoder().raw_decode(m, m.find('var AS=') + len('var AS='))
+        assert 'class="car ' in AS['hero'], 'marchio con carroponte'
+        _MARCHIO = AS['hero']
+    return _MARCHIO
 
 
 def footer(nome):
@@ -104,14 +118,20 @@ def footer(nome):
         f'<li><a {attr} aria-label="Floor {lab}, {nm}"{" aria-current=\"page\"" if voce == f"{lab} {nm}" else ""}>'
         f'<span class="fsq">{lab}</span><span class="fnm">{nm}</span></a></li>' for lab, nm, attr in PIANI)
     priv = ' aria-current="page"' if nome == 'privacy' else ''
+    lg = nome in ('lg', 'room')
     viti = ''.join(f'<i class="rv" style="{p}"></i>' for p in ('left:14px;top:14px', 'right:14px;top:14px', 'left:14px;bottom:14px', 'right:14px;bottom:14px'))
+    # LG come nella pulsantiera: la chiave girata sblocca LG ("Going down."), senza chiave "Not without the key."
+    chiave = (f'<div class="fkey{" open" if lg else ""}">'
+              f'<button class="flgb" type="button" data-k="-1" aria-label="Floor LG, Machine room{"" if lg else ", locked"}"{" aria-current=\"page\"" if lg else ""}>'
+              '<span class="fsq">LG</span><span class="fnm">Machine room</span></button>'
+              f'<span class="fko" aria-live="polite">{"You found it." if lg else "Staff only"}</span>'
+              f'<button class="fcylb" type="button" aria-label="Key: unlock the machine room" aria-pressed="{"true" if lg else "false"}">'
+              '<i class="fcyl" aria-hidden="true"><b></b></i><span class="fnm">Key</span></button></div>')
     return ('<footer class="ftr" data-luce="carta"><div class="in">'
             f'<div class="fplate" data-luce="notte">{viti}'
-            '<div class="fbrand"><div class="lg flogo" data-a="heroS"></div><p class="ftag mo">A design and engineering studio</p></div>'
-            f'<nav class="fdir mo" aria-label="Floors"><ol>{tasti}</ol>'
-            '<div class="fkey" aria-label="Floor LG, Machine room, key only"><span class="fsq">LG</span>'
-            '<span class="fkt"><b>Machine room</b><em>Key only</em></span><i class="fcyl" aria-hidden="true"></i></div></nav>'
-            '<div class="row mo fbar"><span class="mut fcopy"><span>© 2026 Mother Machine</span><i> · </i><span>mothermachine.studio</span></span>'
+            f'<div class="fbrand"><div class="lg flogo">{marchio_mobile()}</div><p class="ftag mo">A design and engineering studio</p></div>'
+            f'<nav class="fdir mo" aria-label="Floors"><ol>{tasti}</ol>{chiave}</nav>'
+            '<div class="row mo fbar"><span class="mut fcopy">© 2026 Mother Machine</span>'
             f'<span class="fleg"><a href="/privacy"{priv}>Privacy</a><a href="/privacy#terms">Terms</a></span></div>'
             '</div></div></footer>')
 
