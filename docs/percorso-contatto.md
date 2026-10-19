@@ -64,9 +64,9 @@ e per liberare gli orari non confermati dopo 24 ore.
 - Da **qualsiasi piano**, con la pulsantiera aperta, si **tiene premuta la chiave 3 secondi**: gira piano fino alla
   seconda tacca, la pulsantiera si allunga e i bottoni dei piani diventano un tastierino da 5 (anche da tastiera: 1-5 e G).
 - **Il codice non è in questa repository né nel sito.** Lo conosce solo il server: è il segreto `MM_DOOR_CODE` su
-  Cloudflare. Il browser manda la sequenza a `/api/porta` (`functions/api/porta.js`); se è giusta il server lascia un
+  Cloudflare. Il browser manda la sequenza a `/api/porta` (`public/_worker.js`, il server del sito); se è giusta il server lascia un
   gettone firmato con `MM_DOOR_KEY` in un cookie HttpOnly di 8 ore. Ogni tentativo costa quasi un secondo.
-- `/lg/room` (il back office, scena 5 con dati di prova) si apre solo con quel gettone (`functions/lg/_middleware.js`);
+- `/lg/room` (il back office, scena 5 con dati di prova) si apre solo con quel gettone (sempre `public/_worker.js`);
   senza, si torna a `/lg`. Codice giusto: OPEN, porte con il simbolo, Machine Room.
 - Segreti da impostare su Cloudflare (Workers & Pages → mother-machine → Settings → Variables and Secrets, tipo
   Secret, sia Production sia Preview): `MM_DOOR_CODE` (i bottoni separati da trattini, come 01-02-03-04-G) e
