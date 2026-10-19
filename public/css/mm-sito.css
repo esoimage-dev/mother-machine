@@ -271,12 +271,12 @@ html.mm-riding #ride .pg{visibility:hidden}
 }
 
 /* ---- su telefono, a pulsantiera aperta, accanto al numero compare "Close" ----
-   La casella si allarga (la larghezza la porta mm-sito.js) insieme allo spazio che la separa dal numero: il numero
-   scivola a sinistra invece di saltare. Da chiusa la scritta non c'e'. */
+   Una scritta ferma (niente lettere che girano): la sua casella si allarga e la scritta si rivela da destra verso
+   sinistra come una tendina, spingendo il numero. Chiudendo, il contrario. La larghezza la porta mm-sito.js. */
+.disp3 .mcl{display:none}
 @media (max-width:620px){
-  html .disp3 .nm{display:inline-grid;min-width:0;width:0;margin-left:-14px;opacity:0;
-    transition:width .42s cubic-bezier(.7,0,.2,1),margin-left .42s cubic-bezier(.7,0,.2,1),opacity .12s}
-  html .disp3:hover:not(.open) .nm,html .disp3:focus-visible:not(.open) .nm{opacity:0}   /* l'hover che resta dopo un tocco non conta */
-  html .disp3.open .nm{margin-left:0;opacity:1;transition:width .42s cubic-bezier(.7,0,.2,1),margin-left .42s cubic-bezier(.7,0,.2,1),opacity .3s .2s}
+  /* la distanza dal numero resta sempre la stessa: i primi 14 px della casella sono lo spazio, mai la scritta */
+  .disp3 .mcl{display:flex;justify-content:flex-end;overflow:hidden;white-space:nowrap;width:0;margin-left:-14px;clip-path:inset(0 0 0 14px);
+    font:400 10.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;transition:width .42s cubic-bezier(.7,0,.2,1)}
 }
-@media (max-width:620px) and (prefers-reduced-motion:reduce){html .disp3 .nm{transition:none}}
+@media (max-width:620px) and (prefers-reduced-motion:reduce){.disp3 .mcl{transition:none}}
