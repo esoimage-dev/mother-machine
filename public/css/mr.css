@@ -1,0 +1,156 @@
+/* Mother Machine · LG Machine Room, la faccia pubblica: il laboratorio sotto lo studio.
+   Linguaggio machine, luce notte, niente vetro. Il pomodoro solo su cio' che si muove (impulsi, spie, cabina).
+   Le animazioni si fermano fuori schermo (classe .mr-off sulla sezione) e con prefers-reduced-motion. */
+
+.mrp .mo{font-family:var(--f-mono)}
+.mrled{display:inline-block;width:7px;height:7px;background:var(--sig);margin-right:9px;vertical-align:1px;animation:mrblink 1.6s steps(1) infinite}
+@keyframes mrblink{50%{opacity:.15}}
+
+/* ---- 1 · apertura ---- */
+.mro{padding-block:clamp(112px,12vw,168px) clamp(56px,7vw,104px)}
+.mro .in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:clamp(32px,5vw,88px);align-items:center}
+.mrotop{display:flex;justify-content:space-between;gap:16px;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.mro h1{margin:clamp(28px,4vw,52px) 0 0;font:650 clamp(52px,7.4vw,128px)/.9 var(--f-body);letter-spacing:-.055em;max-width:9ch;text-wrap:balance}
+.mrp .mrlede{margin:clamp(32px,3.4vw,48px) 0 0;font:400 clamp(18px,1.5vw,21px)/1.45 var(--f-body);max-width:34ch;color:var(--mut)}
+.mrkv{display:grid;grid-template-columns:repeat(3,max-content);gap:0;margin:clamp(32px,4vw,52px) 0 0;border-top:1px solid var(--ln)}
+.mrkv div{padding:14px 28px 0 0;margin-right:28px;border-right:1px solid var(--ln)}
+.mrkv div:last-child{border-right:0}
+.mrkv dt{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.mrkv dd{margin:6px 0 0;font-size:15px;letter-spacing:.04em;font-variant-numeric:tabular-nums}
+
+.mrsec{margin:0;justify-self:end;width:min(100%,460px)}
+.mrsec svg{display:block;width:100%;height:auto;overflow:visible}
+#mrBld text{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;fill:var(--mut);text-transform:uppercase}
+#mrBld .mr-ln{stroke:var(--ln);stroke-width:1;fill:none}
+#mrBld .ink{stroke:var(--ink);stroke-width:1.5;fill:none}
+#mrBld .pipe{stroke:rgba(241,238,231,.22);stroke-width:1.5;fill:none}
+#mrBld .pulse{fill:var(--sig)}
+#mrBld .node{fill:var(--bg);stroke:var(--ink);stroke-width:1.5}
+#mrBld .rack{fill:#181816;stroke:rgba(241,238,231,.22);stroke-width:1}
+#mrBld .bulb{fill:var(--ink);opacity:.25}
+#mrBld .bulb.on{animation:mrbulb 1.9s steps(1) infinite}
+#mrBld .bulb.mr-sig{fill:var(--sig);opacity:1;animation:mrblink 1.2s steps(1) infinite}
+@keyframes mrbulb{0%{opacity:.25}40%{opacity:.9}70%{opacity:.4}}
+#mrBld .fan{transform-box:fill-box;transform-origin:center;animation:mrspin 2.4s linear infinite}
+@keyframes mrspin{to{rotate:360deg}}
+#mrBld .cab{fill:var(--bg);stroke:var(--ink);stroke-width:1.5}
+#mrBld .cabl{fill:var(--sig)}
+
+/* ---- 2 · le macchine ---- */
+.mrw{padding-block:clamp(56px,7vw,104px)}
+.mrwh{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;padding-bottom:24px;border-bottom:1.5px solid var(--ink)}
+.mrwh h2{margin:0;font:650 clamp(34px,3.6vw,56px)/1 var(--f-body);letter-spacing:-.045em}
+.mrwh .mo{font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.mrgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-left:1px solid var(--ln)}
+.mrm{display:grid;grid-template-rows:auto 1fr auto;border-right:1px solid var(--ln);border-bottom:1px solid var(--ln);min-width:0}
+.mrm header{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.mrm header .mrled{margin:0}
+.mrm p{margin:0;padding:16px 18px 20px;font:500 16px/1.35 var(--f-body);letter-spacing:-.01em}
+.mrbox{position:relative;height:230px;margin:0 18px;background:#141412;border:1px solid var(--ln);overflow:hidden}
+
+/* M-01 · build log */
+.mrterm pre{margin:0;padding:14px 16px;font:400 12px/1.75 var(--f-mono);color:var(--mut);white-space:pre;overflow:hidden;height:100%;box-sizing:border-box}
+.mrterm pre b{font-weight:400;color:var(--ink)}
+.mrterm pre em{font-style:normal;color:var(--sig)}
+.mrterm pre i{display:inline-block;width:7px;height:13px;background:var(--sig);vertical-align:-2px;animation:mrblink 1s steps(1) infinite}
+
+/* M-02 · ordini sul nastro */
+.mrbelt{display:grid;align-content:center;gap:18px;padding:0 16px}
+.mrbelt .mr-st{display:grid;grid-template-columns:repeat(3,1fr);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.mrbelt .mr-st span{border-left:1px solid var(--ln);padding:0 0 70px 8px}
+.mrbelt .mr-rail{position:absolute;left:16px;right:16px;top:50%;height:22px;margin-top:6px;border-block:1px solid var(--ln);
+  background:repeating-linear-gradient(90deg,transparent 0 13px,rgba(241,238,231,.08) 13px 14px);background-size:14px 100%;animation:mrrail .7s linear infinite}
+@keyframes mrrail{to{background-position:14px 0}}
+.mrbelt .mr-rail i{position:absolute;top:3px;left:0;width:14px;height:14px;border:1.5px solid var(--ink);box-sizing:border-box;animation:mrbox 10s linear infinite}
+.mrbelt .mr-rail i:nth-child(2){animation-delay:-2s}.mrbelt .mr-rail i:nth-child(3){animation-delay:-4s}
+.mrbelt .mr-rail i:nth-child(4){animation-delay:-6s}.mrbelt .mr-rail i:nth-child(5){animation-delay:-8s}
+@keyframes mrbox{
+  0%{transform:translateX(-20px)}
+  30%{transform:translateX(calc(var(--w,280px)*.33 - 7px))}
+  36%{transform:translateX(calc(var(--w,280px)*.33 - 7px));background:transparent}
+  37%{background:var(--ink)}
+  64%{transform:translateX(calc(var(--w,280px)*.66 - 7px));background:var(--ink)}
+  70%{transform:translateX(calc(var(--w,280px)*.66 - 7px));background:var(--ink);border-color:var(--ink)}
+  71%{background:var(--sig);border-color:var(--sig)}
+  100%{transform:translateX(calc(var(--w,280px) + 20px));background:var(--sig);border-color:var(--sig)}}
+
+/* M-03 · turno di notte */
+.mrnight{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:22px;padding:0 20px}
+.mrnight .dial{position:relative;width:120px;height:120px;border:1.5px solid var(--ink);border-radius:50%;
+  background:repeating-conic-gradient(from -1deg,var(--ln) 0 2deg,transparent 2deg 15deg)}
+.mrnight .dial::after{content:"";position:absolute;inset:14px;border-radius:50%;background:#141412}
+.mrnight .hand{position:absolute;left:50%;top:50%;width:2px;height:46px;margin-left:-1px;background:var(--sig);transform-origin:50% 0;rotate:180deg;z-index:1;animation:mrhand 12s linear infinite}
+@keyframes mrhand{to{rotate:540deg}}
+.mrnight .dial b{position:absolute;inset:0;display:grid;place-items:center;font-weight:400;font-size:11px;letter-spacing:.06em;z-index:2;padding-top:44px;color:var(--mut)}
+.mrnight .jobs{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase}
+.mrnight .jobs li{display:flex;gap:12px;color:var(--mut);transition:color .3s}
+.mrnight .jobs li span{color:inherit;opacity:.7}
+.mrnight .jobs li::after{content:"";width:7px;height:7px;margin:4px 0 0 auto;border:1px solid currentColor;box-sizing:border-box}
+.mrnight .jobs li.on{color:var(--ink)}
+.mrnight .jobs li.on::after{background:var(--sig);border-color:var(--sig)}
+.mrnight .jobs li.mr-done::after{background:var(--ink);border-color:var(--ink)}
+.mrnight .jobs li.mr-done{color:var(--ink)}
+
+/* M-04 · AI privata */
+.mrai{display:grid;place-items:center;align-content:center;gap:16px}
+.mrai .mr-chip{display:grid;grid-template-columns:repeat(12,10px);gap:4px;padding:12px;border:1.5px solid var(--ink);position:relative}
+.mrai .mr-chip::before,.mrai .mr-chip::after{content:"";position:absolute;left:-8px;right:-8px;top:50%;height:60%;translate:0 -50%;
+  background:repeating-linear-gradient(transparent 0 6px,var(--ln) 6px 8px);z-index:-1}
+.mrai .mr-chip::after{left:50%;right:auto;top:-8px;bottom:-8px;height:auto;width:60%;translate:-50% 0;background:repeating-linear-gradient(90deg,transparent 0 6px,var(--ln) 6px 8px)}
+.mrai .mr-chip i{width:10px;height:10px;background:rgba(241,238,231,.1);transition:background-color .35s}
+.mrai .mr-chip i.on{background:var(--ink);transition-duration:.08s}
+.mrai .mr-chip i.hot{background:var(--sig);transition-duration:.08s}
+.mrai span{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
+
+/* M-05 · centralino */
+.mrwire svg{display:block;width:100%;height:100%}
+.mrwire text{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;fill:var(--mut);text-transform:uppercase}
+.mrwire .mr-wl{stroke:rgba(241,238,231,.22);stroke-width:1.2;fill:none}
+.mrwire .mr-nd{fill:#141412;stroke:var(--ink);stroke-width:1.2}
+.mrwire .hub{fill:var(--ink)}
+.mrwire .hubt{fill:#121211}
+.mrwire .mr-pk{fill:var(--sig)}
+
+/* M-06 · registro */
+.mrreg{display:grid;align-content:center;padding:0 16px}
+.mrreg ol{list-style:none;margin:0;padding:0;display:grid}
+.mrreg li{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--ln);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.mrreg li:last-child{border-bottom:0}
+.mrreg li span{color:var(--mut)}
+.mrreg li b{font:600 14px/1.2 var(--f-body);letter-spacing:-.01em;text-transform:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrreg em{font-style:normal;display:flex;align-items:center;gap:8px;color:var(--mut)}
+.mrreg em i{width:7px;height:7px;box-sizing:border-box}
+.mrreg em.mr-run{color:var(--ink)}
+.mrreg em.mr-run i{background:var(--sig);animation:mrblink 1.6s steps(1) infinite}
+.mrreg em.mr-bld i{border:1px solid var(--ink);background:linear-gradient(var(--ink),var(--ink)) 0 100%/100% 0 no-repeat;animation:mrfill 3s ease-in-out infinite}
+@keyframes mrfill{to{background-size:100% 100%}}
+
+/* ---- 3 · la porta chiusa ---- */
+.mrd{padding-block:clamp(56px,7vw,104px) clamp(72px,9vw,128px)}
+.mrd .in{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(32px,5vw,80px);align-items:center}
+.mrdoor{position:relative;width:clamp(150px,16vw,220px);aspect-ratio:3/5;border:1.5px solid var(--ink);
+  background:repeating-linear-gradient(transparent 0 23px,var(--ln) 23px 24px),#141412}
+.mrdoor .seam{position:absolute;left:50%;top:0;bottom:0;width:1.5px;margin-left:-.75px;background:var(--ink)}
+.mrdoor .slot{position:absolute;right:18%;top:50%;width:22px;height:22px;margin-top:-11px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;background:var(--bg)}
+.mrdoor .slot i{width:2px;height:10px;background:var(--ink)}
+.mrdt h2{margin:14px 0 0;font:650 clamp(40px,5vw,84px)/.92 var(--f-body);letter-spacing:-.05em}
+.mrp .mrdt p{margin:20px 0 0;font:400 clamp(17px,1.4vw,20px)/1.45 var(--f-body);color:var(--mut);max-width:38ch}
+.mrdt .mo{font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+
+/* fermi fuori schermo e con movimento ridotto */
+.mr-off *,.mr-off *::before,.mr-off *::after{animation-play-state:paused!important}
+@media (prefers-reduced-motion:reduce){.mrp *,.mrp *::before,.mrp *::after{animation:none!important}}
+
+/* ---- tablet e telefono ---- */
+@media (max-width:1000px){
+  .mrgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .mro .in{grid-template-columns:1fr}
+  .mrsec{justify-self:stretch;width:100%;max-width:440px}
+  .mrkv{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .mrkv div{padding-right:12px;margin-right:12px}
+  .mrgrid{grid-template-columns:1fr}
+  .mrd .in{grid-template-columns:1fr}
+  .mrdoor{width:140px}
+}

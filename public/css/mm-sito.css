@@ -1,0 +1,271 @@
+/* Mother Machine · regole del sito vero sopra le pagine approvate (prototipo/).
+   Caricato in testa a ogni pagina, subito dopo lo stile della pagina: vale prima del primo disegno.
+   Ogni blocco dice cosa corregge e perche'. */
+
+/* ---- avvio: niente transizioni finche' la pagina non ha preso il suo stato iniziale ----
+   Al caricamento (o ricaricando a meta' pagina) testata e logo partono gia' giusti, senza animarsi. */
+html.mm-boot .bar,html.mm-boot .bar *{transition:none!important}
+
+/* ---- testata ----
+   Quando il logo e' grande la testata e' trasparente: e' dello stesso colore della pagina sotto,
+   cosi' il velo della pulsantiera copre tutto e non compare nessuna riga.
+   Fascia e colore cambiano svelti (0,2-0,3 s): risalendo veloci in cima la fascia sparisce prima che il logo sia cresciuto. */
+.bar{z-index:41;transition:border-color .2s,background-color .25s,color .3s}
+.bar:not(.fold){background:transparent}
+.navdim{top:0}
+
+/* ---- logo grande e logo piccolo: si muovono insieme ----
+   Sono due disegni (il piccolo ha il tratto piu' pieno). Invece di scambiarli alla fine, viaggiano
+   sovrapposti con la stessa curva e la stessa durata: il grande scende sul piccolo, il piccolo parte
+   ingrandito sopra il grande. Il passaggio di peso avviene in movimento, dove i due hanno quasi la stessa
+   misura (verso la fine quando si piega, all'inizio quando si riapre): mai a corsa finita, mai a disegno fermo.
+   Le posizioni sono misurate al pixel (scarto sotto il mezzo pixel). */
+.bar .lgS{transform-origin:0 0}
+.bar.fold .lgB{transform:translate(.5px,-8.69px) scale(.4877);opacity:0;transition:transform .6s var(--e-carro),opacity .1s .48s}
+.bar.fold .lgS{transform:none;opacity:1;transition:transform .6s var(--e-carro),opacity .12s .36s}
+.bar:not(.fold) .lgB{transform:none;opacity:1;transition:transform .6s var(--e-carro),opacity .08s}
+.bar:not(.fold) .lgS{transform:translate(-1.025px,9.415px) scale(2.0504);opacity:0;transition:transform .6s var(--e-carro),opacity .12s .08s}
+@media (max-width:620px){
+  .bar.fold .lgB{transform:translate(.42px,-6.07px) scale(.6391)}
+  .bar:not(.fold) .lgS{transform:translate(-.657px,6.11px) scale(1.5647)}
+}
+
+/* ---- logo: la versione disegnata (si vede finche' il font del logo non e' caricato) coincide con quella a carattere ----
+   Prima stava 3,5 px piu' a destra: quando arrivava il font il logo scattava di lato. Scarti misurati al quarto di pixel. */
+.bar .lgB>.mm{transform:translate(-3.4px,-.4px)}
+.bar .lgS>.mm{transform:translate(-1.6px,-.5px)}
+@media (max-width:620px){.bar .lgB>.mm{transform:translate(-2.5px,-1.25px)}.bar .lgS>.mm{transform:translate(-1.5px,-.6px)}}
+
+/* ---- l'ascensore ----
+   Durante la corsa restano solo logo e contatore, chiari sulle porte scure: niente fascia della testata. */
+.bar.riding{background:transparent!important;border-bottom-color:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;color:#F4F2EC!important;transition:none!important}
+/* la testata "in corsa" e' ritagliata sulla sagoma delle porte (public/js/mm-sito.js); sotto, una copia normale sulla pagina */
+/* durante la corsa (e all'arrivo) le porte stanno sopra a tutto, tranne la testata in corsa e il cursore */
+html.mm-riding #ride,html.mm-arr #ride{z-index:2147483000}
+.bar.riding{z-index:2147483001}
+.bar.mm-copy{pointer-events:none;z-index:1}
+html.mm-riding .mmc,html.mm-arr .mmc{z-index:2147483002}
+/* le porte sono piu' alte del vano: il rimbalzo di fine corsa non scopre lo sfondo */
+.ride.shaft .door{top:-12px;bottom:-12px}
+/* arrivo da un'altra pagina: porte chiuse da subito, la pagina resta nascosta finche' le porte non si aprono */
+html.mm-hide{background:#121211}
+html.mm-hide body{visibility:hidden}
+html.mm-hide #ride,html.mm-hide #bar{visibility:visible}
+html.mm-arr #ride{visibility:visible;background:transparent}
+html.mm-arr #ride .door.l,html.mm-arr #ride .door.r{transform:translateX(0)}
+html.mm-arr #ride .pg,html.mm-arr #ride .disp{visibility:hidden}
+
+/* ---- pulsantiera: il piano corrente e' acceso tutto, senza ombra sotto ---- */
+.flr .fb.cur .fbt{box-shadow:0 0 0 4px rgba(244,242,236,.07),0 0 22px rgba(244,242,236,.28)}
+
+/* ---- footer: la placca dell'ascensore montata sul muro ----
+   Una targa scura (luce notte) con quattro viti, come la pulsantiera. Dentro: il marchio (con il carroponte del manuale)
+   e la frase dello studio; i sei piani come bottoni 3 per 2; sotto, sulle stesse tre colonne, LG, il messaggio e la chiave,
+   che funzionano come nella pulsantiera; in fondo lingue, Privacy e Terms, copyright. */
+footer.ftr{padding-block:clamp(40px,5vw,72px)}
+footer.ftr .fplate{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"brand dir" "bar bar";
+  gap:44px clamp(40px,6vw,96px);padding:clamp(40px,4vw,56px) clamp(36px,4.4vw,64px) 22px;background:#121211;color:var(--ink);border-radius:6px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 24px 60px -30px rgba(18,18,17,.45)}
+footer.ftr .fplate .rv{position:absolute;width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.22}
+footer.ftr .fbrand{grid-area:brand;display:grid;align-content:space-between;justify-items:start;gap:28px}
+footer.ftr .flogo{width:clamp(220px,30vw,430px);cursor:default}
+footer.ftr .flogo .mm{display:block;width:100%;height:auto;fill:currentColor;overflow:visible}
+footer.ftr .flogo .mm path{transform-box:fill-box}
+/* il carroponte, come nel manuale (curva carro, il piano inferiore sale di 560 e torna giu'): una corsa sola */
+footer.ftr .flogo.fpress .car{animation:mm-carro 4.2s cubic-bezier(.65,0,.35,1)}
+@keyframes mm-carro{0%{transform:translateY(0)}25%,36.7%{transform:translateY(-560px)}63.3%,100%{transform:translateY(0)}}
+footer.ftr .ftag,footer.ftr .fbar{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}
+footer.ftr .ftag{margin:0;color:var(--mut)}
+footer.ftr .fdir{grid-area:dir;display:grid;gap:20px;align-content:start;--col:88px}
+footer.ftr .fdir ol,footer.ftr .fkey{display:grid;grid-template-columns:repeat(3,var(--col));column-gap:8px}
+footer.ftr .fdir ol{list-style:none;margin:0;padding:0;row-gap:18px}
+footer.ftr .fdir li>a,footer.ftr .flgb,footer.ftr .fcylb{all:unset;box-sizing:border-box;display:grid;justify-items:center;align-content:start;gap:9px;color:var(--ink);text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+footer.ftr .fsq{position:relative;overflow:hidden;isolation:isolate;display:grid;place-items:center;width:50px;height:50px;box-sizing:border-box;
+  border:1.5px solid rgba(244,242,236,.5);font:500 13px/1 var(--f-mono);letter-spacing:.02em;color:var(--ink);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -2px 0 rgba(0,0,0,.3);transition:border-color .25s,color .25s,opacity .3s,transform .12s,box-shadow .12s}
+/* come i bottoni della pulsantiera: al passaggio si accende il bordo e dentro compare l'anello; premuto si schiaccia;
+   chiamato, l'anello lampeggia pomodoro */
+footer.ftr .fsq::after{content:"";position:absolute;inset:4px;border:1.5px solid currentColor;opacity:0;transform:scale(.8);transition:opacity .2s,transform .3s cubic-bezier(.2,.8,.2,1)}
+footer.ftr .fnm{font-size:9.5px;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);white-space:nowrap;text-align:center;transition:color .25s}
+footer.ftr .fdir a:hover .fsq,footer.ftr .fdir a:focus-visible .fsq,footer.ftr .flgb:hover .fsq,footer.ftr .flgb:focus-visible .fsq{border-color:#F4F2EC}
+footer.ftr .fdir a:hover .fsq::after,footer.ftr .fdir a:focus-visible .fsq::after,footer.ftr .flgb:hover .fsq::after,footer.ftr .flgb:focus-visible .fsq::after{opacity:.35;transform:none}
+footer.ftr .fdir a:active .fsq,footer.ftr .flgb:active .fsq{transform:scale(.93);box-shadow:inset 0 2px 4px rgba(0,0,0,.35)}
+footer.ftr .fdir .call .fsq::after{border-color:var(--sig);opacity:1;transform:none;animation:mm-fcall .45s steps(1) infinite}
+@keyframes mm-fcall{50%{opacity:.25}}
+footer.ftr .fdir a:hover .fnm,footer.ftr .fdir a:focus-visible .fnm,footer.ftr .flgb:hover .fnm,footer.ftr .fcylb:hover .fnm{color:var(--ink)}
+footer.ftr .fdir :focus-visible{outline:none}
+footer.ftr .fdir :focus-visible>.fsq,footer.ftr .fcylb:focus-visible .fcyl{outline:2px solid var(--ink);outline-offset:3px}
+footer.ftr .fdir [aria-current] .fsq{background:#F4F2EC;border-color:#F4F2EC;color:#121211;box-shadow:0 0 0 4px rgba(244,242,236,.07),0 0 22px rgba(244,242,236,.22)}
+footer.ftr .fdir [aria-current] .fnm{color:var(--ink)}
+footer.ftr .fdir [aria-current]{cursor:default}
+footer.ftr .fdir [aria-current] .fsq::after{display:none}
+/* LG: un bottone come gli altri, sotto la linea tratteggiata; senza la chiave non si lascia premere */
+footer.ftr .fkey{padding-top:18px;border-top:1px dashed rgba(244,242,236,.18)}
+footer.ftr .fkey.deny .flgb .fsq{animation:mm-fdeny .5s cubic-bezier(.3,0,.3,1)}
+@keyframes mm-fdeny{20%{translate:-5px 0}40%{translate:4px 0}60%{translate:-3px 0}80%{translate:2px 0}}
+footer.ftr .fko{align-self:start;height:50px;display:grid;place-items:center;text-align:center;font-size:9.5px;line-height:1.35;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+footer.ftr .fkey.open .fko{color:var(--ink)}
+footer.ftr .fkey.deny .fko{color:var(--ink)}
+/* la chiave: cilindro con la fessura e le due tacche, come nella pulsantiera; girata, la tacca di mezzo si accende pomodoro */
+footer.ftr .fcyl{position:relative;display:block;width:44px;height:44px;margin:3px 0;border-radius:50%;border:1.5px solid rgba(244,242,236,.55);box-sizing:border-box;transition:border-color .25s}
+footer.ftr .fcyl b{position:absolute;left:50%;top:22%;bottom:22%;width:3px;margin-left:-1.5px;background:#F4F2EC;transition:transform .6s cubic-bezier(.3,1.3,.5,1)}
+footer.ftr .fcyl::before{content:"";position:absolute;left:50%;top:-7px;width:1.5px;height:4px;margin-left:-.75px;background:#F4F2EC;opacity:.5}
+footer.ftr .fcyl::after{content:"";position:absolute;top:50%;right:-7px;width:4px;height:1.5px;margin-top:-.75px;background:#F4F2EC;opacity:.3;transition:opacity .3s .25s,background-color .3s .25s}
+footer.ftr .fcylb:hover .fcyl{border-color:#F4F2EC}
+footer.ftr .fcylb:hover .fcyl b{transform:rotate(14deg)}
+footer.ftr .fkey.open .fcyl b{transform:rotate(90deg)}
+footer.ftr .fkey.open .fcylb:hover .fcyl b{transform:rotate(80deg)}
+footer.ftr .fkey.open .fcyl::after{opacity:1;background:#FF5B3A}
+footer.ftr .fbar{grid-area:bar;display:grid;grid-template-columns:1fr auto 1fr;grid-template-areas:"copy lang legal";align-items:center;gap:16px;padding-top:18px;border-top:1px solid var(--ln);color:var(--mut)}
+footer.ftr .fcopy{grid-area:copy}
+footer.ftr .fbar .flf{grid-area:lang;margin:0!important}
+footer.ftr .fleg{grid-area:legal;justify-self:end;display:flex;gap:22px}
+footer.ftr .fleg a,footer.ftr .flf a{color:inherit;text-decoration:none!important;border-bottom:1px solid transparent;padding-bottom:1px;transition:border-color .2s,opacity .2s,color .2s}
+footer.ftr .fleg a:hover,footer.ftr .fleg a:focus-visible,footer.ftr .fleg a[aria-current],footer.ftr .flf a:hover,footer.ftr .flf a:focus-visible,footer.ftr .flf a[aria-current]{border-bottom-color:currentColor;color:var(--ink);opacity:1}
+@media (prefers-reduced-motion:reduce){footer.ftr .fsq,footer.ftr .fsq::after,footer.ftr .fcyl b{transition:none}footer.ftr .flogo.fpress .car,footer.ftr .fkey.deny .flgb .fsq{animation:none}}
+
+/* ---- footer su telefono: la placca in colonna. Marchio e frase; i bottoni 3 per 2 a tutta larghezza; LG, messaggio e
+   chiave sulle stesse colonne; in fondo lingue e legale sulla stessa riga, poi il copyright. Viti lontane dal testo. ---- */
+@media (max-width:760px){
+  footer.ftr{padding-block:20px 24px}
+  footer.ftr .fplate{grid-template-columns:1fr;grid-template-areas:"brand" "dir" "bar";gap:32px;padding:40px 32px 24px}
+  footer.ftr .fplate .rv{width:5px;height:5px}
+  footer.ftr .flogo{width:200px}
+  footer.ftr .fbrand{gap:14px}
+  footer.ftr .fdir{gap:18px;--col:minmax(0,1fr)}
+  footer.ftr .fdir ol{row-gap:16px}
+  footer.ftr .fsq{width:52px;height:52px;font-size:14px}
+  footer.ftr .fko{height:52px}
+  footer.ftr .fcyl{width:46px;height:46px;margin:3px 0}
+  footer.ftr .fnm,footer.ftr .fko{font-size:9.5px;letter-spacing:.08em}
+  footer.ftr .fbar{grid-template-columns:1fr auto;grid-template-areas:"lang legal" "copy copy";gap:16px;padding-top:18px}
+  footer.ftr .fleg{gap:20px}
+}
+
+/* ---- la freccia nel quadrato (See all work, Explore Brand e Systems, Read the case, Start a work order) ----
+   Come i bottoni pieni: il quadrato resta nero e il pomodoro sale dal basso; la freccia che esce e' chiara, quella che
+   entra e' nera, ognuna con il suo colore fisso. Nessun colore passa piu' per una via di mezzo (prima il fondo andava
+   in dissolvenza dal nero al pomodoro passando per un marrone, e la freccia per un grigio: era il lampo). */
+.arq{isolation:isolate;transition:none!important}
+.arq::before{content:"";position:absolute;inset:0;background:var(--sig);transform:translateY(101%);transition:transform .4s cubic-bezier(.3,.7,.2,1);z-index:-1}
+html a:hover .arq,html a:focus-visible .arq{background:#121211;color:#F4F2EC}
+a:hover .arq::before,a:focus-visible .arq::before{transform:none}
+.arq svg{transition:transform .45s cubic-bezier(.3,.7,.2,1)}
+.arq svg:first-child{fill:#F4F2EC}
+.arq svg+svg{fill:#121211}
+@media (prefers-reduced-motion:reduce){.arq::before{transition:none}}
+
+/* ---- il bottone principale sulla luce rosa: al passaggio sale il pomodoro (manuale: "la presa") ----
+   Prima saliva il colore accento, che sul rosa e' lo stesso nero del bottone: non si vedeva niente. */
+[data-luce^="rosa"] .b.p::before{background:var(--sig)}
+[data-luce^="rosa"] .b.p:hover,[data-luce^="rosa"] .b.p:focus-visible{color:#121211}
+
+/* ---- copertina segnaposto di un progetto: colore del cliente, nome in grande, didascalia mono ---- */
+.wph{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;gap:14px;color:#F4F2EC;transition:scale .7s cubic-bezier(.2,.8,.2,1)}
+.wph b{font:700 clamp(40px,6vw,96px)/.9 var(--f-body);letter-spacing:-.05em}
+.wph span{position:absolute;left:16px;top:14px;opacity:.7}
+.wv .wph b{font-size:clamp(34px,4vw,60px)}
+.wc:hover .wph{scale:1.035}
+
+/* ---- 03 Brand: l'apertura e' la leva "Assembled / Taken apart" ---- */
+.brx.brhero{padding-block:clamp(120px,12vw,170px) clamp(90px,10vw,150px)}
+.brx .brh2 h1{margin:6px 0 0;font:650 clamp(48px,5.6vw,96px)/.92 var(--f-body);letter-spacing:-.06em;padding-bottom:.06em;text-wrap:balance}
+.brx .brh2 h1 span{display:block;font-weight:300;letter-spacing:-.05em}
+.brx .brh2 .brlede{margin:clamp(14px,1.6vw,22px) 0 0;max-width:40ch;font:450 clamp(18px,1.4vw,21px)/1.4 var(--f-body);color:rgba(244,242,236,.82)}
+
+/* ---- film nella home: il disegno deborda di 1px, niente filo chiaro sul bordo con larghezze decimali ---- */
+.h3st>:not(.grain){width:calc(100% + 2px)!important;height:calc(100% + 2px)!important;margin:-1px}
+
+/* ---- suggerimento della lingua nella testata ("Italiano?") ---- */
+.bar .lhint{all:unset;box-sizing:border-box;cursor:pointer;margin-left:auto;margin-right:22px;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 10px;font:500 11px var(--f-mono);letter-spacing:.1em;color:inherit;opacity:0;transform:translateY(-4px);transition:opacity .35s cubic-bezier(.2,.8,.2,1),transform .45s cubic-bezier(.2,.8,.2,1);-webkit-tap-highlight-color:transparent}
+.bar .lhint[hidden]{display:none}
+.bar .lhint.in{opacity:.7;transform:none}
+.bar .lhint.in:hover,.bar .lhint.in:focus-visible{opacity:1}
+.bar .lhint.out{opacity:0;transform:translateY(-4px)}
+.bar .lhint span{text-transform:uppercase;border-bottom:1px solid transparent;transition:border-color .2s}
+.bar .lhint:hover span,.bar .lhint:focus-visible span{border-bottom-color:currentColor}
+.bar .lhint:focus-visible{outline:1px solid currentColor}
+.bar .lhint i{width:6px;height:6px;background:currentColor;flex:none}
+.bar .lhint.in i{animation:lhb 1.1s steps(1) .25s 1}
+.bar .lhint.calm.in i{animation:none}
+@keyframes lhb{0%,50%{background:var(--sig)}25%,75%{background:transparent}100%{background:currentColor}}
+.bar .lhint:not([hidden])+.dispB{margin-left:0}
+@media (max-width:620px){.bar .lhint{margin-right:10px;padding:0 6px}}
+
+@media (prefers-reduced-motion:reduce){.bar .lhint,.bar .lhint.in i{transition:none;animation:none}}
+
+/* ---- passaggio tra le pagine come in un'app (View Transitions tra documenti) ----
+   L'ultimo fotogramma della pagina di prima (porte chiuse) resta davanti finche' la nuova non e' pronta: lo script d'avvio
+   chiude la transizione appena i caratteri ci sono. Nessun fotogramma a meta', nessuna dissolvenza. Dove il browser non
+   le conosce (Firefox), il passaggio resta quello di prima. */
+@view-transition{navigation:auto}
+::view-transition-group(root){animation:none}
+::view-transition-old(root){animation:mm-vt-old 1s steps(1,end) both}
+::view-transition-new(root){animation:mm-vt-new 1s steps(1,end) both}
+@keyframes mm-vt-old{from{opacity:1}to{opacity:0}}
+@keyframes mm-vt-new{from{opacity:0}to{opacity:1}}
+/* la corsa parte dalla pagina vera: la cabina e' trasparente finche' le porte non sono chiuse (prima per un attimo
+   mostrava il piano col colore del vecchio prototipo: bianco sulla home, che ora apre al buio) */
+html.mm-riding #ride{background:transparent}
+html.mm-riding #ride .pg{visibility:hidden}
+
+/* ---- la chiave del personale (da ogni piano): tenuta 3 secondi, la pulsantiera diventa un tastierino ---- */
+#navLift .cyl{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:none}
+#navLift .cyl .n3{transition:opacity .4s}
+#navLift .cyl.mm-holding .n3{opacity:.9;transition:opacity 3s linear}
+/* girata su LG, la tacca di mezzo si accende pomodoro, come la seconda nel tastierino */
+#navLift .flg.open .cyl::after{background:#FF5B3A}
+#navLift.mm-code .cyl i{transform:rotate(135deg)!important}
+#navLift.mm-code .cyl .n3{opacity:1;background:var(--sig,#FF5B3A)}
+#navLift.mm-code .cyl::after{opacity:.3!important}
+/* i piani diventano tasti: restano i quadrati, i nomi si spengono */
+#navLift .flist .ftx,#navLift .flg .fb{transition:opacity .35s}
+#navLift.mm-code .flist .ftx{opacity:.18}
+#navLift.mm-code .flg .fb{opacity:.3}
+/* nel tastierino nessun piano e' acceso: sono tutti tasti uguali */
+#navLift.mm-code .fb.cur .fbt{background:transparent;border-color:rgba(244,242,236,.5);color:inherit;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -2px 0 rgba(0,0,0,.28)}
+#navLift.mm-code .fb.cur .ftx b{font-weight:inherit;letter-spacing:inherit}
+#navLift .fb.mm-hit .fbt{animation:mmhit .32s steps(1)}
+@keyframes mmhit{0%{background:#FF5B3A;border-color:#FF5B3A;color:#121211}}
+/* la fascia del codice esce sotto la chiave: la pulsantiera si allunga */
+.mmkp{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s cubic-bezier(.7,0,.2,1)}
+.mm-code .mmkp{grid-template-rows:1fr}
+/* tutto lo spazio della fascia sta dentro la parte che cresce: si allunga in un solo movimento, senza scatti */
+.mmkpi{min-height:0;overflow:hidden}
+.mmkpc{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:6px 16px;margin-top:12px;padding:16px 4px 4px;border-top:1px dashed rgba(244,242,236,.18);color:#F4F2EC;opacity:0;transition:opacity .2s}
+.mm-code .mmkpc{opacity:1;transition:opacity .35s .15s}
+.mmkpc>.mo{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+.mmkpd{display:flex;gap:10px;justify-self:end}
+.mmkpd i{width:16px;height:16px;border:1.5px solid rgba(244,242,236,.55);box-sizing:border-box;transition:background-color .15s,border-color .15s}
+.mmkpd i.mm-on{background:#F4F2EC;border-color:#F4F2EC}
+.mm-open .mmkpd i{background:#FF5B3A;border-color:#FF5B3A}
+.mmkpm{grid-column:1/-1;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.6;min-height:1.2em}
+.mm-open .mmkpm{opacity:1}
+.mmkp.mm-no .mmkpd{animation:mmno .5s cubic-bezier(.3,0,.3,1)}
+@keyframes mmno{20%{translate:-8px 0}40%{translate:7px 0}60%{translate:-5px 0}80%{translate:3px 0}}
+@media (prefers-reduced-motion:reduce){.mmkp{transition:none}.mmkp.mm-no .mmkpd{animation:none}}
+
+/* la scritta accanto al numero del piano ("All floors", "Tutti i piani", "Todas las plantas") si allarga con dolcezza:
+   la larghezza la porta mm-sito.js, alla stessa velocita' del testo che gira */
+.disp3 #bL{transition:width .42s cubic-bezier(.7,0,.2,1)}
+@media (prefers-reduced-motion:reduce){.disp3 #bL{transition:none}}
+
+/* ---- bottoni pieni: al passaggio il pomodoro riempie tutto il bottone, nessun bordo scuro resta (come in apertura) ----
+   Il bordo diventa trasparente e il fondo si ferma dentro: a riposo il bottone e' identico, il riempimento lo copre tutto. */
+.b.p{border-color:transparent;background-clip:padding-box}
+
+/* ---- cursore sopra il pomodoro: il quadratino interno diventa nero solo nella parte che sta sopra l'arancione ---- */
+.mmc i b{position:absolute;left:50%;top:50%;width:0;height:0;transform:translate(-50%,-50%);background:#121211;z-index:1;
+  clip-path:inset(0 0 100% 0);transition:width .22s cubic-bezier(.2,.8,.2,1),height .22s cubic-bezier(.2,.8,.2,1)}
+.mmc.hit i b{width:8px;height:8px}
+.mmc.hit.dn i b{width:14px;height:14px}
+
+/* ---- la colonna dei piani nella testata, anche su telefono: a riposo sei quadratini, al tocco si aprono a ventaglio ----
+   Il prototipo sul telefono la lasciava gia' aperta in righe (non c'e' il passaggio del mouse); deciso il 19 ottobre:
+   anche li' quadratini, che si aprono a ventaglio quando si apre la pulsantiera, come su desktop. */
+@media (hover:none){
+  html .disp3 .kb i,html .disp3:hover:not(.open) .kb i,html .disp3:focus-visible:not(.open) .kb i{transform:none;opacity:.3}
+  html .disp3 .kb i.lit,html .disp3:hover:not(.open) .kb i.lit{opacity:1}   /* dopo un tocco il telefono resta "sopra": non conta */
+  html .disp3.open .kb i{transform:scaleX(4);opacity:.8}
+  html .disp3.open .kb i.lit{opacity:1}
+}

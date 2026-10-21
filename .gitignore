@@ -1,0 +1,10 @@
+.DS_Store
+node_modules
+dist
+.astro
+anteprime
+scripts/condivisione/.tmp.html
+
+# segreti locali per wrangler (mai nella repository)
+.dev.vars
+.wrangler/

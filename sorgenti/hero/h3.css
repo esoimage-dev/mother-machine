@@ -1,0 +1,67 @@
+/*FILMFONTS*/
+/* ===== eroe 3: il carattere che respira, con lo strumento che lo misura ===== */
+.h3x{--tw:clamp(230px,17vw,300px);min-height:100svh;padding:0!important;display:grid;background:var(--bg);color:var(--ink);overflow:hidden;position:relative}
+.h3g{position:relative;z-index:2;display:grid;grid-template-rows:auto minmax(0,1fr) auto;min-height:100svh;box-sizing:border-box;width:100%;padding-top:clamp(144px,19vh,190px);padding-bottom:clamp(56px,11vh,120px);gap:clamp(24px,4.5vh,48px)}
+.h3spec{display:flex;justify-content:space-between;align-items:center;gap:16px;color:var(--mut);border-bottom:1px solid var(--ln);padding-bottom:12px}
+@keyframes h3run{0%,60%,100%{opacity:1}64%,72%{opacity:.2}68%,76%{opacity:1}}
+.h3ax{display:flex;align-items:center;gap:12px;font-variant-numeric:tabular-nums}
+.h3ax i{display:block;width:clamp(80px,10vw,160px);height:1px;background:var(--ln);position:relative}
+.h3ax i b{position:absolute;left:0;top:-3.5px;width:8px;height:8px;background:var(--sig);transform:translateX(-50%)}
+.h3ax>b{color:var(--ink);font-weight:400;min-width:3ch;text-align:right}
+.h3mid{position:relative;display:grid;align-items:center;min-height:0}
+.h3t{position:relative;z-index:2;margin:0;font-family:var(--f-body);font-weight:400;line-height:.86;letter-spacing:-.045em;color:var(--ink);font-kerning:normal;user-select:none;-webkit-user-select:none}
+.h3t .l{display:block;white-space:nowrap}
+.h3t .c{display:inline-block}
+.h3t .bm{display:inline-block;width:0;height:0;vertical-align:baseline}
+.h3t .dot{color:var(--sig);animation:h3run 3.2s steps(1) infinite;animation-delay:-1.6s}
+.h3t .dot.gone{animation:none;opacity:0}
+/* il film in una finestra */
+.h3film{position:absolute;right:0;top:0;margin:0;width:var(--tw);z-index:2}
+.h3fb{cursor:pointer;display:grid;gap:12px;width:100%;outline:none}
+.h3slot{display:block;position:relative;aspect-ratio:16/9;background:#1B1B19;outline:1px solid var(--ln)}
+.h3st{position:absolute;inset:0;overflow:hidden;background:#F4F2EC;display:block}
+.h3st .grain{position:absolute;inset:0;pointer-events:none;z-index:2}
+.h3st.big{position:fixed;inset:auto;z-index:91}
+.h3fp{display:flex;align-items:center;gap:10px;color:var(--ink)}
+.h3fp em{font-style:normal;color:var(--mut);margin-left:auto}
+.h3fp .pl{width:0;height:0;border-left:9px solid var(--sig);border-top:5.5px solid transparent;border-bottom:5.5px solid transparent;transition:transform .3s var(--e-scatto)}
+.h3fb:hover .pl,.h3fb:focus-visible .pl{transform:translateX(4px)}
+.h3fb:hover .h3slot,.h3fb:focus-visible .h3slot{outline-color:var(--sig)}
+.h3fb:focus-visible{outline:2px solid #2D46E0;outline-offset:4px}
+/* sotto */
+.h3b{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:20px 48px;border-top:1px solid var(--ln);padding-top:22px}
+.hm .h3b .lead{max-width:40ch}
+.h3b .ctas{display:grid;gap:12px;justify-items:stretch;width:var(--tw)}
+@media (max-width:999px){.h3b .ctas{width:auto}}
+.h3lk{display:flex;justify-content:space-between;gap:18px;align-items:center;color:var(--mut)}
+.h3wf{display:none;align-items:center;gap:9px;border:0;background:none;padding:0;cursor:pointer;color:var(--ink)}
+.h3wf .pl{width:0;height:0;border-left:8px solid var(--sig);border-top:5px solid transparent;border-bottom:5px solid transparent}
+/* il bottone: il punto della frase ci vola dentro e lo riempie di pomodoro */
+.h3cta{position:relative;display:flex;justify-content:space-between;align-items:center;gap:28px;height:62px;padding:0 12px 0 24px;background:#F4F2EC;color:#121211;font:600 16px var(--f-body);letter-spacing:-.01em;text-decoration:none;overflow:hidden;isolation:isolate}
+.h3cta .fl{position:absolute;inset:0;background:var(--sig);transform:translateY(101%);transition:transform .5s cubic-bezier(.7,0,.2,1);z-index:-1}
+.h3cta .lb{display:grid;height:1.3em;line-height:1.3em;overflow:hidden}
+.h3cta .lb span{transition:transform .5s cubic-bezier(.7,0,.2,1)}
+.h3cta .gq{width:38px;height:38px;display:grid;place-items:center;background:#121211;color:#F4F2EC;font:500 14px var(--f-mono);transition:color .3s}
+.h3cta.lit .fl,.h3cta:focus-visible .fl{transform:none}
+.h3cta.lit .lb span,.h3cta:focus-visible .lb span{transform:translateY(-100%)}
+.h3cta .gq i{width:26px;height:26px;background:var(--sig);transform:scale(0);transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.h3cta.lit .gq i,.h3cta:focus-visible .gq i{transform:none}
+.h3cta.now .gq i{transition:none}
+.h3cta.vb .gq i{display:none}
+.h3cta:focus-visible{outline:2px solid #2D46E0;outline-offset:3px}
+.h3fly{position:fixed;left:0;top:0;display:none;background:var(--sig);z-index:45;pointer-events:none}
+@media (hover:none){.h3cta .fl,.h3cta .gq i{transform:none}}
+/* la sala di proiezione */
+.h3ov{position:fixed;inset:0;z-index:90;background:#0F0F0E;opacity:0;visibility:hidden;transition:opacity .45s cubic-bezier(.7,0,.2,1),visibility 0s .45s}
+.h3ov.on{opacity:1;visibility:visible;transition:opacity .45s cubic-bezier(.7,0,.2,1)}
+.h3ovb{position:absolute;left:0;right:0;top:0;height:56px;display:flex;align-items:center;gap:12px;padding:0 clamp(16px,3vw,32px);color:#8C887F;z-index:92}
+.h3ovb .sp{flex:1}
+.h3ovb>*{white-space:nowrap}
+.h3ovb button{border:0;background:none;color:#F4F2EC;cursor:pointer;height:36px;padding:0 12px;border:1px solid rgba(244,242,236,.2)}
+.h3ovb button:hover{border-color:var(--sig)}
+.h3ovp{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(244,242,236,.08)}
+.h3ovp i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--sig)}
+@media (max-width:999px){.h3film{display:none}.h3wf{display:inline-flex}}
+@media (max-height:720px) and (min-width:701px){.h3g{padding-top:140px;padding-bottom:48px;gap:24px}}
+@media (max-width:700px){.h3ovb .mo:first-child .x{display:none}.h3g{padding-top:132px;padding-bottom:clamp(40px,8vh,72px);gap:clamp(24px,4vh,40px)}.h3b{grid-template-columns:1fr}.h3pos{display:none}.h3spec{grid-template-columns:1fr auto}.h3b .ctas{justify-self:stretch}}
+@media (prefers-reduced-motion:reduce){.h3t .dot{animation:none}}

@@ -1,0 +1,80 @@
+/* Mother Machine · 05 Home: regole della home sopra la pagina approvata.
+   Soprattutto il telefono: gerarchia dell'apertura, film visibile, 05.2 una scheda alla volta, 05.4 senza tagli. */
+
+/* ---- 05.1 · desktop: struttura del prototipo, testi ridotti; l'indicatore del peso a sinistra ---- */
+.h3ax{order:-1}
+.hm .h3b .lead{text-wrap:balance}
+
+/* ---- 05.1 · telefono e tablet: il citofono del palazzo ----
+   Sotto il titolo una piastra sola, con le quattro viti come la pulsantiera e il footer. In alto lo schermo: il film vero,
+   muto, che gira solo quando si vede; al tocco si apre a tutto schermo con il suono. In basso, dove arriva il pollice,
+   il bottone G della chiamata: premuto si accende l'anello pomodoro e l'ascensore scende a Contact. */
+.h3ic{display:none}
+@media (max-width:999px){
+  .h3b{display:none}
+  .h3x{min-height:100svh;grid-template-rows:auto 1fr}
+  .h3x>.in{padding-bottom:0}
+  .h3g{min-height:0;padding-top:clamp(104px,21vw,170px);padding-bottom:0;gap:24px;grid-template-rows:auto auto}
+  .h3ic{position:relative;align-self:end;display:grid;gap:12px;box-sizing:border-box;width:min(calc(100% - 2*clamp(16px,4vw,56px)),520px);
+    margin:clamp(24px,5vw,48px) clamp(16px,4vw,56px) clamp(12px,3vw,32px);padding:12px 12px 10px;color:#F4F2EC;border-radius:6px;
+    background:linear-gradient(180deg,#1C1C1A,#141413);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 0 1px rgba(244,242,236,.07),0 24px 40px -24px rgba(0,0,0,.7)}
+  .h3ic .rv{position:absolute;width:5px;height:5px;border-radius:50%;background:#F4F2EC;opacity:.2}
+  .h3ic .rv:nth-of-type(1){left:6px;top:6px}.h3ic .rv:nth-of-type(2){right:6px;top:6px}
+  .h3ic .rv:nth-of-type(3){left:6px;bottom:6px}.h3ic .rv:nth-of-type(4){right:6px;bottom:6px}
+  /* lo schermo, incassato nella piastra */
+  .h3icS{all:unset;box-sizing:border-box;position:relative;display:grid;cursor:pointer;border-radius:3px;overflow:hidden;background:#0A0A09;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.06);-webkit-tap-highlight-color:transparent}
+  .h3icV{position:relative;display:block;aspect-ratio:16/9;overflow:hidden}
+  .h3icV .h3slot{outline:0;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+  .h3icV::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.35),inset 0 0 24px rgba(0,0,0,.28)}
+  /* i comandi del film sopra lo schermo, come in un lettore: niente fascia in piu' */
+  .h3icT{position:absolute;left:8px;right:8px;bottom:8px;display:flex;align-items:center;gap:10px;padding:9px 11px;z-index:5;color:#F4F2EC;background:#0F0F0E;border-radius:2px}
+  .h3icT .pl{width:0;height:0;border-left:8px solid var(--sig);border-top:5px solid transparent;border-bottom:5px solid transparent;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+  .h3icT em{margin-left:auto;font-style:normal;color:var(--mut)}
+  .h3icS:active .h3slot{transform:scale(.985)}
+  .h3icS:active .pl{transform:translateX(3px)}
+  .h3icS:focus-visible{outline:2px solid #F4F2EC;outline-offset:3px}
+  /* la chiamata */
+  .h3icC{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:2px 0 0 4px;cursor:pointer;color:#F4F2EC;-webkit-tap-highlight-color:transparent}
+  .h3icL b{display:block;font:600 clamp(21px,5.6vw,26px)/1.05 var(--f-body);letter-spacing:-.025em}
+  .h3icL .mo{display:block;margin-top:7px;color:var(--mut)}
+  .h3icB{position:relative;flex:none;display:grid;place-items:center;width:60px;height:60px;box-sizing:border-box;border:1.5px solid rgba(244,242,236,.5);
+    font-size:16px;color:#F4F2EC;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -2px 0 rgba(0,0,0,.3);transition:border-color .25s,transform .12s,box-shadow .12s}
+  .h3icB::after{content:"";position:absolute;inset:5px;border:1.5px solid currentColor;opacity:0;transform:scale(.8);transition:opacity .2s,transform .3s cubic-bezier(.2,.8,.2,1)}
+  .h3icC:hover .h3icB,.h3icC:active .h3icB,.h3icC.call .h3icB{border-color:#F4F2EC}
+  .h3icC:hover .h3icB::after,.h3icC:active .h3icB::after{opacity:.35;transform:none}
+  .h3icC:active .h3icB{transform:scale(.93);box-shadow:inset 0 2px 4px rgba(0,0,0,.35)}
+  .h3icC.call .h3icB::after{border-color:var(--sig);opacity:1;transform:none;animation:mm-fcall .45s steps(1) infinite}
+  .h3icC:focus-visible .h3icB{outline:2px solid #F4F2EC;outline-offset:3px}
+}
+@media (prefers-reduced-motion:reduce){.h3icC.call .h3icB::after{animation:none}}
+
+/* ---- 05.1 · "Start a project" su telefono come su desktop: carta con il quadrato nero; al tocco sale il pomodoro ----
+   Prima era sempre arancione (il pomodoro va solo su cio' che risponde, manuale). */
+@media (hover:none){
+  .h3cta .fl{transform:translateY(101%)}
+  .h3cta .gq i{transform:scale(0)}
+  .h3cta:active .fl{transform:none;transition-duration:.25s}
+  .h3cta:active .gq i{transform:none}
+}
+
+/* ---- 05.2 · su telefono una scheda alla volta, scelta con due tasti quadrati come la pulsantiera ---- */
+.mtabs{display:none}
+@media (max-width:760px){
+  .mtabs{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:-8px}
+  .mtabs button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px 10px 8px 8px;border:1.5px solid rgba(18,18,17,.22);background:rgba(255,255,255,.22);color:#121211;font:500 11.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;transition:background-color .25s,color .25s,border-color .25s;-webkit-tap-highlight-color:transparent}
+  .mtabs .sq{display:grid;place-items:center;width:32px;height:32px;box-sizing:border-box;border:1.5px solid currentColor;font-size:11px;flex:none}
+  .mtabs button[aria-selected="true"]{background:#121211;border-color:#121211;color:#F4F2EC}
+  .mtabs button[aria-selected="true"] .sq{background:#F4F2EC;color:#121211;border-color:#F4F2EC}
+  .mtabs button:focus-visible{outline:2px solid #121211;outline-offset:2px}
+  .mcards .gc:not(.on){display:none}
+  .mcards .gc.on{animation:mtin .35s cubic-bezier(.2,.8,.2,1)}
+  @keyframes mtin{from{opacity:0;translate:0 10px}to{opacity:1;translate:0 0}}
+}
+
+/* ---- 05.4 · la fila che scorre di lato non taglia piu' la scheda sollevata ne' la sua ombra ---- */
+@media (max-width:620px){
+  .vrw{padding-top:14px!important;padding-bottom:58px!important;margin-top:-14px;margin-bottom:-42px}
+}
+@media (prefers-reduced-motion:reduce){.mcards .gc.on{animation:none}}
