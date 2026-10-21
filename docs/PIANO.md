@@ -13,11 +13,14 @@ cosa no, in che ordine, cosa serve da Eso. La lista operativa da spuntare resta 
 4. **LG oggi è un doppione di Systems.** Va cambiato, non tolto: è la nostra idea più originale.
 
 ## Le decisioni (con la mia raccomandazione)
+- **D0 · Niente numeri ai progetti, per ora (deciso da Eso).** Con pochi lavori, "No. 012" o "Study 03" fanno vedere
+  quanto sono pochi. Via dal registro di Work, dalla home e dalle pagine progetto quando le rifacciamo; il registro si
+  racconta senza numeri di serie. Si riparla quando i lavori saranno tanti.
 - **D1 · Systems resta al 02, non va dentro LG.** Spostarla romperebbe l'ordine del palazzo (Brand 03, poi un buco, poi
   Systems sotto terra) e nasconderebbe proprio il lavoro che vogliamo vendere di più. LG cambia mestiere: diventa il
   laboratorio (vedi D4).
-- **D2 · I lavori veri ci sono già, sono quattro.** No. 012 Vitalia's Pizza on Wheels, No. 011 Vitalia's Restaurant,
-  No. 001 Machine Room (il nostro back office) e **Mother Machine stessa**: marchio, manuale, film e sito sono un caso vero,
+- **D2 · I lavori veri ci sono già, sono quattro.** Vitalia's Pizza on Wheels, Vitalia's Restaurant,
+  Machine Room (il nostro back office) e **Mother Machine stessa**: marchio, manuale, film e sito sono un caso vero,
   fatto da noi, mostrabile oggi. Gli Study (Birrificio Mare, Forno Nove, Lumen Lab) restano nel registro, dichiarati come
   studi, ma non in prima fila in home.
 - **D3 · Sicurezza: hai ragione, manca.** Per chi compra software su misura è una domanda vera ("i miei dati sono al sicuro?").
@@ -53,7 +56,8 @@ che noi riceviamo la richiesta: questo sì, il resto no.
    richiedere fino a 24-48 ore e blocca le mail: va fatto per primo.
 2. **Materiali dei lavori (Eso):** per ognuno dei quattro casi: 4-8 immagini o video, cosa c'era prima, cosa abbiamo fatto,
    un numero vero di risultato, una frase del cliente, il permesso di mostrarlo.
-3. **Pagine progetto (io):** No. 012 per prima (è quasi pronta), poi Mother Machine, poi No. 011, poi No. 001.
+3. **Pagine progetto (io):** Vitalia's Pizza on Wheels per prima (è quasi pronta), poi Mother Machine, poi Vitalia's
+   Restaurant, poi Machine Room.
    Stessa struttura per tutte, dalla pagina progetto approvata. Via "Cairns", "Bozza", "da confermare".
 4. **Work in home ripensato (io):** due proposte con screenshot (per esempio un lavoro grande che riempie lo schermo e gli
    altri in fila, con l'anteprima che si muove). Scegli tu, poi la costruisco.

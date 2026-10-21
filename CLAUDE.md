@@ -33,7 +33,7 @@ Ogni pagina è un piano. Si naviga con la pulsantiera (il menu) e si scende come
 | Piano | Nome | Luce (fondo) | Cosa c'è |
 |---|---|---|---|
 | 05 | Home | notte, poi bianco | apertura al buio, poi le sezioni 05.2-05.5 |
-| 04 | Work | notte | il registro dei progetti; ogni progetto è "04 · No. 014" con la sua pagina |
+| 04 | Work | notte | i progetti, ognuno con la sua pagina. **Niente numeri ai progetti per ora** (deciso da Eso il 21 ottobre: con pochi lavori i numeri fanno vedere quanto sono pochi) |
 | 03 | Brand | bianco (carta) | il fuori: identità, siti e app, negozi online, art direction, grafica |
 | 02 | Systems | grigio macchina | il dentro: software, gestionali, app in codice, CMS, automazioni, AI privata |
 | 01 | Studio | rosa | chi siamo, metodo Survey, Build, Run |

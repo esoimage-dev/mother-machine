@@ -5,8 +5,9 @@ Il piano di lancio in 3 giorni, con le decisioni e l'ordine, è in `docs/PIANO.m
 
 ## Lancio · giorno 1
 - [ ] Nameserver del dominio da GoDaddy a Cloudflare (Eso, la mattina: la propagazione blocca le mail).
-- [ ] Materiali e permessi dei quattro lavori veri: No. 012, No. 011, No. 001, Mother Machine (Eso).
-- [ ] Pagine progetto: No. 012, Mother Machine, No. 011, No. 001.
+- [ ] Materiali e permessi dei quattro lavori veri: Vitalia's Pizza on Wheels, Vitalia's Restaurant, Machine Room, Mother Machine (Eso).
+- [ ] Pagine progetto: Vitalia's Pizza on Wheels, Mother Machine, Vitalia's Restaurant, Machine Room.
+- [ ] Togliere i numeri ai progetti ("No. 012", "Study 03", "No. 001 · 012") da Work, home e pagina progetto.
 - [ ] Work in home: due proposte con screenshot, poi costruire la scelta.
 
 ## Lancio · giorno 2
