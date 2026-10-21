@@ -48,7 +48,9 @@ def comune(t):
     t = t.replace('href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"', 'href="flatpickr.min.css"')
     i = t.find('<head>') + len('<head>')
     assert i > len('<head>') - 1, 'head'
-    return t[:i] + '\n<meta name="robots" content="noindex"><script src="demo-api.js"></script>' + t[i:]
+    # nella demo la password e' gia' data: la sua schermata non deve mai lampeggiare
+    via = '<style>#loginScreen{display:none!important}</style>'
+    return t[:i] + '\n<meta name="robots" content="noindex"><script src="demo-api.js"></script>' + via + t[i:]
 
 
 def main():

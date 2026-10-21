@@ -17,7 +17,8 @@
     };
     var load = function () {
       if (!near) return;
-      frames.forEach(function (f) { if (!f.src && f.dataset.v === side() && f.parentNode.offsetParent !== null) f.src = f.dataset.src });
+      /* anche il lato nascosto si carica subito: al cambio e' gia' pronto, niente lampi */
+      frames.forEach(function (f) { if (!f.src && f.parentNode.offsetParent !== null) f.src = f.dataset.src });
       fit();
     };
     if (IO) new IntersectionObserver(function (es) { if (es[0].isIntersecting) { near = true; load() } }, { rootMargin: '600px 0px' }).observe(vd);

@@ -65,7 +65,9 @@ def comune(t, nome):
     t = re.sub(r'href="([a-z0-9-]+\.html)[^"]*"', lambda m: m.group(0) if m.group(1) in PAGINE else 'href="#"', t)
     i = t.find('<head>') + len('<head>')
     assert i > len('<head>') - 1, 'head'
-    return t[:i] + '\n<meta name="robots" content="noindex"><script src="demo-api.js"></script>' + t[i:]
+    # nella demo: niente badge delle assunzioni, niente truck che cammina, niente schermata della password
+    via = '<style>.hiring-badge,.mini-truck,#gate{display:none!important}</style>'
+    return t[:i] + '\n<meta name="robots" content="noindex"><script src="demo-api.js"></script>' + via + t[i:]
 
 
 def main():
