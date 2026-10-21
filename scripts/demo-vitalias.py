@@ -68,6 +68,8 @@ def main():
         shutil.copy(SRC / f, OUT / f)
 
     b = comune((SRC / 'booking.html').read_text(encoding='utf8'))
+    # la barra della promozione di Natale non serve alla demo: la pagina parte pulita
+    b = una(b, "  var bar = document.getElementById('xmasBar');\n  if(!bar) return;", "  var bar = document.getElementById('xmasBar');\n  if(bar) bar.remove(); return;", 'barra di Natale')
     (OUT / 'booking.html').write_text(b, encoding='utf8')
 
     c = comune((SRC / 'confirmed.html').read_text(encoding='utf8'))

@@ -696,7 +696,7 @@ body{font-family:var(--f-body);font-variation-settings:"opsz" 12;-webkit-font-sm
 (function(){
   var CODE = 'XMAS10';
   var bar = document.getElementById('xmasBar');
-  if(!bar) return;
+  if(bar) bar.remove(); return;
   var closed = false;
   try { closed = sessionStorage.getItem('xmasBarClosed') === '1'; } catch(e){}
 

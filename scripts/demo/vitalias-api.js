@@ -6,7 +6,7 @@
 (function () {
   'use strict';
   var SETTINGS = /*SETTINGS*/{}/*SETTINGS*/;
-  var KEY = 'mm-vit-demo-1', CH = 'mm-vit-demo';
+  var KEY = 'mm-vit-demo-2', CH = 'mm-vit-demo';
   var ch = ('BroadcastChannel' in window) ? new BroadcastChannel(CH) : null;
   var realFetch = window.fetch.bind(window);
 
@@ -37,47 +37,65 @@
   function balanceDue(isoDate) { var d = new Date(isoDate + 'T12:00:00'); d.setDate(d.getDate() - 21); return iso(d) }
   function nextSat(from) { var d = addDays(from); while (d.getDay() !== 6) d.setDate(d.getDate() + 1); return d }
 
-  /* ---- le prenotazioni inventate: nomi, indirizzi e numeri non sono di nessuno ---- */
+  /* ---- le prenotazioni inventate: nomi, indirizzi e numeri non sono di nessuno ----
+     Si generano rispetto a oggi, da undici mesi fa a quattro mesi avanti: il calendario non resta mai vuoto e le
+     analytics (mese, anno, sempre) hanno numeri pieni. Un generatore con seme fisso: a ogni visita gli stessi eventi. */
   function seed() {
-    var P = { social: 150000, party: 175000, celebration: 210000 };
-    var rows = [
-      ['Sophie Marlow', 'Birthday / Party', 'party', 2, '18:00', 'Backyard', '4870', 'Cairns Area', 'deposit_paid', 'Margherita, Diavola, Capricciosa, Bufalina, Godfather, Garlic Focaccia', 4, 2],
-      ['Liam & Grace', 'Wedding', 'celebration', 9, '17:30', 'Event Venue', '4879', 'Palm Cove / Trinity Beach', 'fully_paid', 'Margherita, Diavola, Bufalina, Godfather, Gambero Rosso, Umbria, 4 Formaggi e Tartufo, Siciliana', 8, 4],
-      ['Harbour Lane Co.', 'Corporate Event', 'party', 12, '12:00', 'Car Park', '4870', 'Cairns Area', 'unpaid', 'Margherita, Diavola, Capricciosa, Norcina, Garlic Focaccia', 0, 3],
-      ['Ava Thompson', 'Birthday / Party', 'social', 16, '16:00', 'Patio / Deck', '4878', 'Smithfield / Yorkeys Knob', 'quote_requested', '', 0, 0],
-      ['Noah Bennett', 'Backyard Gathering', 'social', 23, '18:30', 'Backyard', '4869', 'Edmonton', 'deposit_paid', 'Margherita, Diavola, Napule\', Norcina', 2, 0],
-      ['St Mary\'s Fete', 'School / Community Event', 'celebration', 30, '11:00', 'Park / Outdoor', '4865', 'Gordonvale', 'fully_paid', 'Margherita, Diavola, Capricciosa, Garlic Focaccia, Siciliana, Umbria', 6, 6],
-      ['Mia Collins', 'Birthday / Party', 'party', 37, '19:00', 'Backyard', '4881', 'Kuranda', 'deposit_paid', 'Margherita, Bufalina, Godfather, Gambero Rosso, 4 Formaggi e Tartufo', 3, 1],
-      ['Oliver Reid', 'Wedding', 'celebration', 51, '17:00', 'Event Venue', '4877', 'Port Douglas Area', 'deposit_paid', 'Margherita, Diavola, Capricciosa, Bufalina, Godfather, Umbria, Norcina, Siciliana', 10, 5]
-    ];
-    var list = rows.map(function (r, i) {
-      var date = r[3] < 0 ? iso(addDays(r[3])) : iso(nextSat(r[3]));
-      var base = P[r[2]], travel = (SETTINGS.travel && SETTINGS.travel[r[6]] || 0) * 100;
-      var evening = r[4] >= (SETTINGS.eveningThreshold || '19:00') ? (SETTINGS.eveningSurcharge || 100) * 100 : 0;
-      var addons = r[10] * (SETTINGS.addonVegan || 3) * 100 + r[11] * (SETTINGS.addonGF || 10) * 100;
-      var total = base + travel + evening + addons, st = r[8], quote = st === 'quote_requested';
-      var paid = st === 'fully_paid' ? total : st === 'deposit_paid' ? Math.round(total * (SETTINGS.depositPct || .3)) : 0;
-      var created = addDays(-12 + i).toISOString();
-      var hist = [{ at: created, event: quote ? 'Custom quote requested' : 'Booking submitted' }];
-      if (paid) hist.push({ at: created, event: st === 'fully_paid' ? 'Paid in full via Stripe' : 'Deposit paid via Stripe', amountCents: paid });
-      return {
-        id: 'demo-' + (i + 1), createdAt: created, updatedAt: created,
-        name: r[0], email: r[0].toLowerCase().replace(/[^a-z]+/g, '.').replace(/^\.|\.$/g, '') + '@example.com', phone: '0400 000 00' + i,
-        eventDateISO: date, eventDateLabel: label(date), startTime: r[4], eventType: r[1],
-        venueLabel: r[5], areaLabel: r[7], address: (12 + i * 7) + ' Example Street', postcode: r[6],
-        packageKey: quote ? 'custom' : r[2], packageLabel: quote ? 'Custom event' : SETTINGS_PKG_LABEL(r[2]),
-        basePriceCents: quote ? 0 : base, totalPriceCents: quote ? null : total, totalPrice: quote ? 'Custom quote, to be confirmed' : money(total),
-        paymentChoice: st === 'fully_paid' ? 'full' : quote ? 'quote' : 'deposit', paymentStatus: st, stripeAmountPaid: paid,
-        amountDueToday: paid ? money(paid) : '', balanceAmount: st === 'deposit_paid' ? money(total - paid) : '',
-        balanceDueDateISO: st === 'deposit_paid' ? balanceDue(date) : null,
-        pendingPayment: false, eventStatus: 'upcoming', remindersSent: [],
-        pizzas: r[9], numVegan: r[10] ? String(r[10]) : '', numGF: r[11] ? String(r[11]) : '', nutellaDessert: i % 2 === 0, marshmallowTopping: i % 4 === 0,
-        travelFee: travel ? money(travel) : '', eveningSurcharge: evening ? money(evening) : '', addonsAmount: addons ? money(addons) : '',
-        notes: quote ? 'About 25 kids and 15 adults. Can we do mini pizzas for the kids?' : '', adminNotes: '', contacted: !quote,
-        source: st === 'unpaid' ? 'admin' : 'web', quoteUrl: '#', history: hist
-      };
-    });
-    return { v: 1, bookings: list, blocks: {}, discounts: [{ id: 'XMAS10', code: 'XMAS10', name: 'Christmas events', pct: 10, fromISO: '', toISO: '', eventToISO: '', active: true }], settings: {}, policies: {} };
+    var rnd = (function (a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296 } })(20261021);
+    var pickOne = function (a) { return a[Math.floor(rnd() * a.length)] };
+    var FIRST = ['Sophie', 'Liam', 'Grace', 'Noah', 'Mia', 'Oliver', 'Ava', 'Jack', 'Chloe', 'Lucas', 'Ella', 'Henry', 'Zoe', 'Leo', 'Ruby', 'Max', 'Isla', 'Archie', 'Lily', 'Tom', 'Matilda', 'Ethan', 'Amelia', 'Harvey', 'Sienna'];
+    var LAST = ['Marlow', 'Bennett', 'Collins', 'Reid', 'Thompson', 'Hayes', 'Walsh', 'Moore', 'Fraser', 'Quinn', 'Doyle', 'Parker', 'Grant', 'Lowe', 'Hart', 'Ford', 'Ross', 'Shaw', 'Lane', 'Price'];
+    var ORGS = ['Harbour Lane Co.', 'Reef Street Physio', 'Northside Rugby Club', 'St Mary\'s Fete', 'Palm Cove Surf Club', 'Tablelands Dental', 'Esplanade Realty', 'Coral Coast Builders'];
+    var TYPES = [['Birthday / Party', 5], ['Wedding', 2], ['Backyard Gathering', 3], ['Corporate Event', 2], ['School / Community Event', 1]];
+    var VENUES = ['Backyard', 'Patio / Deck', 'Park / Outdoor', 'Event Venue', 'Car Park'];
+    var ZONES = (SETTINGS.zones || []).filter(function (z) { return z.surcharge <= 160 });
+    var PIZ = (SETTINGS.pizzas || []).map(function (x) { return x.name });
+    var P = { social: 150000, party: 175000, celebration: 210000 }, KEYS = ['social', 'party', 'party', 'party', 'celebration', 'celebration'];
+    var weighted = function () { var r = rnd() * 13, acc = 0; for (var i = 0; i < TYPES.length; i++) { acc += TYPES[i][1]; if (r < acc) return TYPES[i][0] } return 'Birthday / Party' };
+    var list = [], n = 0, today = iso(addDays(0));
+    for (var day = -330; day <= 125; day++) {
+      var d = addDays(day), wd = d.getDay();
+      /* il ritmo vero del truck: circa venti eventi al mese, il sabato spesso due */
+      var count = wd === 6 ? (rnd() < .8 ? 2 : 1) : wd === 5 ? (rnd() < .75 ? 1 : 0) : wd === 0 ? (rnd() < .65 ? 1 : 0) : (rnd() < .18 ? 1 : 0);
+      if (day > 70 && rnd() < .45) count = Math.max(0, count - 1);        /* piu' avanti, il calendario si riempie meno */
+      for (var c = 0; c < count; c++) {
+        n++;
+        var date = iso(d), past = date < today, type = wd >= 1 && wd <= 4 ? 'Corporate Event' : weighted();
+        var org = type === 'Corporate Event' || type === 'School / Community Event';
+        var name = org ? pickOne(ORGS) : (type === 'Wedding' ? pickOne(FIRST) + ' & ' + pickOne(FIRST) : pickOne(FIRST) + ' ' + pickOne(LAST));
+        var key = type === 'Wedding' ? 'celebration' : pickOne(KEYS), z = pickOne(ZONES), time = c ? '18:30' : pickOne(['11:00', '12:00', '16:00', '17:30', '18:00', '19:00']);
+        var nV = Math.floor(rnd() * 6), nG = Math.floor(rnd() * 4);
+        var travel = (z.surcharge || 0) * 100, evening = time >= (SETTINGS.eveningThreshold || '19:00') ? (SETTINGS.eveningSurcharge || 100) * 100 : 0;
+        var addons = nV * (SETTINGS.addonVegan || 3) * 100 + nG * (SETTINGS.addonGF || 10) * 100;
+        var total = P[key] + travel + evening + addons, ahead = day;
+        /* sotto le tre settimane il saldo e' gia' incassato in automatico: nessun saldo in ritardo */
+        var st = past || ahead < 21 ? 'fully_paid' : ahead < 60 ? (rnd() < .75 ? 'deposit_paid' : rnd() < .5 ? 'fully_paid' : 'quote_requested') : (rnd() < .7 ? 'deposit_paid' : rnd() < .5 ? 'quote_requested' : 'unpaid');
+        var quote = st === 'quote_requested', cash = past && rnd() < .12;
+        var paid = st === 'fully_paid' ? total : st === 'deposit_paid' ? Math.round(total * (SETTINGS.depositPct || .3)) : 0;
+        var created = addDays(Math.min(day, 0) - 10 - Math.floor(rnd() * 50)).toISOString();
+        var hist = [{ at: created, event: quote ? 'Custom quote requested' : 'Booking submitted' }];
+        if (paid) hist.push({ at: created, event: cash ? 'Cash received' : st === 'fully_paid' ? 'Paid in full via Stripe' : 'Deposit paid via Stripe', amountCents: paid });
+        var pz = PIZ.slice().sort(function () { return rnd() - .5 }).slice(0, key === 'celebration' ? 8 : key === 'party' ? 6 : 5);
+        list.push({
+          id: 'demo-' + n, createdAt: created, updatedAt: created,
+          name: name, email: name.toLowerCase().replace(/[^a-z]+/g, '.').replace(/^\.|\.$/g, '') + '@example.com', phone: '0400 000 ' + String(100 + n).slice(-3),
+          eventDateISO: date, eventDateLabel: label(date), startTime: time, eventType: type,
+          venueLabel: pickOne(VENUES), areaLabel: z.area, address: (2 + n % 90) + ' Example Street', postcode: z.code,
+          packageKey: quote ? 'custom' : key, packageLabel: quote ? 'Custom event' : SETTINGS_PKG_LABEL(key),
+          basePriceCents: quote ? 0 : P[key], totalPriceCents: quote ? null : total, totalPrice: quote ? 'Custom quote, to be confirmed' : money(total),
+          paymentChoice: st === 'fully_paid' ? 'full' : quote ? 'quote' : 'deposit', paymentStatus: st,
+          stripeAmountPaid: cash ? 0 : paid, cashPayments: cash ? [{ at: created, amountCents: paid }] : [],
+          amountDueToday: paid ? money(paid) : '', balanceAmount: st === 'deposit_paid' ? money(total - paid) : '',
+          balanceDueDateISO: st === 'deposit_paid' ? balanceDue(date) : null,
+          pendingPayment: false, eventStatus: past ? 'completed' : 'upcoming', remindersSent: [],
+          pizzas: quote ? '' : pz.join(', '), numVegan: nV ? String(nV) : '', numGF: nG ? String(nG) : '', nutellaDessert: rnd() < .6, marshmallowTopping: rnd() < .25,
+          travelFee: travel ? money(travel) : '', eveningSurcharge: evening ? money(evening) : '', addonsAmount: addons ? money(addons) : '',
+          notes: quote ? 'Around 120 guests. Can we talk about a bigger menu?' : '', adminNotes: '', contacted: !quote,
+          source: st === 'unpaid' ? 'admin' : 'web', quoteUrl: '#', history: hist
+        });
+      }
+    }
+    return { v: 2, day: iso(addDays(0)), bookings: list, blocks: {}, discounts: [{ id: 'WELCOME10', code: 'WELCOME10', name: 'First booking', pct: 10, fromISO: '', toISO: '', eventToISO: '', active: true }], settings: {}, policies: {} };
   }
   function SETTINGS_PKG_LABEL(k) { return { social: 'Social (10–30 guests, ~30 pizzas)', party: 'Party (30–55 guests, ~50 pizzas)', celebration: 'Celebration (55–85 guests, ~80 pizzas)' }[k] || k }
 
@@ -85,7 +103,7 @@
   var S = null;
   function load() {
     if (S) return S;
-    try { var s = JSON.parse(localStorage.getItem(KEY)); if (s && s.v === 1) return (S = s) } catch (e) {}
+    try { var s = JSON.parse(localStorage.getItem(KEY)); if (s && s.v === 2 && s.day === iso(addDays(0))) return (S = s) } catch (e) {}
     S = seed(); persist(); return S;
   }
   function persist() { try { localStorage.setItem(KEY, JSON.stringify(S)) } catch (e) {} }

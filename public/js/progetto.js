@@ -12,7 +12,7 @@
       frames.forEach(function (f) {
         var box = f.parentNode, w = box.clientWidth; if (!w) return;
         var k = w / parseFloat(getComputedStyle(f).width);
-        f.style.transform = 'scale(' + k + ')'; f.style.height = (box.clientHeight / k) + 'px';
+        f.style.transform = 'scale(' + k + ')'; f.style.height = ((box.clientHeight - f.offsetTop) / k) + 'px';
       });
     };
     var load = function () {
@@ -52,7 +52,7 @@
 
     /* ricomincia: dati inventati di nuovo, tutte le finestre */
     vd.querySelector('.vdre').addEventListener('click', function () {
-      try { localStorage.removeItem('mm-vit-demo-1') } catch (e) {}
+      try { localStorage.removeItem('mm-vit-demo-2') } catch (e) {}
       frames.forEach(function (f) { if (f.src) f.src = f.dataset.src });
       pick('c');
     });
