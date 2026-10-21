@@ -10,6 +10,19 @@
   var ch = ('BroadcastChannel' in window) ? new BroadcastChannel(CH) : null;
   var realFetch = window.fetch.bind(window);
 
+  /* dentro la pagina del caso le finestre non devono muovere lo scroll di chi le ospita:
+     scrollIntoView scorre solo la finestra della demo */
+  if (window.top !== window) {
+    Element.prototype.scrollIntoView = function (o) {
+      var r = this.getBoundingClientRect(), b = (o && typeof o === 'object' && o.block) || (o === false ? 'end' : 'start');
+      var y = window.scrollY + r.top - (b === 'center' ? (innerHeight - r.height) / 2 : b === 'end' ? innerHeight - r.height : b === 'nearest' ? (r.top < 0 ? 0 : r.bottom > innerHeight ? innerHeight - r.height : r.top) : 0);
+      window.scrollTo({ top: Math.max(0, y), behavior: (o && o.behavior) || 'auto' });
+    };
+    /* anche il focus non deve far scorrere la pagina che ospita la demo */
+    var focus0 = HTMLElement.prototype.focus;
+    HTMLElement.prototype.focus = function (o) { return focus0.call(this, Object.assign({}, o || {}, { preventScroll: true })) };
+  }
+
   /* niente notifiche push nella demo: la Control Room nasconde il pannello da sola */
   try { delete window.PushManager } catch (e) {}
 
@@ -76,12 +89,12 @@
     S = seed(); persist(); return S;
   }
   function persist() { try { localStorage.setItem(KEY, JSON.stringify(S)) } catch (e) {} }
-  function changed(what) { persist(); if (ch) ch.postMessage({ state: S, what: what || '' }) }
+  function changed(what) { if (what === 'paid' || what === 'quote') S.lastNew = { what: what, at: Date.now() }; persist(); if (ch) ch.postMessage({ state: S, what: what || '' }) }
   if (ch) ch.addEventListener('message', function (e) {
     if (e.data && e.data.state) { S = e.data.state; if (typeof window.MM_DEMO_REFRESH === 'function') window.MM_DEMO_REFRESH(e.data.what) }
     if (e.data && e.data.reset) { S = null; try { localStorage.removeItem(KEY) } catch (x) {} location.reload() }
   });
-  window.MM_DEMO = { reset: function () { S = seed(); persist(); if (ch) ch.postMessage({ reset: true }); location.reload() } };
+  window.MM_DEMO = { reset: function () { S = seed(); persist(); if (ch) ch.postMessage({ reset: true }); location.reload() }, last: function () { return load().lastNew || null } };
 
   function settings() { return Object.assign({}, SETTINGS, load().settings || {}) }
   function find(id) { return load().bookings.filter(function (b) { return b.id === id })[0] }

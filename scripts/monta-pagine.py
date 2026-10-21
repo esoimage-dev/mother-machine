@@ -203,7 +203,7 @@ def ritocchi(nome, t):
         V = '/work/vitalias/'
         t = una(t, '<a href="#" data-go="4">04 · Work</a> &nbsp;/&nbsp; No. 012</span>', '<a href="#" data-go="4">04 · Work</a></span>', 'numero in testa')
         t = una(t, '<figure class="chcover"><em>Cover · foto del truck a un evento</em><span class="chlogo mo">Logo del cliente</span></figure>',
-                '<figure class="chcover chimg"><img src="' + V + 'cover.webp" alt="Vitalia\'s pizzas on a branded table at an event" width="1800" height="887" fetchpriority="high">'
+                '<figure class="chcover chimg"><img src="' + V + 'cover.webp" alt="Vitalia\'s pizzas on a branded table at an event" width="1786" height="881" fetchpriority="high">'
                 '<span class="chlogo"><img src="' + V + 'logo-white.svg" alt="Vitalia\'s Pizza on Wheels logo" width="559" height="197"></span></figure>', 'copertina')
         s = t.find('<div class="cfn" data-c="4">'); e = t.find('</div>\n    <div class="cfba">', s)
         assert s > 0 and e > s and 'cfdraft' in t[s:e], 'numeri'
@@ -245,14 +245,22 @@ def ritocchi(nome, t):
                      '    </div>\n'
                      '    <div class="vd" id="vd">\n'
                      '      <div class="vdtop">\n'
-                     '        <div class="vdsw" role="tablist" aria-label="Screen"><button role="tab" aria-selected="true" data-v="c">Customer</button><button role="tab" aria-selected="false" data-v="o">Owner</button></div>\n'
-                     '        <button class="vdre mo" type="button">Start over</button>\n'
+                     '        <div class="vdsw" role="tablist" aria-label="Whose side">'
+                     '<button role="tab" aria-selected="true" data-v="c"><b>Customer</b><span class="mo">The booking site</span></button>'
+                     '<button role="tab" aria-selected="false" data-v="o"><b>Owner</b><span class="mo">The Control Room</span></button></div>\n'
+                     '        <button class="vdre" type="button"><span class="fl" aria-hidden="true"></span><i aria-hidden="true">↻</i>Start over</button>\n'
                      '      </div>\n'
                      '      <div class="vdst" data-v="c">\n'
-                     '        <figure class="vdl"><figcaption class="mo"><b>Owner</b> · Control Room</figcaption><div class="vdscr"><iframe title="Control Room, demo with invented bookings" data-src="/demo/vitalias/tony.html"></iframe></div><i class="vdbase" aria-hidden="true"></i></figure>\n'
-                     '        <figure class="vdp"><figcaption class="mo"><b>Customer</b> · Booking</figcaption><div class="vdscr"><iframe title="Booking site, demo" data-src="/demo/vitalias/booking.html"></iframe></div></figure>\n'
-                     '        <figure class="vdp vdpo"><figcaption class="mo"><b>Owner</b> · Control Room</figcaption><div class="vdscr"><iframe title="Control Room on the phone, demo" data-src="/demo/vitalias/tony.html"></iframe></div></figure>\n'
+                     '        <figure class="vdl"><div class="vdscr">'
+                     '<iframe data-v="c" title="Booking site on a computer, demo" data-src="/demo/vitalias/booking.html"></iframe>'
+                     '<iframe data-v="o" title="Control Room on a computer, demo with invented bookings" data-src="/demo/vitalias/tony.html"></iframe>'
+                     '</div><i class="vdbase" aria-hidden="true"></i></figure>\n'
+                     '        <figure class="vdp"><div class="vdscr">'
+                     '<iframe data-v="c" title="Booking site on a phone, demo" data-src="/demo/vitalias/booking.html"></iframe>'
+                     '<iframe data-v="o" title="Control Room on a phone, demo" data-src="/demo/vitalias/tony.html"></iframe>'
+                     '</div></figure>\n'
                      '      </div>\n'
+                     '      <p class="vdhint" aria-live="polite">Book an event on either screen. Then switch to Owner.</p>\n'
                      '      <ol class="vdf">\n'
                      '        <li><span class="mo">01</span><b>Booked and paid online.</b><p>Package, place, pizzas, date. A 30% deposit by card, day or night.</p></li>\n'
                      '        <li><span class="mo">02</span><b>It lands by itself.</b><p>The booking appears in the Control Room the moment it is paid. Nobody types it in.</p></li>\n'
@@ -260,6 +268,12 @@ def ritocchi(nome, t):
                      '        <li><span class="mo">04</span><b>Ready for the kitchen.</b><p>Which pizzas, how many, vegan and gluten-free. One sheet per event, counted for you.</p></li>\n'
                      '      </ol>\n'
                      '    ') + t[e:]
+        # il sistema e' il protagonista: sale subito dopo l'apertura, prima di "What we did"
+        s = t.find('  <!-- 3 · il sistema, acceso -->'); e = t.find('</section>', s) + len('</section>')
+        assert s > 0 and e > s, 'sezione sistema'
+        sez = t[s:e]; t = t[:s] + t[e:].lstrip('\n')
+        i = t.find('  <!-- 2 · cosa e risultati -->'); assert i > 0, 'sezione risultati'
+        t = t[:i] + sez + '\n\n' + t[i:]
         # lo script della miniatura non serve piu': i numeri che contano e le righe che salgono passano in progetto.js
         s = t.find('/* pagina progetto v3: il Control Room in miniatura')
         e = t.find('\n})();', t.find(".cfn b[data-n]", s)) + len('\n})();')

@@ -23,50 +23,62 @@
 }
 .cfn[data-c="3"] b{padding-bottom:.1em}   /* la barra di 24/7 scende sotto la riga: non tocca la didascalia */
 
-/* ---- The system: computer e telefono, il codice vero del cliente su dati inventati ---- */
+/* ---- The system: computer e telefono, il codice vero del cliente su dati inventati ----
+   Uno switch sceglie il lato (Customer: il sito di prenotazione; Owner: la Control Room) e lo mostra sia sul computer
+   sia sul telefono. Le pagine si caricano solo quando servono. */
 .vd{margin-top:clamp(28px,4vw,52px)}
-.vdtop{display:flex;align-items:center;gap:14px;margin-bottom:14px}
-.vdsw{display:none}
-.vdre{all:unset;cursor:pointer;margin-left:auto;color:var(--mut);border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
-.vdre:hover,.vdre:focus-visible{color:var(--ink);border-color:currentColor}
-.vdst{display:grid;grid-template-columns:minmax(0,1fr) clamp(250px,22vw,320px);gap:clamp(24px,3vw,48px);align-items:end}
-.vd figure{margin:0;display:grid;gap:12px}
-.vd figcaption{color:var(--mut)}
-.vd figcaption b{color:var(--ink);font-weight:500}
+.vdtop{display:flex;align-items:center;gap:14px;margin-bottom:clamp(18px,2.4vw,28px);flex-wrap:wrap}
+.vdsw{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:14px;background:rgba(18,18,17,.09);min-width:min(100%,460px)}
+.vdsw button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:2px;padding:12px 18px;border-radius:10px;color:var(--ink);-webkit-tap-highlight-color:transparent;transition:background-color .25s,color .25s}
+.vdsw b{font:600 17px/1.15 var(--f-body);letter-spacing:-.01em}
+.vdsw .mo{color:var(--mut);transition:color .25s}
+.vdsw button[aria-selected="true"]{background:#121211;color:#F4F2EC}
+.vdsw button[aria-selected="true"] .mo{color:rgba(244,242,236,.6)}
+.vdsw button:not([aria-selected="true"]):hover{background:rgba(18,18,17,.07)}
+.vdsw button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+/* ricomincia: un bottone vero; al passaggio il pomodoro sale e lo riempie tutto (regola dei bottoni pieni) */
+.vdre{all:unset;box-sizing:border-box;position:relative;overflow:hidden;isolation:isolate;cursor:pointer;margin-left:auto;display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 18px;border-radius:10px;border:1.5px solid #121211;color:#121211;font:600 15px var(--f-body);-webkit-tap-highlight-color:transparent}
+.vdre .fl{position:absolute;inset:-2px;background:var(--sig,#FF5B3A);transform:translateY(101%);transition:transform .45s cubic-bezier(.7,0,.2,1);z-index:-1}
+.vdre i{font-style:normal;font-size:17px;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.vdre:hover,.vdre:focus-visible{border-color:transparent}
+.vdre:hover .fl,.vdre:focus-visible .fl{transform:none}
+.vdre:hover i{transform:rotate(-180deg)}
+.vdre:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.vdst{display:grid;grid-template-columns:minmax(0,1fr) clamp(240px,21vw,310px);gap:clamp(24px,3vw,48px);align-items:end}
+.vd figure{margin:0}
 .vdscr{position:relative;overflow:hidden;background:#110E0C}
 .vdscr iframe{position:absolute;left:0;top:0;border:0;transform-origin:0 0;background:#110E0C}
-/* il computer: cornice scura sottile, base sotto */
+.vdst[data-v="c"] iframe[data-v="o"],.vdst[data-v="o"] iframe[data-v="c"]{visibility:hidden;pointer-events:none}
+/* il computer */
 .vdl .vdscr{aspect-ratio:16/10;border-radius:14px;border:10px solid #1A1A18;box-shadow:0 1px 0 rgba(255,255,255,.08) inset,0 40px 70px -40px rgba(18,18,17,.6)}
 .vdl .vdscr iframe{width:1280px;height:800px}
 .vdbase{display:block;height:14px;margin:-12px -4% 0;border-radius:0 0 18px 18px;background:linear-gradient(#2A2A27,#161614);box-shadow:0 18px 30px -18px rgba(0,0,0,.6)}
 /* il telefono */
 .vdp .vdscr{aspect-ratio:390/800;border-radius:42px;border:9px solid #1A1A18;box-shadow:0 1px 0 rgba(255,255,255,.08) inset,0 40px 70px -40px rgba(18,18,17,.6)}
 .vdp .vdscr iframe{width:390px;height:800px}
-.vd .vdpo{display:none}
+.vdhint{margin:18px 0 0;font-size:15px;line-height:1.4;color:var(--mut)}
 /* le quattro cose che fa, sotto */
 .vdf{list-style:none;margin:clamp(36px,4vw,56px) 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(16px,2vw,32px)}
 .vdf li{display:grid;grid-template-columns:30px 1fr;gap:0 8px;padding-top:14px;border-top:1px solid var(--ln)}
 .vdf .mo{color:var(--mut);padding-top:3px}
 .vdf b{font:600 17px/1.25 var(--f-body);letter-spacing:-.015em}
 .vdf p{grid-column:2;margin:6px 0 0;font-size:14px;line-height:1.45;color:var(--mut)}
+/* il nostro cursore si spegne quando il mouse entra in uno schermo: dentro comanda il cursore della pagina vera */
+html.mm-inframe .mmc{opacity:0!important;transition:none}
 
-/* su telefono: un dispositivo alla volta, lo switch grande e chiaro */
+/* su telefono: lo switch resta, si vede solo il telefono */
 @media (max-width:760px){
-  .vdtop{margin-bottom:18px}
-  .vdsw{display:grid;grid-template-columns:1fr 1fr;flex:1;gap:6px;padding:4px;border-radius:12px;background:rgba(18,18,17,.08)}
-  .vdsw button{all:unset;cursor:pointer;text-align:center;padding:11px 8px;border-radius:9px;font:600 15px var(--f-body);color:var(--mut);-webkit-tap-highlight-color:transparent;transition:background-color .25s,color .25s}
-  .vdsw button[aria-selected="true"]{background:#121211;color:#F4F2EC}
-  .vdsw button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-  .vdre{margin-left:0}
-  .vd figcaption{display:none}   /* lo switch dice gia' cosa si guarda */
+  .vdsw{min-width:0;width:100%}
+  .vdsw button{padding:11px 14px}
+  .vdre{margin-left:0;height:40px;font-size:14px}
   .vdst{grid-template-columns:1fr;justify-items:center}
   .vd .vdl{display:none}
   .vdp{width:min(100%,330px)}
-  .vd .vdst[data-v="c"] .vdpo,.vd .vdst[data-v="o"] .vdp:not(.vdpo){display:none}
-  .vd .vdst[data-v="o"] .vdpo{display:grid}
+  .vdhint{text-align:center}
   .vdf{grid-template-columns:1fr 1fr;gap:22px 16px}
 }
 @media (max-width:420px){.vdf{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.vdre .fl,.vdre i{transition:none}}
 
 /* ---- The look: l'identita' del cliente, caratteri e colori veri ---- */
 @font-face{font-family:"VitBodoni";src:url(/work/vitalias/fonts/bodoni-moda-latin-400-normal.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
@@ -86,3 +98,28 @@
   .clb{grid-template-columns:1fr}
   .clbt{min-height:0}
 }
+
+/* ---- prima e dopo: come era e come e' adesso. Le scritte sopra restano; il nuovo e' piu' grande, piu' nero, piu' bold ---- */
+.cfba>div{grid-template-columns:minmax(0,.45fr) minmax(0,.85fr) minmax(0,1.5fr);align-items:center;padding:clamp(16px,2vw,24px) 0}
+@media (max-width:760px){.cfba>div{grid-template-columns:1fr}}
+.cfba p.bf{font:400 clamp(17px,1.5vw,22px)/1.25 var(--f-body);letter-spacing:-.01em;color:var(--mut)}
+.cfba p:not(.bf){font:650 clamp(24px,2.7vw,40px)/1.08 var(--f-body);letter-spacing:-.03em;color:var(--ink);padding-left:clamp(34px,3vw,46px)}
+.cfba p:not(.bf)::before{color:var(--ink);font-weight:400}
+.cfbh span:last-child{color:var(--ink)}
+@media (max-width:760px){
+  .cfba p:not(.bf){font-size:clamp(24px,7vw,32px);padding-left:30px}
+}
+
+/* ---- la testa piu' corta: la copertina meno alta, "What we did" piu' compatto ---- */
+.chcover.chimg{aspect-ratio:21/8}
+.cfdid b{font-size:clamp(26px,3vw,48px)!important}
+@media (max-width:760px){.chcover.chimg{aspect-ratio:16/10}}
+
+/* ---- il logo nella galleria piu' grande ---- */
+.clg{grid-template-columns:1.25fr 1.6fr 1fr 1.2fr}
+.clg .t1>img{width:84%;max-height:62%}
+/* il lato Owner "chiamato": l'anello pomodoro lampeggia, come un bottone di piano */
+.vdsw button.call{box-shadow:inset 0 0 0 2px var(--sig,#FF5B3A);animation:vdcall .45s steps(1) 8}
+@keyframes vdcall{50%{box-shadow:inset 0 0 0 2px transparent}}
+@media (prefers-reduced-motion:reduce){.vdsw button.call{animation:none}}
+.vd,.vd *{overflow-anchor:none}   /* lo switch non deve spostare la pagina */

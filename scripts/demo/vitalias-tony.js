@@ -11,7 +11,13 @@
 
   /* nella pagina del caso il computer si apre sul calendario, non sui codici sconto */
   function toCal() { var l = document.querySelector('.legend'); if (l && window.innerWidth > 700) window.scrollTo(0, l.getBoundingClientRect().top + window.scrollY - 16) }
-  var tries = 0; (function wait() { if (document.getElementById('adminWrap') && document.getElementById('adminWrap').style.display === 'block') toCal(); else if (tries++ < 40) setTimeout(wait, 100) })();
+  /* appena aperta: se dal lato Customer e' arrivata una prenotazione da poco, la Control Room la mostra subito */
+  var tries = 0; (function wait() {
+    if (document.getElementById('adminWrap') && document.getElementById('adminWrap').style.display === 'block') {
+      var n = window.MM_DEMO && MM_DEMO.last();
+      if (n && Date.now() - n.at < 15 * 60 * 1000) window.MM_DEMO_REFRESH(n.what); else { toCal(); setTimeout(toCal, 700) }
+    } else if (tries++ < 40) setTimeout(wait, 100);
+  })();
 
   window.MM_DEMO_REFRESH = async function (what) {
     try {
