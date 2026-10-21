@@ -190,9 +190,9 @@ CASI = {
                'Back office for events and payments', 'Hiring, from the job post to the trial shift'],
         # risultati: Eso dice che le richieste di functions sono cresciute moltissimo, ma senza un numero preciso.
         # Niente percentuali a occhio: solo fatti veri. Il numero si aggiunge quando arriva.
-        numeri=['<div class="lead"><b data-n="200" data-p="+" data-s="%">+0%</b><span>function enquiries since the new site went live</span></div>',
+        numeri=['<div class="lead"><b data-n="240" data-p="+" data-s="%">+0%</b><span>function enquiries since the new site went live</span></div>',
                 '<div><b>24/7</b><span>enquiries arrive with set menu, guests, allergies and drinks already chosen</span></div>',
-                '<div><b data-n="0">0</b><span>calls to send a quote: menu, price and PDF go out in one email</span></div>'],
+                '<div><b data-n="2" data-s="min">0min</b><span>from enquiry to quote: menu, price and PDF in one email</span></div>'],
         righe=[('Function enquiries', 'Phone calls and long email threads', 'Set menu, dietary needs and drinks, chosen online'),
                ('Quotes', 'Written one by one', 'A menu and a price, sent from the back office'),
                ('Menus', 'A new PDF for every change', 'Edited live, printed in one click'),
