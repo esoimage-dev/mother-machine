@@ -1183,24 +1183,25 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
   <!-- 3 · il sistema, acceso -->
   <section class="hs cd" data-luce="macchina" data-f="04.2" data-n="The system" id="c3"><div class="in">
     <div class="cdh">
-      <div><span class="mo mut">The system</span><h2>The Control Room, running.</h2></div>
-      <p>The real interface, with invented bookings. Watch it work, or click anything and take over.</p>
+      <div><span class="mo mut">The system</span><h2>Book on the phone. Watch it land.</h2></div>
+      <p>The real booking site and the real Control Room, running on invented data. Book an event on the phone, pay the deposit, and see it arrive on the computer.</p>
     </div>
-    <div class="cdw">
-      <div class="cdc" role="tablist" aria-label="What the system does">
-        <button role="tab" aria-selected="true" data-s="0"><span class="mo">01</span><b>Every booking, one calendar.</b><p>Paid, deposit in, unpaid, quote sent. The month in one look.</p><i class="pg"><i></i></i></button>
-        <button role="tab" aria-selected="false" data-s="1"><span class="mo">02</span><b>Paid without chasing.</b><p>A payment link by WhatsApp. The customer pays, the booking turns green.</p><i class="pg"><i></i></i></button>
-        <button role="tab" aria-selected="false" data-s="2"><span class="mo">03</span><b>The site edits itself.</b><p>Change a price here. It is live on the website, the checkout and the emails.</p><i class="pg"><i></i></i></button>
-        <button role="tab" aria-selected="false" data-s="3"><span class="mo">04</span><b>Ready for the kitchen.</b><p>How many pizzas, which ones, vegan and gluten-free. One sheet per event.</p><i class="pg"><i></i></i></button>
+    <div class="vd" id="vd">
+      <div class="vdtop">
+        <div class="vdsw" role="tablist" aria-label="Screen"><button role="tab" aria-selected="true" data-v="c">Customer</button><button role="tab" aria-selected="false" data-v="o">Owner</button></div>
+        <button class="vdre mo" type="button">Start over</button>
       </div>
-      <div class="cdr">
-        <div class="cdtop">
-          <div class="cdsw" role="tablist" aria-label="Screen"><button role="tab" aria-selected="true" data-w="d">Desktop</button><button role="tab" aria-selected="false" data-w="p">Phone</button></div>
-          <span class="cdst mo" aria-live="polite"><i class="live" aria-hidden="true"></i><span>Playing</span></span>
-          <button class="cdre mo" type="button">Reset</button>
-        </div>
-        <div class="crf" data-w="d"><div class="crapp" id="crapp" aria-label="Control Room demo with invented data"></div></div>
+      <div class="vdst" data-v="c">
+        <figure class="vdl"><figcaption class="mo"><b>Owner</b> · Control Room</figcaption><div class="vdscr"><iframe title="Control Room, demo with invented bookings" data-src="/demo/vitalias/tony.html"></iframe></div><i class="vdbase" aria-hidden="true"></i></figure>
+        <figure class="vdp"><figcaption class="mo"><b>Customer</b> · Booking</figcaption><div class="vdscr"><iframe title="Booking site, demo" data-src="/demo/vitalias/booking.html"></iframe></div></figure>
+        <figure class="vdp vdpo"><figcaption class="mo"><b>Owner</b> · Control Room</figcaption><div class="vdscr"><iframe title="Control Room on the phone, demo" data-src="/demo/vitalias/tony.html"></iframe></div></figure>
       </div>
+      <ol class="vdf">
+        <li><span class="mo">01</span><b>Booked and paid online.</b><p>Package, place, pizzas, date. A 30% deposit by card, day or night.</p></li>
+        <li><span class="mo">02</span><b>It lands by itself.</b><p>The booking appears in the Control Room the moment it is paid. Nobody types it in.</p></li>
+        <li><span class="mo">03</span><b>Paid without chasing.</b><p>Balance reminders and payment links go out on their own. Refunds in two clicks.</p></li>
+        <li><span class="mo">04</span><b>Phone orders too.</b><p>A call from someone who prefers to talk? The event goes in by hand, same calendar.</p></li>
+      </ol>
     </div>
   </div></section>
 
@@ -1396,122 +1397,7 @@ pickNav();
   addEventListener('scroll',function(){last=null},{passive:true});
 })();
 
-/* pagina progetto v3: il Control Room in miniatura, acceso. Dati inventati, niente esce dalla pagina. */
-(function(){
-  var RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var app=document.getElementById('crapp'),frame=app.parentNode,sec=document.getElementById('c3');
-  var chs=[].slice.call(sec.querySelectorAll('.cdc button')),sws=[].slice.call(sec.querySelectorAll('.cdsw button')),stat=sec.querySelector('.cdst');
-  var SL={paid:'Paid',dep:'Deposit paid',unp:'Unpaid',quo:'Quote sent'};
-  var PZ=[['Margherita',.26],['Diavola',.22],['Capricciosa',.16],['4 Formaggi e Tartufo',.14],['Bufalina',.12],['Nutella dessert',.1]];
-  function seed(){return {pr:{Social:1500,Party:1750,Celebration:2100},b:[
-    {id:'b3',d:3,w:'Sat',t:'6:00 PM',a:'Gordonvale',who:'Sarah M.',pk:'Party',g:'30-55 guests',pz:50,tot:1750,paid:1750,st:'paid',h:[['12 Sep','Booking submitted'],['12 Sep','Deposit paid via Stripe'],['26 Sep','Balance paid via Stripe']]},
-    {id:'b9',d:9,w:'Fri',t:'5:00 PM',a:'Cairns City',who:'Liam K.',pk:'Social',g:'10-30 guests',pz:30,tot:1500,paid:1500,st:'paid',h:[['2 Sep','Booking submitted'],['2 Sep','Paid in full via Stripe']]},
-    {id:'b17',d:17,w:'Sat',t:'2:00 PM',a:'Edmonton',who:'Priya D.',pk:'Celebration',g:'55-85 guests',pz:80,tot:2100,paid:630,st:'dep',h:[['20 Sep','Booking submitted'],['20 Sep','Deposit paid via Stripe']]},
-    {id:'b24',d:24,w:'Sat',t:'7:30 PM',a:'Smithfield',who:'Tom and Jess',pk:'Party',g:'30-55 guests · evening',pz:50,tot:1850,paid:0,st:'unp',h:[['14 Oct','Booking submitted'],['15 Oct','Reminder sent (auto)']]},
-    {id:'b30',d:30,w:'Fri',t:'6:00 PM',a:'Trinity Beach',who:'Reef Rotary Club',pk:'Social',g:'10-30 guests',pz:30,tot:1500,paid:0,st:'quo',h:[['13 Oct','Quote requested'],['13 Oct','Quote sent']]},
-    {id:'b31',d:31,w:'Sat',t:'5:00 PM',a:'Mount Sheridan',who:'Mia R.',pk:'Party',g:'30-55 guests',pz:50,tot:1750,paid:525,st:'dep',h:[['28 Sep','Booking submitted'],['28 Sep','Deposit paid via Stripe']]}]}}
-  var S=seed(),openId=null;
-  function $m(n){return '$'+Math.round(n).toLocaleString('en-AU')}
-  function bk(id){return S.b.filter(function(b){return b.id===id})[0]}
-  function kpi(){var c=0,o=0,e=0,q=0;S.b.forEach(function(b){c+=b.paid;if(b.st==='quo')q++;else{e++;o+=b.tot-b.paid}});return [c,o,e,q]}
 
-  /* ---- disegno ---- */
-  function build(){
-    var cells='',DW=['MON','TUE','WED','THU','FRI','SAT','SUN'];DW.forEach(function(d){cells+='<div class="h">'+d+'</div>'});
-    for(var i=0;i<35;i++){var day=i-2;var inm=day>=1&&day<=31;cells+='<div class="c'+(inm?'':' x')+'">'+(inm?day:'')+(inm?S.b.filter(function(b){return b.d===day}).map(function(b){return '<button class="cr-ev s-'+b.st+'" data-id="'+b.id+'">'+b.a+' · '+b.t.replace(':00','')+'</button>'}).join(''):'')+'</div>'}
-    var list=S.b.map(function(b){return '<button class="cr-li" data-id="'+b.id+'"><div class="d"><b>'+b.d+'</b><span>'+b.w+'</span></div><div class="w"><b>'+b.a+' · '+b.t+'</b><span>'+b.pk+' · ~'+b.pz+' pizzas</span></div><span class="cr-st s-'+b.st+'">'+SL[b.st]+'</span></button>'}).join('');
-    var tz=S.b.filter(function(b){return b.st!=='quo'}).reduce(function(s,b){return s+b.pz},0);
-    app.innerHTML='<div class="cr-in">'+
-      '<div class="cr-top"><div class="cr-brand"><span>Vitalia\'s · Pizza on Wheels</span><b>Control Room</b></div><nav class="cr-tabs"><button class="on" data-v="cal">Bookings</button><button data-v="price">Prices</button><button data-v="kit">Kitchen</button></nav></div>'+
-      '<div class="cr-kpi"><div class="k1"><b></b><span>Collected</span></div><div class="k2"><b></b><span>Outstanding</span></div><div class="k3"><b></b><span>Events</span></div><div class="k4"><b></b><span>Quotes</span></div></div>'+
-      '<div class="cr-v cr-cal on" data-v="cal"><div class="cr-mh"><b>October 2026</b><div class="cr-lg"><span><i class="s-paid"></i>Paid</span><span><i class="s-dep"></i>Deposit</span><span><i class="s-unp"></i>Unpaid</span><span><i class="s-quo"></i>Quote</span></div></div><div class="cr-grid">'+cells+'</div><div class="cr-list">'+list+'</div></div>'+
-      '<div class="cr-v cr-price" data-v="price"><div class="cr-pf"><h4>Site prices</h4><p>What customers pay. Saved here, live on the website, the checkout and the emails.</p><div class="row">'+
-        ['Social','Party','Celebration'].map(function(k){return '<label>'+k+'<span class="cr-in2">$<input inputmode="numeric" data-k="'+k+'" value="'+S.pr[k]+'" aria-label="'+k+' price"></span></label>'}).join('')+
-        '</div><button class="cr-btn cr-q cr-save">Save changes</button></div>'+
-        '<div class="cr-site"><div class="cr-sb"><i></i><i></i><i></i><span>pizzatruck.vitalias.com.au</span></div><div class="cr-sc"><h5>Pick your <i>party</i> size.</h5><div class="cr-sp">'+
-        [['Social','10-30 guests'],['Party','30-55 guests'],['Celebration','55-85 guests']].map(function(p){return '<div><b>'+p[0]+'</b><span>'+p[1]+'</span><em data-k="'+p[0]+'">from '+$m(S.pr[p[0]])+'</em></div>'}).join('')+
-        '</div><div class="cr-sl"><i></i>Live on the website</div></div></div></div>'+
-      '<div class="cr-v cr-kit" data-v="kit"><div class="cr-kb"><h4>Pizzas to make · October</h4>'+PZ.map(function(p){var n=Math.round(tz*p[1]);return '<div class="cr-bar"><span style="text-align:left;color:var(--t)">'+p[0]+'</span><i><b data-w="'+Math.round(p[1]/.26*100)+'%"></b></i><span>'+n+'</span></div>'}).join('')+'</div>'+
-        '<div class="cr-ks"><h4>This month</h4><div class="big">'+tz+'</div><div class="sm"><div>Events<b>'+kpi()[2]+'</b></div><div>Vegan mozzarella<b>6</b></div><div>Gluten-free bases<b>4</b></div></div><button class="cr-btn cr-pr">Print event sheets</button></div></div>'+
-      '</div><aside class="cr-p" aria-label="Booking"></aside><div class="cr-to" role="status"></div><div class="cr-gh" aria-hidden="true"></div>';
-    nums(false)}
-  function nums(tick){var k=kpi(),f=[$m(k[0]),$m(k[1]),k[2],k[3]];[].slice.call(app.querySelectorAll('.cr-kpi b')).forEach(function(b,i){if(b.textContent!==String(f[i])){b.textContent=f[i];if(tick){b.classList.remove('tick');void b.offsetWidth;b.classList.add('tick')}}})}
-  function paint(b){[].slice.call(app.querySelectorAll('[data-id="'+b.id+'"]')).forEach(function(e){if(e.classList.contains('cr-ev'))e.className='cr-ev s-'+b.st;else{var s=e.querySelector('.cr-st');s.className='cr-st s-'+b.st;s.textContent=SL[b.st]}})}
-  function panel(id){var b=bk(id),p=app.querySelector('.cr-p');openId=id;
-    p.innerHTML='<div class="cr-ph"><div><span>'+b.w+' '+b.d+' Oct · '+b.t+'</span><b>'+b.who+'</b></div><button class="cr-x" aria-label="Close">✕</button></div>'+
-      '<div class="cr-who">'+b.a+' · <b>'+SL[b.st]+'</b></div><div class="cr-pk">'+b.pk+' · '+b.g+' · ~'+b.pz+' pizzas</div>'+
-      '<div class="cr-mon"><div><b>'+$m(b.tot)+'</b><span>Total</span></div><div><b>'+$m(b.paid)+'</b><span>Paid</span></div><div><b>'+$m(b.tot-b.paid)+'</b><span>Balance</span></div></div>'+
-      '<div class="cr-act">'+(b.st==='quo'?'<button class="cr-btn cr-q cr-acc">Quote accepted · book it</button>':b.st==='paid'?'<button class="cr-btn cr-pr cr-sheet">Print event sheet</button>':'<button class="cr-btn cr-wa">Send payment link · WhatsApp</button><button class="cr-btn cr-em">Email it</button>')+'</div>'+
-      '<div class="cr-hi"><b>History</b>'+b.h.map(function(h,i){return '<div'+(h[2]?' class="nw"':'')+'><span>'+h[0]+'</span><span>'+h[1]+'</span></div>'}).join('')+'</div>';
-    b.h.forEach(function(h){h[2]=0});p.classList.add('on');
-    [].slice.call(app.querySelectorAll('.cr-ev,.cr-li')).forEach(function(e){e.classList.toggle('hl',e.dataset.id===id)})}
-  function close(){openId=null;app.querySelector('.cr-p').classList.remove('on');[].slice.call(app.querySelectorAll('.hl')).forEach(function(e){e.classList.remove('hl')})}
-  var tt;function toast(a,b){var t=app.querySelector('.cr-to');t.innerHTML='<i></i><div>'+a+(b?'<small>'+b+'</small>':'')+'</div>';t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},2600)}
-  function view(v){close();[].slice.call(app.querySelectorAll('.cr-tabs button')).forEach(function(b){b.classList.toggle('on',b.dataset.v===v)});[].slice.call(app.querySelectorAll('.cr-v')).forEach(function(e){e.classList.toggle('on',e.dataset.v===v)});
-    if(v==='kit'){var bs=[].slice.call(app.querySelectorAll('.cr-bar i b'));bs.forEach(function(b){b.style.setProperty('--w','0')});requestAnimationFrame(function(){requestAnimationFrame(function(){bs.forEach(function(b){b.style.setProperty('--w',b.dataset.w)})})})}}
-  /* azioni: tutte simulate */
-  function link(id,via){var b=bk(id);b.h.push(['15 Oct','Payment link sent by '+via,1]);toast('Payment link sent by '+via+'.','Demo: nothing leaves this page.');panel(id);
-    setTimeout(function(){if(b.st==='paid')return;b.paid=b.tot;b.st='paid';b.h.push(['15 Oct','Balance paid via Stripe',1]);paint(b);nums(true);if(openId===id)panel(id);toast('Paid via Stripe · '+$m(b.tot),'The booking turns green on its own.')},1700)}
-  function accept(id){var b=bk(id);b.st='unp';b.h.push(['15 Oct','Quote accepted, booked',1]);paint(b);nums(true);panel(id);toast('Booked. The date is now taken on the website.','Demo data.')}
-  function save(){var ch=0;[].slice.call(app.querySelectorAll('.cr-pf input')).forEach(function(i){var v=parseInt(i.value.replace(/\D/g,''),10)||0,k=i.dataset.k;if(v&&v!==S.pr[k]){S.pr[k]=v;ch++;var em=app.querySelector('.cr-sp em[data-k="'+k+'"]');em.textContent='from '+$m(v);em.classList.remove('fl');void em.offsetWidth;em.classList.add('fl')}});
-    toast(ch?'Live on the website, the checkout and the emails.':'Nothing changed.','Demo: the real site is not touched.')}
-  app.addEventListener('click',function(e){var t=e.target.closest('button');if(!t)return;
-    if(t.dataset.id)panel(t.dataset.id);else if(t.classList.contains('cr-x'))close();else if(t.dataset.v)view(t.dataset.v);
-    else if(t.classList.contains('cr-wa'))link(openId,'WhatsApp');else if(t.classList.contains('cr-em'))link(openId,'email');
-    else if(t.classList.contains('cr-acc'))accept(openId);else if(t.classList.contains('cr-save'))save();
-    else if(t.classList.contains('cr-pr')||t.classList.contains('cr-sheet'))toast('Event sheet ready to print.','Pizzas, allergies and notes, one page per event.')});
-  app.addEventListener('focusin',function(e){if(e.target.tagName==='INPUT')e.target.parentNode.classList.add('f')});
-  app.addEventListener('focusout',function(e){if(e.target.tagName==='INPUT')e.target.parentNode.classList.remove('f')});
-
-  /* ---- la regia: il nostro cursore lavora da solo finché non tocchi ---- */
-  var run=0,cur=0,user=false,inView=false;
-  function gh(){return app.querySelector('.cr-gh')}
-  function W(ms,tk){return new Promise(function(res,rej){setTimeout(function(){tk===run?res():rej(0)},ms)})}
-  function vis(sel){return [].slice.call(app.querySelectorAll(sel)).filter(function(e){return e.getClientRects().length&&e.offsetParent!==null})[0]}
-  function mv(sel,tk,ms){var el=typeof sel==='string'?vis(sel):sel;if(!el)return W(10,tk);var a=app.getBoundingClientRect(),r=el.getBoundingClientRect(),g=gh();
-    g.style.setProperty('--x',(r.left-a.left+Math.min(r.width/2,60))+'px');g.style.setProperty('--y',(r.top-a.top+r.height/2)+'px');g.classList.add('on','hv');return W(ms||800,tk).then(function(){return el})}
-  function tap(sel,tk){return mv(sel,tk).then(function(el){var g=gh();g.classList.add('pr');el.classList.add('pr');return W(200,tk).then(function(){g.classList.remove('pr');el.classList.remove('pr');el.click();return el})})}
-  var SC=[
-    function(tk){view('cal');return W(300,tk).then(function(){return mv('[data-id="b3"]',tk,700)}).then(function(){return mv('[data-id="b9"]',tk,700)}).then(function(){return mv('[data-id="b31"]',tk,700)}).then(function(){return tap('[data-id="b17"]',tk)}).then(function(){return W(2600,tk)}).then(function(){return tap('.cr-x',tk)}).then(function(){return W(400,tk)})},
-    function(tk){view('cal');var b=bk('b24');if(b.st==='paid'){b.st='unp';b.paid=0;b.h=b.h.slice(0,2);paint(b);nums(false)}
-      return W(300,tk).then(function(){return tap('[data-id="b24"]',tk)}).then(function(){return W(900,tk)}).then(function(){return tap('.cr-wa',tk)}).then(function(){return W(3400,tk)}).then(function(){return tap('.cr-x',tk)}).then(function(){return W(400,tk)})},
-    function(tk){var inp;return tap('.cr-tabs [data-v="price"]',tk).then(function(){return W(500,tk)}).then(function(){return tap('.cr-pf input[data-k="Party"]',tk)}).then(function(el){inp=el;inp.focus({preventScroll:true});inp.value='';var s=String(S.pr.Party===1750?1850:1750),p=Promise.resolve();
-        s.split('').forEach(function(ch){p=p.then(function(){return W(170,tk)}).then(function(){inp.value+=ch})});return p}).then(function(){inp.blur();return W(300,tk)}).then(function(){return tap('.cr-save',tk)}).then(function(){return W(2800,tk)})},
-    function(tk){return tap('.cr-tabs [data-v="kit"]',tk).then(function(){return W(1500,tk)}).then(function(){return tap('.cr-kit .cr-pr',tk)}).then(function(){return W(2400,tk)}).then(function(){return tap('.cr-tabs [data-v="cal"]',tk)}).then(function(){return W(500,tk)})}];
-  var DUR=[8.6,9.2,7.6,6.6];
-  function pick(i){cur=i;chs.forEach(function(b,j){b.setAttribute('aria-selected',j===i?'true':'false');b.tabIndex=j===i?0:-1;var p=b.querySelector('.pg i');p.style.transition='none';p.style.transform='scaleX(0)'})}
-  function grow(i){var p=chs[i].querySelector('.pg i');void p.offsetWidth;p.style.transition='transform '+DUR[i]+'s linear';p.style.transform='scaleX(1)'}
-  function freeze(){chs.forEach(function(b){var p=b.querySelector('.pg i'),m=getComputedStyle(p).transform;p.style.transition='none';p.style.transform=m==='none'?'scaleX(0)':m})}
-  function say(t,on){stat.lastElementChild.textContent=t;stat.classList.toggle('off',!on)}
-  function play(i,loop){var tk=++run;pick(i);grow(i);say(loop?'Playing':'Showing '+chs[i].querySelector('.mo').textContent,true);
-    SC[i](tk).then(function(){if(tk!==run)return;if(loop){if(i===3)S=seedKeepNothing();play((i+1)%4,true)}else{gh().classList.remove('on','hv');say('Your turn · invented data',false)}}).catch(function(){})}
-  function seedKeepNothing(){var n=seed();S=n;build();return n}
-  function stop(msg){run++;freeze();var g=gh();if(g)g.classList.remove('on','hv');say(msg||'Your turn · invented data',false)}
-  app.addEventListener('click',function(e){if(e.isTrusted&&!user){user=true;stop()}},true);app.addEventListener('input',function(e){if(e.isTrusted&&!user){user=true;stop()}});
-  app.addEventListener('keydown',function(e){if(e.isTrusted&&!user){user=true;stop()}});
-  chs.forEach(function(b,i){b.addEventListener('click',function(){stop();play(i,false)});
-    b.addEventListener('keydown',function(e){var d=/Down|Right/.test(e.key)?1:/Up|Left/.test(e.key)?-1:0;if(!d)return;e.preventDefault();var n=(i+d+4)%4;chs[n].focus();chs[n].click()})});
-  sws.forEach(function(b){b.addEventListener('click',function(){sws.forEach(function(o){o.setAttribute('aria-selected',o===b?'true':'false')});frame.setAttribute('data-w',b.dataset.w);close();
-    if(!user&&inView&&!RM){stop('Resizing');setTimeout(function(){play(cur,true)},900)}})});
-  sec.querySelector('.cdre').addEventListener('click',function(){S=seed();build();user=false;if(inView&&!RM)play(0,true);else{pick(0);say('Reset',false)}});
-  build();pick(0);
-  if(RM){say('Your turn · invented data',false)}
-  else new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!inView){inView=true;if(!user)play(cur,true)}else if(!v&&inView){inView=false;if(!user)stop('Paused')}},{threshold:.35}).observe(frame);
-
-  /* le righe salgono una dopo l'altra */
-  var dl=document.querySelector('.cfdid');[].slice.call(dl.children).forEach(function(li,i){li.style.setProperty('--i',i)});
-  if(RM)dl.classList.add('on');else{var io2=new IntersectionObserver(function(es){if(es[0].isIntersecting){dl.classList.add('on');io2.disconnect()}},{threshold:.25});io2.observe(dl)}
-  /* bozza: lo stesso blocco con 2, 3, 4 o 6 numeri */
-  var POOL=[[12,'','h','a week nobody spends on the phone or in DMs'],[48,'','','events booked online since launch'],[86,'$','k','booked online, deposits paid by card'],[100,'','%','of balances collected on time'],[3,'','min','from enquiry to paid deposit'],[6,'',' wks','from kickoff to launch']];
-  var cfn=document.querySelector('.cfn'),dr=[].slice.call(document.querySelectorAll('.cfdraft button'));
-  dr.forEach(function(b){b.addEventListener('click',function(){var k=+b.dataset.k;dr.forEach(function(o){o.classList.toggle('on',o===b)});cfn.setAttribute('data-c',k);
-    cfn.innerHTML=POOL.slice(0,k).map(function(m,i){return '<div'+(i?'':' class="lead"')+'><b>'+m[1]+m[0]+m[2]+'</b><span>'+m[3]+'</span><em>da confermare</em></div>'}).join('')})});
-  /* i numeri contano */
-  [].slice.call(document.querySelectorAll('.cfn b[data-n]')).forEach(function(el){
-    var io=new IntersectionObserver(function(es){if(!es[0].isIntersecting)return;io.disconnect();var n=+el.dataset.n,pre=el.dataset.p||'',s=el.dataset.s||'',a=null;
-      if(RM){el.textContent=pre+n+s;return}
-      (function f(t){if(!a)a=t;var p=Math.min(1,(t-a)/1400);el.textContent=pre+Math.round(n*(1-Math.pow(1-p,3)))+s;if(p<1)requestAnimationFrame(f)})(performance.now())},{threshold:.5});io.observe(el)});
-})();
 
 </script>
 <script src="/js/mm-sito.js"></script><script src="/js/mm-chiave.js"></script><script src="/js/progetto.js"></script>

@@ -226,6 +226,37 @@ def ritocchi(nome, t):
                      '      <figure class="t t4"><video src="' + V + 'truck.mp4" poster="' + V + 'truck-poster.webp" muted loop playsinline preload="none" aria-label="The truck at an event"></video><figcaption class="mo">At an event</figcaption></figure>\n'
                      '    ') + t[e:]
         t = una(t, '<span class="mo mut">Next · No. 011</span>', '<span class="mo mut">Next</span>', 'prossimo')
+        # The system: la demo vera. Computer con la Control Room e telefono con la prenotazione, il codice del cliente
+        # che gira su dati inventati (public/demo/vitalias, montata da scripts/demo-vitalias.py). Si parlano: una
+        # prenotazione fatta sul telefono arriva sul computer. Su telefono un dispositivo alla volta, con lo switch.
+        s = t.find('<div class="cdh">'); e = t.find('</div>\n  </div></section>', t.find('<div class="crf"', s))
+        assert s > 0 and e > s, 'demo vecchia'
+        t = t[:s] + ('<div class="cdh">\n'
+                     '      <div><span class="mo mut">The system</span><h2>Book on the phone. Watch it land.</h2></div>\n'
+                     '      <p>The real booking site and the real Control Room, running on invented data. Book an event on the phone, pay the deposit, and see it arrive on the computer.</p>\n'
+                     '    </div>\n'
+                     '    <div class="vd" id="vd">\n'
+                     '      <div class="vdtop">\n'
+                     '        <div class="vdsw" role="tablist" aria-label="Screen"><button role="tab" aria-selected="true" data-v="c">Customer</button><button role="tab" aria-selected="false" data-v="o">Owner</button></div>\n'
+                     '        <button class="vdre mo" type="button">Start over</button>\n'
+                     '      </div>\n'
+                     '      <div class="vdst" data-v="c">\n'
+                     '        <figure class="vdl"><figcaption class="mo"><b>Owner</b> · Control Room</figcaption><div class="vdscr"><iframe title="Control Room, demo with invented bookings" data-src="/demo/vitalias/tony.html"></iframe></div><i class="vdbase" aria-hidden="true"></i></figure>\n'
+                     '        <figure class="vdp"><figcaption class="mo"><b>Customer</b> · Booking</figcaption><div class="vdscr"><iframe title="Booking site, demo" data-src="/demo/vitalias/booking.html"></iframe></div></figure>\n'
+                     '        <figure class="vdp vdpo"><figcaption class="mo"><b>Owner</b> · Control Room</figcaption><div class="vdscr"><iframe title="Control Room on the phone, demo" data-src="/demo/vitalias/tony.html"></iframe></div></figure>\n'
+                     '      </div>\n'
+                     '      <ol class="vdf">\n'
+                     '        <li><span class="mo">01</span><b>Booked and paid online.</b><p>Package, place, pizzas, date. A 30% deposit by card, day or night.</p></li>\n'
+                     '        <li><span class="mo">02</span><b>It lands by itself.</b><p>The booking appears in the Control Room the moment it is paid. Nobody types it in.</p></li>\n'
+                     '        <li><span class="mo">03</span><b>Paid without chasing.</b><p>Balance reminders and payment links go out on their own. Refunds in two clicks.</p></li>\n'
+                     '        <li><span class="mo">04</span><b>Phone orders too.</b><p>A call from someone who prefers to talk? The event goes in by hand, same calendar.</p></li>\n'
+                     '      </ol>\n'
+                     '    ') + t[e:]
+        # lo script della miniatura non serve piu': i numeri che contano e le righe che salgono passano in progetto.js
+        s = t.find('/* pagina progetto v3: il Control Room in miniatura')
+        e = t.find('\n})();', t.find(".cfn b[data-n]", s)) + len('\n})();')
+        assert s > 0 and e > s, 'script del caso'
+        t = t[:s] + t[e:]
 
     if nome == 'room':
         # il back office: dalla pagina approvata di Contact resta solo la scena 5, accesa, al piano LG

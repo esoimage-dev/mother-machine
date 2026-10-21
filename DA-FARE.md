@@ -6,7 +6,9 @@ Il piano di lancio in 3 giorni, con le decisioni e l'ordine, è in `docs/PIANO.m
 ## Lancio · giorno 1
 - [x] Nameserver del dominio da GoDaddy a Cloudflare (21 ottobre).
 - [ ] Materiali e permessi dei quattro lavori veri: Vitalia's Pizza on Wheels, Vitalia's Restaurant, Machine Room, Mother Machine (Eso).
-- [ ] Pagine progetto: Vitalia's Pizza on Wheels, Mother Machine, Vitalia's Restaurant, Machine Room.
+- [x] Pagina progetto Vitalia's Pizza on Wheels: materiali veri, numeri veri, demo vera telefono e computer (21 ottobre).
+  Per rifare la demo dal codice del cliente: `python3 scripts/demo-vitalias.py /percorso/vitalias-pizza-on-wheels`.
+- [ ] Pagine progetto: Mother Machine, Vitalia's Restaurant, Machine Room.
 - [ ] Togliere i numeri ai progetti ("No. 012", "Study 03", "No. 001 · 012") da Work, home e pagina progetto.
 - [ ] Work in home: due proposte con screenshot, poi costruire la scelta.
 
