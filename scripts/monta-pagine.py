@@ -42,7 +42,7 @@ META = {
                'A small studio. On purpose. The people who design your system are the people who build it.', '#EEC3B1'),
     'contact': ('/contact', 'Mother Machine · Contact',
                 'Tell us what slows you down. The first conversation is free, and a real person reads every order.', '#EEC3B1'),
-    'progetto': ('/work/project', "Mother Machine · Vitalia's Pizza on Wheels",
+    'progetto': ('/work/vitalias-pizza-on-wheels', "Mother Machine · Vitalia's Pizza on Wheels",
                  'A new business, built from zero: the brand, the website and the system that runs it.', '#0F0F0E'),
     'work': ('/work', 'Mother Machine · Work',
              'The register: every machine we deliver gets a serial number. Who it was for, what we built, what changed.', '#0F0F0E'),
@@ -81,7 +81,7 @@ CORRENTE = {'home': '05 Home', 'work': '04 Work', 'progetto': '04 Work', 'brand'
             'studio': '01 Studio', 'contact': 'G Contact'}
 
 VITALIA_HOME = (
-    '<a class="wc" href="/work/project" data-go="4" data-dest="/work/project">'
+    '<a class="wc" href="/work/vitalias-pizza-on-wheels" data-go="4" data-dest="/work/vitalias-pizza-on-wheels">'
     '<div class="wv" style="--c:#C8462D"><div class="wph"><b>Vitalia\'s</b><span class="mo">Cover · the truck at an event</span></div>'
     '<span class="wcta mo"><i></i>View project</span></div>'
     '<div class="wm mo"><span>No. 012</span><span>Brand · Systems</span></div>'
@@ -134,6 +134,126 @@ def footer(nome):
             '<div class="row mo fbar"><span class="mut fcopy">© 2026 Mother Machine</span>'
             f'<span class="fleg"><a href="/privacy"{priv}>Privacy</a><a href="/privacy#terms">Terms</a></span></div>'
             '</div></div></footer>')
+
+
+# ---- le pagine dei casi (04 Work): uno stampo, i contenuti di ogni lavoro qui sotto ----
+# Lo stampo e' la pagina progetto approvata. Ogni caso ha: testa, copertina, la demo vera (computer e telefono, con
+# lo switch fra i due lati), cosa abbiamo fatto, i numeri (solo veri), come era e com'e', l'identita' visiva, il
+# prossimo lavoro. Niente numeri di serie, niente citazioni inventate.
+def _li(n, b, p=None):
+    return '<li><span class="mo">' + n + '</span><b>' + b + '</b>' + ('<p>' + p + '</p>' if p else '') + '</li>'
+
+
+CASI = {
+    'progetto': dict(
+        V='/work/vitalias/', titolo="Vitalia's Pizza on Wheels",
+        lede='A pizza truck for private events in Cairns. A new business, built from zero: the brand, the website and the system that runs it.',
+        meta=[('Sector', 'Catering'), ('Place', 'Cairns, AU'), ('Year', '2026')], sito='https://pizzatruck.vitalias.com.au/',
+        copertina='<img src="/work/vitalias/cover.webp" alt="Vitalia\'s pizzas on a branded table at an event" width="1786" height="881" fetchpriority="high">',
+        logo='<img src="/work/vitalias/logo-white.svg" alt="Vitalia\'s Pizza on Wheels logo" width="559" height="197">',
+        fatto=['Brand identity', 'Website with online booking', 'Control Room, the back office', 'Stripe deposits and refunds', 'Prices and menu, edited live'],
+        # i risultati veri dati da Eso: 42 eventi in meno di due mesi, circa A$75k (scritto $70k+, per difetto)
+        numeri=['<div class="lead"><b data-n="42">0</b><span>events booked in under two months, from a standing start</span></div>',
+                '<div><b data-n="70" data-p="$" data-s="k+">$0k+</b><span>in bookings (AUD), deposits paid by card</span></div>',
+                '<div><b>24/7</b><span>bookings and payments, with nobody on the phone</span></div>'],
+        righe=[('Bookings', 'By phone, email and DMs', 'Online, day and night'), ('Deposits', 'Chased by text', 'Paid by card when booking'),
+               ('A new price', 'A call to the developer', 'Two clicks, live everywhere'), ('Kitchen prep', 'Counted by hand', 'Ready on one sheet')],
+        demo=dict(cartella='/demo/vitalias/', cliente='booking.html', titolare='tony.html', ch='mm-vit-demo', key='mm-vit-demo-2',
+                  h2='The truck books itself.',
+                  p='The real booking site and the real Control Room, running on invented data. Book an event on the phone, pay the deposit, and watch the back office fill itself in.',
+                  lati=(('Customer', 'The booking site'), ('Owner', 'The Control Room')),
+                  hint_c='Book an event on either screen. Then switch to Owner.', hint_o='The Control Room. Bookings land here by themselves.',
+                  hint_ok='Booked and paid. Switch to Owner: it is already in the Control Room.',
+                  voci=[('Booked and paid online.', 'Package, place, pizzas, date. A 30% deposit by card, day or night.'),
+                        ('It lands by itself.', 'The booking appears in the Control Room the moment it is paid. Nobody types it in.'),
+                        ('Paid without chasing.', 'Balance reminders and payment links go out on their own. Refunds in two clicks.'),
+                        ('Ready for the kitchen.', 'Which pizzas, how many, vegan and gluten-free. One sheet per event, counted for you.')]),
+        font='Bodoni Moda · Geist', frase='Your party.<em>Our pizza truck.</em>', fonte_fam='VitBodoni',
+        colori=[('Red', '#C8212A', ''), ('Deep red', '#8C1219', ''), ('Paper', '#F3EBDD', '#1A1410'), ('Charcoal', '#0E0B09', '')],
+        galleria=[('t1', '<img src="/work/vitalias/logo-white.svg" alt="" loading="lazy">', 'Logo'),
+                  ('t2', '<img src="/work/vitalias/site.webp" alt="The Vitalia\'s Pizza on Wheels website" loading="lazy">', 'Website'),
+                  ('t3', '<img src="/work/vitalias/flyer.webp" alt="Tiny truck, big party: the launch flyer" loading="lazy">', 'Print'),
+                  ('t4', '<video src="/work/vitalias/truck.mp4" poster="/work/vitalias/truck-poster.webp" muted loop playsinline preload="none" aria-label="The truck at an event"></video>', 'At an event')],
+        prossimo=('/work/vitalias-restaurant', "Vitalia's Restaurant", 'Website · Functions · Menus · Hiring'),
+    ),
+}
+
+
+def caso(t, C):
+    V = C['V']
+    t = una(t, '<a href="#" data-go="4">04 · Work</a> &nbsp;/&nbsp; No. 012</span>', '<a href="#" data-go="4">04 · Work</a></span>', 'numero in testa')
+    t = una(t, "<h1>Vitalia's Pizza on Wheels</h1>", '<h1>' + C['titolo'] + '</h1>', 'titolo')
+    s = t.find('<div class="chrow">'); e = t.find('<figure class="chcover">', s)
+    assert s > 0 and e > s, 'testa'
+    t = t[:s] + ('<div class="chrow">\n      <p>' + C['lede'] + '</p>\n      <div class="chr">\n        <dl class="chmeta">\n' +
+                 ''.join('          <div><dt class="mo">' + a + '</dt><dd>' + b + '</dd></div>\n' for a, b in C['meta']) +
+                 '        </dl>\n        <a class="b chvisit" href="' + C['sito'] + '" target="_blank" rel="noopener">Visit the website<i aria-hidden="true">↗</i></a>\n'
+                 '      </div>\n    </div>\n    ') + t[e:]
+    t = una(t, '<figure class="chcover"><em>Cover · foto del truck a un evento</em><span class="chlogo mo">Logo del cliente</span></figure>',
+            '<figure class="chcover chimg">' + C['copertina'] + '<span class="chlogo">' + C['logo'] + '</span></figure>', 'copertina')
+    s = t.find('<ol class="cfdid">'); e = t.find('</ol>', s) + len('</ol>')
+    assert s > 0 and e > s, 'cosa abbiamo fatto'
+    t = t[:s] + '<ol class="cfdid">\n' + ''.join('      ' + _li('%02d' % (i + 1), x) + '\n' for i, x in enumerate(C['fatto'])) + '    </ol>' + t[e:]
+    s = t.find('<div class="cfn" data-c="4">'); e = t.find('</div>\n    <div class="cfba">', s)
+    assert s > 0 and e > s and 'cfdraft' in t[s:e], 'numeri'
+    t = t[:s] + '<div class="cfn" data-c="' + str(len(C['numeri'])) + '">\n' + ''.join('      ' + x + '\n' for x in C['numeri']) + '    ' + t[e:]
+    s = t.find('<div class="cfba">'); e = t.find('\n    </div>', s)
+    assert s > 0 and e > s, 'prima e dopo'
+    t = t[:s] + ('<div class="cfba">\n      <div class="cfbh mo"><span></span><span class="mut">The usual way</span><span>Here</span></div>\n' +
+                 '\n'.join('      <div><span class="mo mut">' + a + '</span><p class="bf">' + b + '</p><p>' + c + '</p></div>' for a, b, c in C['righe'])) + t[e:]
+    s = t.find('<blockquote class="clq">'); e = t.find('</blockquote>', s) + len('</blockquote>')
+    assert s > 0 and e > s, 'citazione'
+    t = t[:s] + t[e:].lstrip()
+    s = t.find('<div class="clg">'); e = t.find('</div>\n  </div></section>', s)
+    assert s > 0 and e > s and 'da inviare' in t[s:e], 'galleria'
+    t = t[:s] + ('<div class="clb">\n'
+                 '      <div class="clbt" style="--bf:' + C['fonte_fam'] + '"><p lang="en">' + C['frase'] + '</p><span class="mo">' + C['font'] + '</span></div>\n'
+                 '      <ul class="clbs" aria-label="Brand colours">' +
+                 ''.join('<li style="--c:' + h + (';--t:' + tt if tt else '') + '"><b>' + n + '</b><span class="mo">' + h + '</span></li>' for n, h, tt in C['colori']) +
+                 '</ul>\n    </div>\n    <div class="clg">\n' +
+                 ''.join('      <figure class="t ' + k + '">' + m + '<figcaption class="mo">' + c + '</figcaption></figure>\n' for k, m, c in C['galleria']) +
+                 '    ') + t[e:]
+    s = t.find('<a class="cnx" href="#">'); e = t.find('<i class="arq"', s)
+    assert s > 0 and e > s, 'prossimo'
+    u, n, d = C['prossimo']
+    t = t[:s] + '<a class="cnx" href="' + u + '"><span class="mo mut">Next</span><b>' + n + '</b><span class="mo mut">' + d + '</span>' + t[e:]
+    # la demo vera: computer e telefono, Customer o Owner
+    D = C['demo']
+    s = t.find('<div class="cdh">'); e = t.find('</div>\n  </div></section>', t.find('<div class="crf"', s))
+    assert s > 0 and e > s, 'demo vecchia'
+    (lc, sc), (lo, so) = D['lati']
+    ifr = lambda v, dove, cosa: '<iframe data-v="' + v + '" title="' + cosa + ' on a ' + dove + ', demo with invented data" data-src="' + D['cartella'] + (D['cliente'] if v == 'c' else D['titolare']) + '"></iframe>'
+    t = t[:s] + ('<div class="cdh">\n'
+                 '      <div><span class="mo mut">The system</span><h2>' + D['h2'] + '</h2></div>\n'
+                 '      <p>' + D['p'] + '</p>\n'
+                 '    </div>\n'
+                 '    <div class="vd" id="vd" data-ch="' + D['ch'] + '" data-key="' + D['key'] + '" data-hint-c="' + D['hint_c'] + '" data-hint-o="' + D['hint_o'] + '" data-hint-ok="' + D['hint_ok'] + '">\n'
+                 '      <div class="vdtop">\n'
+                 '        <div class="vdsw" role="tablist" aria-label="Whose side">'
+                 '<button role="tab" aria-selected="true" data-v="c"><b>' + lc + '</b><span class="mo">' + sc + '</span></button>'
+                 '<button role="tab" aria-selected="false" data-v="o"><b>' + lo + '</b><span class="mo">' + so + '</span></button></div>\n'
+                 '        <button class="vdre" type="button"><span class="fl" aria-hidden="true"></span><i aria-hidden="true">↻</i>Start over</button>\n'
+                 '      </div>\n'
+                 '      <div class="vdst" data-v="c">\n'
+                 '        <figure class="vdl"><div class="vdscr">' + ifr('c', 'computer', sc) + ifr('o', 'computer', so) + '</div><i class="vdbase" aria-hidden="true"></i></figure>\n'
+                 '        <figure class="vdp"><div class="vdscr">' + ifr('c', 'phone', sc) + ifr('o', 'phone', so) + '</div></figure>\n'
+                 '      </div>\n'
+                 '      <p class="vdhint" aria-live="polite">' + D['hint_c'] + '</p>\n'
+                 '      <ol class="vdf">\n' + ''.join('        ' + _li('%02d' % (i + 1), b, pp) + '\n' for i, (b, pp) in enumerate(D['voci'])) +
+                 '      </ol>\n'
+                 '    ') + t[e:]
+    # il sistema e' il protagonista: sale subito dopo l'apertura, prima di "What we did"
+    s = t.find('  <!-- 3 · il sistema, acceso -->'); e = t.find('</section>', s) + len('</section>')
+    assert s > 0 and e > s, 'sezione sistema'
+    sez = t[s:e]; t = t[:s] + t[e:].lstrip('\n')
+    i = t.find('  <!-- 2 · cosa e risultati -->'); assert i > 0, 'sezione risultati'
+    t = t[:i] + sez + '\n\n' + t[i:]
+    # lo script della miniatura non serve piu': i numeri che contano e le righe che salgono stanno in progetto.js
+    s = t.find('/* pagina progetto v3: il Control Room in miniatura')
+    e = t.find('\n})();', t.find(".cfn b[data-n]", s)) + len('\n})();')
+    assert s > 0 and e > s, 'script del caso'
+    return t[:s] + t[e:]
+
 
 
 def ritocchi(nome, t):
@@ -197,88 +317,8 @@ def ritocchi(nome, t):
                 '<button type="button" role="tab" aria-selected="false"><span class="sq">03</span>Brand</button></div>'
                 '<div class="mcards">', 'tasti 05.2')
 
-    if nome == 'progetto':
-        # Vitalia's Pizza on Wheels con i materiali veri (21 ottobre). Niente numeri di serie, niente citazione.
-        # I risultati sono quelli veri dati da Eso: 42 eventi in meno di due mesi, circa A$75k (scritto A$70k+).
-        V = '/work/vitalias/'
-        t = una(t, '<a href="#" data-go="4">04 · Work</a> &nbsp;/&nbsp; No. 012</span>', '<a href="#" data-go="4">04 · Work</a></span>', 'numero in testa')
-        t = una(t, '<figure class="chcover"><em>Cover · foto del truck a un evento</em><span class="chlogo mo">Logo del cliente</span></figure>',
-                '<figure class="chcover chimg"><img src="' + V + 'cover.webp" alt="Vitalia\'s pizzas on a branded table at an event" width="1786" height="881" fetchpriority="high">'
-                '<span class="chlogo"><img src="' + V + 'logo-white.svg" alt="Vitalia\'s Pizza on Wheels logo" width="559" height="197"></span></figure>', 'copertina')
-        s = t.find('<div class="cfn" data-c="4">'); e = t.find('</div>\n    <div class="cfba">', s)
-        assert s > 0 and e > s and 'cfdraft' in t[s:e], 'numeri'
-        t = t[:s] + ('<div class="cfn" data-c="3">\n'
-                     '      <div class="lead"><b data-n="42">0</b><span>events booked in under two months, from a standing start</span></div>\n'
-                     '      <div><b data-n="70" data-p="$" data-s="k+">$0k+</b><span>in bookings (AUD), deposits paid by card</span></div>\n'
-                     '      <div><b>24/7</b><span>bookings and payments, with nobody on the phone</span></div>\n'
-                     '    ') + t[e:]
-        t = una(t, '<div class="cfbh mo"><span></span><span class="mut">Before</span><span>After</span></div>',
-                '<div class="cfbh mo"><span></span><span class="mut">The usual way</span><span>Here</span></div>', 'prima e dopo')
-        s = t.find('<blockquote class="clq">'); e = t.find('</blockquote>', s) + len('</blockquote>')
-        assert s > 0 and e > s, 'citazione'
-        t = t[:s] + t[e:].lstrip()
-        s = t.find('<div class="clg">'); e = t.find('</div>\n  </div></section>', s)
-        assert s > 0 and e > s and 'da inviare' in t[s:e], 'galleria'
-        t = t[:s] + ('<div class="clb">\n'
-                     '      <div class="clbt"><p lang="en">Your party.<em>Our pizza truck.</em></p><span class="mo">Bodoni Moda · Geist</span></div>\n'
-                     '      <ul class="clbs" aria-label="Brand colours">'
-                     '<li style="--c:#C8212A"><b>Red</b><span class="mo">#C8212A</span></li>'
-                     '<li style="--c:#8C1219"><b>Deep red</b><span class="mo">#8C1219</span></li>'
-                     '<li style="--c:#F3EBDD;--t:#1A1410"><b>Paper</b><span class="mo">#F3EBDD</span></li>'
-                     '<li style="--c:#0E0B09"><b>Charcoal</b><span class="mo">#0E0B09</span></li></ul>\n'
-                     '    </div>\n    '
-                     '<div class="clg">\n'
-                     '      <figure class="t t1"><img src="' + V + 'logo-white.svg" alt="" loading="lazy"><figcaption class="mo">Logo</figcaption></figure>\n'
-                     '      <figure class="t t2"><img src="' + V + 'site.webp" alt="The Vitalia\'s Pizza on Wheels website" loading="lazy"><figcaption class="mo">Website</figcaption></figure>\n'
-                     '      <figure class="t t3"><img src="' + V + 'flyer.webp" alt="Tiny truck, big party: the launch flyer" loading="lazy"><figcaption class="mo">Print</figcaption></figure>\n'
-                     '      <figure class="t t4"><video src="' + V + 'truck.mp4" poster="' + V + 'truck-poster.webp" muted loop playsinline preload="none" aria-label="The truck at an event"></video><figcaption class="mo">At an event</figcaption></figure>\n'
-                     '    ') + t[e:]
-        t = una(t, '<span class="mo mut">Next · No. 011</span>', '<span class="mo mut">Next</span>', 'prossimo')
-        # The system: la demo vera. Computer con la Control Room e telefono con la prenotazione, il codice del cliente
-        # che gira su dati inventati (public/demo/vitalias, montata da scripts/demo-vitalias.py). Si parlano: una
-        # prenotazione fatta sul telefono arriva sul computer. Su telefono un dispositivo alla volta, con lo switch.
-        s = t.find('<div class="cdh">'); e = t.find('</div>\n  </div></section>', t.find('<div class="crf"', s))
-        assert s > 0 and e > s, 'demo vecchia'
-        t = t[:s] + ('<div class="cdh">\n'
-                     '      <div><span class="mo mut">The system</span><h2>The truck books itself.</h2></div>\n'
-                     '      <p>The real booking site and the real Control Room, running on invented data. Book an event on the phone, pay the deposit, and watch the back office fill itself in.</p>\n'
-                     '    </div>\n'
-                     '    <div class="vd" id="vd">\n'
-                     '      <div class="vdtop">\n'
-                     '        <div class="vdsw" role="tablist" aria-label="Whose side">'
-                     '<button role="tab" aria-selected="true" data-v="c"><b>Customer</b><span class="mo">The booking site</span></button>'
-                     '<button role="tab" aria-selected="false" data-v="o"><b>Owner</b><span class="mo">The Control Room</span></button></div>\n'
-                     '        <button class="vdre" type="button"><span class="fl" aria-hidden="true"></span><i aria-hidden="true">↻</i>Start over</button>\n'
-                     '      </div>\n'
-                     '      <div class="vdst" data-v="c">\n'
-                     '        <figure class="vdl"><div class="vdscr">'
-                     '<iframe data-v="c" title="Booking site on a computer, demo" data-src="/demo/vitalias/booking.html"></iframe>'
-                     '<iframe data-v="o" title="Control Room on a computer, demo with invented bookings" data-src="/demo/vitalias/tony.html"></iframe>'
-                     '</div><i class="vdbase" aria-hidden="true"></i></figure>\n'
-                     '        <figure class="vdp"><div class="vdscr">'
-                     '<iframe data-v="c" title="Booking site on a phone, demo" data-src="/demo/vitalias/booking.html"></iframe>'
-                     '<iframe data-v="o" title="Control Room on a phone, demo" data-src="/demo/vitalias/tony.html"></iframe>'
-                     '</div></figure>\n'
-                     '      </div>\n'
-                     '      <p class="vdhint" aria-live="polite">Book an event on either screen. Then switch to Owner.</p>\n'
-                     '      <ol class="vdf">\n'
-                     '        <li><span class="mo">01</span><b>Booked and paid online.</b><p>Package, place, pizzas, date. A 30% deposit by card, day or night.</p></li>\n'
-                     '        <li><span class="mo">02</span><b>It lands by itself.</b><p>The booking appears in the Control Room the moment it is paid. Nobody types it in.</p></li>\n'
-                     '        <li><span class="mo">03</span><b>Paid without chasing.</b><p>Balance reminders and payment links go out on their own. Refunds in two clicks.</p></li>\n'
-                     '        <li><span class="mo">04</span><b>Ready for the kitchen.</b><p>Which pizzas, how many, vegan and gluten-free. One sheet per event, counted for you.</p></li>\n'
-                     '      </ol>\n'
-                     '    ') + t[e:]
-        # il sistema e' il protagonista: sale subito dopo l'apertura, prima di "What we did"
-        s = t.find('  <!-- 3 · il sistema, acceso -->'); e = t.find('</section>', s) + len('</section>')
-        assert s > 0 and e > s, 'sezione sistema'
-        sez = t[s:e]; t = t[:s] + t[e:].lstrip('\n')
-        i = t.find('  <!-- 2 · cosa e risultati -->'); assert i > 0, 'sezione risultati'
-        t = t[:i] + sez + '\n\n' + t[i:]
-        # lo script della miniatura non serve piu': i numeri che contano e le righe che salgono passano in progetto.js
-        s = t.find('/* pagina progetto v3: il Control Room in miniatura')
-        e = t.find('\n})();', t.find(".cfn b[data-n]", s)) + len('\n})();')
-        assert s > 0 and e > s, 'script del caso'
-        t = t[:s] + t[e:]
+    if nome in CASI:
+        t = caso(t, CASI[nome])
 
     if nome == 'room':
         # il back office: dalla pagina approvata di Contact resta solo la scena 5, accesa, al piano LG
@@ -570,12 +610,12 @@ def monta(nome, src):
 
     if nome == 'home':
         t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/home.css">', 'stile home')
-    if nome == 'progetto':
+    if nome in CASI:
         t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/progetto.css">', 'stile progetto')
 
     # 6. coda
     i = t.rfind('</body>')
-    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>', 'progetto': '<script src="/js/progetto.js"></script>'}.get(nome, '')
+    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>', 'progetto': '<script src="/js/progetto.js"></script>', 'ristorante': '<script src="/js/progetto.js"></script>'}.get(nome, '')
     t = t[:i] + coda + t[i:] if i > 0 else t + coda
     (OUT / f'{nome}.html').write_text(t, encoding='utf8')
     return luce

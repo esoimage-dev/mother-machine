@@ -16,7 +16,8 @@ const pages: Record<string, string> = {
   systems,
   brand,
   work,
-  'work/project': progetto,
+  'work/vitalias-pizza-on-wheels': progetto,
+  'work/project': progetto,   // il vecchio indirizzo resta per chi l'aveva gia'
   contact,
   privacy,
   lg,

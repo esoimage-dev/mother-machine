@@ -6,7 +6,7 @@
   var vd = document.getElementById('vd');
   if (vd) {
     var stage = vd.querySelector('.vdst'), frames = [].slice.call(vd.querySelectorAll('iframe'));
-    var tabs = [].slice.call(vd.querySelectorAll('.vdsw button')), hint = vd.querySelector('.vdhint'), near = !IO;
+    var tabs = [].slice.call(vd.querySelectorAll('.vdsw button')), hint = vd.querySelector('.vdhint'), near = !IO, ds = vd.dataset;
     var side = function () { return stage.getAttribute('data-v') };
     var fit = function () {
       frames.forEach(function (f) {
@@ -30,15 +30,15 @@
     var pick = function (v) {
       tabs.forEach(function (o) { o.setAttribute('aria-selected', o.dataset.v === v ? 'true' : 'false'); o.classList.remove('call') });
       stage.setAttribute('data-v', v); load();
-      say(v === 'o' ? 'The Control Room. Bookings land here by themselves.' : 'Book an event on either screen. Then switch to Owner.');
+      say(v === 'o' ? ds.hintO : ds.hintC);
     };
     tabs.forEach(function (b) { b.addEventListener('click', function () { pick(b.dataset.v) }) });
 
     /* quando una prenotazione e' pagata, il lato Owner chiama */
-    if ('BroadcastChannel' in window) new BroadcastChannel('mm-vit-demo').addEventListener('message', function (e) {
+    if ('BroadcastChannel' in window && ds.ch) new BroadcastChannel(ds.ch).addEventListener('message', function (e) {
       var w = e.data && e.data.what;
-      if ((w === 'paid' || w === 'quote') && side() === 'c') {
-        say(w === 'paid' ? 'Booked and paid. Switch to Owner: it is already in the Control Room.' : 'Quote requested. Switch to Owner: it is already in the Control Room.');
+      if ((w === 'paid' || w === 'quote' || w === 'enquiry') && side() === 'c') {
+        say(ds.hintOk);
         tabs.forEach(function (o) { o.classList.toggle('call', o.dataset.v === 'o') });
       }
     });
@@ -52,7 +52,7 @@
 
     /* ricomincia: dati inventati di nuovo, tutte le finestre */
     vd.querySelector('.vdre').addEventListener('click', function () {
-      try { localStorage.removeItem('mm-vit-demo-2') } catch (e) {}
+      try { localStorage.removeItem(ds.key) } catch (e) {}
       frames.forEach(function (f) { if (f.src) f.src = f.dataset.src });
       pick('c');
     });

@@ -131,7 +131,10 @@
   var API = {
     'site-settings': function () { return J(settings()) },
     'admin-save-settings': function (m, b) { if (m === 'GET') return J(settings()); load().settings = Object.assign(load().settings || {}, b || {}); changed('settings'); return J(settings()) },
-    'blocked-dates': function () {
+    /* nella demo il calendario pubblico resta libero: chi prova deve poter prenotare qualsiasi giorno, senza
+       inciampare nei sabati gia' pieni delle prenotazioni inventate (i giorni chiusi a mano restano chiusi) */
+    'blocked-dates': function () { var b = Object.keys(load().blocks || {}); return J({ busy: [], blocked: b, dates: b }) },
+    'blocked-dates-reale': function () {
       var counts = {}, s = load(), ok = { deposit_paid: 1, fully_paid: 1, cash: 1 }, dead = { cancelled: 1, refunded: 1 };
       s.bookings.forEach(function (r) { if (r.eventDateISO && !dead[r.paymentStatus] && (ok[r.paymentStatus] || r.source === 'admin')) counts[r.eventDateISO] = (counts[r.eventDateISO] || 0) + 1 });
       var blocked = Object.keys(s.blocks || {}), busy = [];
