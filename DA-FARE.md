@@ -19,7 +19,9 @@ Il piano di lancio in 3 giorni, con le decisioni e l'ordine, è in `docs/PIANO.m
 ## Lancio · giorno 3
 - [ ] Privacy con nome legale, ABN, indirizzo; ABN nel footer; SEO; Open Graph; doctype.
 - [ ] Controllo finale su tutte le pagine e i dispositivi; modulo e mail provati davvero.
-- [ ] Merge su `main`, dominio attivo, repository privata, Rate Limiting su `/api/porta`.
+- [ ] Lancio: in `public/_worker.js` `PRIMA_DEL_LANCIO = false` (oggi Google non indicizza), repository privata, Rate Limiting su `/api/porta`.
+- [x] Sito su `main` (21 ottobre), con il blocco per Google acceso.
+- [ ] Dominio: nameserver su Cloudflare fatti il 21 ottobre; quando e' attivo, Pages → Custom domains: mothermachine.studio e www.
 
 ## Dopo il lancio
 - [ ] Machine Room completa e Cloudflare Access.

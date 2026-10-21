@@ -62,12 +62,24 @@ async function stanza(request, env) {
   return out;
 }
 
+// Prima del lancio il sito e' online ma Google non lo mette nei risultati (studi, privacy in bozza).
+// Il giorno del lancio: false, un commit, e Google puo' indicizzare.
+const PRIMA_DEL_LANCIO = true;
+
+async function pagina(request, env) {
+  const r = await env.ASSETS.fetch(request);
+  if (!PRIMA_DEL_LANCIO) return r;
+  const out = new Response(r.body, r);
+  out.headers.set('x-robots-tag', 'noindex');
+  return out;
+}
+
 export default {
   async fetch(request, env) {
     const { pathname } = new URL(request.url);
     if (pathname === '/api/porta') return porta(request, env);
     if (pathname.startsWith('/lg/room')) return stanza(request, env);
     if (pathname === '/_worker.js') return new Response('Not found', { status: 404 });
-    return env.ASSETS.fetch(request);
+    return pagina(request, env);
   },
 };

@@ -9,6 +9,7 @@ Pacchetto del 15 ottobre 2026. Contiene tutto quello che serve per costruire mot
 - Non toccare ciò che è approvato (hero, testata, pulsantiera, cursore, vetro). Portarlo nel sito identico.
 - Tutto leggero e tecnicamente impeccabile: 60 fps, niente backdrop-filter dal vivo su aree grandi, animazioni ferme quando fuori schermo, prefers-reduced-motion rispettato.
 - Fare sempre copie prima di sovrascrivere. Nel sito vero la copia è la storia di git: un commit per ogni passo chiaro.
+- **Push raggruppati** (deciso da Eso il 21 ottobre): Cloudflare Pages gratis fa 500 build al mese e ogni push su qualsiasi branch è un build. Commit piccoli sì, ma push solo quando c'è un blocco di modifiche da vedere (non uno per commit). Su `main` si porta solo a tappe chiare, con l'ok di Eso: anche quello è un build.
 - Non esportare MP4 se non richiesto.
 
 ## Cosa c'è nel pacchetto
