@@ -69,7 +69,7 @@ span.flatpickr-weekday{background:transparent;color:#F5EFE0!important;opacity:.5
 <style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}:root{
   --f-display:'Bodoni Moda',Georgia,serif;
   --f-body:'Geist',system-ui,-apple-system,sans-serif;
-  /* ===== ACCENT (brand) — same in both themes ===== */
+  /* ===== ACCENT (brand) - same in both themes ===== */
   --red:#C8212A;
   --red-rgb:200,33,42;
   --red-dark:#8C1219;
@@ -1187,7 +1187,7 @@ body{font-family:var(--f-body);font-variation-settings:"opsz" 12;-webkit-font-sm
 
           <div class="pay-due-row" id="payDueRow">
             <span class="pay-due-label">Due today</span>
-            <span class="pay-due-amt" id="payDueAmt">—</span>
+            <span class="pay-due-amt" id="payDueAmt">-</span>
           </div>
           <div class="checkout-cta-wrap">
             <button type="submit" class="btn-checkout" id="payBtn">Secure my event date →</button>
@@ -1396,7 +1396,7 @@ let appliedDiscount = null; // { code, pct, name } once a valid code is applied
 
 // ===== Payment policy =====
 let DEPOSIT_PCT = 0.3;         // deposit share (owner-overridable via /site-settings)
-// Human label for the deposit share (e.g. "30%") — used in the checkout copy so
+// Human label for the deposit share (e.g. "30%") - used in the checkout copy so
 // every mention tracks the owner's current setting, not a hard-coded number.
 function depLabel(){ return Math.round(DEPOSIT_PCT * 100) + '%'; }
 const FULL_ONLY_WINDOW = 21;   // events within N days must be paid in full (3 weeks)
@@ -1410,7 +1410,7 @@ let SITE_BOOKINGS_PAUSED = false;
 let SITE_PAUSED_MSG = '';
 // Render the pizza-selection grid from the (possibly owner-edited) menu. The
 // static cards in the HTML are the no-JS fallback; this overwrites them with the
-// live menu. Selection logic is untouched — it still keys off .pzz-card +
+// live menu. Selection logic is untouched - it still keys off .pzz-card +
 // data-pizza, which these cards carry identically.
 function pzEscHtml(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function pzEscAttr(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
@@ -1533,7 +1533,7 @@ function enforceBookingPause(){
 // already at capacity). BUSY = one event that day: still selectable, marked
 // with a red dot, checkout locked, visitor invited to call/WhatsApp. To close
 // a date by hand, use the day switch in the admin panel (it writes to the
-// calendar-blocks store that blocked-dates.mjs reads) — NOT here — so every
+// calendar-blocks store that blocked-dates.mjs reads) - NOT here - so every
 // calendar on the site stays in sync from one place.
 const BLOCKED_DATES = [];
 const BUSY_DATES = [];
@@ -1879,7 +1879,7 @@ function updateBusyUI(info){
   let files = [];
 
   // Keep the real <input> in sync with our own `files` list, since we clear
-  // its native value below to allow re-selecting/adding more photos — without
+  // its native value below to allow re-selecting/adding more photos - without
   // this, the preview shows photos that never actually get submitted.
   window.syncPhotoInput = function(){
     const dt = new DataTransfer();
@@ -2087,7 +2087,7 @@ async function submitForm(e) {
     try {
       jsonFields.photos = await Promise.all(photoFiles.map(compressPhotoToBase64));
     } catch (err) {
-      jsonFields.photo_note = photoFiles.length + ' photo(s) attached: ' + photoFiles.map(f => f.name).join(', ') + ' — check the Netlify Forms submission for download links.';
+      jsonFields.photo_note = photoFiles.length + ' photo(s) attached: ' + photoFiles.map(f => f.name).join(', ') + ' - check the Netlify Forms submission for download links.';
     }
   }
 
@@ -2158,7 +2158,7 @@ async function submitForm(e) {
     });
 }
 
-// Custom calendar (flatpickr) — same look on every device, unavailable dates shown greyed out
+// Custom calendar (flatpickr) - same look on every device, unavailable dates shown greyed out
 (async function(){
   const onStep5 = () => document.getElementById('step5').classList.contains('active');
 
@@ -2174,7 +2174,7 @@ async function submitForm(e) {
   // Pull the live calendar state (busy = one event that day, still bookable;
   // blocked = hand-closed or already at capacity, fully unavailable). Computed
   // server-side from confirmed bookings so the calendar can never show a taken
-  // date as free. If the fetch is slow or fails the calendar still loads — it
+  // date as free. If the fetch is slow or fails the calendar still loads - it
   // just won't show today's live busy/blocked marks until the next visit.
   try {
     const controller = new AbortController();
@@ -2202,7 +2202,7 @@ async function submitForm(e) {
       onDayCreate: function(dObj, dStr, fp, dayElem){
         const d = dayElem.dateObj;
         const iso = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-        // A date at capacity is greyed out (disabled) — no dot on those; the
+        // A date at capacity is greyed out (disabled) - no dot on those; the
         // dot only means "one event, still bookable, call us".
         if(BUSY_DATES.indexOf(iso) !== -1 && BLOCKED_DATES.indexOf(iso) === -1) dayElem.insertAdjacentHTML('beforeend','<span class="busy-dot"></span>');
       }
@@ -2258,7 +2258,7 @@ window.addEventListener('scroll', () => {
     window.scrollY > 60 ? '.7rem 5vw' : '1.1rem 5vw';
 });
 
-// Scroll reveal — unified premium fade-up, fires once on enter
+// Scroll reveal - unified premium fade-up, fires once on enter
 (function(){
   const items = document.querySelectorAll('.reveal, .reveal-title');
   if(!('IntersectionObserver' in window)){
@@ -2293,7 +2293,7 @@ VITALIA_MENU.attachAddressAutocomplete('venueAddress', 'venuePostcode');
 // Show a banner if the customer cancelled out of Stripe Checkout (success
 // goes to the dedicated confirmed.html page instead, not back here). If we
 // have their booking saved in sessionStorage, show a proper retry screen
-// instead of dumping them back into an empty step-1 wizard — the booking +
+// instead of dumping them back into an empty step-1 wizard - the booking +
 // its guaranteed notification already happened, only the payment didn't.
 (function(){
   var payment = new URLSearchParams(location.search).get('payment');
@@ -2316,7 +2316,7 @@ VITALIA_MENU.attachAddressAutocomplete('venueAddress', 'venuePostcode');
     return;
   }
 
-  // Don't send them back through the marketing hero + an empty wizard — that
+  // Don't send them back through the marketing hero + an empty wizard - that
   // reads like "start over". Hide the hero and the (now-reset) wizard card,
   // and show a focused "payment not completed" screen with the exact event
   // they were paying for and a one-tap retry that reuses the saved payload.

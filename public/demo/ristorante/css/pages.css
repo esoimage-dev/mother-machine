@@ -1,0 +1,311 @@
+/* =====================================================================
+   Vitalia's sub-pages, 2026 redesign. Loaded after site.css on the pages
+   that have been rebuilt (menus, our story, find us, career, vouchers, book,
+   thank you, 404 and the two legal pages), never on the home or functions.
+   Same language as the home: big condensed Bricolage, Newsreader italic for
+   the one warm sentence, paper and laguna, red only as a spark.
+   ===================================================================== */
+.pg{--sand:#F3E9D6;--sand-rgb:243,233,214}
+.pg img{height:auto}
+.pg p,.pg li{text-wrap:pretty}
+
+/* ---------- Shared type ---------- */
+.p-title{font-family:var(--font-display);font-size:clamp(3.3rem,10.5vw,8.6rem);font-weight:800;font-stretch:75%;letter-spacing:-.035em;word-spacing:.08em;line-height:.86;color:var(--ink);text-wrap:balance;margin:0}
+.p-title em{font-style:normal;color:var(--green)}
+.p-big{font-size:clamp(2.6rem,6.6vw,5.6rem);font-weight:800;font-stretch:75%;letter-spacing:-.032em;word-spacing:.07em;line-height:.9;text-wrap:balance}
+.p-mid{font-size:clamp(1.9rem,3.8vw,3.1rem);font-weight:750;font-stretch:76%;letter-spacing:-.028em;word-spacing:.05em;line-height:.95;text-wrap:balance}
+.p-voice{font-family:var(--font-voice);font-style:italic;font-weight:400;font-size:clamp(1.22rem,1.9vw,1.6rem);line-height:1.28;color:var(--ink);max-width:32ch;margin-top:clamp(.9rem,1.6vw,1.3rem)}
+.p-body{font-size:1.06rem;line-height:1.62;color:#3d4a43;max-width:58ch}
+.p-body+.p-body{margin-top:.9rem}
+.p-link{display:inline-flex;align-items:center;min-height:44px;font-weight:600;color:var(--ink);background:linear-gradient(currentColor,currentColor) 0 calc(100% - 10px)/100% 2px no-repeat;transition:background-size .35s var(--ease),color .2s}
+.p-link:hover{background-size:40% 2px;color:var(--green)}
+.p-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:clamp(1.4rem,2.6vw,2rem)}
+.pg .btn{min-height:48px;justify-content:center}
+.pg :focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.pg .btn-primary{box-shadow:none}
+
+/* ---------- The opening: one per page, never the old green banner ---------- */
+.p-open{background:var(--paper);padding-block:clamp(2rem,5.5vw,4.4rem) clamp(2.2rem,5vw,4rem)}
+.p-open-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1.6rem,4vw,3.4rem);align-items:end}
+.p-open-media{margin:0;position:relative}
+.p-open-media img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;background:var(--surface-2)}
+.p-open-side{display:flex;flex-direction:column;gap:.9rem}
+@media (min-width:900px){
+  .p-open-grid.has-media{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
+  .p-open-media img{aspect-ratio:3/2;max-height:min(50vh,440px)}
+  .p-one .p-open-media img{aspect-ratio:4/5;max-height:min(68vh,600px)}
+}
+
+/* A rule between chapters instead of a box around each one */
+.p-sec{padding-block:clamp(3.4rem,7vw,6rem)}
+.p-sec+.p-sec{border-top:1px solid var(--line)}
+.p-sec-tight{padding-block:clamp(2.4rem,5vw,4rem)}
+.p-dark{background:var(--laguna);color:var(--sand)}
+.p-dark .p-body{color:rgba(var(--sand-rgb),.82)}
+.p-dark .p-link{color:var(--sand)}
+
+/* =====================================================================
+   GIFT VOUCHERS: one screen to buy, a line on how, the small print, done.
+   ===================================================================== */
+.vc2{padding-block:clamp(1.6rem,4.5vw,3.6rem) clamp(2.4rem,5vw,4rem)}
+.vc2-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:1.6rem;grid-template-areas:"head" "stage" "ctrl"}
+.vc2-head{grid-area:head}
+.vc2-stage{grid-area:stage}
+.vc2-ctrl{grid-area:ctrl}
+.vc2 .p-title{font-size:clamp(3rem,13vw,6.6rem)}
+.vc2 .p-title span{display:block;color:var(--green)}
+
+.vc2-stage{position:relative;perspective:1100px;padding-bottom:clamp(4.2rem,20vw,6rem)}
+.vc2-photo{margin:0;width:88%;margin-left:auto;border-radius:6px;overflow:hidden;background:var(--surface-2)}
+.vc2-photo img{width:100%;aspect-ratio:4/3;object-fit:cover;object-position:50% 62%;display:block}
+.vc2 .vc-card{position:absolute;left:0;bottom:0;width:min(78%,400px);animation:none}
+.vc2 .vc-card-face{border-radius:14px;box-shadow:0 30px 50px -24px rgba(10,20,14,.75),0 0 0 1px rgba(0,0,0,.25),0 2px 0 rgba(255,255,255,.12) inset}
+.vc2 .vc-card-face::before{border-radius:8px}
+.vc2 .vc-card-label,.vc2 .vc-card-bot{font-family:var(--font-display);font-stretch:85%;letter-spacing:.14em;font-weight:600}
+.vc2 .vc-card-kind{font-family:var(--font-display);font-stretch:85%;letter-spacing:.1em}
+.vc2 .vc-card-amount{font-family:var(--font-display);font-weight:800;font-stretch:75%;letter-spacing:-.02em;font-size:clamp(3rem,10vw,4.6rem);font-variant-numeric:tabular-nums;line-height:.9}
+.vc2 .vc-card-amount.is-swap{animation:none}
+.vc2 .vc-card.is-roll .vc-shine{animation:vc2Sheen .9s var(--ease) 1}
+@keyframes vc2Sheen{from{left:-45%}to{left:130%}}
+
+.vc2-pick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.5rem}
+.vc2-pick .vc-amt{all:unset;box-sizing:border-box;cursor:pointer;display:grid;place-items:center;min-height:56px;border:1.5px solid rgba(var(--ink-rgb),.2);border-radius:var(--btn-r);
+  font-family:var(--font-display);font-weight:750;font-stretch:76%;font-size:clamp(1.35rem,4.4vw,1.75rem);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink);transition:background .2s,color .2s,border-color .2s,transform .2s var(--ease)}
+.vc2-pick .vc-amt:hover{border-color:var(--ink)}
+.vc2-pick .vc-amt:active{transform:scale(.97)}
+.vc2-pick .vc-amt:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.vc2-pick .vc-amt[aria-checked="true"]{background:var(--laguna);border-color:var(--laguna);color:var(--sand)}
+.vc2-what{margin-top:1rem;min-height:3.3em;font-size:1.02rem;line-height:1.55;color:#3d4a43;max-width:44ch}
+.vc2-what strong{color:var(--ink);font-weight:650}
+.vc2-buy{margin-top:1.2rem;display:flex;flex-direction:column;align-items:flex-start;gap:.8rem}
+.vc2-buy .btn{width:100%;font-size:1.06rem}
+.vc2-trust{font-size:.9rem;color:var(--muted);line-height:1.5}
+.vc2-trust b{color:var(--ink);font-weight:600}
+
+@media (min-width:900px){
+  .vc2 .p-title{font-size:clamp(3.6rem,5.6vw,5.4rem)}
+  .vc2-grid{grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);grid-template-areas:"head stage" "ctrl stage";column-gap:clamp(2.4rem,5vw,5rem);row-gap:1.6rem;align-items:start}
+  .vc2-stage{align-self:center;padding-bottom:4.6rem}
+  .vc2-photo{width:86%}
+  .vc2-photo img{aspect-ratio:5/6;max-height:min(66vh,580px)}
+  .vc2-ctrl{align-self:end}
+  .vc2-buy{flex-direction:row;align-items:center;gap:1.2rem}
+  .vc2-buy .btn{width:auto;flex-shrink:0}
+}
+
+/* How it works, as one line */
+.vc2-steps{list-style:none;margin:0;padding:clamp(1.4rem,3vw,2rem) 0;display:grid;grid-template-columns:minmax(0,1fr);gap:.9rem;border-block:1px solid var(--line);counter-reset:st}
+.vc2-steps li{display:flex;align-items:baseline;gap:.8rem;font-size:1.02rem;line-height:1.45;color:#3d4a43}
+.vc2-steps li::before{counter-increment:st;content:counter(st);font-family:var(--font-display);font-weight:800;font-stretch:75%;font-size:2.1rem;line-height:.8;color:var(--green);min-width:1.1ch}
+.vc2-steps b{color:var(--ink);font-weight:650}
+@media (min-width:900px){.vc2-steps{grid-template-columns:repeat(3,minmax(0,1fr));gap:2rem}}
+
+/* The small print: a short list, not an accordion */
+.vc2-small{padding-block:clamp(2.6rem,5vw,4rem) clamp(1rem,2vw,1.6rem)}
+.vc2-small-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:1.6rem 3rem;margin-top:clamp(1.4rem,3vw,2.2rem)}
+.vc2-small dt{font-weight:650;color:var(--ink);font-size:1rem}
+.vc2-small dd{margin:.25rem 0 0;font-size:.96rem;line-height:1.58;color:var(--muted);max-width:46ch}
+.vc2-small-note{margin-top:clamp(1.6rem,3vw,2.2rem);font-size:.96rem;color:var(--muted)}
+.vc2-small-note a{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding-block:.6rem}
+@media (min-width:760px){.vc2-small-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.vc2-close{padding-block:clamp(2rem,4vw,3rem) clamp(2.6rem,5vw,4rem)}
+.vc2-close-row{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:1.4rem 3rem;padding-top:clamp(1.6rem,3vw,2.4rem);background:linear-gradient(var(--ink),var(--ink)) var(--pad) 0/calc(100% - 2 * var(--pad)) 1px no-repeat}
+.vc2-close .p-mid{max-width:18ch}
+
+/* =====================================================================
+   MENUS: the book starts under a short opening, no cover, real buttons after.
+   ===================================================================== */
+.mn-open{padding-block:clamp(1.4rem,3.4vw,2.6rem) 0}
+.mn-head{display:grid;grid-template-columns:minmax(0,1fr);gap:.4rem 2rem;align-items:end}
+.mn-head .p-title{font-size:clamp(3.2rem,9vw,6.4rem)}
+.mn-head .p-voice{margin-top:.5rem;font-size:clamp(1.12rem,1.6vw,1.38rem)}
+.pg .menu-langs{display:inline-flex;gap:0;background:none;border:1.5px solid rgba(var(--ink-rgb),.18);border-radius:var(--btn-r);padding:3px;margin:0;justify-self:start}
+.pg .menu-lang{min-height:44px;min-width:64px;padding:0 1rem;border-radius:5px;font-family:var(--font-display);font-stretch:85%;text-transform:none;letter-spacing:0;font-size:.98rem;font-weight:600;color:var(--ink)}
+.pg .menu-lang.active{background:var(--laguna);color:var(--sand)}
+.pg .menu-lang:not(.active):hover{background:var(--surface-2)}
+@media (min-width:900px){
+  .mn-head{grid-template-columns:minmax(0,1fr) auto}
+  .mn-head .menu-langs{grid-column:2;grid-row:1/3;align-self:end;justify-self:end}
+}
+
+.mn-book{padding-block:clamp(1.2rem,2.6vw,1.8rem) clamp(3rem,6vw,4.6rem)}
+.mn-bar{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:.4rem 2rem;border-bottom:1px solid var(--line)}
+.pg .menu-tabs{display:flex;flex-wrap:nowrap;gap:clamp(.2rem,1.4vw,1.4rem);margin:0 calc(-1 * var(--pad));padding:0 var(--pad);overflow-x:auto;scrollbar-width:none;justify-content:flex-start;max-width:100vw}
+.pg .menu-tabs::-webkit-scrollbar{display:none}
+.pg .menu-tab{flex-shrink:0;min-height:48px;padding:0 .35rem;border:0;border-radius:0;background:none;font-family:var(--font-display);font-stretch:78%;text-transform:none;letter-spacing:-.01em;font-weight:700;font-size:clamp(1.18rem,2vw,1.5rem);color:var(--muted);box-shadow:inset 0 -3px 0 transparent;transition:color .2s,box-shadow .25s}
+.pg .menu-tab:hover{color:var(--ink);background:none}
+.pg .menu-tab.active{color:var(--ink);background:none;box-shadow:inset 0 -3px 0 var(--red)}
+.mb-dedication{font-family:var(--font-voice);font-style:italic;font-size:.98rem;line-height:1.4;color:var(--muted);padding:.5rem 0 .7rem;max-width:52ch}
+@media (min-width:900px){
+  .pg .menu-tabs{margin:0;padding:0;max-width:none}
+  .mb-dedication{text-align:right;max-width:40ch}
+}
+
+.pg .mbook{margin-top:clamp(.9rem,2vw,1.3rem);border-radius:10px;box-shadow:0 22px 44px -34px rgba(28,36,32,.45)}
+.pg .mbook-title{font-family:var(--font-display);font-stretch:85%;letter-spacing:.08em;font-size:.92rem}
+.pg .mbook-tool{min-height:44px;border-radius:var(--btn-r);padding:0 .95rem}
+.pg .mbook-stage{height:clamp(420px,calc(100svh - 230px),900px)}
+/* the arrows live in the foot bar now, beside the page dots, so nothing floats over the dishes */
+.pg .mbook-foot{justify-content:space-between;padding:.5rem clamp(.5rem,2vw,1rem)}
+.pg .mbook-foot .mbook-nav{position:static;transform:none;width:48px;height:48px;box-shadow:none;background:transparent;border:1.5px solid var(--line);display:grid}
+.pg .mbook-foot .mbook-nav:hover:not(:disabled){transform:none;background:var(--laguna);border-color:var(--laguna);color:#fff}
+.pg .mbook-foot .mbook-nav:disabled{opacity:.3;pointer-events:none}
+.pg .mbook-dots{gap:0;flex-wrap:wrap;justify-content:center}
+.pg .mb-dot{width:44px;height:44px;border-radius:0;background:none;display:grid;place-items:center}
+.pg .mb-dot::before{content:'';width:9px;height:9px;border-radius:50%;background:rgba(28,36,32,.25);transition:width .25s,background .25s}
+.pg .mb-dot.is-on{width:44px;background:none}
+.pg .mb-dot.is-on::before{width:24px;border-radius:999px;background:var(--green)}
+.pg .mb-dot:hover::before{background:rgba(28,36,32,.5)}
+.mb-count{display:none;font-variant-numeric:tabular-nums;font-size:1rem;font-weight:600;color:var(--ink);min-width:4rem;text-align:center}
+@media (max-width:640px){.pg .mbook-dots{display:none}.mb-count{display:block}}
+/* "keep scrolling" sits in the corner, off the dish names */
+.pg .mb-scroll-hint{left:auto;right:.4rem;bottom:.6rem;transform:none;width:30px;height:30px;animation:none}
+@media (max-width:900px){.pg .mbook-foot .mbook-nav{display:grid}}
+
+.mn-cta{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:clamp(1.4rem,3vw,2rem)}
+
+/* Also at Vitalia's: the deli and the house wine, side by side */
+.mn-also{background:var(--surface-2);padding-block:clamp(3.2rem,6.5vw,5.4rem)}
+.mn-also-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1rem,2vw,1.4rem);margin-top:clamp(1.6rem,3.4vw,2.6rem)}
+.mn-tile{display:grid;grid-template-columns:minmax(0,1fr);border-radius:10px;overflow:hidden;background:var(--paper)}
+.mn-tile figure{margin:0;background:#e9e2d4}
+.mn-tile img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.mn-tile-copy{padding:clamp(1.3rem,3vw,2rem);display:flex;flex-direction:column;gap:.6rem}
+.mn-tile h3{font-size:clamp(1.7rem,3vw,2.4rem);font-weight:750;font-stretch:76%;letter-spacing:-.03em;line-height:.95}
+.mn-tile p{color:#3d4a43;font-size:1rem;line-height:1.58;max-width:42ch}
+.mn-tile-deli{background:var(--laguna);color:var(--sand)}
+.mn-tile-deli h3{color:var(--sand)}
+.mn-tile-deli p{color:rgba(var(--sand-rgb),.82)}
+.mn-tile-deli .p-link{color:var(--sand);align-self:flex-start}
+.mn-tile-deli .mn-tile-copy{justify-content:flex-end;min-height:100%}
+.mn-tile-deli .mn-tile-word{font-family:var(--font-voice);font-style:italic;font-size:clamp(3rem,7vw,5.4rem);line-height:.9;color:rgba(var(--sand-rgb),.18);margin-bottom:auto;letter-spacing:-.02em}
+@media (min-width:760px){
+  .mn-also-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)}
+  .mn-tile-wine{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+  .mn-tile-wine img{height:100%;aspect-ratio:auto;min-height:320px}
+}
+
+/* =====================================================================
+   OUR STORY: the mosaic, then her, then everything that followed.
+   ===================================================================== */
+.story .hero-mosaic-line{font-family:var(--font-voice);font-style:italic;font-size:clamp(1.25rem,2.2vw,1.75rem);line-height:1.3;max-width:28ch}
+.story .scroll-cue{font-family:var(--font-display);font-stretch:85%;letter-spacing:.12em;font-size:.72rem;min-height:44px;justify-content:flex-end}
+.st-her{padding-block:clamp(3rem,6vw,4.6rem)}
+.st-her-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1.8rem,4vw,4rem);align-items:center}
+.st-her-photo{margin:0;max-width:340px}
+.st-her-photo img{width:100%;aspect-ratio:497/625;object-fit:cover;border-radius:6px;filter:grayscale(1)}
+.st-kicker{font-family:var(--font-voice);font-style:italic;font-size:clamp(1.15rem,1.7vw,1.4rem);color:var(--muted);margin-bottom:.7rem}
+.st-her .p-big{margin-bottom:clamp(1.2rem,2.4vw,1.8rem)}
+@media (min-width:900px){.st-her-grid{grid-template-columns:minmax(0,.62fr) minmax(0,1.38fr)}}
+
+/* her sentence, as large as the page allows */
+.st-quote{background:var(--laguna);color:var(--sand);padding-block:clamp(3rem,6.5vw,5rem)}
+.st-quote blockquote{font-family:var(--font-voice);font-style:italic;font-weight:400;font-size:clamp(2rem,4.8vw,4rem);line-height:1.08;letter-spacing:-.02em;max-width:26ch;text-wrap:balance}
+.st-quote blockquote::before{content:'\201C';color:var(--red);margin-left:-.42em;padding-right:.04em}
+.st-quote cite{display:block;margin-top:1.4rem;font-style:normal;font-size:.98rem;color:rgba(var(--sand-rgb),.7)}
+
+/* the years, as numbers you can read across the page */
+.st-years{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);border-top:1px solid var(--ink)}
+.st-years li{display:grid;grid-template-columns:5.4rem minmax(0,1fr);gap:1rem;align-items:baseline;padding:1rem 0;border-bottom:1px solid var(--line)}
+.st-years b{font-family:var(--font-display);font-weight:800;font-stretch:75%;font-size:clamp(2.2rem,4vw,3.4rem);letter-spacing:-.03em;line-height:.9;color:var(--green);font-variant-numeric:tabular-nums}
+.st-years span{font-size:1rem;line-height:1.5;color:#3d4a43}
+@media (min-width:900px){
+  .st-years{grid-template-columns:repeat(5,minmax(0,1fr));border-top:0}
+  .st-years li{grid-template-columns:1fr;align-items:start;align-content:start;gap:.6rem;padding:1.2rem 1.4rem 0 0;border-bottom:0;border-top:1px solid var(--ink)}
+  .st-years li+li{padding-left:1.2rem;border-left:1px solid var(--line)}
+}
+
+.st-family-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1.8rem,4vw,4rem);align-items:center;margin-top:clamp(3rem,6vw,5rem)}
+.st-family-grid figure{margin:0}
+.st-family-grid img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:50% 30%;border-radius:6px}
+@media (min-width:900px){.st-family-grid{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}}
+
+/* the book: no card around it, just the object and the words */
+.story .book-row{background:none;border:0;box-shadow:none;border-radius:0;padding:0}
+.story .book-row h3{font-size:clamp(2.2rem,4.6vw,3.6rem);font-weight:800;font-stretch:75%;letter-spacing:-.03em;line-height:.9}
+.story .book-orig{font-family:var(--font-voice);font-size:1.2rem;margin-top:.4rem}
+.story .book-note{font-size:.88rem}
+.st-cause{display:flex;flex-direction:column;align-items:flex-start;gap:1.4rem}
+.st-cause .p-mid{max-width:16ch;color:var(--sand)}
+.st-cause .p-body{margin-top:1rem;max-width:52ch}
+@media (max-width:700px){.story .book-row{text-align:left;justify-items:start}.story .book-stage{width:min(240px,70vw);padding:1rem 0 0}.story .book-buys{justify-content:flex-start}.story .book-quote{display:none}}
+
+/* =====================================================================
+   FIND US
+   ===================================================================== */
+.fu-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1.8rem,4vw,3.4rem);align-items:stretch}
+.fu-addr{font-family:var(--font-display);font-weight:750;font-stretch:76%;letter-spacing:-.025em;line-height:1;font-size:clamp(1.9rem,3.4vw,2.7rem)}
+.fu-addr small{display:block;margin-top:.4rem;font-family:var(--font-body);font-stretch:100%;font-weight:400;letter-spacing:0;font-size:1.02rem;line-height:1.5;color:var(--muted)}
+.fu-facts{list-style:none;margin:clamp(1.4rem,3vw,2rem) 0 0;padding:0;border-top:1px solid var(--ink)}
+.fu-facts li{display:grid;grid-template-columns:6.5rem minmax(0,1fr);gap:1rem;align-items:baseline;padding:.85rem 0;border-bottom:1px solid var(--line);font-size:1.02rem}
+.fu-facts span:first-child{color:var(--muted);font-size:.95rem}
+.fu-facts a{font-weight:600;display:inline-block;padding-block:.35rem}
+.fu-open{display:inline-flex;align-items:center;gap:.5rem}
+.fu-open::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0}
+.fu-open.is-open::before{background:#2FA35B;box-shadow:0 0 0 4px rgba(47,163,91,.16)}
+.fu-actions{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:clamp(1.4rem,3vw,2rem);max-width:460px}
+.fu-note{margin-top:1.1rem;font-size:.95rem;color:var(--muted)}
+.pg .vmap-wrap{position:relative;min-height:420px;border-radius:10px;overflow:hidden;background:#E9E5DC;box-shadow:none;isolation:isolate}
+.pg .vmap-open{min-height:44px}
+.pg .vmap-zoom button{width:44px;height:44px}
+@media (min-width:900px){
+  .fu-grid{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}
+  .pg .vmap-wrap{min-height:540px}
+}
+
+/* =====================================================================
+   CAREER
+   ===================================================================== */
+.cr-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(2rem,4vw,3.6rem);align-items:start}
+.cr-perks{list-style:none;margin:1.2rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:.3rem 1.4rem;font-size:1rem;color:var(--ink)}
+.cr-perks li{display:inline-flex;align-items:center;gap:.5rem}
+.cr-perks li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--red)}
+.pg .positions-box{margin-top:clamp(1.6rem,3vw,2.2rem);border-radius:10px;box-shadow:none}
+.pg .form-card{border-radius:10px;box-shadow:0 22px 44px -34px rgba(28,36,32,.45)}
+.pg .apply-tile{min-height:64px}
+.pg .form-back{min-height:44px}
+.cr-ask{margin-top:1.4rem;font-size:.98rem;color:var(--muted)}
+.cr-ask a{color:var(--ink);font-weight:600;display:inline-block;padding-block:.6rem}
+@media (min-width:960px){.cr-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}}
+
+/* =====================================================================
+   BOOK, THANK YOU, 404: one screen each
+   ===================================================================== */
+.p-one{min-height:calc(100svh - 80px);display:flex;align-items:center}
+.p-one .p-open-grid{width:100%}
+.p-one .p-body{margin-top:1.2rem}
+.p-quick{list-style:none;margin:clamp(1.6rem,3vw,2.2rem) 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--ink);max-width:560px}
+.p-quick a{display:flex;align-items:center;justify-content:space-between;min-height:56px;padding:.4rem 0;border-bottom:1px solid var(--line);font-family:var(--font-display);font-weight:700;font-stretch:78%;font-size:1.35rem;letter-spacing:-.015em;transition:color .2s}
+.p-quick li:nth-child(odd) a{margin-right:1.2rem}
+.p-quick a:hover{color:var(--green)}
+.p-small{margin-top:1.2rem;font-size:.95rem;color:var(--muted)}
+.p-small a{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding-block:.6rem}
+#tyText a{color:var(--green);font-weight:600}
+@media (max-width:899px){.p-one{min-height:0}.p-one .p-open-media{order:-1}.p-one .p-open-media img{aspect-ratio:16/10}}
+
+/* =====================================================================
+   LEGAL: document type, not marketing headlines
+   ===================================================================== */
+.lg-open{padding-block:clamp(2rem,5vw,3.6rem) clamp(1.4rem,3vw,2.2rem);border-bottom:1px solid var(--line)}
+.lg-open .p-title{font-size:clamp(2.8rem,7vw,5.2rem)}
+.lg-date{margin-top:.9rem;font-size:.95rem;color:var(--muted)}
+.lg-body{max-width:680px;padding-block:clamp(2rem,5vw,3.4rem) clamp(3rem,6vw,4.6rem)}
+.lg-body h2{font-family:var(--font-display);font-size:1.4rem;font-weight:700;font-stretch:90%;letter-spacing:-.01em;line-height:1.25;margin:2.2rem 0 .6rem;scroll-margin-top:100px}
+.lg-body p{margin-bottom:1rem;color:#3d4a43;line-height:1.68}
+.lg-body a{color:var(--green);text-decoration:underline;text-underline-offset:3px}
+.lg-toc{list-style:none;margin:0 0 1.6rem;padding:1rem 0;border-block:1px solid var(--line);display:flex;flex-wrap:wrap;gap:.1rem 1.4rem}
+.lg-toc a{display:inline-block;padding-block:.55rem;color:var(--ink);font-weight:500;text-decoration:none}
+.lg-toc a:hover{color:var(--green)}
+
+/* ---------- Floaters stay off the finale and the footer ---------- */
+.fab-book.is-on.is-quiet{opacity:0;visibility:hidden}
+
+@media (prefers-reduced-motion:reduce){
+  .vc2 .vc-card.is-roll .vc-shine{animation:none}
+  .pg .menu-tab,.vc2-pick .vc-amt{transition:none}
+}
+
+/* Japanese and Chinese never get a fake italic: the voice lines switch to a real CJK face */
+.pg .p-voice:lang(ja),.pg .mb-dedication:lang(ja){font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",var(--font-body);font-style:normal;font-size:1.05rem;line-height:1.6}
+.pg .p-voice:lang(zh),.pg .mb-dedication:lang(zh){font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",var(--font-body);font-style:normal;font-size:1.05rem;line-height:1.6}

@@ -1,0 +1,4785 @@
+<!doctype html>
+<html lang="en"><head>
+<meta name="robots" content="noindex"><script src="demo-api.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Print the menu &middot; Vitalia's</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/print-menu.css?v=6d0b7305">
+<style id="pmPage">@page{size:A4 landscape;margin:0}</style>
+</head>
+<body>
+<header class="pm-top">
+  <a class="pm-back" href="tony.html" aria-label="Back to the backoffice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg><span>Backoffice</span></a>
+  <div class="pm-title-ui"><b>Print menus</b><span id="pmSub">Dinner &middot; English &middot; A5 booklet on A4</span></div>
+  <div class="pm-tools">
+    <div class="pm-views" id="pmViews">
+      <button type="button" class="pm-view-main" data-view="sheets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9V3.6h11V9"/><rect x="3" y="9" width="18" height="7.5" rx="2"/><path d="M6.5 14h11v6.4h-11z"/></svg><span>Print sheets</span></button>
+      <button type="button" class="pm-view-more" id="pmViewMore" aria-haspopup="menu" aria-expanded="false"><span class="pm-view-alt" id="pmViewAlt">More views</span><svg class="pm-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="pm-menu pm-menu-left" id="pmViewMenu" role="menu" hidden>
+        <p class="pm-menu-h">See it another way</p>
+        <button type="button" role="menuitem" data-view="sheets" class="has-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9V3.6h11V9"/><rect x="3" y="9" width="18" height="7.5" rx="2"/><path d="M6.5 14h11v6.4h-11z"/></svg><b>Print sheets</b><small>The A4 sheets exactly as they come out of the printer.</small><i class="pm-tick">&#10003;</i></button>
+        <button type="button" role="menuitem" data-view="pages" class="has-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg><b>Pages</b><small>Every A5 page on its own, cover first.</small><i class="pm-tick">&#10003;</i></button>
+        <button type="button" role="menuitem" data-view="spreads" class="has-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12.5" rx="2"/><path d="M12 4v12.5M8.5 20.5h7M12 16.5v4"/></svg><b>Booklet</b><small>Open like the real menu, two pages side by side.</small><i class="pm-tick">&#10003;</i></button>
+      </div>
+    </div>
+    <label class="pm-switch"><input type="checkbox" id="pmGuides" checked> Guides</label>
+  </div>
+  <div class="pm-print" id="pmPrint">
+    <button type="button" class="pm-btn pm-main" id="pmPdfSheets" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9V3.6h11V9"/><rect x="3" y="9" width="18" height="7.5" rx="2"/><path d="M6.5 14h11v6.4h-11z"/></svg><span class="pm-main-t"><b>Print or save PDF</b><small id="pmMainSub">A4 sheets for the print shop</small></span></button>
+    <button type="button" class="pm-btn pm-more" id="pmMore" aria-haspopup="menu" aria-expanded="false" aria-label="Other formats" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+    <div class="pm-menu" id="pmMenu" role="menu" hidden>
+      <p class="pm-menu-h">Choose a format</p>
+      <button type="button" role="menuitem" data-print="sheets" class="has-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9V3.6h11V9"/><rect x="3" y="9" width="18" height="7.5" rx="2"/><path d="M6.5 14h11v6.4h-11z"/></svg><b>A4 sheets for the print shop</b><small>The usual one. Folded and nested, the pages fall in order.</small><i class="pm-tick">&#10003;</i></button>
+      <button type="button" role="menuitem" data-print="pages" class="has-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg><b>A5 pages in reading order</b><small>One page per sheet, cover first. To email, read on screen or proofread.</small></button>
+    </div>
+  </div>
+</header>
+<div class="pm-body">
+  <aside class="pm-side">
+    <div class="pm-pick">
+      <p class="pm-pick-h">Menu</p>
+      <div class="pm-chips" id="pmMenus" role="radiogroup" aria-label="Menu">
+        <button type="button" class="on" role="radio" aria-checked="true" data-menu="dinner">Dinner</button>
+        <button type="button" role="radio" aria-checked="false" data-menu="lunch">Lunch</button>
+        <button type="button" role="radio" aria-checked="false" data-menu="drinks">Drinks</button>
+        <button type="button" role="radio" aria-checked="false" disabled>Focacce<i>soon</i></button>
+      </div>
+      <p class="pm-pick-h">Outdoor boards</p>
+      <div class="pm-chips" id="pmBoards" role="radiogroup" aria-label="Outdoor boards">
+        <button type="button" role="radio" aria-checked="false" data-menu="board-dinner">Dinner · A2</button>
+        <button type="button" role="radio" aria-checked="false" data-menu="board-lunch">Lunch · 73×39.5</button>
+      </div>
+      <p class="pm-pick-h">Language</p>
+      <div class="pm-chips" id="pmLangs" role="radiogroup" aria-label="Language">
+        <button type="button" class="on" role="radio" aria-checked="true" data-lang="en">English</button>
+        <button type="button" role="radio" aria-checked="false" data-lang="zh" lang="zh">中文</button>
+        <button type="button" role="radio" aria-checked="false" data-lang="ja" lang="ja">日本語</button>
+      </div>
+    </div>
+    <div id="pmDraft"></div>
+    <div class="pm-state" id="pmState"><b>Laying out&hellip;</b><span>Measuring every line.</span></div>
+    <h3>Pages</h3>
+    <ul class="pm-list" id="pmList"></ul>
+    <div class="pm-shop" id="pmShop" hidden>
+      <p class="pm-pick-h">For the print shop</p>
+      <p class="pm-shop-t" id="pmShopText"></p>
+      <button type="button" class="pm-btn ghost pm-shop-copy" id="pmShopCopy">Copy the message</button>
+    </div>
+    <details class="pm-help" open>
+      <summary>How to print</summary>
+      <p class="pm-howto"><b>Print or save PDF</b> opens the print window with the A4 sheets. Save it as a PDF for the print shop, or print it straight away.</p>
+      <p class="pm-howto"><b>In the print window or at the shop:</b> A4, <b>double-sided, flip on the short edge</b>, scale 100%, no margins. Fold each sheet in half and <span id="pmNest">nest sheet 2 inside sheet 1</span>.</p>
+      <p class="pm-howto"><b>Guides</b> show the area dishes must stay in, the price column, the last line, and dashed spaces where another dish would still fit. They never print.</p>
+    </details>
+  </aside>
+  <main class="pm-canvas"><div class="pm-pages" id="pmPages"><p class="pm-loading">Laying out the booklet&hellip;</p></div></main>
+</div>
+<div class="pm-tip" id="pmTip" hidden>
+  <div class="pm-tip-card" role="dialog" aria-modal="true" aria-labelledby="pmTipH">
+    <h2 id="pmTipH">In the print window</h2>
+    <ol>
+      <li><b>Destination:</b> Save as PDF for the print shop, or your printer</li>
+      <li><b>Paper:</b> A4, landscape</li>
+      <li><b>Two-sided:</b> on, flip on the short edge</li>
+      <li><b>Scale:</b> 100% (default), margins none</li>
+    </ol>
+    <label class="pm-tip-skip"><input type="checkbox" id="pmTipSkip"> Don&rsquo;t show this again</label>
+    <div class="pm-tip-act">
+      <button type="button" class="pm-btn ghost" id="pmTipNo">Cancel</button>
+      <button type="button" class="pm-btn" id="pmTipGo">Open print window</button>
+    </div>
+  </div>
+</div>
+<script id="menuData-dinner" type="application/json">{
+  "id": "dinner",
+  "hours": {
+    "lunch": "11:00am - 4:30pm",
+    "dinner": "4:30pm - 9:00pm"
+  },
+  "title": {
+    "en": "Dinner",
+    "zh": "晚餐",
+    "ja": "ディナー"
+  },
+  "legend": [
+    {
+      "code": "V",
+      "en": "Vegetarian",
+      "zh": "素食",
+      "ja": "ベジタリアン"
+    },
+    {
+      "code": "VG",
+      "en": "Vegan",
+      "zh": "纯素",
+      "ja": "ヴィーガン"
+    },
+    {
+      "code": "GF",
+      "en": "Gluten Free",
+      "zh": "无麸质",
+      "ja": "グルテンフリー"
+    },
+    {
+      "code": "DF",
+      "en": "Dairy Free",
+      "zh": "无乳制品",
+      "ja": "乳製品不使用"
+    }
+  ],
+  "surcharge": {
+    "en": "10% surcharge applies on weekends | 15% surcharge on public holidays",
+    "zh": "周末加收 10% 服务费 | 公共假期加收 15% 服务费",
+    "ja": "週末は10%、祝日は15%の追加料金がかかります。"
+  },
+  "cover": {
+    "since": {
+      "en": "SINCE 2017",
+      "zh": "始于 2017",
+      "ja": "2017年創業"
+    },
+    "memory": {
+      "en": "In loving memory of Vitalia Zanda,\nthe heart and inspiration behind everything we do.",
+      "zh": "怀念 Vitalia Zanda，\n她是我们一切的核心与灵感。",
+      "ja": "私たちのすべての中心であり、\nインスピレーションの源となったヴィタリア・ザンダを偲んで。"
+    },
+    "title": {
+      "en": "DINNER",
+      "zh": "晚餐",
+      "ja": "ディナー"
+    }
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "type": "cover"
+    },
+    {
+      "id": "p1",
+      "panels": [
+        [
+          "starters"
+        ],
+        [
+          "pasta"
+        ]
+      ]
+    },
+    {
+      "id": "p2",
+      "panels": [
+        [
+          "pizza-1"
+        ],
+        [
+          "pizza-2"
+        ]
+      ]
+    },
+    {
+      "id": "p3",
+      "panels": [
+        [
+          "mains"
+        ],
+        [
+          "sides"
+        ]
+      ]
+    },
+    {
+      "id": "p4",
+      "panels": [
+        [
+          "dolce"
+        ]
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "starters",
+      "name": {
+        "en": "Starters",
+        "zh": "开胃菜",
+        "ja": "前菜"
+      },
+      "foot": {
+        "en": "legend",
+        "zh": "legend",
+        "ja": "legend"
+      },
+      "items": [
+        {
+          "id": "garlic-focaccia",
+          "price": "15.5",
+          "tags": [
+            "VG"
+          ],
+          "en": {
+            "name": "Garlic Focaccia",
+            "desc": "House focaccia infused with garlic and rosemary"
+          },
+          "zh": {
+            "name": "大蒜佛卡夏",
+            "desc": "自制佛卡夏配大蒜和迷迭香"
+          },
+          "ja": {
+            "name": "ガーリックフォカッチャ",
+            "desc": "ガーリックとローズマリーを練り込んだ自家製フォカッチャ"
+          },
+          "options": [
+            {
+              "en": "Add Anchovies $4",
+              "zh": "加凤尾鱼 $4",
+              "ja": "アンチョビ追加 $4"
+            },
+            {
+              "en": "Add San Marzano tomato purée $4",
+              "zh": "加圣马扎诺番茄酱 $4",
+              "ja": "サンマルツァーノトマトソース追加 $4"
+            }
+          ]
+        },
+        {
+          "id": "bruscofocaccia",
+          "price": "11",
+          "tags": [
+            "V"
+          ],
+          "tagNote": {
+            "en": "VG Option Available",
+            "zh": "可提供纯素",
+            "ja": "ヴィーガン対応可"
+          },
+          "en": {
+            "name": "Bruscofocaccia",
+            "desc": "Crunchy bruschetta-style focaccia bread topped with fresh tomatoes, parmesan and fresh basil"
+          },
+          "zh": {
+            "name": "意式烤佛卡夏",
+            "desc": "配新鲜番茄、帕玛森芝士和罗勒"
+          },
+          "ja": {
+            "name": "ブルスコフォカッチャ",
+            "desc": "トマト・パルメザン・バジルをのせたブルスケッタ風フォカッチャ"
+          }
+        },
+        {
+          "id": "mussels",
+          "price": "29.5",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Mussels",
+            "desc": "Fresh mussels steamed and served with a warm pizza basket"
+          },
+          "zh": {
+            "name": "青口贝",
+            "desc": "新鲜蒸制，配温热披萨面包篮"
+          },
+          "ja": {
+            "name": "ムール貝",
+            "desc": "蒸しムール貝＋ピザバスケット付き"
+          },
+          "choiceLabel": {
+            "en": "Choice of:",
+            "zh": "可选：",
+            "ja": "選べるソース："
+          },
+          "options": [
+            {
+              "en": "Garlic and white wine",
+              "zh": "大蒜白葡萄酒",
+              "ja": "ガーリック白ワイン"
+            },
+            {
+              "en": "Spicy Napoli sauce",
+              "zh": "辣味那不勒斯酱",
+              "ja": "スパイシーナポリソース"
+            }
+          ]
+        },
+        {
+          "id": "truffle-burrata",
+          "price": "24.5",
+          "tags": [
+            "V",
+            "GF"
+          ],
+          "en": {
+            "name": "Truffle Burrata Salad",
+            "desc": "Creamy burrata with cherry tomatoes, rocket and finished with a delicate truffle sauce"
+          },
+          "zh": {
+            "name": "松露布拉塔沙拉",
+            "desc": "布拉塔芝士配樱桃番茄和芝麻菜，淋松露酱"
+          },
+          "ja": {
+            "name": "トリュフ・ブッラータサラダ",
+            "desc": "ブッラータ、チェリートマト、ルッコラ、トリュフソース"
+          }
+        },
+        {
+          "id": "calamari-fritti",
+          "price": "22.5",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Calamari Fritti",
+            "desc": "Crispy battered squid rings with parsley, aioli and fresh lemon"
+          },
+          "zh": {
+            "name": "酥炸鱿鱼",
+            "desc": "配欧芹、蒜味蛋黄酱和新鲜柠檬"
+          },
+          "ja": {
+            "name": "カラマリフリット",
+            "desc": "イカのフリット、アイオリソース＆レモン添え"
+          }
+        },
+        {
+          "id": "cured-meat-platter",
+          "price": "36",
+          "tags": [],
+          "en": {
+            "name": "Mixed Cured Meat Platter",
+            "desc": "Chef's choice of three artisanal cured meat, served with toasted focaccia and nduja butter, olives"
+          },
+          "zh": {
+            "name": "冷切肉拼盘",
+            "desc": "主厨精选三种意式风干肉，配烤佛卡夏、nduja 黄油和橄榄"
+          },
+          "ja": {
+            "name": "生ハム盛り合わせ",
+            "desc": "シェフおすすめの3種の生ハム＋フォカッチャ"
+          }
+        },
+        {
+          "id": "polenta-porcini",
+          "price": "19.5",
+          "tags": [
+            "VG",
+            "GF"
+          ],
+          "en": {
+            "name": "Polenta & Porcini with Truffle Oil",
+            "desc": "Golden crispy polenta on a bed of olive tapenade, with sautéed porcini and cherry tomatoes, finished with aromatic truffle oil"
+          },
+          "zh": {
+            "name": "波伦塔牛肝菌松露",
+            "desc": "香脆波伦塔配橄榄酱、牛肝菌和樱桃番茄，淋松露油"
+          },
+          "ja": {
+            "name": "ポレンタ（ポルチーニ＆トリュフオイル）",
+            "desc": "トウモロコシの粉を使用した北イタリアの伝統的な家庭料理"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pasta",
+      "name": {
+        "en": "Pasta",
+        "zh": "意面",
+        "ja": "パスタ"
+      },
+      "foot": {
+        "en": "Gluten Free Pasta +$5",
+        "zh": "无麸质意面 +$5",
+        "ja": "グルテンフリーパスタ +$5"
+      },
+      "items": [
+        {
+          "id": "lasagna",
+          "price": "36",
+          "tags": [],
+          "en": {
+            "name": "Lasagna",
+            "desc": "Traditional layers of pasta with slow-cooked beef ragù and creamy béchamel sauce"
+          },
+          "zh": {
+            "name": "千层意面",
+            "desc": "慢炖牛肉酱与白酱层叠"
+          },
+          "ja": {
+            "name": "ラザニア",
+            "desc": "牛ラグーとベシャメルソースの伝統的なラザニア"
+          }
+        },
+        {
+          "id": "rigatoni-bolognese",
+          "price": "31",
+          "tags": [],
+          "en": {
+            "name": "Rigatoni Bolognese Al Tegamino",
+            "desc": "Rigatoni served with Italy's most celebrated sauce, classic Bolognese, grated Parmesan"
+          },
+          "zh": {
+            "name": "博洛尼亚肉酱管面",
+            "desc": "经典博洛尼亚肉酱配帕玛森芝士"
+          },
+          "ja": {
+            "name": "リガトーニ・ボロネーゼ",
+            "desc": "自家製ボロネーゼ、パルメザン"
+          }
+        },
+        {
+          "id": "gnocchi-gamberi",
+          "price": "35",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Gnocchi Zucchine e Gamberi",
+            "desc": "Soft potato gnocchi coated in zucchini cream, topped with tiger prawns, bottarga, and parsley"
+          },
+          "zh": {
+            "name": "西葫芦虾仁面疙瘩",
+            "desc": "土豆面疙瘩配西葫芦酱，搭配虎虾、乌鱼子和欧芹"
+          },
+          "ja": {
+            "name": "ズッキーニとエビのニョッキ",
+            "desc": "ズッキーニクリーム、エビ、ボッタルガ（カラスミ）"
+          }
+        },
+        {
+          "id": "truffle-risotto",
+          "price": "35",
+          "tags": [
+            "V"
+          ],
+          "tagNote": {
+            "en": "VG Option Available",
+            "zh": "可选纯素",
+            "ja": "ヴィーガン対応可"
+          },
+          "en": {
+            "name": "Truffle And Porcini Risotto",
+            "desc": "Creamy risotto with truffle and porcini, basil & cashew pesto, toasted almond flakes"
+          },
+          "zh": {
+            "name": "松露牛肝菌烩饭",
+            "desc": "配罗勒腰果青酱和烤杏仁片"
+          },
+          "ja": {
+            "name": "トリュフとポルチーニのリゾット",
+            "desc": "クリーミーリゾット、ポルチーニ"
+          }
+        },
+        {
+          "id": "carbonara",
+          "price": "29.5",
+          "tags": [],
+          "en": {
+            "name": "Spaghetti Carbonara",
+            "desc": "Spaghetti tossed with crispy guanciale in a silky egg and Pecorino Romano sauce, finished with cracked black pepper"
+          },
+          "zh": {
+            "name": "卡邦尼意面",
+            "desc": "配意式猪脸颊肉、蛋液和佩科里诺芝士"
+          },
+          "ja": {
+            "name": "カルボナーラ",
+            "desc": "グアンチャーレ、卵、ペコリーノチーズ"
+          }
+        },
+        {
+          "id": "linguine-marinara",
+          "price": "49",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Linguine alla Marinara",
+            "desc": "Linguine with local tiger prawns, mussels, 1/2 bug, squid, clams and Napoli sauce"
+          },
+          "zh": {
+            "name": "海鲜细扁面",
+            "desc": "配本地虎虾、青口贝、蛤蜊、半只琵琶虾和鱿鱼"
+          },
+          "ja": {
+            "name": "シーフード・リングイネ",
+            "desc": "エビ・ムール貝・イカなどの新鮮なシーフード"
+          }
+        },
+        {
+          "id": "paccheri-salsiccia",
+          "price": "30.5",
+          "tags": [],
+          "en": {
+            "name": "Paccheri Salsiccia e funghi",
+            "desc": "Wide tube-shaped pasta with Italian pork sausage and mushrooms in a rich & creamy saffron cheese sauce"
+          },
+          "zh": {
+            "name": "香肠菌菇大管面",
+            "desc": "配浓郁藏红花芝士酱"
+          },
+          "ja": {
+            "name": "サルシッチャとマッシュルームのパスタ",
+            "desc": "ソーセージとキノコのクリームソース"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pizza-1",
+      "name": {
+        "en": "Pizza",
+        "zh": "披萨",
+        "ja": "ピッツァ"
+      },
+      "foot": {
+        "en": "Gluten Free Pizza +$8",
+        "zh": "无麸质披萨 +$8",
+        "ja": "グルテンフリーピザ +$8"
+      },
+      "items": [
+        {
+          "id": "margherita",
+          "price": "26.5",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Margherita",
+            "desc": "San Marzano tomatoes, mozzarella, basil, EVOO"
+          },
+          "zh": {
+            "name": "玛格丽塔披萨",
+            "desc": "圣马扎诺番茄、马苏里拉、罗勒、特级初榨橄榄油"
+          },
+          "ja": {
+            "name": "マルゲリータ",
+            "desc": "イタリアントマト、モッツァレラ、バジル、エクストラバージンオリーブオイル"
+          }
+        },
+        {
+          "id": "bufalina",
+          "price": "36",
+          "tags": [],
+          "en": {
+            "name": "Bufalina",
+            "desc": "San Marzano tomatoes, fresh buffalo mozzarella, prosciutto crudo, cherry tomatoes, basil, EVOO"
+          },
+          "zh": {
+            "name": "布法利娜披萨",
+            "desc": "圣马扎诺番茄、水牛马苏里拉、生火腿、樱桃番茄、罗勒、特级初榨橄榄油"
+          },
+          "ja": {
+            "name": "ブッファリーナ",
+            "desc": "イタリアントマト、チェリートマト、フレッシュモッツァレラ、生ハム"
+          }
+        },
+        {
+          "id": "capricciosa",
+          "price": "30.5",
+          "tags": [],
+          "en": {
+            "name": "Capricciosa",
+            "desc": "San Marzano tomatoes, mozzarella, ham, mushrooms, artichokes, olives"
+          },
+          "zh": {
+            "name": "卡布里乔萨披萨",
+            "desc": "圣马扎诺番茄、马苏里拉、火腿、蘑菇、朝鲜蓟、橄榄"
+          },
+          "ja": {
+            "name": "カプリチョーザ",
+            "desc": "イタリアントマト、モッツァレラ、ハム、マッシュルーム、アーティチョーク、オリーブ"
+          }
+        },
+        {
+          "id": "vegetariana",
+          "price": "31.5",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Vegetariana 2.0",
+            "desc": "Zucchini cream base, mozzarella, fried eggplant, roasted capsicum"
+          },
+          "zh": {
+            "name": "素食 2.0 披萨",
+            "desc": "西葫芦奶油底、马苏里拉、炸茄子、烤甜椒"
+          },
+          "ja": {
+            "name": "ベジタリアーナ 2.0",
+            "desc": "ズッキーニクリーム、モッツァレラ、揚げナス、ローストパプリカ"
+          }
+        },
+        {
+          "id": "sardegna",
+          "price": "29.5",
+          "tags": [
+            "VG"
+          ],
+          "en": {
+            "name": "Sardegna",
+            "desc": "San Marzano tomatoes, vegan mozzarella, cherry tomatoes, artichokes, garlic, oregano, basil"
+          },
+          "zh": {
+            "name": "撒丁岛披萨",
+            "desc": "圣马扎诺番茄、纯素马苏里拉、樱桃番茄、朝鲜蓟、大蒜、牛至、罗勒"
+          },
+          "ja": {
+            "name": "サルデーニャ",
+            "desc": "トマトソース、ヴィーガンモッツァレラ、チェリートマト、アーティチョーク、ガーリック、オレガノ、バジル"
+          }
+        },
+        {
+          "id": "umbria",
+          "price": "29.5",
+          "tags": [
+            "VG"
+          ],
+          "en": {
+            "name": "Umbria",
+            "desc": "Vegan mozzarella, pumpkin purée, mushrooms, walnuts, truffle cream"
+          },
+          "zh": {
+            "name": "翁布里亚披萨",
+            "desc": "纯素马苏里拉、南瓜泥、蘑菇、核桃、松露酱"
+          },
+          "ja": {
+            "name": "ウンブリア",
+            "desc": "ヴィーガンモッツァレラ、パンプキンクリーム、マッシュルーム、クルミ、トリュフクリーム"
+          }
+        },
+        {
+          "id": "napule",
+          "price": "34.5",
+          "tags": [],
+          "en": {
+            "name": "Napule'",
+            "desc": "Mozzarella, smoked scamorza, Italian sausage, broccoli rabe (friarielli)"
+          },
+          "zh": {
+            "name": "那不勒披萨",
+            "desc": "马苏里拉、烟熏斯卡莫扎、意大利香肠、西兰花苗"
+          },
+          "ja": {
+            "name": "ナポリ",
+            "desc": "モッツァレラ、スモークスカモルツァ（チーズ）、イタリアンソーセージ、ブロッコリーニ"
+          }
+        },
+        {
+          "id": "diavola",
+          "price": "31.5",
+          "tags": [],
+          "en": {
+            "name": "Diavola",
+            "desc": "San Marzano tomatoes, mozzarella, Calabrese salami, caramelized onion, 'nduja"
+          },
+          "zh": {
+            "name": "迪亚沃拉披萨",
+            "desc": "圣马扎诺番茄、马苏里拉、卡拉布里亚辣萨拉米、焦糖洋葱、nduja"
+          },
+          "ja": {
+            "name": "ディアボラ",
+            "desc": "イタリアントマト、モッツァレラ、サラミ、キャラメリゼオニオン、ンドゥイヤ（辛口ソース）"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pizza-2",
+      "name": {
+        "en": "Pizza",
+        "zh": "披萨",
+        "ja": "ピッツァ"
+      },
+      "foot": {
+        "en": "Gluten Free Pizza +$8",
+        "zh": "无麸质披萨 +$8",
+        "ja": "グルテンフリーピザ +$8"
+      },
+      "items": [
+        {
+          "id": "leonardo",
+          "price": "34.5",
+          "tags": [],
+          "en": {
+            "name": "Leonardo da Vinci",
+            "desc": "San Marzano tomatoes, mozzarella, prosciutto crudo, rocket, shaved parmesan, EVOO"
+          },
+          "zh": {
+            "name": "达芬奇披萨",
+            "desc": "圣马扎诺番茄、马苏里拉、生火腿、芝麻菜、帕玛森芝士、特级初榨橄榄油"
+          },
+          "ja": {
+            "name": "レオナルド・ダ・ヴィンチ",
+            "desc": "モッツァレラ、プロシュート、ルッコラ、パルメザンチーズ"
+          }
+        },
+        {
+          "id": "mortazza",
+          "price": "35",
+          "tags": [],
+          "en": {
+            "name": "Mortazza",
+            "desc": "Mozzarella, mortadella, sun-dried tomatoes, pistachio burrata"
+          },
+          "zh": {
+            "name": "莫塔扎披萨",
+            "desc": "马苏里拉、莫塔德拉香肠、风干番茄、开心果布拉塔"
+          },
+          "ja": {
+            "name": "モルタッツァ",
+            "desc": "モッツァレラ、モルタデッラ（ボロニアソーセージ）、ドライトマト、ピスタチオ、ブッラータ"
+          }
+        },
+        {
+          "id": "il-padrino",
+          "price": "36.5",
+          "tags": [],
+          "en": {
+            "name": "Il Padrino (The Godfather)",
+            "desc": "San Marzano tomatoes, mozzarella, soppressa salami, rocket, cherry tomatoes, burrata"
+          },
+          "zh": {
+            "name": "教父披萨",
+            "desc": "圣马扎诺番茄、马苏里拉、索普雷萨萨拉米、芝麻菜、樱桃番茄、布拉塔"
+          },
+          "ja": {
+            "name": "イル・パドリーノ",
+            "desc": "イタリアントマト、モッツァレラ、サラミ、ルッコラ、チェリートマト、ブッラータ"
+          }
+        },
+        {
+          "id": "quattro-formaggi",
+          "price": "31.5",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Quattro Formaggi e Tartufo",
+            "desc": "Mozzarella, gorgonzola, smoked scamorza, parmesan, truffle cream"
+          },
+          "zh": {
+            "name": "四种芝士松露披萨",
+            "desc": "马苏里拉、戈贡佐拉、烟熏斯卡莫扎、帕玛森芝士、松露酱"
+          },
+          "ja": {
+            "name": "クアトロフォルマッジ・トリュフ",
+            "desc": "モッツァレラ、ゴルゴンゾーラ、スモークスカモルツァ（チーズ）、パルメザン、トリュフクリーム"
+          }
+        },
+        {
+          "id": "zuccotta",
+          "price": "34",
+          "tags": [],
+          "en": {
+            "name": "Zuccotta",
+            "desc": "Pumpkin cream base, mozzarella, guanciale, grated pecorino"
+          },
+          "zh": {
+            "name": "南瓜猪颊肉披萨",
+            "desc": "南瓜奶油底、马苏里拉、猪颊肉、佩科里诺芝士"
+          },
+          "ja": {
+            "name": "ズッコッタ",
+            "desc": "パンプキンクリーム、モッツァレラ、グアンチャーレ、ペコリーノチーズ"
+          }
+        },
+        {
+          "id": "frutti-di-mare",
+          "price": "39.5",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Frutti di Mare",
+            "desc": "San Marzano garlic tomatoes, prawns, calamari, mussels, clams, parsley"
+          },
+          "zh": {
+            "name": "海鲜披萨",
+            "desc": "圣马扎诺蒜香番茄酱、虾、鱿鱼、青口贝、蛤蜊、欧芹"
+          },
+          "ja": {
+            "name": "フルッティ・ディ・マーレ",
+            "desc": "エビ、イカ、ムール貝、アサリ、にんにく、パセリ"
+          }
+        },
+        {
+          "id": "calzone",
+          "price": "30.5",
+          "tags": [],
+          "en": {
+            "name": "Calzone (Folded Pizza)",
+            "desc": "San Marzano tomatoes, mozzarella, mild salami, ricotta, black pepper"
+          },
+          "zh": {
+            "name": "包馅披萨",
+            "desc": "圣马扎诺番茄、马苏里拉、温和萨拉米、里科塔、黑胡椒"
+          },
+          "ja": {
+            "name": "カルツォーネ",
+            "desc": "モッツァレラ、ハム、サラミ、リコッタ、ブラックペッパー"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mains",
+      "name": {
+        "en": "Mains",
+        "zh": "主菜",
+        "ja": "メイン"
+      },
+      "foot": {
+        "en": "Prepared to order with the finest ingredients",
+        "zh": "现点现做，选用优质食材",
+        "ja": "厳選した食材を使用し、ご注文後にお作りします"
+      },
+      "items": [
+        {
+          "id": "beef-cheek",
+          "price": "38",
+          "tags": [
+            "GF"
+          ],
+          "en": {
+            "name": "Beef Cheek",
+            "desc": "Slow-cooked beef cheek with fried polenta, glazed carrots and its own rich, velvety jus"
+          },
+          "zh": {
+            "name": "牛颊肉",
+            "desc": "慢炖牛颊肉配香煎波伦塔、胡萝卜及浓郁肉汁"
+          },
+          "ja": {
+            "name": "ビーフチーク",
+            "desc": "じっくり煮込んだ牛ほほ肉＋ポレンタ"
+          }
+        },
+        {
+          "id": "fish-of-the-day",
+          "price": "MP",
+          "tags": [],
+          "en": {
+            "name": "Fish of the Day",
+            "desc": "Prepared daily with the freshest seasonal catch. Crafted by our Chef and presented at your table"
+          },
+          "zh": {
+            "name": "今日鲜鱼",
+            "desc": "每日选用最新鲜渔获，由主厨精心呈现"
+          },
+          "ja": {
+            "name": "本日の魚",
+            "desc": "シェフおすすめの魚料理（仕入れ状況によって値段が異なるため、スタッフにお尋ねください）"
+          }
+        },
+        {
+          "id": "gamberoni",
+          "price": "38",
+          "tags": [],
+          "en": {
+            "name": "Gamberoni Al Vino Bianco",
+            "desc": "Pan-fried local tiger prawns with white wine, garlic, and parsley"
+          },
+          "zh": {
+            "name": "白葡萄酒大虾",
+            "desc": "本地虎虾配白葡萄酒、大蒜和欧芹"
+          },
+          "ja": {
+            "name": "エビの白ワインソテー",
+            "desc": "ガーリックと白ワインをたっぷり使用したエビ料理"
+          },
+          "options": [
+            {
+              "en": "Add Salad $6",
+              "zh": "加沙拉 $6",
+              "ja": "サラダ +$6"
+            },
+            {
+              "en": "Add Chips $6",
+              "zh": "加薯条 $6",
+              "ja": "ポテト +$6"
+            }
+          ]
+        },
+        {
+          "id": "zuppa-di-pesce",
+          "price": "69",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Zuppa di Pesce Positano",
+            "desc": "Seafood hotpot with Moreton Bay bugs, prawns, fish fillet, clams, squid and mussels in rich Napoli sauce"
+          },
+          "zh": {
+            "name": "波西塔诺海鲜锅",
+            "desc": "包含琵琶虾、大虾、鱼片、蛤蜊、青口贝和鱿鱼，配浓郁那不勒斯酱"
+          },
+          "ja": {
+            "name": "ズッパディペッシェ（ポジターノ風）",
+            "desc": "イタリア郷土料理のエビ・魚・ムール貝のトマト煮込み"
+          },
+          "options": [
+            {
+              "en": "Add Extra Moreton Bay Bug $10",
+              "zh": "加额外琵琶虾 $10",
+              "ja": "モートンベイバグ追加 $10"
+            },
+            {
+              "en": "Add GF Bread $2",
+              "zh": "加无麸质面包 $2",
+              "ja": "グルテンフリーパン +$2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sides",
+      "name": {
+        "en": "Sides",
+        "zh": "配菜",
+        "ja": "サイド"
+      },
+      "foot": {
+        "en": "Perfect to complement your main course",
+        "zh": "完美搭配您的主菜",
+        "ja": "メインにぴったりの一品"
+      },
+      "items": [
+        {
+          "id": "chips",
+          "price": "11.5",
+          "tags": [
+            "VG",
+            "DF"
+          ],
+          "en": {
+            "name": "Chips",
+            "desc": "Crispy golden chips"
+          },
+          "zh": {
+            "name": "薯条",
+            "desc": "金黄酥脆"
+          },
+          "ja": {
+            "name": "フライドポテト",
+            "desc": "カリッと揚げた黄金色のフライドポテト",
+            "descSource": "translated"
+          }
+        },
+        {
+          "id": "rocket-salad",
+          "price": "13.5",
+          "tags": [
+            "V",
+            "GF"
+          ],
+          "en": {
+            "name": "Rocket, Fennel, Pear, and Parmesan Salad",
+            "desc": "Rocket leaves with fennel, pear, house made pickled onion, and shaved Parmesan cheese"
+          },
+          "zh": {
+            "name": "芝麻菜茴香梨沙拉",
+            "desc": "配自制腌洋葱和帕玛森芝士"
+          },
+          "ja": {
+            "name": "ルッコラ・洋梨・パルメザンサラダ",
+            "desc": "ルッコラ、フェンネル、洋梨、自家製ピクルスオニオン、削りたてパルメザンチーズ",
+            "descSource": "translated"
+          }
+        },
+        {
+          "id": "mixed-leaves",
+          "price": "12.5",
+          "tags": [
+            "VG",
+            "GF"
+          ],
+          "en": {
+            "name": "Mixed Leaves Salad",
+            "desc": "Simple mix of seasonal greens with light vinaigrette"
+          },
+          "zh": {
+            "name": "混合生菜沙拉",
+            "desc": "时令生菜配清爽油醋汁"
+          },
+          "ja": {
+            "name": "ミックスサラダ",
+            "desc": "季節の葉野菜を軽やかなビネグレットで和えたシンプルなサラダ",
+            "descSource": "translated"
+          }
+        },
+        {
+          "id": "broccolini",
+          "price": "15.5",
+          "tags": [
+            "V",
+            "GF"
+          ],
+          "en": {
+            "name": "Broccolini al Parmigiano",
+            "desc": "Tender broccolini sautéed with grated parmesan and toasted almond flakes"
+          },
+          "zh": {
+            "name": "帕玛森西兰花苗",
+            "desc": "配帕玛森芝士和烤杏仁片"
+          },
+          "ja": {
+            "name": "ブロッコリーニ・パルメザン",
+            "desc": "柔らかなブロッコリーニのソテー、パルメザンチーズとローストアーモンドスライス",
+            "descSource": "translated"
+          }
+        },
+        {
+          "id": "polenta-chips",
+          "price": "12",
+          "tags": [
+            "VG",
+            "GF"
+          ],
+          "en": {
+            "name": "Polenta Chips",
+            "desc": "Crispy polenta chips with rosemary salt, aioli"
+          },
+          "zh": {
+            "name": "波伦塔条",
+            "desc": "配迷迭香盐和蒜味蛋黄酱"
+          },
+          "ja": {
+            "name": "ポレンタチップス",
+            "desc": "カリッと揚げたポレンタチップス、ローズマリーソルトとアイオリソース添え",
+            "descSource": "translated"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dolce",
+      "name": {
+        "en": "Dolce",
+        "zh": "甜点",
+        "ja": "ドルチェ"
+      },
+      "foot": {
+        "en": "surcharge",
+        "zh": "surcharge",
+        "ja": "surcharge"
+      },
+      "items": [
+        {
+          "id": "tiramisu",
+          "price": "16.5",
+          "tags": [],
+          "en": {
+            "name": "Tiramisù",
+            "desc": "Classic espresso, mascarpone dessert, dusted with cocoa powder"
+          },
+          "zh": {
+            "name": "提拉米苏",
+            "desc": "经典意式浓缩咖啡与马斯卡彭奶酪甜点，撒上可可粉"
+          },
+          "ja": {
+            "name": "自家製ティラミス",
+            "desc": "エスプレッソとマスカルポーネの定番ドルチェ、ココアパウダー仕上げ",
+            "descSource": "translated"
+          }
+        },
+        {
+          "id": "panna-cotta",
+          "price": "16.5",
+          "tags": [],
+          "en": {
+            "name": "Amaretto Cherry Panna Cotta",
+            "desc": "Milky panna cotta with amaretto cherry compote"
+          },
+          "zh": {
+            "name": "阿玛雷托樱桃意式奶冻",
+            "desc": "香滑意式奶冻，搭配阿玛雷托樱桃果酱"
+          },
+          "ja": {
+            "name": "パンナコッタ（アマレットチェリー）",
+            "desc": "ミルキーなパンナコッタ、アマレットチェリーのコンポート添え",
+            "descSource": "translated"
+          }
+        },
+        {
+          "id": "cannolo",
+          "price": "12.5",
+          "tags": [],
+          "en": {
+            "name": "Cannolo Siciliano",
+            "desc": "Crispy cannoli shells filled with silky ricotta cream, chocolate bits, orange zest and crunchy pistachios"
+          },
+          "zh": {
+            "name": "西西里卡诺里卷",
+            "desc": "酥脆外壳填满里科塔奶酪、巧克力碎、橙皮屑和开心果"
+          },
+          "ja": {
+            "name": "カンノーロ",
+            "desc": "イタリア・シチリア島発祥の伝統的な揚げ菓子"
+          }
+        },
+        {
+          "id": "gelato-nutella",
+          "price": "15.5",
+          "tags": [
+            "GF"
+          ],
+          "en": {
+            "name": "Gelato alla Nutella",
+            "desc": "House-made Nutella gelato with whipped cream and crunchy hazelnuts"
+          },
+          "zh": {
+            "name": "榛果酱冰淇淋",
+            "desc": "自制冰淇淋，配鲜奶油和榛果"
+          },
+          "ja": {
+            "name": "ヌテラジェラート",
+            "desc": "ヌテラをたっぷり使用した自家製ジェラート"
+          }
+        },
+        {
+          "id": "sorbet",
+          "price": "15.5",
+          "tags": [
+            "VG",
+            "GF"
+          ],
+          "en": {
+            "name": "Lemon and Mango Sorbet",
+            "desc": "Refreshing vegan sorbet paired with tangy red berries coulis"
+          },
+          "zh": {
+            "name": "柠檬芒果雪芭",
+            "desc": "清爽雪芭配红莓酱"
+          },
+          "ja": {
+            "name": "レモン＆マンゴーソルベ",
+            "desc": "爽やかなヴィーガンソルベ、甘酸っぱいベリーのクーリ添え",
+            "descSource": "translated"
+          }
+        },
+        {
+          "id": "cheese-board",
+          "price": "26",
+          "tags": [],
+          "en": {
+            "name": "“Formaggi & Delizie” Cheese Board",
+            "desc": "A curated selection of three Italian cheeses paired with pear jam, apricot, truffle honey and crackers"
+          },
+          "zh": {
+            "name": "奶酪拼盘",
+            "desc": "精选三种意大利奶酪，配果酱、松露蜂蜜和饼干"
+          },
+          "ja": {
+            "name": "チーズボード",
+            "desc": "3つのイタリアチーズとクラッカー、梨ジャム・アプリコット・トリュフハニーソース添え"
+          }
+        },
+        {
+          "id": "maritozzo",
+          "price": "",
+          "tags": [],
+          "en": {
+            "name": "Maritozzo",
+            "desc": "Cream filled bun with your choice of topping:"
+          },
+          "zh": {
+            "name": "意式奶油夹心面包",
+            "desc": "可选："
+          },
+          "ja": {
+            "name": "マリトッツォ",
+            "desc": "イタリア・ローマ発祥の伝統的な菓子パン"
+          },
+          "options": [
+            {
+              "en": "Classic cream $10",
+              "zh": "经典 $10",
+              "ja": "プレーン $10"
+            },
+            {
+              "en": "Strawberries $13",
+              "zh": "草莓 $13",
+              "ja": "いちご $13"
+            },
+            {
+              "en": "Chocolate $12",
+              "zh": "巧克力 $12",
+              "ja": "チョコレート $12"
+            },
+            {
+              "en": "Salted caramel $12",
+              "zh": "焦糖 $12",
+              "ja": "塩キャラメル $12"
+            },
+            {
+              "en": "Orange $12",
+              "zh": "橙子 $12",
+              "ja": "オレンジ $12"
+            },
+            {
+              "en": "Pistachio $13",
+              "zh": "开心果 $13",
+              "ja": "ピスタチオ $13"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "style": "serif"
+}</script>
+<script id="menuData-drinks" type="application/json">{
+  "id": "drinks",
+  "style": "serif",
+  "title": {
+    "en": "Drinks",
+    "zh": "饮品",
+    "ja": "ドリンク"
+  },
+  "surcharge": {
+    "en": "10% surcharge applies on weekends | 15% surcharge on public holidays",
+    "zh": "周末加收 10% 服务费 | 公共假期加收 15% 服务费",
+    "ja": "週末は10%、祝日は15%の追加料金がかかります。"
+  },
+  "cover": {
+    "since": {
+      "en": "SINCE 2017",
+      "zh": "始于 2017",
+      "ja": "2017年創業"
+    },
+    "title": {
+      "en": "VITALIA'S"
+    },
+    "script": {
+      "en": "Wine & Drink List",
+      "zh": "酒水单",
+      "ja": "ワイン & ドリンクリスト"
+    },
+    "memory": {
+      "en": "Inspired by Vitalia’s spirit,\na toast to love, life, and good company.",
+      "zh": "承 Vitalia 的心意，\n敬爱、生活与相聚的良伴。",
+      "ja": "ヴィタリアの心を受け継いで、\n愛と人生、そして良き仲間に乾杯を。"
+    }
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "type": "cover"
+    },
+    {
+      "id": "d1",
+      "panels": [
+        [
+          "soft-coffee"
+        ],
+        [
+          "beers"
+        ]
+      ],
+      "foot": [
+        {
+          "en": "Add to your coffee  •  Soy $1  •  Almond $1  •  Oat $1  •  Lactose Free $1  •  Ice Cream $2",
+          "zh": "咖啡可加  •  豆奶 $1  •  杏仁奶 $1  •  燕麦奶 $1  •  无乳糖 $1  •  冰淇淋 $2",
+          "ja": "コーヒーに追加  •  豆乳 $1  •  アーモンド $1  •  オーツ $1  •  乳糖不使用 $1  •  アイスクリーム $2"
+        },
+        {
+          "en": "Local and imported favourites, always refreshing",
+          "zh": "本地与进口的人气之选，始终清爽",
+          "ja": "地元と輸入の人気銘柄、いつでも爽快に"
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "panels": [
+        [
+          "cocktails"
+        ],
+        [
+          "mocktails"
+        ]
+      ],
+      "foot": [
+        {
+          "en": "Other classic cocktails available",
+          "zh": "另有其他经典鸡尾酒供应",
+          "ja": "その他の定番カクテルもご用意しています"
+        },
+        {
+          "en": "Alcohol-free creations with vibrant flavours and Italian style",
+          "zh": "无酒精创意饮品，风味鲜明，意式格调",
+          "ja": "鮮やかな味わいとイタリアらしさを纏うノンアルコールの一杯"
+        }
+      ]
+    },
+    {
+      "id": "d3",
+      "panels": [
+        [
+          "red-wines"
+        ],
+        [
+          "white-wines"
+        ]
+      ],
+      "foot": [
+        {
+          "en": "Ask our team for pairing suggestions to enhance your meal",
+          "zh": "欢迎询问我们的团队，为您的餐点推荐搭配",
+          "ja": "お料理に合わせたペアリングはスタッフにお尋ねください"
+        },
+        {
+          "en": "Fresh, balanced whites that pair beautifully with our dishes",
+          "zh": "清新平衡的白葡萄酒，与我们的菜肴相得益彰",
+          "ja": "フレッシュでバランスの取れた白、料理と美しく調和します"
+        }
+      ]
+    },
+    {
+      "id": "d4",
+      "panels": [
+        [
+          "sparkling"
+        ],
+        [
+          "cellar"
+        ]
+      ],
+      "foot": [
+        {
+          "en": "Bubbles that celebrate every occasion",
+          "zh": "为每个值得庆祝的时刻而生的气泡",
+          "ja": "どんな時も華やかに彩る泡"
+        },
+        {
+          "en": "An exclusive collection of prestigious Italian wines, crafted with heritage and passion",
+          "zh": "珍藏意大利名酒精选，承袭传统与热忱",
+          "ja": "伝統と情熱が生んだ、イタリア銘醸ワインの特別なコレクション"
+        }
+      ]
+    },
+    {
+      "id": "d5",
+      "panels": [
+        [
+          "spirits"
+        ],
+        [
+          "liqueurs"
+        ]
+      ],
+      "foot": [
+        {
+          "en": "A curated range of iconic spirits from around the world, perfect to savour neat or mixed",
+          "zh": "精选世界经典烈酒，纯饮或调饮皆宜",
+          "ja": "世界の名酒を厳選、ストレートでもカクテルでも"
+        },
+        {
+          "en": "Classic Italian and world-famous liqueurs to complete your dining experience",
+          "zh": "意大利经典与世界知名利口酒，为您的用餐画上句点",
+          "ja": "イタリアの定番と世界の名リキュールで、お食事の締めくくりを"
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "soft-coffee",
+      "name": {
+        "en": "Soft Drinks & Coffee",
+        "zh": "软饮与咖啡",
+        "ja": "ソフトドリンク & コーヒー"
+      },
+      "cols": [
+        {},
+        {}
+      ],
+      "groups": [
+        {
+          "id": "soft-drinks",
+          "label": {
+            "en": "SOFT DRINKS",
+            "zh": "软饮",
+            "ja": "ソフトドリンク"
+          },
+          "items": [
+            {
+              "id": "sparkling-water",
+              "prices": [
+                "",
+                "8"
+              ],
+              "en": {
+                "name": "Sparkling Water 750ml"
+              },
+              "zh": {
+                "name": "气泡水 750ml"
+              },
+              "ja": {
+                "name": "スパークリングウォーター 750ml"
+              }
+            },
+            {
+              "id": "sanpellegrino-water",
+              "prices": [
+                "",
+                "12"
+              ],
+              "en": {
+                "name": "Sanpellegrino Sparkling Water 1L"
+              },
+              "zh": {
+                "name": "Sanpellegrino 气泡水 1L"
+              },
+              "ja": {
+                "name": "サンペレグリノ スパークリングウォーター 1L"
+              }
+            },
+            {
+              "id": "sanpellegrino-soft",
+              "prices": [
+                "",
+                "5.5"
+              ],
+              "en": {
+                "name": "Sanpellegrino Soft Drinks",
+                "desc": "Aranciata – Limonata – Arancia Rossa – Clementina"
+              },
+              "zh": {
+                "name": "Sanpellegrino 果味汽水",
+                "desc": "香橙 – 柠檬 – 血橙 – 克莱门氏小柑橘"
+              },
+              "ja": {
+                "name": "サンペレグリノ ソフトドリンク",
+                "desc": "アランチャータ – リモナータ – ブラッドオレンジ – クレメンティーナ"
+              }
+            },
+            {
+              "id": "classic-soft",
+              "prices": [
+                "",
+                "5.5"
+              ],
+              "en": {
+                "name": "Classic Soft Drinks",
+                "desc": "Coke – Zero – LLB"
+              },
+              "zh": {
+                "name": "经典汽水",
+                "desc": "可乐 – 零度可乐 – LLB"
+              },
+              "ja": {
+                "name": "定番ソフトドリンク",
+                "desc": "コーラ – ゼロ – LLB"
+              }
+            },
+            {
+              "id": "juices",
+              "prices": [
+                "",
+                "5"
+              ],
+              "en": {
+                "name": "Juices",
+                "desc": "Orange – Pineapple – Apple – Mango"
+              },
+              "zh": {
+                "name": "果汁",
+                "desc": "橙汁 – 菠萝 – 苹果 – 芒果"
+              },
+              "ja": {
+                "name": "ジュース",
+                "desc": "オレンジ – パイナップル – アップル – マンゴー"
+              }
+            },
+            {
+              "id": "ginger-beer",
+              "prices": [
+                "",
+                "6"
+              ],
+              "en": {
+                "name": "Ginger Beer"
+              },
+              "zh": {
+                "name": "姜汁汽水"
+              },
+              "ja": {
+                "name": "ジンジャービア"
+              }
+            }
+          ]
+        },
+        {
+          "id": "coffee",
+          "label": {
+            "en": "COFFEE",
+            "zh": "咖啡",
+            "ja": "コーヒー"
+          },
+          "items": [
+            {
+              "id": "espresso",
+              "prices": [
+                "3.5",
+                "4.5"
+              ],
+              "en": {
+                "name": "Espresso"
+              },
+              "zh": {
+                "name": "意式浓缩咖啡"
+              },
+              "ja": {
+                "name": "エスプレッソ"
+              }
+            },
+            {
+              "id": "cappuccino",
+              "prices": [
+                "6.5",
+                "7.5"
+              ],
+              "en": {
+                "name": "Cappuccino / Latte / Flat White"
+              },
+              "zh": {
+                "name": "卡布奇诺 / 拿铁 / 馥芮白"
+              },
+              "ja": {
+                "name": "カプチーノ / ラテ / フラットホワイト"
+              }
+            },
+            {
+              "id": "hot-chocolate",
+              "prices": [
+                "6.5",
+                "7.5"
+              ],
+              "en": {
+                "name": "Hot Chocolate"
+              },
+              "zh": {
+                "name": "热巧克力"
+              },
+              "ja": {
+                "name": "ホットチョコレート"
+              }
+            },
+            {
+              "id": "long-black",
+              "prices": [
+                "5.5",
+                "6.5"
+              ],
+              "en": {
+                "name": "Long Black"
+              },
+              "zh": {
+                "name": "澳式黑咖啡"
+              },
+              "ja": {
+                "name": "ロングブラック"
+              }
+            },
+            {
+              "id": "chai-latte",
+              "prices": [
+                "7",
+                "8"
+              ],
+              "en": {
+                "name": "Chai Latte"
+              },
+              "zh": {
+                "name": "香料奶茶拿铁"
+              },
+              "ja": {
+                "name": "チャイラテ"
+              }
+            },
+            {
+              "id": "iced-coffee",
+              "prices": [
+                "",
+                "9"
+              ],
+              "en": {
+                "name": "Iced Coffee",
+                "desc": "Coffee - Chai - Mocha - Latte - Chocolate"
+              },
+              "zh": {
+                "name": "冰咖啡",
+                "desc": "咖啡 - 香料奶茶 - 摩卡 - 拿铁 - 巧克力"
+              },
+              "ja": {
+                "name": "アイスコーヒー",
+                "desc": "コーヒー - チャイ - モカ - ラテ - チョコレート"
+              }
+            },
+            {
+              "id": "hot-tea",
+              "prices": [
+                "",
+                "5"
+              ],
+              "en": {
+                "name": "Hot Tea",
+                "desc": "English breakfast - Green - Peppermint - Chamomile - Lemongrass & Ginger"
+              },
+              "zh": {
+                "name": "热茶",
+                "desc": "英式早餐茶 - 绿茶 - 薄荷 - 洋甘菊 - 香茅生姜"
+              },
+              "ja": {
+                "name": "ホットティー",
+                "desc": "イングリッシュブレックファスト - 緑茶 - ペパーミント - カモミール - レモングラス & ジンジャー"
+              }
+            },
+            {
+              "id": "caffe-corretto",
+              "prices": [
+                "",
+                "7"
+              ],
+              "en": {
+                "name": "Caffè Corretto",
+                "desc": "Espresso with Grappa - Baileys - Sambuca"
+              },
+              "zh": {
+                "name": "加烈浓缩咖啡",
+                "desc": "浓缩咖啡配格拉帕 - 百利甜 - 珊布卡"
+              },
+              "ja": {
+                "name": "カフェ・コレット",
+                "desc": "エスプレッソにグラッパ - ベイリーズ - サンブーカ"
+              }
+            },
+            {
+              "id": "affogato",
+              "prices": [
+                "",
+                "9.5"
+              ],
+              "en": {
+                "name": "Affogato",
+                "desc": "• Add liqueur $9 Baileys - Amaretto - Frangelico - Kahlua"
+              },
+              "zh": {
+                "name": "阿芙佳朵",
+                "desc": "• 加酒 $9 百利甜 - 杏仁酒 - 榛子酒 - 咖啡利口酒"
+              },
+              "ja": {
+                "name": "アフォガート",
+                "desc": "• リキュール追加 $9 ベイリーズ - アマレット - フランジェリコ - カルーア"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "beers",
+      "name": {
+        "en": "Beers & Ciders",
+        "zh": "啤酒与苹果酒",
+        "ja": "ビール & サイダー"
+      },
+      "cols": [
+        {},
+        {}
+      ],
+      "groups": [
+        {
+          "id": "bottled",
+          "label": {
+            "en": "BOTTLED",
+            "zh": "瓶装",
+            "ja": "ボトル"
+          },
+          "items": [
+            {
+              "id": "zero-beer",
+              "prices": [
+                "",
+                "9"
+              ],
+              "en": {
+                "name": "0% Alcohol Beer 330ml"
+              },
+              "zh": {
+                "name": "无酒精啤酒 330ml"
+              },
+              "ja": {
+                "name": "ノンアルコールビール 330ml"
+              }
+            },
+            {
+              "id": "peroni-leggera",
+              "prices": [
+                "",
+                "11"
+              ],
+              "en": {
+                "name": "Peroni Leggera 330ml"
+              }
+            },
+            {
+              "id": "peroni-red",
+              "prices": [
+                "",
+                "11.5"
+              ],
+              "en": {
+                "name": "Peroni Red Label 330ml"
+              }
+            },
+            {
+              "id": "moretti",
+              "prices": [
+                "",
+                "13"
+              ],
+              "en": {
+                "name": "Moretti 330ml"
+              }
+            }
+          ]
+        },
+        {
+          "id": "premium-bottled",
+          "label": {
+            "en": "PREMIUM BOTTLED",
+            "zh": "精品瓶装",
+            "ja": "プレミアムボトル"
+          },
+          "note": {
+            "en": "*Stock subject to availability",
+            "zh": "*视库存供应情况而定",
+            "ja": "*在庫状況によります"
+          },
+          "items": [
+            {
+              "id": "peroni-gran-riserva",
+              "prices": [
+                "",
+                "19"
+              ],
+              "en": {
+                "name": "Peroni Gran Riserva Doppio Malto 330ml"
+              }
+            },
+            {
+              "id": "ichnusa",
+              "prices": [
+                "",
+                "19.5"
+              ],
+              "en": {
+                "name": "Ichnusa Sardinian Lager 330ml"
+              }
+            },
+            {
+              "id": "baladin",
+              "prices": [
+                "",
+                "21"
+              ],
+              "en": {
+                "name": "Baladin Nazionale Gluten Free 330ml"
+              }
+            }
+          ]
+        },
+        {
+          "id": "tap",
+          "label": {
+            "en": "TAP",
+            "zh": "生啤",
+            "ja": "生ビール"
+          },
+          "items": [
+            {
+              "id": "beaches-blonde",
+              "prices": [
+                "11",
+                "14.5"
+              ],
+              "en": {
+                "name": "Beaches Blonde Lager"
+              }
+            },
+            {
+              "id": "freefall-pale",
+              "prices": [
+                "12",
+                "15.5"
+              ],
+              "en": {
+                "name": "Freefall Extra Pale Ale"
+              }
+            }
+          ]
+        },
+        {
+          "id": "ciders",
+          "label": {
+            "en": "CIDERS",
+            "zh": "苹果酒",
+            "ja": "サイダー"
+          },
+          "items": [
+            {
+              "id": "apple-cider",
+              "prices": [
+                "",
+                "11"
+              ],
+              "en": {
+                "name": "Apple Cider 330ml"
+              },
+              "zh": {
+                "name": "苹果酒 330ml"
+              },
+              "ja": {
+                "name": "アップルサイダー 330ml"
+              }
+            },
+            {
+              "id": "pear-cider",
+              "prices": [
+                "",
+                "11"
+              ],
+              "en": {
+                "name": "Pear Cider 330ml"
+              },
+              "zh": {
+                "name": "梨子酒 330ml"
+              },
+              "ja": {
+                "name": "ペアサイダー 330ml"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cocktails",
+      "name": {
+        "en": "Cocktails",
+        "zh": "鸡尾酒",
+        "ja": "カクテル"
+      },
+      "items": [
+        {
+          "id": "aperol-spritz",
+          "price": "18.5",
+          "en": {
+            "name": "Aperol Spritz",
+            "desc": "Aperol, prosecco, soda"
+          },
+          "zh": {
+            "name": "Aperol 气泡开胃酒",
+            "desc": "Aperol、普罗塞克、苏打水"
+          },
+          "ja": {
+            "name": "アペロールスプリッツ",
+            "desc": "アペロール、プロセッコ、ソーダ"
+          }
+        },
+        {
+          "id": "campari-spritz",
+          "price": "20.5",
+          "en": {
+            "name": "Campari Spritz",
+            "desc": "Campari bitter, prosecco, soda"
+          },
+          "zh": {
+            "name": "Campari 气泡开胃酒",
+            "desc": "Campari 苦味酒、普罗塞克、苏打水"
+          },
+          "ja": {
+            "name": "カンパリスプリッツ",
+            "desc": "カンパリ、プロセッコ、ソーダ"
+          }
+        },
+        {
+          "id": "limoncello-spritz",
+          "price": "20.5",
+          "en": {
+            "name": "Limoncello Spritz",
+            "desc": "Limoncello, prosecco, soda"
+          },
+          "zh": {
+            "name": "柠檬酒气泡开胃酒",
+            "desc": "柠檬利口酒、普罗塞克、苏打水"
+          },
+          "ja": {
+            "name": "リモンチェッロスプリッツ",
+            "desc": "リモンチェッロ、プロセッコ、ソーダ"
+          }
+        },
+        {
+          "id": "negroni",
+          "price": "23",
+          "en": {
+            "name": "Negroni",
+            "desc": "Gin, Campari, red vermouth"
+          },
+          "zh": {
+            "name": "尼格罗尼",
+            "desc": "金酒、Campari 苦味酒、红味美思"
+          },
+          "ja": {
+            "name": "ネグローニ",
+            "desc": "ジン、カンパリ、レッドベルモット"
+          }
+        },
+        {
+          "id": "espresso-martini",
+          "price": "20.5",
+          "en": {
+            "name": "Espresso Martini",
+            "desc": "Vodka, coffee liqueur, fresh espresso, sugar syrup"
+          },
+          "zh": {
+            "name": "浓缩咖啡马天尼",
+            "desc": "伏特加、咖啡利口酒、现萃浓缩咖啡、糖浆"
+          },
+          "ja": {
+            "name": "エスプレッソマティーニ",
+            "desc": "ウォッカ、コーヒーリキュール、淹れたてエスプレッソ、シュガーシロップ"
+          }
+        },
+        {
+          "id": "moscow-mule",
+          "price": "21.5",
+          "en": {
+            "name": "Moscow Mule",
+            "desc": "Lime juice, vodka, ginger beer"
+          },
+          "zh": {
+            "name": "莫斯科骡子",
+            "desc": "青柠汁、伏特加、姜汁汽水"
+          },
+          "ja": {
+            "name": "モスコミュール",
+            "desc": "ライムジュース、ウォッカ、ジンジャービア"
+          }
+        },
+        {
+          "id": "margarita",
+          "price": "21.5",
+          "en": {
+            "name": "Margarita",
+            "desc": "Tequila, Cointreau, lime juice, salt, sugar"
+          },
+          "zh": {
+            "name": "玛格丽特",
+            "desc": "龙舌兰、君度橙酒、青柠汁、盐、糖"
+          },
+          "ja": {
+            "name": "マルガリータ",
+            "desc": "テキーラ、コアントロー、ライムジュース、塩、砂糖"
+          }
+        },
+        {
+          "id": "mojito",
+          "price": "22.5",
+          "en": {
+            "name": "Mojito",
+            "desc": "Lime juice, mint, rum, soda"
+          },
+          "zh": {
+            "name": "莫吉托",
+            "desc": "青柠汁、薄荷、朗姆酒、苏打水"
+          },
+          "ja": {
+            "name": "モヒート",
+            "desc": "ライムジュース、ミント、ラム、ソーダ"
+          }
+        },
+        {
+          "id": "tiramisu-martini",
+          "price": "23.5",
+          "en": {
+            "name": "Tiramisù Martini",
+            "desc": "Coffee-infused vodka, Frangelico, coffee, sugar syrup, cocoa powder"
+          },
+          "zh": {
+            "name": "提拉米苏马天尼",
+            "desc": "咖啡浸渍伏特加、榛子利口酒、咖啡、糖浆、可可粉"
+          },
+          "ja": {
+            "name": "ティラミスマティーニ",
+            "desc": "コーヒー漬けウォッカ、フランジェリコ、コーヒー、シュガーシロップ、ココアパウダー"
+          }
+        },
+        {
+          "id": "long-island",
+          "price": "24.5",
+          "en": {
+            "name": "Long Island",
+            "desc": "Vodka, gin, white rum, tequila, triple sec, lemon juice, cola"
+          },
+          "zh": {
+            "name": "长岛冰茶",
+            "desc": "伏特加、金酒、白朗姆、龙舌兰、白橙皮酒、柠檬汁、可乐"
+          },
+          "ja": {
+            "name": "ロングアイランド",
+            "desc": "ウォッカ、ジン、ホワイトラム、テキーラ、トリプルセック、レモンジュース、コーラ"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mocktails",
+      "name": {
+        "en": "Mocktails 0%",
+        "zh": "无酒精鸡尾酒 0%",
+        "ja": "ノンアルコールカクテル 0%"
+      },
+      "items": [
+        {
+          "id": "blue-mediteranneo",
+          "price": "15.5",
+          "en": {
+            "name": "Blue Mediterraneo",
+            "desc": "Ginger ale, blue curaçao syrup, lime juice"
+          },
+          "zh": {
+            "name": "蓝色地中海",
+            "desc": "姜汁汽水、蓝橙糖浆、青柠汁"
+          },
+          "ja": {
+            "name": "ブルー・メディテラネオ",
+            "desc": "ジンジャーエール、ブルーキュラソーシロップ、ライムジュース"
+          }
+        },
+        {
+          "id": "sunrise",
+          "price": "15.5",
+          "en": {
+            "name": "Sunrise",
+            "desc": "Pineapple and orange juice, strawberry syrup"
+          },
+          "zh": {
+            "name": "日出",
+            "desc": "菠萝汁与橙汁、草莓糖浆"
+          },
+          "ja": {
+            "name": "サンライズ",
+            "desc": "パイナップルとオレンジジュース、ストロベリーシロップ"
+          }
+        },
+        {
+          "id": "ginger-pear",
+          "price": "15.5",
+          "en": {
+            "name": "Ginger Pear",
+            "desc": "Pear juice, lemon juice, ginger beer"
+          },
+          "zh": {
+            "name": "姜香洋梨",
+            "desc": "梨汁、柠檬汁、姜汁汽水"
+          },
+          "ja": {
+            "name": "ジンジャーペア",
+            "desc": "洋梨ジュース、レモンジュース、ジンジャービア"
+          }
+        },
+        {
+          "id": "citrus-mule",
+          "price": "15.5",
+          "en": {
+            "name": "Citrus Mule",
+            "desc": "Lime juice, ginger beer, Sanpellegrino Limonata"
+          },
+          "zh": {
+            "name": "柑橘骡子",
+            "desc": "青柠汁、姜汁汽水、Sanpellegrino 柠檬汽水"
+          },
+          "ja": {
+            "name": "シトラスミュール",
+            "desc": "ライムジュース、ジンジャービア、サンペレグリノ リモナータ"
+          }
+        },
+        {
+          "id": "golden-orchard",
+          "price": "15.5",
+          "en": {
+            "name": "Golden Orchard",
+            "desc": "Apple juice, pear juice, Sanpellegrino Aranciata"
+          },
+          "zh": {
+            "name": "金色果园",
+            "desc": "苹果汁、梨汁、Sanpellegrino 香橙汽水"
+          },
+          "ja": {
+            "name": "ゴールデンオーチャード",
+            "desc": "アップルジュース、洋梨ジュース、サンペレグリノ アランチャータ"
+          }
+        }
+      ]
+    },
+    {
+      "id": "red-wines",
+      "name": {
+        "en": "Red Wines",
+        "zh": "红葡萄酒",
+        "ja": "赤ワイン"
+      },
+      "cols": [
+        {
+          "icon": "glass-s"
+        },
+        {
+          "icon": "glass-l"
+        },
+        {
+          "icon": "bottle"
+        }
+      ],
+      "groups": [
+        {
+          "id": "red-italian",
+          "label": {
+            "en": "ITALIAN",
+            "zh": "意大利",
+            "ja": "イタリア"
+          },
+          "items": [
+            {
+              "id": "sangiovese",
+              "prices": [
+                "13",
+                "22",
+                "55"
+              ],
+              "en": {
+                "name": "Sangiovese",
+                "region": "Emilia Romagna",
+                "desc": "Light and fruity Italian classic with soft tannins"
+              },
+              "zh": {
+                "desc": "轻盈果香的意大利经典之作，单宁柔和",
+                "region": "艾米利亚-罗马涅"
+              },
+              "ja": {
+                "desc": "軽やかで果実味豊かなイタリアの定番、柔らかなタンニン",
+                "region": "エミリア・ロマーニャ"
+              }
+            },
+            {
+              "id": "primitivo",
+              "prices": [
+                "12",
+                "20",
+                "54"
+              ],
+              "en": {
+                "name": "Primitivo",
+                "region": "Puglia",
+                "desc": "Rich and medium-bodied with ripe cherry and plum aromas"
+              },
+              "zh": {
+                "desc": "酒体中等而醇厚，带成熟樱桃与李子香气",
+                "region": "普利亚"
+              },
+              "ja": {
+                "desc": "コクのあるミディアムボディ、熟したチェリーとプラムの香り",
+                "region": "プーリア"
+              }
+            },
+            {
+              "id": "montepulciano",
+              "prices": [
+                "12.5",
+                "21",
+                "54"
+              ],
+              "en": {
+                "name": "Montepulciano",
+                "region": "Abruzzo",
+                "desc": "Dry and savoury red with red fruit and subtle spice"
+              },
+              "zh": {
+                "desc": "干型醇香红酒，带红色浆果与细腻香料气息",
+                "region": "阿布鲁佐"
+              },
+              "ja": {
+                "desc": "辛口で旨みのある赤、赤い果実とほのかなスパイス",
+                "region": "アブルッツォ"
+              }
+            },
+            {
+              "id": "valpolicella",
+              "prices": [
+                "",
+                "",
+                "69"
+              ],
+              "en": {
+                "name": "Valpolicella Superiore",
+                "region": "Veneto",
+                "desc": "Fresh and light-bodied, ideal for lighter dishes"
+              },
+              "zh": {
+                "desc": "清新轻盈，适合搭配清淡菜肴",
+                "region": "威尼托"
+              },
+              "ja": {
+                "desc": "フレッシュで軽やか、軽めの料理にぴったり",
+                "region": "ヴェネト"
+              }
+            },
+            {
+              "id": "chianti",
+              "prices": [
+                "",
+                "",
+                "67"
+              ],
+              "en": {
+                "name": "Chianti Bell’Antonio",
+                "region": "Toscana",
+                "desc": "Vibrant and smooth Tuscan red with notes of cherry and spice"
+              },
+              "zh": {
+                "desc": "鲜活顺滑的托斯卡纳红酒，带樱桃与香料气息",
+                "region": "托斯卡纳"
+              },
+              "ja": {
+                "desc": "生き生きとして滑らかなトスカーナの赤、チェリーとスパイスの風味",
+                "region": "トスカーナ"
+              }
+            }
+          ]
+        },
+        {
+          "id": "red-house",
+          "label": {
+            "en": "HOUSE",
+            "zh": "招牌",
+            "ja": "ハウス"
+          },
+          "items": [
+            {
+              "id": "house-red",
+              "prices": [
+                "11",
+                "18.5",
+                "48"
+              ],
+              "en": {
+                "name": "Vitalia’s House Red",
+                "region": "South Australia",
+                "desc": "Bold Australian Shiraz with dark berries and gentle spice"
+              },
+              "zh": {
+                "desc": "浓郁的澳洲西拉，带深色浆果与柔和香料",
+                "region": "南澳大利亚"
+              },
+              "ja": {
+                "desc": "力強いオーストラリアのシラーズ、黒い果実と穏やかなスパイス",
+                "region": "南オーストラリア"
+              }
+            }
+          ]
+        },
+        {
+          "id": "red-australasian",
+          "label": {
+            "en": "AUSTRALASIAN",
+            "zh": "澳新",
+            "ja": "オセアニア"
+          },
+          "items": [
+            {
+              "id": "pinot-noir-nugan",
+              "prices": [
+                "12.5",
+                "21",
+                "54"
+              ],
+              "en": {
+                "name": "Pinot Noir Nugan",
+                "region": "South Australia",
+                "desc": "Light and silky, with red cherry and strawberry notes"
+              },
+              "zh": {
+                "desc": "轻盈丝滑，带红樱桃与草莓香气",
+                "region": "南澳大利亚"
+              },
+              "ja": {
+                "desc": "軽やかでシルキー、レッドチェリーと苺の香り",
+                "region": "南オーストラリア"
+              }
+            },
+            {
+              "id": "shiraz-alexander",
+              "prices": [
+                "12.5",
+                "21",
+                "54"
+              ],
+              "en": {
+                "name": "Shiraz Alexander Hill",
+                "region": "South Australia",
+                "desc": "Rich fruit and warm spice, classic smooth texture"
+              },
+              "zh": {
+                "desc": "丰富果味与温暖香料，口感经典顺滑",
+                "region": "南澳大利亚"
+              },
+              "ja": {
+                "desc": "豊かな果実と温かなスパイス、なめらかな口当たり",
+                "region": "南オーストラリア"
+              }
+            },
+            {
+              "id": "merlot-berrigan",
+              "prices": [
+                "",
+                "",
+                "72"
+              ],
+              "en": {
+                "name": "Merlot Berrigan Mount Benson",
+                "region": "South Australia",
+                "desc": "Soft and plummy, with dark cherry and a smooth finish"
+              },
+              "zh": {
+                "desc": "柔顺的李子果香，带黑樱桃气息，余味顺滑",
+                "region": "南澳大利亚"
+              },
+              "ja": {
+                "desc": "柔らかなプラムの果実味、ダークチェリーと滑らかな余韻",
+                "region": "南オーストラリア"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "white-wines",
+      "name": {
+        "en": "White Wines",
+        "zh": "白葡萄酒",
+        "ja": "白ワイン"
+      },
+      "cols": [
+        {
+          "icon": "glass-s"
+        },
+        {
+          "icon": "glass-l"
+        },
+        {
+          "icon": "bottle"
+        }
+      ],
+      "groups": [
+        {
+          "id": "white-italian",
+          "label": {
+            "en": "ITALIAN",
+            "zh": "意大利",
+            "ja": "イタリア"
+          },
+          "items": [
+            {
+              "id": "soave",
+              "prices": [
+                "12",
+                "20",
+                "53"
+              ],
+              "en": {
+                "name": "Soave",
+                "region": "Veneto",
+                "desc": "Dry and fruity, crisp and versatile"
+              },
+              "zh": {
+                "desc": "干型果香，清爽百搭",
+                "region": "威尼托"
+              },
+              "ja": {
+                "desc": "辛口で果実味があり、爽やかで合わせやすい",
+                "region": "ヴェネト"
+              }
+            },
+            {
+              "id": "pinot-grigio",
+              "prices": [
+                "13",
+                "22",
+                "56"
+              ],
+              "en": {
+                "name": "Pinot Grigio delle Venezie",
+                "region": "Veneto",
+                "desc": "Light and floral, pear and citrus notes"
+              },
+              "zh": {
+                "desc": "轻盈花香，带梨与柑橘气息",
+                "region": "威尼托"
+              },
+              "ja": {
+                "desc": "軽やかで華やか、洋梨と柑橘の香り",
+                "region": "ヴェネト"
+              }
+            },
+            {
+              "id": "rose-nerello",
+              "prices": [
+                "14.5",
+                "23",
+                "61"
+              ],
+              "en": {
+                "name": "Rosé Nerello Mascalese",
+                "region": "Sicilia",
+                "desc": "Dry and medium-bodied, with vibrant floral tones"
+              },
+              "zh": {
+                "desc": "干型中等酒体，花香鲜明",
+                "region": "西西里"
+              },
+              "ja": {
+                "desc": "辛口ミディアムボディ、華やかな花の香り",
+                "region": "シチリア"
+              }
+            },
+            {
+              "id": "gavi-valentino",
+              "prices": [
+                "",
+                "",
+                "69"
+              ],
+              "en": {
+                "name": "Gavi Valentino DOCG",
+                "region": "Lombardia",
+                "desc": "Bright acidity and refined minerality, elegant profile"
+              },
+              "zh": {
+                "desc": "酸度明亮，矿物感精致，风格优雅",
+                "region": "伦巴第"
+              },
+              "ja": {
+                "desc": "明るい酸と繊細なミネラル感、優雅な味わい",
+                "region": "ロンバルディア"
+              }
+            },
+            {
+              "id": "fiano-avellino",
+              "prices": [
+                "",
+                "",
+                "89"
+              ],
+              "en": {
+                "name": "Fiano di Avellino Macchialupa",
+                "region": "Campania",
+                "desc": "Aromatic and floral, fruit and firm acidity, elegant structure"
+              },
+              "zh": {
+                "desc": "芳香花香，果味与坚实酸度，结构优雅",
+                "region": "坎帕尼亚"
+              },
+              "ja": {
+                "desc": "芳香豊かで華やか、果実味としっかりした酸、優雅な構成",
+                "region": "カンパーニア"
+              }
+            }
+          ]
+        },
+        {
+          "id": "white-house",
+          "label": {
+            "en": "HOUSE",
+            "zh": "招牌",
+            "ja": "ハウス"
+          },
+          "items": [
+            {
+              "id": "house-white",
+              "prices": [
+                "11",
+                "18.5",
+                "48"
+              ],
+              "en": {
+                "name": "Vitalia’s House White",
+                "region": "South Australia",
+                "desc": "Sauvignon Blanc with citrus and tropical fruit, crisp and clean finish"
+              },
+              "zh": {
+                "desc": "长相思，带柑橘与热带水果香气，清爽干净",
+                "region": "南澳大利亚"
+              },
+              "ja": {
+                "desc": "ソーヴィニヨン・ブラン、柑橘とトロピカルフルーツ、爽やかでクリーンな余韻",
+                "region": "南オーストラリア"
+              }
+            }
+          ]
+        },
+        {
+          "id": "white-australasian",
+          "label": {
+            "en": "AUSTRALASIAN",
+            "zh": "澳新",
+            "ja": "オセアニア"
+          },
+          "items": [
+            {
+              "id": "chardonnay-haselgrove",
+              "prices": [
+                "12",
+                "20",
+                "54"
+              ],
+              "en": {
+                "name": "Chardonnay H Haselgrove",
+                "region": "South Australia",
+                "desc": "Citrus and stone fruit, subtle almond oak, fine acidity"
+              },
+              "zh": {
+                "desc": "柑橘与核果，淡淡杏仁橡木香，酸度细腻",
+                "region": "南澳大利亚"
+              },
+              "ja": {
+                "desc": "柑橘と核果、ほのかなアーモンドとオーク、繊細な酸",
+                "region": "南オーストラリア"
+              }
+            },
+            {
+              "id": "sauvignon-ten-rock",
+              "prices": [
+                "14",
+                "23",
+                "60"
+              ],
+              "en": {
+                "name": "Sauvignon Blanc Ten Rock",
+                "region": "New Zealand",
+                "desc": "Gooseberry, green apple and fresh herbs, dry and zesty"
+              },
+              "zh": {
+                "desc": "醋栗、青苹果与清新草本，干型爽脆",
+                "region": "新西兰"
+              },
+              "ja": {
+                "desc": "グーズベリー、青リンゴ、フレッシュハーブ、辛口で爽快",
+                "region": "ニュージーランド"
+              }
+            },
+            {
+              "id": "riesling-ems-table",
+              "prices": [
+                "14",
+                "23",
+                "61"
+              ],
+              "en": {
+                "name": "Riesling Organic Em’s Table",
+                "region": "South Australia",
+                "desc": "Floral and zesty, citrus lift with sweet spice"
+              },
+              "zh": {
+                "desc": "花香爽利，柑橘提升与甜香料",
+                "region": "南澳大利亚"
+              },
+              "ja": {
+                "desc": "華やかで爽やか、柑橘の高まりと甘いスパイス",
+                "region": "南オーストラリア"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sparkling",
+      "name": {
+        "en": "Sparkling Wines",
+        "zh": "起泡酒",
+        "ja": "スパークリングワイン"
+      },
+      "cols": [
+        {
+          "icon": "glass-s"
+        },
+        {
+          "icon": "glass-l"
+        },
+        {
+          "icon": "bottle"
+        }
+      ],
+      "groups": [
+        {
+          "id": "sparkling-200ml",
+          "label": {
+            "en": "200ml BOTTLE",
+            "zh": "200ml 瓶装",
+            "ja": "200ml ボトル"
+          },
+          "items": [
+            {
+              "id": "prosecco-au",
+              "prices": [
+                "",
+                "",
+                "17.5"
+              ],
+              "en": {
+                "name": "Prosecco",
+                "region": "Australia",
+                "desc": "Light and crisp bubbles with green apple and pear notes"
+              },
+              "zh": {
+                "desc": "轻盈清爽的气泡，带青苹果与梨的香气",
+                "region": "澳大利亚"
+              },
+              "ja": {
+                "desc": "軽やかで爽快な泡、青リンゴと洋梨の香り",
+                "region": "オーストラリア"
+              }
+            },
+            {
+              "id": "moscato-au",
+              "prices": [
+                "",
+                "",
+                "17"
+              ],
+              "en": {
+                "name": "Moscato",
+                "region": "Australia",
+                "desc": "Sweet and gently sparkling, with fresh grape and peach notes"
+              },
+              "zh": {
+                "desc": "清甜微泡，带新鲜葡萄与桃子香气",
+                "region": "澳大利亚"
+              },
+              "ja": {
+                "desc": "甘口でやさしい発泡、フレッシュなブドウと白桃の香り",
+                "region": "オーストラリア"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sparkling-house",
+          "label": {
+            "en": "HOUSE",
+            "zh": "招牌",
+            "ja": "ハウス"
+          },
+          "items": [
+            {
+              "id": "house-prosecco",
+              "prices": [
+                "12",
+                "20",
+                "50"
+              ],
+              "en": {
+                "name": "Vitalia’s House Prosecco",
+                "region": "Victoria",
+                "desc": "From the King Valley: light, crisp and fruity bubbles"
+              },
+              "zh": {
+                "desc": "来自 King Valley：轻盈清爽的果味气泡",
+                "region": "维多利亚州"
+              },
+              "ja": {
+                "desc": "キングヴァレー産：軽やかで爽快、果実味のある泡",
+                "region": "ビクトリア州"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sparkling-italian",
+          "label": {
+            "en": "ITALIAN",
+            "zh": "意大利",
+            "ja": "イタリア"
+          },
+          "items": [
+            {
+              "id": "lambrusco",
+              "prices": [
+                "",
+                "",
+                "46"
+              ],
+              "en": {
+                "name": "Lambrusco di Modena",
+                "region": "Emilia Romagna",
+                "desc": "Lightly sparkling red with fresh berries and a soft, fruity finish"
+              },
+              "zh": {
+                "desc": "微起泡红酒，带清新浆果香气，余味柔和果香",
+                "region": "艾米利亚-罗马涅"
+              },
+              "ja": {
+                "desc": "微発泡の赤、フレッシュなベリーと柔らかな果実味の余韻",
+                "region": "エミリア・ロマーニャ"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sparkling-french",
+          "label": {
+            "en": "FRENCH",
+            "zh": "法国",
+            "ja": "フランス"
+          },
+          "items": [
+            {
+              "id": "moet-chandon",
+              "prices": [
+                "",
+                "",
+                "198"
+              ],
+              "en": {
+                "name": "Moët & Chandon Champagne",
+                "region": "France",
+                "desc": "Fine bubbles, elegant balance and refined character"
+              },
+              "zh": {
+                "desc": "细腻气泡，优雅平衡，格调精致",
+                "region": "法国"
+              },
+              "ja": {
+                "desc": "きめ細かな泡、優雅なバランスと洗練された個性",
+                "region": "フランス"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cellar",
+      "name": {
+        "en": "Italian Cellar Selection",
+        "zh": "意大利酒窖精选",
+        "ja": "イタリア厳選ワインセラー"
+      },
+      "groups": [
+        {
+          "id": "cellar-red",
+          "style": "head",
+          "label": {
+            "en": "RED",
+            "zh": "红葡萄酒",
+            "ja": "赤ワイン"
+          },
+          "items": [
+            {
+              "id": "taurasi",
+              "year": "2015",
+              "price": "179",
+              "en": {
+                "name": "Macchialupa Taurasi DOCG",
+                "region": "Campania",
+                "desc": "A majestic red from Aglianico grapes aged in oak, deep notes of dark cherry, violet and spice, with a lingering finish"
+              },
+              "zh": {
+                "desc": "以 Aglianico 葡萄酿造并经橡木陈酿的雄浑红酒，深邃的黑樱桃、紫罗兰与香料气息，余韵悠长",
+                "region": "坎帕尼亚"
+              },
+              "ja": {
+                "desc": "オーク熟成のアリアニコ種による堂々たる赤、ダークチェリー、スミレ、スパイスの深い香りと長い余韻",
+                "region": "カンパーニア"
+              }
+            },
+            {
+              "id": "amarone",
+              "year": "2018",
+              "price": "199",
+              "en": {
+                "name": "Amarone della Valpolicella Riondo DOCG",
+                "region": "Veneto",
+                "desc": "Full-bodied and complex, made from semi-dried grapes, aromas of raisin, chocolate and plum, balanced with smooth tannins"
+              },
+              "zh": {
+                "desc": "酒体饱满复杂，以半干葡萄酿造，带葡萄干、巧克力与李子香气，单宁顺滑平衡",
+                "region": "威尼托"
+              },
+              "ja": {
+                "desc": "半乾燥ブドウから造られるフルボディで複雑な味わい、レーズン、チョコレート、プラムの香り、滑らかなタンニン",
+                "region": "ヴェネト"
+              }
+            },
+            {
+              "id": "brunello",
+              "year": "2017",
+              "price": "249",
+              "en": {
+                "name": "Brunello di Montalcino La Fornace",
+                "region": "Toscana",
+                "desc": "Intense ruby red with ripe cherry and forest-berry aromas, firm elegant tannins and a lingering refined finish"
+              },
+              "zh": {
+                "desc": "浓郁宝石红，成熟樱桃与森林浆果香气，单宁坚实优雅，余韵精致悠长",
+                "region": "托斯卡纳"
+              },
+              "ja": {
+                "desc": "濃いルビー色、熟したチェリーと森の果実の香り、しっかりとした上品なタンニンと洗練された余韻",
+                "region": "トスカーナ"
+              }
+            },
+            {
+              "id": "barolo",
+              "year": "2018",
+              "price": "229",
+              "en": {
+                "name": "Barolo Massimo Rivetti DOCG",
+                "region": "Piemonte",
+                "desc": "The king of wines from Nebbiolo grapes, intense bouquet of rose, cherry and truffle, full-bodied with long persistence"
+              },
+              "zh": {
+                "desc": "以 Nebbiolo 葡萄酿造的酒中之王，玫瑰、樱桃与松露的浓郁芬芳，酒体饱满，回味悠长",
+                "region": "皮埃蒙特"
+              },
+              "ja": {
+                "desc": "ネッビオーロ種による王のワイン、バラ、チェリー、トリュフの豊かな芳香、フルボディで長い持続性",
+                "region": "ピエモンテ"
+              }
+            },
+            {
+              "id": "barbaresco",
+              "year": "2019",
+              "price": "189",
+              "en": {
+                "name": "Barbaresco Manuel Marinacci DOCG",
+                "region": "Piemonte",
+                "desc": "Delicate yet structured Nebbiolo from a small artisan producer, aromas of berries, rose and licorice, elegant and silky finish"
+              },
+              "zh": {
+                "desc": "来自小型匠人酒庄的 Nebbiolo，细腻而有结构，带浆果、玫瑰与甘草香气，收结优雅丝滑",
+                "region": "皮埃蒙特"
+              },
+              "ja": {
+                "desc": "小規模生産者による繊細かつ骨格のあるネッビオーロ、ベリー、バラ、リコリスの香り、優雅で絹のような余韻",
+                "region": "ピエモンテ"
+              }
+            },
+            {
+              "id": "montefalco",
+              "year": "2017",
+              "price": "179",
+              "en": {
+                "name": "Montefalco Sagrantino Carapace DOCG",
+                "region": "Umbria",
+                "desc": "Powerful Umbrian red from Sagrantino grapes, aromas of blackberry, cherry and spice, with firm tannins and a long finish"
+              },
+              "zh": {
+                "desc": "以 Sagrantino 葡萄酿造的翁布里亚浓郁红酒，带黑莓、樱桃与香料香气，单宁坚实，余韵悠长优雅",
+                "region": "翁布里亚"
+              },
+              "ja": {
+                "desc": "サグランティーノ種から造るウンブリアの力強い赤、ブラックベリー、チェリー、スパイスの香り、しっかりしたタンニンと長く優雅な余韻",
+                "region": "ウンブリア"
+              }
+            }
+          ]
+        },
+        {
+          "id": "cellar-white",
+          "style": "head",
+          "label": {
+            "en": "WHITE",
+            "zh": "白葡萄酒",
+            "ja": "白ワイン"
+          },
+          "items": [
+            {
+              "id": "greco-di-tufo",
+              "year": "2022",
+              "price": "119",
+              "en": {
+                "name": "Greco di Tufo Macchialupa",
+                "region": "Campania",
+                "desc": "Deep straw yellow wine with apricot and almond aromas, warm dry palate with excellent structure and balance"
+              },
+              "zh": {
+                "desc": "深稻草黄色，带杏与杏仁香气，口感温暖干爽，结构与平衡出色",
+                "region": "坎帕尼亚"
+              },
+              "ja": {
+                "desc": "濃い麦わら色、アプリコットとアーモンドの香り、温かみのある辛口で優れた構成とバランス",
+                "region": "カンパーニア"
+              }
+            },
+            {
+              "id": "ca-maiol",
+              "year": "2021",
+              "price": "129",
+              "en": {
+                "name": "Ca’ Maiol - Prestige Lugana",
+                "region": "Lombardia",
+                "desc": "Bright white with green apple and citrus, light tropical hints and a crisp mineral finish with freshness"
+              },
+              "zh": {
+                "desc": "明亮白葡萄酒，青苹果与柑橘，淡淡热带气息，收结清爽带矿物感",
+                "region": "伦巴第"
+              },
+              "ja": {
+                "desc": "明るい白ワイン、青リンゴと柑橘、軽いトロピカルなニュアンス、爽快でミネラリーな余韻",
+                "region": "ロンバルディア"
+              }
+            },
+            {
+              "id": "de-coccio",
+              "year": "2021",
+              "price": "129",
+              "en": {
+                "name": "De Coccio IGP - Verdicchio in Amphora",
+                "region": "Lazio",
+                "desc": "Golden straw colour, rich bouquet of honeyed fruit and delicate herbs, full smooth body with elegant minerality"
+              },
+              "zh": {
+                "desc": "金稻草色，蜜饯果香与细腻草本的丰富芬芳，酒体饱满顺滑，矿物感优雅",
+                "region": "拉齐奥"
+              },
+              "ja": {
+                "desc": "黄金色、蜜のような果実と繊細なハーブの豊かな香り、まろやかな厚みと優雅なミネラル感",
+                "region": "ラツィオ"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spirits",
+      "name": {
+        "en": "Whiskey, Rum & Premium Spirits",
+        "zh": "威士忌、朗姆酒与精品烈酒",
+        "ja": "ウイスキー、ラム & プレミアムスピリッツ"
+      },
+      "groups": [
+        {
+          "id": "whiskey-rum",
+          "label": {
+            "en": "WHISKEY / RUM / BOURBONS",
+            "zh": "威士忌 / 朗姆 / 波本",
+            "ja": "ウイスキー / ラム / バーボン"
+          },
+          "items": [
+            {
+              "id": "jack-daniels",
+              "price": "14.5",
+              "en": {
+                "name": "Jack Daniel’s"
+              }
+            },
+            {
+              "id": "johnny-walker",
+              "price": "14.5",
+              "en": {
+                "name": "Johnnie Walker"
+              }
+            },
+            {
+              "id": "ballantines",
+              "price": "14.5",
+              "en": {
+                "name": "Ballantine’s"
+              }
+            },
+            {
+              "id": "bacardi",
+              "price": "13.5",
+              "en": {
+                "name": "Bacardi"
+              }
+            },
+            {
+              "id": "malibu",
+              "price": "13.5",
+              "en": {
+                "name": "Malibu"
+              }
+            },
+            {
+              "id": "sailor-jerry",
+              "price": "14.5",
+              "en": {
+                "name": "Sailor Jerry"
+              }
+            },
+            {
+              "id": "jameson",
+              "price": "14.5",
+              "en": {
+                "name": "Jameson"
+              }
+            },
+            {
+              "id": "canadian-club",
+              "price": "13.5",
+              "en": {
+                "name": "Canadian Club"
+              }
+            },
+            {
+              "id": "jim-beam",
+              "price": "13.5",
+              "en": {
+                "name": "Jim Beam"
+              }
+            },
+            {
+              "id": "makers-mark",
+              "price": "14.5",
+              "en": {
+                "name": "Maker’s Mark"
+              }
+            }
+          ]
+        },
+        {
+          "id": "premium-spirits",
+          "label": {
+            "en": "PREMIUM SPIRITS",
+            "zh": "精品烈酒",
+            "ja": "プレミアムスピリッツ"
+          },
+          "items": [
+            {
+              "id": "courvoisier",
+              "price": "17.9",
+              "en": {
+                "name": "Courvoisier Cognac"
+              }
+            },
+            {
+              "id": "grey-goose",
+              "price": "18.5",
+              "en": {
+                "name": "Grey Goose"
+              }
+            },
+            {
+              "id": "gin-malfy",
+              "price": "18.5",
+              "en": {
+                "name": "Gin Malfy"
+              }
+            },
+            {
+              "id": "gin-tanqueray",
+              "price": "17.5",
+              "en": {
+                "name": "Gin Tanqueray"
+              }
+            },
+            {
+              "id": "diplomatico",
+              "price": "19.9",
+              "en": {
+                "name": "Diplomatico Reserva"
+              }
+            },
+            {
+              "id": "grappa-piave",
+              "price": "16.5",
+              "en": {
+                "name": "Grappa Bianca Piave"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "liqueurs",
+      "name": {
+        "en": "Liqueurs & Digestives",
+        "zh": "利口酒与餐后酒",
+        "ja": "リキュール & 食後酒"
+      },
+      "items": [
+        {
+          "id": "amaretto",
+          "price": "13.5",
+          "en": {
+            "name": "Amaretto"
+          }
+        },
+        {
+          "id": "frangelico",
+          "price": "13.5",
+          "en": {
+            "name": "Frangelico"
+          }
+        },
+        {
+          "id": "baileys",
+          "price": "13.5",
+          "en": {
+            "name": "Baileys"
+          }
+        },
+        {
+          "id": "kahlua",
+          "price": "13.5",
+          "en": {
+            "name": "Kahlua"
+          }
+        },
+        {
+          "id": "cointreau",
+          "price": "14.5",
+          "en": {
+            "name": "Cointreau"
+          }
+        },
+        {
+          "id": "midori",
+          "price": "13.5",
+          "en": {
+            "name": "Midori"
+          }
+        },
+        {
+          "id": "limoncello",
+          "price": "13.5",
+          "en": {
+            "name": "Limoncello"
+          }
+        },
+        {
+          "id": "sambuca-bianca",
+          "price": "14.5",
+          "en": {
+            "name": "Sambuca Bianca"
+          }
+        },
+        {
+          "id": "sambuca-nera",
+          "price": "14.5",
+          "en": {
+            "name": "Sambuca Nera"
+          }
+        },
+        {
+          "id": "amaro-del-capo",
+          "price": "14.5",
+          "en": {
+            "name": "Amaro del Capo"
+          }
+        },
+        {
+          "id": "montenegro",
+          "price": "14.5",
+          "en": {
+            "name": "Montenegro"
+          }
+        },
+        {
+          "id": "averna",
+          "price": "14.5",
+          "en": {
+            "name": "Averna"
+          }
+        },
+        {
+          "id": "lucano",
+          "price": "14.5",
+          "en": {
+            "name": "Lucano"
+          }
+        },
+        {
+          "id": "mirto",
+          "price": "15",
+          "en": {
+            "name": "Mirto Liqueur"
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<script id="menuData-lunch" type="application/json">{
+  "id": "lunch",
+  "note": "English is the source of truth, verified column by column against the rendered pages. Chinese and Japanese transcribed from their own rendered pages, then checked ingredient by ingredient against the English; the Calzone was missing parmesan in both and was brought in line. Two typos in the printed English were corrected on the owner's instruction: 'Iced Coffes' and 'Chamomille' (both were already correct in Chinese and Japanese).",
+  "title": {
+    "en": "Lunch",
+    "zh": "午餐",
+    "ja": "ランチ"
+  },
+  "hours": {
+    "lunch": "11:00am - 4:30pm",
+    "dinner": "4:30pm - 9:00pm"
+  },
+  "legend": [
+    {
+      "code": "V",
+      "en": "Vegetarian",
+      "zh": "素食",
+      "ja": "ベジタリアン"
+    },
+    {
+      "code": "VG",
+      "en": "Vegan",
+      "zh": "纯素",
+      "ja": "ヴィーガン"
+    },
+    {
+      "code": "GF",
+      "en": "Gluten Free",
+      "zh": "无麸质",
+      "ja": "グルテンフリー"
+    },
+    {
+      "code": "DF",
+      "en": "Dairy Free",
+      "zh": "无乳制品",
+      "ja": "乳製品不使用"
+    }
+  ],
+  "surcharge": {
+    "en": "10% surcharge applies on weekends | 15% surcharge on public holidays",
+    "zh": "周末加收 10% 服务费 | 公共假期加收 15% 服务费",
+    "ja": "週末は10%、祝日は15%の追加料金がかかります。"
+  },
+  "cover": {
+    "since": {
+      "en": "SINCE 2017",
+      "zh": "始于 2017",
+      "ja": "2017年創業"
+    },
+    "memory": {
+      "en": "In loving memory of Vitalia Zanda,\nthe heart and inspiration behind everything we do.",
+      "zh": "怀念 Vitalia Zanda，\n她是我们一切的核心与灵感。",
+      "ja": "私たちのすべての中心であり、\nインスピレーションの源となったヴィタリア・ザンダを偲んで。"
+    },
+    "title": {
+      "en": "LUNCH",
+      "zh": "午餐",
+      "ja": "ランチ"
+    }
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "type": "cover"
+    },
+    {
+      "id": "l1",
+      "panels": [
+        [
+          "salads",
+          "mains"
+        ],
+        [
+          "pasta"
+        ]
+      ]
+    },
+    {
+      "id": "l2",
+      "panels": [
+        [
+          "pizza-1"
+        ],
+        [
+          "pizza-2"
+        ]
+      ]
+    },
+    {
+      "id": "l3",
+      "panels": [
+        [
+          "dolce"
+        ],
+        [
+          "soft-drinks"
+        ]
+      ]
+    },
+    {
+      "id": "l4",
+      "panels": [
+        [
+          "coffee"
+        ]
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "salads",
+      "name": {
+        "en": "Salads",
+        "zh": "沙拉",
+        "ja": "サラダ"
+      },
+      "items": [
+        {
+          "id": "burrata-caprese",
+          "price": "22.5",
+          "tags": [
+            "V",
+            "GF"
+          ],
+          "en": {
+            "name": "Burrata Caprese",
+            "desc": "Creamy Italian burrata with rocket, cherry tomatoes, zucchini cream, and balsamic vinegar dressing"
+          },
+          "zh": {
+            "name": "布拉塔卡布里沙拉",
+            "desc": "意大利布拉塔奶酪、芝麻菜、樱桃番茄、西葫芦奶油、意式香醋汁"
+          },
+          "ja": {
+            "name": "ブラータ・カプレーゼ",
+            "desc": "イタリア産ブラータチーズ、ルッコラ、チェリートマト、ズッキーニクリーム、バルサミコドレッシング"
+          }
+        },
+        {
+          "id": "prawns-salad",
+          "price": "25.5",
+          "tags": [
+            "GF"
+          ],
+          "en": {
+            "name": "Prawns Salad",
+            "desc": "Local prawns, mixed salad with tomatoes, quinoa, carrots and zesty yoghurt cream"
+          },
+          "zh": {
+            "name": "大虾沙拉",
+            "desc": "本地鲜虾、混合生菜、番茄、藜麦、胡萝卜、清爽酸奶酱"
+          },
+          "ja": {
+            "name": "海老のサラダ",
+            "desc": "地元産の海老、ミックスサラダ、トマト、キヌア、にんじん、さわやかなヨーグルトクリーム"
+          }
+        },
+        {
+          "id": "chicken-salad",
+          "price": "22.5",
+          "tags": [
+            "GF"
+          ],
+          "en": {
+            "name": "Chicken Salad",
+            "desc": "Mixed leaves with chicken, olives, capsicum sauce, balsamic vinegar dressing, and shaved parmesan"
+          },
+          "zh": {
+            "name": "鸡肉沙拉",
+            "desc": "混合生菜、嫩鸡肉、橄榄、红椒酱、意式香醋汁、帕尔玛干酪片"
+          },
+          "ja": {
+            "name": "チキンサラダ",
+            "desc": "ミックスリーフ、チキン、オリーブ、パプリカソース、バルサミコドレッシング、削りパルメザン"
+          }
+        },
+        {
+          "id": "la-vegana",
+          "price": "22.5",
+          "tags": [
+            "VG",
+            "GF"
+          ],
+          "en": {
+            "name": "La Vegana",
+            "desc": "Mixed leaves and colourful mix of quinoa, celeriac sauce, mushrooms, fried cauliflower and almond flakes"
+          },
+          "zh": {
+            "name": "纯素田园沙拉",
+            "desc": "混合生菜、彩色藜麦、芹菜根酱、蘑菇、炸花椰菜、杏仁片"
+          },
+          "ja": {
+            "name": "ラ・ヴェガーナ",
+            "desc": "ミックスリーフ、カラフルなキヌア、セロリアックソース、きのこ、揚げカリフラワー、アーモンドフレーク"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pasta",
+      "name": {
+        "en": "Pasta",
+        "zh": "意面",
+        "ja": "パスタ"
+      },
+      "items": [
+        {
+          "id": "spaghetti-pomodoro",
+          "price": "25",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Spaghetti al Pomodoro",
+            "desc": "Fresh tomato sauce with basil and parmesan"
+          },
+          "zh": {
+            "name": "番茄罗勒意面",
+            "desc": "新鲜番茄酱、罗勒、帕尔玛干酪"
+          },
+          "ja": {
+            "name": "スパゲッティ・ポモドーロ",
+            "desc": "フレッシュトマトソース、バジル、パルメザンチーズ"
+          }
+        },
+        {
+          "id": "lunch-carbonara",
+          "price": "26",
+          "tags": [],
+          "en": {
+            "name": "Spaghetti Carbonara",
+            "desc": "Creamy sauce with eggs, pecorino cheese, crispy guanciale, and freshly ground black pepper"
+          },
+          "zh": {
+            "name": "卡邦纳拉意面",
+            "desc": "鸡蛋奶油酱、佩科里诺奶酪、香脆猪颊肉、现磨黑胡椒"
+          },
+          "ja": {
+            "name": "スパゲッティ・カルボナーラ",
+            "desc": "卵とペコリーノチーズのクリーミーソース、カリカリのグアンチャーレ、挽きたてブラックペッパー"
+          }
+        },
+        {
+          "id": "gnocchi-quattro",
+          "price": "26",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Gnocchi Quattro Formaggi",
+            "desc": "Soft gnocchi in a smooth, creamy blend of gorgonzola, parmesan, provolone, and pecorino cheese"
+          },
+          "zh": {
+            "name": "四种奶酪马铃薯团子",
+            "desc": "软糯马铃薯团子、戈尔贡佐拉、帕尔玛干酪、普罗沃洛内与佩科里诺四味奶酪浓郁酱汁"
+          },
+          "ja": {
+            "name": "ニョッキ・クワトロフォルマッジ",
+            "desc": "やわらかいニョッキ、ゴルゴンゾーラ・パルメザン・プロヴォローネ・ペコリーノの濃厚な4種チーズソース"
+          }
+        },
+        {
+          "id": "cavatelli-bolognese",
+          "price": "25",
+          "tags": [],
+          "en": {
+            "name": "Cavatelli alla Bolognese",
+            "desc": "Cavatelli with slow-cooked beef ragù in a rich Napoli sauce, topped with grated parmesan"
+          },
+          "zh": {
+            "name": "博洛尼亚肉酱贝壳面",
+            "desc": "贝壳面配慢炖牛肉拉古酱与浓郁那不勒斯番茄底，顶部撒帕尔玛干酪碎"
+          },
+          "ja": {
+            "name": "カヴァテッリ・ボロネーゼ",
+            "desc": "じっくり煮込んだビーフラグー、リッチなナポリソース、パルメザンチーズがけ"
+          }
+        },
+        {
+          "id": "linguine-vongole",
+          "price": "28",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Linguine alle Vongole",
+            "desc": "Linguine with juicy vongole, cherry tomatoes, fresh parsley, and white wine sauce"
+          },
+          "zh": {
+            "name": "蛤蜊扁面",
+            "desc": "扁面配鲜嫩蛤蜊、樱桃番茄、新鲜欧芹、白葡萄酒酱汁"
+          },
+          "ja": {
+            "name": "リングイネ・ボンゴレ",
+            "desc": "あさり、チェリートマト、フレッシュパセリ、白ワインソース"
+          }
+        }
+      ],
+      "foot": {
+        "en": "Gluten Free Pasta +$5",
+        "zh": "无麸质意面 +$5",
+        "ja": "グルテンフリーパスタ +$5"
+      }
+    },
+    {
+      "id": "pizza-1",
+      "name": {
+        "en": "Pizza",
+        "zh": "比萨",
+        "ja": "ピザ"
+      },
+      "items": [
+        {
+          "id": "margherita",
+          "price": "26.5",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Margherita",
+            "desc": "San Marzano tomatoes, mozzarella, basil, EVOO"
+          },
+          "zh": {
+            "name": "玛格丽特",
+            "desc": "圣马扎诺番茄、马苏里拉奶酪、新鲜罗勒、特级初榨橄榄油"
+          },
+          "ja": {
+            "name": "マルゲリータ",
+            "desc": "サン・マルツァーノトマト、モッツァレラ、バジル、エキストラバージンオリーブオイル"
+          }
+        },
+        {
+          "id": "bufalina",
+          "price": "36",
+          "tags": [],
+          "en": {
+            "name": "Bufalina",
+            "desc": "San Marzano tomatoes, fresh buffalo mozzarella, prosciutto crudo, cherry tomatoes, basil, EVOO"
+          },
+          "zh": {
+            "name": "水牛奶酪比萨",
+            "desc": "圣马扎诺番茄、新鲜水牛马苏里拉奶酪、意式生火腿、樱桃番茄、罗勒、特级初榨橄榄油"
+          },
+          "ja": {
+            "name": "ブファリーナ",
+            "desc": "サン・マルツァーノトマト、フレッシュ水牛モッツァレラ、プロシュット・クルード、チェリートマト、バジル、オリーブオイル"
+          }
+        },
+        {
+          "id": "capricciosa",
+          "price": "30.5",
+          "tags": [],
+          "en": {
+            "name": "Capricciosa",
+            "desc": "San Marzano tomatoes, mozzarella, ham, mushrooms, artichokes, olives"
+          },
+          "zh": {
+            "name": "随心比萨",
+            "desc": "圣马扎诺番茄、马苏里拉奶酪、火腿、蘑菇、朝鲜蓟、橄榄"
+          },
+          "ja": {
+            "name": "カプリチョーザ",
+            "desc": "サン・マルツァーノトマト、モッツァレラ、ハム、マッシュルーム、アーティチョーク、オリーブ"
+          }
+        },
+        {
+          "id": "vegetariana",
+          "price": "31.5",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Vegetariana 2.0",
+            "desc": "Zucchini cream base, mozzarella, fried eggplant, roasted capsicum"
+          },
+          "zh": {
+            "name": "蔬菜比萨 2.0",
+            "desc": "西葫芦奶油底酱、马苏里拉奶酪、炸茄子、烤红椒"
+          },
+          "ja": {
+            "name": "ヴェジタリアーナ 2.0",
+            "desc": "ズッキーニクリームベース、モッツァレラ、揚げナス、ローストパプリカ"
+          }
+        },
+        {
+          "id": "sardegna",
+          "price": "29.5",
+          "tags": [
+            "VG"
+          ],
+          "en": {
+            "name": "Sardegna",
+            "desc": "San Marzano, vegan-mozzarella, cherry tomatoes, artichokes, oregano, basil"
+          },
+          "zh": {
+            "name": "撒丁岛",
+            "desc": "圣马扎诺番茄、纯素马苏里拉、樱桃番茄、朝鲜蓟、牛至、罗勒"
+          },
+          "ja": {
+            "name": "サルデーニャ",
+            "desc": "サン・マルツァーノトマト、ヴィーガンモッツァレラ、チェリートマト、アーティチョーク、オレガノ、バジル"
+          }
+        },
+        {
+          "id": "umbria",
+          "price": "29.5",
+          "tags": [
+            "VG"
+          ],
+          "en": {
+            "name": "Umbria",
+            "desc": "Vegan-mozzarella, pumpkin pure' mushrooms, walnuts, truffle cream"
+          },
+          "zh": {
+            "name": "翁布里亚",
+            "desc": "纯素马苏里拉、南瓜泥、蘑菇、核桃、松露奶油"
+          },
+          "ja": {
+            "name": "ウンブリア",
+            "desc": "ヴィーガンモッツァレラ、かぼちゃのピューレ、マッシュルーム、くるみ、トリュフクリーム"
+          }
+        },
+        {
+          "id": "napule",
+          "price": "34.5",
+          "tags": [],
+          "en": {
+            "name": "Napule'",
+            "desc": "Mozzarella, smoked scamorza, Italian sausage, broccoli rabe (friarielli)"
+          },
+          "zh": {
+            "name": "那不勒斯风情",
+            "desc": "马苏里拉奶酪、烟熏斯卡莫扎奶酪、意大利香肠、西兰花苗"
+          },
+          "ja": {
+            "name": "ナポレ",
+            "desc": "モッツァレラ、スモークスカモルツァ、イタリアンソーセージ、イタリア産菜の花（フリアリエッリ）"
+          }
+        },
+        {
+          "id": "diavola",
+          "price": "31.5",
+          "tags": [],
+          "en": {
+            "name": "Diavola",
+            "desc": "San Marzano tomatoes, mozzarella, Calabrese salami, caramelized onion, 'nduja"
+          },
+          "zh": {
+            "name": "魔鬼比萨",
+            "desc": "圣马扎诺番茄、马苏里拉奶酪、卡拉布里亚辣味萨拉米、焦糖洋葱、辣肠酱"
+          },
+          "ja": {
+            "name": "ディアヴォラ",
+            "desc": "サン・マルツァーノトマト、モッツァレラ、カラブリア産スパイシーサラミ、キャラメライズドオニオン、’ンドゥイヤ"
+          }
+        }
+      ],
+      "foot": {
+        "en": "Gluten Free Pizza +$8",
+        "zh": "无麸质披萨 +$8",
+        "ja": "グルテンフリーピザ +$8"
+      }
+    },
+    {
+      "id": "pizza-2",
+      "name": {
+        "en": "Pizza",
+        "zh": "比萨",
+        "ja": "ピザ"
+      },
+      "items": [
+        {
+          "id": "leonardo",
+          "price": "34.5",
+          "tags": [],
+          "en": {
+            "name": "Leonardo da Vinci",
+            "desc": "San Marzano tomatoes, mozzarella, prosciutto crudo, rocket, shaved parmesan, EVOO"
+          },
+          "zh": {
+            "name": "达芬奇",
+            "desc": "圣马扎诺番茄、马苏里拉奶酪、意式生火腿、芝麻菜、帕尔玛干酪片、特级初榨橄榄油"
+          },
+          "ja": {
+            "name": "レオナルド・ダ・ヴィンチ",
+            "desc": "サン・マルツァーノトマト、モッツァレラ、プロシュット・クルード、ルッコラ、削りパルメザン、オリーブオイル"
+          }
+        },
+        {
+          "id": "mortazza",
+          "price": "35",
+          "tags": [],
+          "en": {
+            "name": "Mortazza",
+            "desc": "Mozzarella, mortadella, sun-dried tomatoes, pistachio burrata"
+          },
+          "zh": {
+            "name": "莫尔塔扎",
+            "desc": "马苏里拉奶酪、意式博洛尼亚香肠、风干番茄、开心果布拉塔奶酪"
+          },
+          "ja": {
+            "name": "モルタッツァ",
+            "desc": "モッツァレラ、モルタデッラ、セミドライトマト、ピスタチオブラータ"
+          }
+        },
+        {
+          "id": "il-padrino",
+          "price": "36.5",
+          "tags": [],
+          "en": {
+            "name": "Il Padrino (The Godfather)",
+            "desc": "San Marzano tomatoes, mozzarella, soppressa salami, rocket, cherry tomatoes, burrata"
+          },
+          "zh": {
+            "name": "教父",
+            "desc": "圣马扎诺番茄、马苏里拉奶酪、索普雷萨萨拉米、芝麻菜、樱桃番茄、布拉塔奶酪"
+          },
+          "ja": {
+            "name": "ゴッドファーザー",
+            "desc": "サン・マルツァーノトマト、モッツァレラ、ソプレッササラミ、ルッコラ、チェリートマト、ブラータ"
+          }
+        },
+        {
+          "id": "quattro-formaggi",
+          "price": "31.5",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Quattro Formaggi e Tartufo",
+            "desc": "Mozzarella, gorgonzola, smoked scamorza, parmesan, truffle cream"
+          },
+          "zh": {
+            "name": "四种奶酪配松露",
+            "desc": "马苏里拉、戈尔贡佐拉蓝纹奶酪、烟熏斯卡莫扎、帕尔玛干酪、松露奶油"
+          },
+          "ja": {
+            "name": "クワトロフォルマッジ・タルトゥーフォ",
+            "desc": "モッツァレラ、ゴルゴンゾーラ、スモークスカモルツァ、パルメザン、トリュフクリーム"
+          }
+        },
+        {
+          "id": "zuccotta",
+          "price": "34",
+          "tags": [],
+          "en": {
+            "name": "Zuccotta",
+            "desc": "Pumpkin cream base, mozzarella, guanciale, grated pecorino"
+          },
+          "zh": {
+            "name": "南瓜奶油比萨",
+            "desc": "南瓜奶油底酱、马苏里拉奶酪、猪脸颊培根、研磨佩科里诺奶酪"
+          },
+          "ja": {
+            "name": "ズッコッタ",
+            "desc": "かぼちゃクリームベース、モッツァレラ、グアンチャーレ、すりおろしペコリーノ"
+          }
+        },
+        {
+          "id": "frutti-di-mare",
+          "price": "39.5",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Frutti di Mare",
+            "desc": "San Marzano garlic tomatoes, prawns, calamari, mussels, clams, parsley"
+          },
+          "zh": {
+            "name": "海鲜比萨",
+            "desc": "圣马扎诺蒜香番茄酱、大虾、鱿鱼、贻贝、蛤蜊、新鲜欧芹"
+          },
+          "ja": {
+            "name": "フルッティ・ディ・マーレ",
+            "desc": "サン・マルツァーノガーリックトマトソース、海老、イカ、ムール貝、あさり、パセリ"
+          }
+        },
+        {
+          "id": "calzone",
+          "price": "30.5",
+          "tags": [],
+          "en": {
+            "name": "Calzone (Folded Pizza)",
+            "desc": "San Marzano tomatoes, mozzarella, mild salami, ricotta, black pepper, parmesan"
+          },
+          "zh": {
+            "name": "意式对折披萨",
+            "desc": "圣马扎诺番茄、马苏里拉奶酪、温和萨拉米、瑞可塔奶酪、现磨黑胡椒、帕尔玛干酪"
+          },
+          "ja": {
+            "name": "カルツォーネ（折りたたみピザ）",
+            "desc": "サン・マルツァーノトマト、モッツァレラ、マイルドサラミ、リコッタ、ブラックペッパー、パルメザン"
+          }
+        }
+      ],
+      "foot": {
+        "en": "Gluten Free Pizza +$8",
+        "zh": "无麸质披萨 +$8",
+        "ja": "グルテンフリーピザ +$8"
+      }
+    },
+    {
+      "id": "mains",
+      "name": {
+        "en": "Mains",
+        "zh": "主菜",
+        "ja": "メイン"
+      },
+      "items": [
+        {
+          "id": "lunch-lasagna",
+          "price": "26.5",
+          "tags": [],
+          "en": {
+            "name": "Lasagna",
+            "desc": "Traditional layers of pasta with slow-cooked beef ragù and creamy béchamel sauce"
+          },
+          "zh": {
+            "name": "意式千层面",
+            "desc": "传统多层面片、慢炖牛肉拉古酱、浓郁白酱"
+          },
+          "ja": {
+            "name": "ラザニア",
+            "desc": "伝統的な重ね生地、じっくり煮込んだビーフラグー、濃厚ベシャメルソース"
+          }
+        },
+        {
+          "id": "pollo-cacciatora",
+          "price": "26.5",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Pollo alla Cacciatora",
+            "desc": "Braised chicken thigh with cherry tomatoes, olives, capers and red wine Napoli sauce, served with house focaccia"
+          },
+          "zh": {
+            "name": "猎人风味鸡腿",
+            "desc": "红酒番茄酱焖鸡腿、樱桃番茄、橄榄、刺山柑，配自制佛卡夏面包"
+          },
+          "ja": {
+            "name": "鶏もも肉のカッチャトーラ",
+            "desc": "チェリートマト・オリーブ・ケーパー・赤ワインナポリソースで煮込んだ鶏もも肉、自家製フォカッチャ添え"
+          }
+        },
+        {
+          "id": "calamari-prawns-frittura",
+          "price": "26.5",
+          "tags": [
+            "DF",
+            "GF"
+          ],
+          "en": {
+            "name": "Calamari & Prawns Frittura",
+            "desc": "Crispy fried calamari and prawns served with chips, salad and aioli sauce"
+          },
+          "zh": {
+            "name": "炸鱿鱼大虾",
+            "desc": "香脆炸鱿鱼与大虾，配薯条、沙拉及蒜泥蛋黄酱"
+          },
+          "ja": {
+            "name": "イカと海老のフリット",
+            "desc": "サクサクに揚げたイカと海老、フライドポテト・サラダ・アイオリソース添え"
+          }
+        }
+      ],
+      "foot": {
+        "en": "legend",
+        "zh": "legend",
+        "ja": "legend"
+      }
+    },
+    {
+      "id": "dolce",
+      "name": {
+        "en": "Dolce",
+        "zh": "甜品",
+        "ja": "デザート"
+      },
+      "items": [
+        {
+          "id": "tiramisu",
+          "price": "16.5",
+          "tags": [],
+          "en": {
+            "name": "Tiramisù",
+            "desc": "Classic espresso, mascarpone dessert, dusted with cocoa powder"
+          },
+          "zh": {
+            "name": "提拉米苏",
+            "desc": "经典意式浓缩咖啡与马斯卡彭奶酪甜点，顶部撒可可粉"
+          },
+          "ja": {
+            "name": "ティラミス",
+            "desc": "エスプレッソとマスカルポーネの定番イタリアンデザート、ココアパウダーがけ"
+          }
+        },
+        {
+          "id": "cannolo",
+          "price": "12.5",
+          "tags": [],
+          "en": {
+            "name": "Cannolo Siciliano",
+            "desc": "Crispy cannoli shells filled with silky ricotta cream, chocolate bits, orange zest and crunchy pistachios"
+          },
+          "zh": {
+            "name": "西西里卷管饼",
+            "desc": "香脆卷管饼外壳、丝滑瑞可塔奶油馅、巧克力碎、橙皮丁、脆开心果"
+          },
+          "ja": {
+            "name": "カンノーロ・シチリアーノ",
+            "desc": "サクサクのカンノーロシェル、なめらかなリコッタクリーム、チョコチップ、オレンジピール、砕きピスタチオ"
+          }
+        },
+        {
+          "id": "gelato-nutella",
+          "price": "15.5",
+          "tags": [
+            "GF"
+          ],
+          "en": {
+            "name": "Gelato alla Nutella",
+            "desc": "House-made Nutella gelato with whipped cream and crunchy hazelnuts"
+          },
+          "zh": {
+            "name": "能多益冰淇淋",
+            "desc": "自制能多益榛子巧克力冰淇淋、鲜奶油、香脆榛子"
+          },
+          "ja": {
+            "name": "ヌテッラジェラート",
+            "desc": "自家製ヌテッラジェラート、ホイップクリーム、砕きヘーゼルナッツ"
+          }
+        },
+        {
+          "id": "sorbet",
+          "price": "15.5",
+          "tags": [
+            "VG",
+            "GF"
+          ],
+          "en": {
+            "name": "Lemon and Mango Sorbet",
+            "desc": "Refreshing vegan sorbet paired with tangy red berries coulis"
+          },
+          "zh": {
+            "name": "柠檬芒果雪葩",
+            "desc": "清爽纯素雪葩、酸甜红莓果泥"
+          },
+          "ja": {
+            "name": "レモン＆マンゴーソルベ",
+            "desc": "さわやかなヴィーガンソルベ、タンジーな赤いベリーのクーリ添え"
+          }
+        }
+      ]
+    },
+    {
+      "id": "soft-drinks",
+      "name": {
+        "en": "Soft Drinks",
+        "zh": "软饮",
+        "ja": "ドリンク"
+      },
+      "items": [
+        {
+          "id": "sparkling-750",
+          "price": "8",
+          "tags": [],
+          "en": {
+            "name": "Sparkling Water",
+            "size": "750ml",
+            "desc": ""
+          },
+          "zh": {
+            "name": "气泡水 750ml",
+            "desc": ""
+          },
+          "ja": {
+            "name": "スパークリングウォーター 750ml",
+            "desc": ""
+          }
+        },
+        {
+          "id": "sanpellegrino-1l",
+          "price": "12",
+          "tags": [],
+          "en": {
+            "name": "Sanpellegrino Sparkling Water",
+            "size": "1L",
+            "desc": ""
+          },
+          "zh": {
+            "name": "圣培露气泡水 1L",
+            "desc": ""
+          },
+          "ja": {
+            "name": "サンペレグリノ スパークリングウォーター 1L",
+            "desc": ""
+          }
+        },
+        {
+          "id": "sanpellegrino-soft",
+          "price": "5.5",
+          "tags": [],
+          "en": {
+            "name": "San Pellegrino Soft Drinks",
+            "desc": "Aranciata - Limonata - Clementina - Arancia Rossa"
+          },
+          "zh": {
+            "name": "圣培露果味气泡饮",
+            "desc": "橙味 · 柠檬味 · 橘子味 · 血橙味"
+          },
+          "ja": {
+            "name": "サンペレグリノ フルーツドリンク",
+            "desc": "オレンジ · レモン · クレメンティーナ · ブラッドオレンジ"
+          }
+        },
+        {
+          "id": "classic-soft",
+          "price": "5.5",
+          "tags": [],
+          "en": {
+            "name": "Classic Soft Drinks",
+            "desc": "Coke - Zero - LLB"
+          },
+          "zh": {
+            "name": "经典汽水",
+            "desc": "可口可乐 · 零度可乐 · LLB"
+          },
+          "ja": {
+            "name": "定番ソフトドリンク",
+            "desc": "コカ・コーラ · ゼロコーラ · LLB"
+          }
+        },
+        {
+          "id": "juice",
+          "price": "5",
+          "tags": [],
+          "en": {
+            "name": "Juice",
+            "desc": "Pineapple - Orange - Apple - Mango"
+          },
+          "zh": {
+            "name": "鲜榨果汁",
+            "desc": "菠萝 · 橙汁 · 苹果 · 芒果"
+          },
+          "ja": {
+            "name": "ジュース",
+            "desc": "パイナップル · オレンジ · アップル · マンゴー"
+          }
+        },
+        {
+          "id": "ginger-beer",
+          "price": "6",
+          "tags": [],
+          "en": {
+            "name": "Ginger Beer",
+            "desc": ""
+          },
+          "zh": {
+            "name": "姜汁啤酒",
+            "desc": ""
+          },
+          "ja": {
+            "name": "ジンジャービア",
+            "desc": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "coffee",
+      "name": {
+        "en": "Coffee",
+        "zh": "咖啡",
+        "ja": "コーヒー"
+      },
+      "priceColumns": 2,
+      "items": [
+        {
+          "id": "espresso",
+          "price": "3.5",
+          "price2": "4.5",
+          "tags": [],
+          "en": {
+            "name": "Espresso",
+            "desc": "Single - Double"
+          },
+          "zh": {
+            "name": "浓缩咖啡",
+            "desc": "单份 · 双份 / Single · Double"
+          },
+          "ja": {
+            "name": "エスプレッソ",
+            "desc": "シングル · ダブル / Single · Double"
+          }
+        },
+        {
+          "id": "cappuccino",
+          "price": "6.5",
+          "price2": "7.5",
+          "tags": [],
+          "en": {
+            "name": "Cappuccino · Latte · Flat White",
+            "desc": "Medium - Large"
+          },
+          "zh": {
+            "name": "卡布奇诺 · 拿铁 · 白咖啡",
+            "desc": "中杯 · 大杯 / Medium · Large"
+          },
+          "ja": {
+            "name": "カプチーノ · カフェラテ · フラットホワイト",
+            "desc": "Mサイズ · Lサイズ / Medium · Large"
+          }
+        },
+        {
+          "id": "hot-chocolate",
+          "price": "6.5",
+          "price2": "7.5",
+          "tags": [],
+          "en": {
+            "name": "Hot Chocolate",
+            "desc": "Medium - Large"
+          },
+          "zh": {
+            "name": "热巧克力",
+            "desc": "中杯 · 大杯 / Medium · Large"
+          },
+          "ja": {
+            "name": "ホットチョコレート",
+            "desc": "Mサイズ · Lサイズ / Medium · Large"
+          }
+        },
+        {
+          "id": "long-black",
+          "price": "5.5",
+          "price2": "6.5",
+          "tags": [],
+          "en": {
+            "name": "Long Black",
+            "desc": "Medium - Large"
+          },
+          "zh": {
+            "name": "长黑咖啡",
+            "desc": "中杯 · 大杯 / Medium · Large"
+          },
+          "ja": {
+            "name": "ロングブラック",
+            "desc": "Mサイズ · Lサイズ / Medium · Large"
+          }
+        },
+        {
+          "id": "chai-latte",
+          "price": "7",
+          "price2": "8",
+          "tags": [],
+          "en": {
+            "name": "Chai Latte",
+            "desc": "Medium - Large"
+          },
+          "zh": {
+            "name": "印度香料拿铁",
+            "desc": "中杯 · 大杯 / Medium · Large"
+          },
+          "ja": {
+            "name": "チャイラテ",
+            "desc": "Mサイズ · Lサイズ / Medium · Large"
+          }
+        },
+        {
+          "id": "iced-coffee",
+          "price": "",
+          "price2": "9",
+          "tags": [],
+          "en": {
+            "name": "Iced Coffees",
+            "desc": "Coffee · Chai · Mocha · Latte · Chocolate"
+          },
+          "zh": {
+            "name": "冰咖啡",
+            "desc": "冰咖 · 冰茶 · 冰摩卡 · 冰拿铁 · 冰巧克力"
+          },
+          "ja": {
+            "name": "アイスコーヒー各種",
+            "desc": "コーヒー · チャイ · モカ · ラテ · チョコレート"
+          }
+        },
+        {
+          "id": "tea",
+          "price": "",
+          "price2": "5",
+          "tags": [],
+          "en": {
+            "name": "Tea",
+            "desc": "English Breakfast · Green · Peppermint · Chamomile · Lemongrass & Ginger"
+          },
+          "zh": {
+            "name": "茶",
+            "desc": "英式早餐茶 · 绿茶 · 薄荷茶 · 洋甘菊茶 · 柠檬草姜茶"
+          },
+          "ja": {
+            "name": "ティー",
+            "desc": "イングリッシュブレックファスト · グリーン · ペパーミント · カモミール · レモングラス＆ジンジャー"
+          }
+        }
+      ],
+      "colHead": {
+        "en": "M · L",
+        "zh": "中杯 · 大杯",
+        "ja": "M · L"
+      },
+      "foot": {
+        "en": "surcharge",
+        "zh": "surcharge",
+        "ja": "surcharge"
+      }
+    }
+  ],
+  "style": "serif"
+}</script>
+<script id="menuData-focacce" type="application/json">{
+  "id": "focacce",
+  "style": "cards",
+  "title": {
+    "en": "Focacce & Maritozzi",
+    "zh": "佛卡夏与玛丽托佐",
+    "ja": "フォカッチャ & マリトッツォ"
+  },
+  "pages": [
+    {
+      "panels": [
+        [
+          "focacce"
+        ],
+        [
+          "maritozzi"
+        ]
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "focacce",
+      "logo": "assets/opt/fm/logo-focacce.webp",
+      "name": {
+        "en": "Focacce",
+        "zh": "佛卡夏",
+        "ja": "フォカッチャ"
+      },
+      "aside": {
+        "en": "Every day, made with love",
+        "zh": "每一天，用心制作",
+        "ja": "毎日、愛を込めて"
+      },
+      "items": [
+        {
+          "id": "italian-stallion",
+          "price": "19",
+          "img": "assets/opt/fm/italian-stallion.webp",
+          "en": {
+            "name": "Italian Stallion",
+            "desc": "Mortadella, creamy burrata, basil pesto, fresh tomatoes"
+          },
+          "zh": {
+            "desc": "意式大香肠、奶油布拉塔、罗勒青酱、新鲜番茄"
+          },
+          "ja": {
+            "desc": "モルタデッラ、クリーミーなブッラータ、バジルペスト、フレッシュトマト"
+          }
+        },
+        {
+          "id": "calabrian-fire",
+          "price": "19",
+          "img": "assets/opt/fm/calabrian-fire.webp",
+          "en": {
+            "name": "Calabrian Fire",
+            "desc": "Spicy salami, olive pâté, ’nduja, caramelised red onions"
+          },
+          "zh": {
+            "desc": "辣味萨拉米、橄榄酱、卡拉布里亚辣香肠酱、焦糖红洋葱"
+          },
+          "ja": {
+            "desc": "スパイシーサラミ、オリーブパテ、ンドゥイヤ、赤玉ねぎのキャラメリゼ"
+          }
+        },
+        {
+          "id": "roman-gladiator",
+          "price": "19.5",
+          "img": "assets/opt/fm/roman-gladiator.webp",
+          "en": {
+            "name": "Roman Gladiator",
+            "desc": "Porchetta with creamy potato and rich parmesan"
+          },
+          "zh": {
+            "desc": "意式烤猪肉配奶油土豆与浓郁帕玛森芝士"
+          },
+          "ja": {
+            "desc": "ポルケッタ、クリーミーポテト、濃厚なパルメザン"
+          }
+        },
+        {
+          "id": "vitalias-parma",
+          "price": "20",
+          "img": "assets/opt/fm/vitalias-parma.webp",
+          "en": {
+            "name": "Vitalia’s Parma",
+            "desc": "Prosciutto di Parma, buffalo mozzarella, tomatoes, basil"
+          },
+          "zh": {
+            "desc": "帕尔马火腿、水牛马苏里拉、番茄、罗勒"
+          },
+          "ja": {
+            "desc": "パルマ産生ハム、水牛モッツァレラ、トマト、バジル"
+          }
+        },
+        {
+          "id": "pane-e-amore",
+          "price": "19",
+          "tags": [
+            "VG"
+          ],
+          "img": "assets/opt/fm/pane-and-amore.webp",
+          "en": {
+            "name": "Pane & Amore",
+            "desc": "Vegan pesto, eggplant, roasted peppers, dairy-free mozzarella"
+          },
+          "zh": {
+            "desc": "纯素青酱、茄子、烤甜椒、无奶马苏里拉"
+          },
+          "ja": {
+            "desc": "ヴィーガンペスト、なす、ローストパプリカ、乳不使用モッツァレラ"
+          }
+        },
+        {
+          "id": "capri-breeze",
+          "price": "19.5",
+          "tags": [
+            "V"
+          ],
+          "img": "assets/opt/fm/capri-breeze.webp",
+          "en": {
+            "name": "Capri Breeze",
+            "desc": "Tomatoes, buffalo mozzarella, sun-dried tomatoes, basil"
+          },
+          "zh": {
+            "desc": "番茄、水牛马苏里拉、油渍番茄干、罗勒"
+          },
+          "ja": {
+            "desc": "トマト、水牛モッツァレラ、ドライトマト、バジル"
+          }
+        }
+      ]
+    },
+    {
+      "id": "maritozzi",
+      "logo": "assets/opt/fm/logo-maritozzi.webp",
+      "name": {
+        "en": "Maritozzi",
+        "zh": "玛丽托佐",
+        "ja": "マリトッツォ"
+      },
+      "aside": {
+        "en": "Every day, made with love",
+        "zh": "每一天，用心制作",
+        "ja": "毎日、愛を込めて"
+      },
+      "items": [
+        {
+          "id": "classic-cream",
+          "price": "10",
+          "img": "assets/opt/fm/classic-cream.webp",
+          "en": {
+            "name": "Classic Cream",
+            "desc": "Whipped cream"
+          },
+          "zh": {
+            "name": "经典奶油",
+            "desc": "鲜奶油"
+          },
+          "ja": {
+            "name": "クラシック クリーム",
+            "desc": "ホイップクリーム"
+          }
+        },
+        {
+          "id": "strawberries",
+          "price": "13",
+          "img": "assets/opt/fm/strawberries.webp",
+          "en": {
+            "name": "Strawberries",
+            "desc": "Whipped cream and strawberries"
+          },
+          "zh": {
+            "name": "草莓",
+            "desc": "鲜奶油与草莓"
+          },
+          "ja": {
+            "name": "ストロベリー",
+            "desc": "ホイップクリームとイチゴ"
+          }
+        },
+        {
+          "id": "chocolate",
+          "price": "12",
+          "img": "assets/opt/fm/chocolate.webp",
+          "en": {
+            "name": "Chocolate",
+            "desc": "Whipped cream and chocolate shavings"
+          },
+          "zh": {
+            "name": "巧克力",
+            "desc": "鲜奶油与巧克力碎"
+          },
+          "ja": {
+            "name": "チョコレート",
+            "desc": "ホイップクリームとチョコレートシェービング"
+          }
+        },
+        {
+          "id": "salted-caramel",
+          "price": "12",
+          "img": "assets/opt/fm/salted-caramel.webp",
+          "en": {
+            "name": "Salted Caramel",
+            "desc": "Whipped cream and salted caramel drizzle"
+          },
+          "zh": {
+            "name": "海盐焦糖",
+            "desc": "鲜奶油与海盐焦糖酱"
+          },
+          "ja": {
+            "name": "塩キャラメル",
+            "desc": "ホイップクリームと塩キャラメルソース"
+          }
+        },
+        {
+          "id": "orange",
+          "price": "12",
+          "img": "assets/opt/fm/orange.webp",
+          "en": {
+            "name": "Orange",
+            "desc": "Whipped cream and candied orange zest"
+          },
+          "zh": {
+            "name": "香橙",
+            "desc": "鲜奶油与糖渍橙皮"
+          },
+          "ja": {
+            "name": "オレンジ",
+            "desc": "ホイップクリームとオレンジピールの砂糖漬け"
+          }
+        },
+        {
+          "id": "pistachio",
+          "price": "13",
+          "img": "assets/opt/fm/pistachio.webp",
+          "en": {
+            "name": "Pistachio",
+            "desc": "Whipped cream and chopped pistachios"
+          },
+          "zh": {
+            "name": "开心果",
+            "desc": "鲜奶油与开心果碎"
+          },
+          "ja": {
+            "name": "ピスタチオ",
+            "desc": "ホイップクリームと刻みピスタチオ"
+          }
+        }
+      ]
+    }
+  ],
+  "legend": [
+    {
+      "code": "V",
+      "en": "Vegan",
+      "zh": "纯素",
+      "ja": "ヴィーガン"
+    },
+    {
+      "code": "VG",
+      "en": "Vegetarian",
+      "zh": "素食",
+      "ja": "ベジタリアン"
+    }
+  ]
+}</script>
+<script src="js/print-menu.js?v=43102458"></script>
+<script>
+(function () {
+  var P = window.VitaliasPrint;
+  // One entry per printable menu: its booklet, its page names in the sidebar, how the sheets nest.
+  var MENUS = {
+    dinner: { title: 'Dinner', nest: 'nest sheet 2 inside sheet 1',
+      names: { cover: 'Cover', starters: 'Starters', pasta: 'Pasta', 'pizza-1': 'Pizza 1', 'pizza-2': 'Pizza 2', mains: 'Mains', sides: 'Sides', dolce: 'Dolce' } },
+    lunch: { title: 'Lunch', nest: 'nest sheet 2 inside sheet 1',
+      names: { cover: 'Cover', salads: 'Salads & mains', pasta: 'Pasta', 'pizza-1': 'Pizza 1', 'pizza-2': 'Pizza 2', dolce: 'Dolce', 'soft-drinks': 'Soft drinks', coffee: 'Coffee' } },
+    drinks: { title: 'Drinks', nest: 'nest sheet 3 inside sheet 2, and both inside sheet 1',
+      names: { cover: 'Cover', 'soft-coffee': 'Soft drinks & coffee', beers: 'Beers & ciders', cocktails: 'Cocktails', mocktails: 'Mocktails',
+        'red-wines': 'Red wines', 'white-wines': 'White wines', sparkling: 'Sparkling', cellar: 'Cellar selection', spirits: 'Spirits',
+        liqueurs: 'Liqueurs', back: 'Back cover' } },
+    'board-dinner': { title: 'Dinner board', board: true, srcs: ['dinner'], names: {},
+      shop: 'Outside Stand Dinner Menu:\n• 1x – A2 (594 × 420 mm), full colour\nPrint at 100%, no scaling: the PDF is already A2. Please use the colours and fonts exactly as they are in the file.' },
+    'board-lunch': { title: 'Lunch board', board: true, srcs: ['lunch', 'focacce'], names: {},
+      shop: 'Outside Stand Lunch Menu:\n• 1x – CUSTOM size 730 mm × 395 mm, rigid material, full colour, slightly rounded edges\nPrint at 100%, no scaling: the PDF is already 730 × 395 mm. Please use the colours and fonts exactly as they are in the file.' }
+  };
+  var PW_KEY = 'vitalia_admin_pw';
+  var LANG_LABEL = { en: 'English', zh: '中文', ja: '日本語' };
+  document.documentElement.style.setProperty('--pm-scale', P.SCALE);
+  var q = new URLSearchParams(location.search);
+  var lang = q.get('lang') || 'en';
+  if (!LANG_LABEL[lang]) lang = 'en';
+  var menuKey = MENUS[q.get('menu')] ? q.get('menu') : 'dinner';
+  var NAMES = MENUS[menuKey].names;
+  // A phone gets one page per screen; the spreads are for a computer.
+  // Print sheets first: this page exists to print, so it opens on what the printer gets.
+  var view = q.get('view') || 'sheets';
+  var guidesOn = q.get('guides') !== '0';
+  // The same source as the website: unsaved backoffice changes when asked for,
+  // else the version saved in the backoffice, else the one built into the site.
+  var loaded = {};
+  var draftKey = null;
+  function menuFor(key) {
+    if (loaded[key]) return Promise.resolve(loaded[key]);
+    var builtIn = JSON.parse(document.getElementById('menuData-' + key).textContent);
+    var draft = null;
+    if (q.get('source') === 'draft' && (key === menuKey || (MENUS[menuKey].srcs || []).indexOf(key) !== -1)) {
+      try { draft = JSON.parse(localStorage.getItem('vitalias-print-draft-' + key) || 'null'); } catch (e) { draft = null; }
+    }
+    if (draft && draft.menu) { draftKey = key; return Promise.resolve(loaded[key] = draft.menu); }
+    if (q.get('source') === 'built-in') return Promise.resolve(loaded[key] = builtIn);
+    return fetch('/.netlify/functions/menu?id=' + key).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+      .then(function (saved) { return (loaded[key] = saved && saved.sections && saved.sections.length ? saved : builtIn); });
+  }
+  var result;
+
+  function fit() {
+    var canvas = document.querySelector('.pm-canvas');
+    var widthMm = result && result.board ? result.board.mm[0] : view === 'pages' ? 148 : 297;
+    var avail = canvas.clientWidth - 48;
+    var f = Math.min(1, avail / (widthMm * 96 / 25.4));
+    document.querySelector('.pm-pages').style.setProperty('--pm-fit', f > 0 ? f : 1);
+  }
+  function show(v) {
+    view = v;
+    document.getElementById('pmPage').textContent = pageRule(v);
+    P.mount(result, v, document.getElementById('pmPages'), { guides: guidesOn, names: NAMES });
+    document.querySelectorAll('[data-view]').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-view') === v); });
+    var ALT = { pages: 'Pages', spreads: 'Booklet' };
+    document.getElementById('pmViewAlt').textContent = ALT[v] || 'More views';
+    document.getElementById('pmViewMore').classList.toggle('on', !!ALT[v]);
+    fit();
+  }
+  function pageRule(v) {
+    if (result && result.board) return '@page{size:' + result.board.mm[0] + 'mm ' + result.board.mm[1] + 'mm;margin:0}';
+    return '@page{size:' + (v === 'pages' ? 'A5 portrait' : 'A4 landscape') + ';margin:0}';
+  }
+  var TIPS = {
+    sheets: ['Save as PDF for the print shop, or your printer', 'A4, landscape', 'on, flip on the short edge', '100% (default), margins none'],
+    pages: ['Save as PDF, or your printer', 'A5, portrait (or A4, scaled to fit)', 'off, one page per sheet', '100% (default), margins none'],
+    board: ['Save as PDF, then send it to the print shop', 'leave it as it comes (the board size is set by the file)', 'off', '100% (default), margins none, background graphics on']
+  };
+  var tipFor = 'sheets';
+  function askPrint(v) {
+    closeMenu();
+    var skip = false;
+    try { skip = localStorage.getItem('vitalias-print-tip') === 'skip'; } catch (e) {}
+    if (skip) { printAs(v); return; }
+    tipFor = v;
+    var li = document.querySelectorAll('#pmTip li');
+    (result && result.board ? TIPS.board : TIPS[v]).forEach(function (t, i) { li[i].lastChild.textContent = ' ' + t; });
+    document.getElementById('pmTip').hidden = false;
+    document.getElementById('pmTipGo').focus();
+  }
+  function closeTip() { document.getElementById('pmTip').hidden = true; }
+  function closeMenu() {
+    document.getElementById('pmMenu').hidden = true;
+    document.getElementById('pmMore').setAttribute('aria-expanded', 'false');
+  }
+  function printAs(v) {
+    var before = view, g = guidesOn;
+    guidesOn = false;
+    document.getElementById('pmPage').textContent = pageRule(v);
+    P.mount(result, v, document.getElementById('pmPages'), { guides: false });
+    var restore = function () { window.removeEventListener('afterprint', restore); guidesOn = g; show(before); };
+    window.addEventListener('afterprint', restore);
+    setTimeout(function () { window.print(); }, 60);
+  }
+  function summary(reports) {
+    var bad = reports.filter(function (r) { return !r.ok; });
+    var st = document.getElementById('pmState');
+    st.className = 'pm-state' + (bad.length ? ' bad' : '');
+    st.innerHTML = bad.length
+      ? '<b>' + bad.length + (bad.length === 1 ? ' page needs' : ' pages need') + ' a fix</b><span>Shorten or move the dishes marked in red, then the PDF unlocks.</span>'
+      : '<b>Ready to print</b><span>Every page fits, nothing overlaps, prices line up.</span>';
+    document.getElementById('pmList').innerHTML = reports.map(function (r) {
+      var pill, why = [];
+      if (!r.ok) {
+        pill = '<em class="bad">fix</em>';
+        if (r.overLines) why.push('over by ' + r.overLines + ' line' + (r.overLines > 1 ? 's' : ''));
+        if (r.longNames.length) why.push('name too long: ' + r.longNames.join(', '));
+        if (r.longDescs.length) why.push('description over 3 lines: ' + r.longDescs.join(', '));
+        if (r.tooWide.length) why.push('too wide: ' + r.tooWide.join(', '));
+        if (r.frame.length) why.push(r.frame.join(', ') + ' too long');
+      } else if (r.id === 'cover') pill = '<em>cover</em>';
+      else if (r.id === 'back') pill = '<em>back</em>';
+      else if (r.room > 0) pill = '<em>room for ' + r.room + '</em>';
+      else pill = '<em class="full">full</em>';
+      return '<li><button type="button" data-go="' + r.id + '"><span>' + (r.names || NAMES[r.id] || r.id) + (why.length ? '<small>' + why.join(' &middot; ') + '</small>' : '') + '</span>' + pill + '</button></li>';
+    }).join('');
+    document.querySelectorAll('[data-go]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var c = document.querySelector('.pm-cell[data-face="' + b.getAttribute('data-go') + '"]');
+        if (!c) return;
+        c.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash');
+      });
+    });
+    document.getElementById('pmPdfSheets').disabled = !!bad.length;
+    document.getElementById('pmMore').disabled = !!bad.length;
+    document.getElementById('pmPrint').classList.toggle('is-locked', !!bad.length);
+  }
+
+  var currentMenu;
+  function subtitle() {
+    var M = MENUS[menuKey], isBoard = !!M.board;
+    var B = isBoard ? P.BOARDS[menuKey] : null;
+    document.getElementById('pmSub').textContent = M.title + ' · ' + LANG_LABEL[lang] + ' · ' + (isBoard ? B.label : 'A5 booklet on A4');
+    document.getElementById('pmNest').textContent = M.nest || '';
+    document.getElementById('pmMainSub').textContent = isBoard ? B.label.replace(' · ', ' board, ') + ' PDF' : 'A4 sheets for the print shop';
+    document.querySelectorAll('#pmMenus [data-menu], #pmBoards [data-menu]').forEach(function (b) {
+      var on = b.getAttribute('data-menu') === menuKey;
+      b.classList.toggle('on', on); b.setAttribute('aria-checked', on ? 'true' : 'false');
+    });
+    document.querySelectorAll('#pmLangs [data-lang]').forEach(function (b) {
+      var on = b.getAttribute('data-lang') === lang;
+      b.classList.toggle('on', on); b.setAttribute('aria-checked', on ? 'true' : 'false');
+      // the boards are English: their QR codes take guests to the Chinese and Japanese menus
+      b.disabled = isBoard && b.getAttribute('data-lang') !== 'en';
+    });
+    document.getElementById('pmViews').hidden = isBoard;
+    document.getElementById('pmMore').hidden = isBoard;
+    document.getElementById('pmShop').hidden = !isBoard;
+    if (isBoard) document.getElementById('pmShopText').textContent = M.shop;
+  }
+  // The boards' typeface is behind the backoffice password. Opened from the backoffice the
+  // password comes along; opened on its own, the page asks for it once.
+  function unlockBoard() {
+    return new Promise(function (resolve) {
+      var host = document.getElementById('pmPages');
+      host.innerHTML = '<form class="pm-unlock" id="pmUnlock"><b>Backoffice password</b><span>The outdoor boards use the restaurant’s own typeface, which only the backoffice can load.</span>' +
+        '<input type="password" id="pmUnlockPw" autocomplete="current-password" placeholder="Password"><button type="submit" class="pm-btn">Unlock</button><em id="pmUnlockErr" hidden>That password did not work.</em></form>';
+      var form = document.getElementById('pmUnlock');
+      document.getElementById('pmUnlockPw').focus();
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var pw = document.getElementById('pmUnlockPw').value;
+        P.boardFonts(pw).then(function (ok) {
+          if (!ok) { document.getElementById('pmUnlockErr').hidden = false; return; }
+          try { sessionStorage.setItem(PW_KEY, pw); } catch (er) {}
+          resolve(true);
+        });
+      });
+    });
+  }
+  // Rebuilds every face for the menu and language on screen now. Called once at load
+  // and again each time a menu or language chip changes.
+  function rebuild() {
+    window.__pmReady = false;
+    var M = MENUS[menuKey];
+    if (M.board) lang = 'en';
+    NAMES = M.names;
+    subtitle();
+    document.documentElement.setAttribute('lang', lang);
+    document.getElementById('pmPdfSheets').disabled = true;
+    document.getElementById('pmMore').disabled = true;
+    document.getElementById('pmPages').innerHTML = '<p class="pm-loading">Laying out the ' + (M.board ? 'board' : 'booklet') + '&hellip;</p>';
+    var fonts = M.board
+      ? P.fontsReady('en').then(function () {
+          var pw = ''; try { pw = sessionStorage.getItem(PW_KEY) || ''; } catch (e) {}
+          return P.boardFonts(pw).then(function (ok) { return ok || unlockBoard(); });
+        })
+      : P.fontsReady(lang);
+    var data = M.board
+      ? Promise.all(M.srcs.map(menuFor)).then(function (list) { var m = {}; M.srcs.forEach(function (k, i) { m[k] = list[i]; }); return m; })
+      : menuFor(menuKey);
+    return Promise.all([data, fonts]).then(function (res) {
+      currentMenu = res[0];
+      var drafted = draftKey === menuKey || (M.srcs || []).indexOf(draftKey) !== -1;
+      document.getElementById('pmDraft').innerHTML = drafted
+        ? '<p class="pm-draft">Showing your <b>unsaved changes</b> from the backoffice. Publish them there when you are happy.</p>' : '';
+      document.getElementById('pmPages').innerHTML = '<p class="pm-loading">Laying out&hellip;</p>';
+      return P.build(currentMenu, { booklet: menuKey, lang: lang });
+    }).then(function (r) {
+      result = r;
+      summary(r.reports);
+      show(view);
+      window.__pmReport = r.reports;
+      window.__pmReady = true;
+    });
+  }
+
+  rebuild().then(function () {
+    var r = result;
+    document.getElementById('pmGuides').checked = guidesOn;
+    document.getElementById('pmGuides').addEventListener('change', function () { guidesOn = this.checked; show(view); });
+    var closeViews = function () { document.getElementById('pmViewMenu').hidden = true; document.getElementById('pmViewMore').setAttribute('aria-expanded', 'false'); };
+    document.querySelectorAll('[data-view]').forEach(function (b) { b.addEventListener('click', function () { closeViews(); show(b.getAttribute('data-view')); }); });
+    document.getElementById('pmViewMore').addEventListener('click', function (e) {
+      e.stopPropagation(); closeMenu();
+      var m = document.getElementById('pmViewMenu'), open = m.hidden;
+      m.hidden = !open; this.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.addEventListener('click', function (e) { if (!e.target.closest('#pmViews')) closeViews(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeViews(); });
+    document.getElementById('pmPdfSheets').addEventListener('click', function () { askPrint('sheets'); });
+    document.getElementById('pmMore').addEventListener('click', function (e) {
+      e.stopPropagation();
+      var m = document.getElementById('pmMenu'), open = m.hidden;
+      m.hidden = !open;
+      this.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.querySelectorAll('[data-print]').forEach(function (b) {
+      b.addEventListener('click', function () { askPrint(b.getAttribute('data-print')); });
+    });
+    document.addEventListener('click', function (e) { if (!e.target.closest('#pmPrint')) closeMenu(); });
+    document.getElementById('pmTipNo').addEventListener('click', closeTip);
+    document.getElementById('pmTip').addEventListener('click', function (e) { if (e.target === this) closeTip(); });
+    document.getElementById('pmTipGo').addEventListener('click', function () {
+      try { if (document.getElementById('pmTipSkip').checked) localStorage.setItem('vitalias-print-tip', 'skip'); } catch (e) {}
+      closeTip();
+      printAs(tipFor);
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeMenu(); closeTip(); } });
+    document.querySelectorAll('#pmLangs [data-lang]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (b.disabled || b.classList.contains('on') || !window.__pmReady) return;
+        lang = b.getAttribute('data-lang');
+        rebuild();
+      });
+    });
+    document.getElementById('pmShopCopy').addEventListener('click', function () {
+      var btn = this, text = MENUS[menuKey].shop || '';
+      (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () {
+        btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy the message'; }, 1600);
+      }).catch(function () {});
+    });
+    document.querySelectorAll('#pmMenus [data-menu], #pmBoards [data-menu]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (b.disabled || b.classList.contains('on') || !window.__pmReady) return;
+        menuKey = b.getAttribute('data-menu');
+        rebuild();
+      });
+    });
+    window.addEventListener('resize', fit);
+    if (window.innerWidth < 700) document.querySelector('.pm-help').removeAttribute('open');
+    show(view);
+    window.__pmReport = r.reports;
+    window.__pmReady = true;
+  });
+})();
+</script>
+</body></html>

@@ -78,20 +78,20 @@ body{font-family:var(--f-body);background:var(--charcoal);color:var(--cream);min
 /* ===== Analytics: hidden by default, slides open on demand ======================
    The calendar keeps its full width until you tap the pill under it; then the
    analytics column reveals on the right (calendar eases narrower) with a smooth
-   width+fade animation. Closed again, the calendar is back to full width — so
+   width+fade animation. Closed again, the calendar is back to full width - so
    the panel is never in the way. Feature hidden below 1024px (no room). ======== */
 .cal-layout{display:flex;align-items:flex-start;gap:0;}
 .cal-layout > .cal-grid{flex:1 1 auto;min-width:0;}
 /* Premium reveal. Collapses in BOTH dimensions when closed (width:0 alone
    still leaves the full content height, which pushed the pill far below the
    calendar). The exact open height is measured in JS and set as max-height, so
-   the reveal animates over the FULL content — no early-finish snap — with the
+   the reveal animates over the FULL content - no early-finish snap - with the
    pill riding down on the growing column. Width leads a touch so it reads as
    "column slides out, then fills downward"; the calendar tracks the width
    frame-by-frame via flex, resizing with the animation rather than snapping. */
 .analytics-panel{flex:0 0 auto;width:0;max-height:0;overflow:hidden;margin-left:0;
   /* CLOSING: the column collapses (max-height) first + the pill rides up, THEN
-     the calendar re-widens (width/margin delayed) — the exact reverse of open. */
+     the calendar re-widens (width/margin delayed) - the exact reverse of open. */
   transition:width .46s cubic-bezier(.5,0,.1,1) .32s,max-height .54s cubic-bezier(.5,0,.1,1),margin-left .46s cubic-bezier(.5,0,.1,1) .32s;
   will-change:width,max-height;}
 .cal-layout.analytics-open .analytics-panel{width:284px;margin-left:1.2rem;
@@ -109,7 +109,7 @@ body{font-family:var(--f-body);background:var(--charcoal);color:var(--cream);min
 /* On phone/tablet the column can't sit beside the calendar, so it stacks
    underneath it: the calendar stays full width, the pill sits right below,
    and opening reveals the panel vertically (height animation) pushing the
-   pill + day panel down — same reveal metaphor as desktop, rotated. */
+   pill + day panel down - same reveal metaphor as desktop, rotated. */
 @media(max-width:1023px){
   .cal-layout{flex-direction:column;}
   .cal-layout > .cal-grid{width:100%;}
@@ -130,7 +130,7 @@ body{font-family:var(--f-body);background:var(--charcoal);color:var(--cream);min
 .an-eye .eye-off{display:none;}
 .analytics-panel.figures-hidden .an-eye .eye-on{display:none;}
 .analytics-panel.figures-hidden .an-eye .eye-off{display:block;}
-/* Amounts blur out when figures are hidden — quick over-the-shoulder privacy */
+/* Amounts blur out when figures are hidden - quick over-the-shoulder privacy */
 .an-money{transition:filter .2s;}
 .analytics-panel.figures-hidden .an-money{filter:blur(8px);user-select:none;}
 /* Cards */
@@ -374,7 +374,7 @@ body{font-family:var(--f-body);background:var(--charcoal);color:var(--cream);min
 .booking-controls button{background:transparent;border:1px solid rgba(var(--red-rgb),.3);color:rgba(var(--red-rgb),.9);padding:.4rem .7rem;border-radius:4px;font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;font-family:var(--f-body);}
 .booking-controls button:hover{background:rgba(var(--red-rgb),.12);}
 .no-bookings{color:rgba(var(--cream-rgb),.4);font-size:.85rem;margin-bottom:.9rem;}
-/* Collapsible event cards — each event is a thin bar (name + status + chevron)
+/* Collapsible event cards - each event is a thin bar (name + status + chevron)
    that expands to the full card. Lets a 2-event day stay navigable without a
    giant scroll: close the one you're done with. */
 .booking-acc{border:1px solid rgba(var(--cream-rgb),.12);border-radius:8px;margin-bottom:.7rem;overflow:hidden;background:var(--charcoal-2);}
@@ -401,11 +401,11 @@ body{font-family:var(--f-body);background:var(--charcoal);color:var(--cream);min
 .ce-day-add:hover{background:rgba(230,150,60,.2);border-color:#ffb02e;}
 .ce-day-add .ce-day-add-plus{font-size:1.25rem;line-height:0;font-weight:400;}
 /* On a Jolly (hand-blocked) day the add button looks disabled/greyed, but is
-   still clickable — clicking it asks for confirmation before letting you add. */
+   still clickable - clicking it asks for confirmation before letting you add. */
 .ce-day-add.ce-day-add-blocked{background:rgba(var(--cream-rgb),.05);border-color:rgba(var(--cream-rgb),.2);color:rgba(var(--cream-rgb),.4);}
 .ce-day-add.ce-day-add-blocked:hover{background:rgba(var(--cream-rgb),.09);border-color:rgba(var(--cream-rgb),.32);color:rgba(var(--cream-rgb),.6);}
 .card-section{margin-top:.85rem;padding-top:.75rem;border-top:1px solid rgba(var(--cream-rgb),.08);}
-/* Section title — clearly a heading (accent bar + brighter, bolder), so it
+/* Section title - clearly a heading (accent bar + brighter, bolder), so it
    reads above the values below it, not blended in. */
 .card-section-label{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(var(--cream-rgb),.62);font-weight:700;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
 .card-section-label::before{content:'';width:4px;height:12px;border-radius:2px;background:rgba(var(--cream-rgb),.28);flex-shrink:0;}
@@ -645,7 +645,7 @@ body{font-family:var(--f-body);background:var(--charcoal);color:var(--cream);min
    right while Back/Cancel stay on the left. */
 .ce-foot-right{margin-left:auto;display:flex;gap:10px;align-items:center;}
 .ce-foot-right .ce-btn-primary{margin-left:0;}
-/* Data-only "Save details" — a secondary save that never touches price/payment. */
+/* Data-only "Save details" - a secondary save that never touches price/payment. */
 .ce-btn-secondary{background:rgba(var(--cream-rgb),.1);border:1px solid rgba(var(--cream-rgb),.25);color:var(--cream);padding:.65rem 1.2rem;border-radius:7px;cursor:pointer;font-size:.82rem;font-weight:600;}
 .ce-btn-secondary:hover{background:rgba(var(--cream-rgb),.16);border-color:rgba(var(--cream-rgb),.4);}
 .ce-btn-secondary:disabled{opacity:.6;cursor:default;}
@@ -1979,7 +1979,7 @@ body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-v
     <div class="ce-head">
       <div>
         <div class="ce-eyebrow" id="ceEyebrow">New event</div>
-        <div class="ce-title" id="ceDateTitle">—</div>
+        <div class="ce-title" id="ceDateTitle">-</div>
       </div>
       <button class="ce-close" id="ceClose" type="button" aria-label="Close">&times;</button>
     </div>
@@ -2198,7 +2198,7 @@ function showAdmin(){
 }
 
 // ===== Push notifications =====
-// Public VAPID key (safe to expose — the matching private key that actually
+// Public VAPID key (safe to expose - the matching private key that actually
 // signs pushes stays server-side only). Web Push, not tied to any one app:
 // works via Chrome/Edge/Firefox on Android as-is, and via Safari on iPhone
 // once this page is added to the Home Screen (Apple's own requirement).
@@ -2800,7 +2800,7 @@ function ceSetDate(iso){
   document.getElementById('ceDateTitle').textContent=d.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 }
 // Loads our own busy/blocked calendar into the create/edit date picker, same
-// source as the public calendar and "Move event date" — so a day already at
+// source as the public calendar and "Move event date" - so a day already at
 // capacity is disabled and a day with one event shows a red dot, right here.
 // excludeISO (when editing) keeps the booking's own current date from being
 // disabled/dotted against itself.
@@ -2842,7 +2842,7 @@ function openCreateEvent(iso){
   ceSetDate(iso);
   // Exclude the day we're creating on from its own disable list, so a day the
   // owner has hand-blocked (or that's already busy) can still hold their own
-  // event — e.g. blocking a day for a private catering gig AND logging it.
+  // event - e.g. blocking a day for a private catering gig AND logging it.
   ceLoadDateAvailability(iso);
   ceApplyLightEditLocks();
   ceUpdateTotal(); ceGoStep(1);
@@ -2928,7 +2928,7 @@ function ceGoStep(n){
   document.getElementById('ceBackBtn').style.display=(n===2 && !ceCreated)?'inline-block':'none';
   const next=document.getElementById('ceNextBtn');
   // "Save details" (data-only) shows when editing an existing not-yet-paid event
-  // (unpaid / quote) on the details step — so the owner can fix customer/event
+  // (unpaid / quote) on the details step - so the owner can fix customer/event
   // data without being forced to re-send a quote or payment link. Paid events
   // already save content-only via the primary button (ceLightEdit), and brand
   // new events have nothing to save yet.
@@ -2959,7 +2959,7 @@ function ceBuildSummary(){
   if(pizzas.length){
     const seenPz={}, uniqPz=[];
     pizzas.forEach(function(p){ if(!seenPz[p]){ seenPz[p]=1; uniqPz.push(p); } });
-    // Flavours only, one per line — no per-flavour quantities (the team decides).
+    // Flavours only, one per line - no per-flavour quantities (the team decides).
     h+='<div class="ce-sum-row"><span>Menu pizzas</span><b>'+uniqPz.map(function(p){return '&#8211; '+esc(p);}).join('<br>')+'</b></div>';
   }
   if(p.nV) h+=sm(p.nV+'× Vegan mozzarella', p.veganCents);
@@ -3007,8 +3007,8 @@ function ceBuildPayload(method){
 // Content-only save for an already-paid event: updates the customer/event
 // details, menu and notes (everything the printable event sheet uses) without
 // touching price, payment status or Stripe links. The date is deliberately
-// left alone here too — use Move event date on the booking card for that.
-// Builds the content-only payload (customer/event details, menu and notes —
+// left alone here too - use Move event date on the booking card for that.
+// Builds the content-only payload (customer/event details, menu and notes -
 // everything the printable event sheet uses) from the current form state.
 function ceBuildContentPayload(){
   return {
@@ -3030,7 +3030,7 @@ function ceBuildContentPayload(){
   };
 }
 // Content-only save: updates the details without touching price, payment status
-// or Stripe links. The date is deliberately left alone here too — use Move
+// or Stripe links. The date is deliberately left alone here too - use Move
 // event date on the booking card for that. Patches local state and re-renders
 // the day panel immediately, so the change shows without any page refresh.
 // Used both by the paid-event "Save changes" primary and the unpaid/quote
@@ -3098,7 +3098,7 @@ function ceShowLink(res){
   const waText=encodeURIComponent(shareMsg);
   const linksHtml=buttons.map(function(b){ return '<div class="ce-link-row"><span>'+esc(b.label)+'</span><a href="'+b.url+'" target="_blank" rel="noopener">open</a></div>'; }).join('');
   // A finished event/quote auto-sends the email after a 10s countdown (right
-  // inside the button) — for ANY payment method (quote, deposit, full, or a
+  // inside the button) - for ANY payment method (quote, deposit, full, or a
   // cash booking's remaining-balance link), since sending the customer their
   // link is almost always the next step. A small pause button next to it
   // cancels the countdown so it can be sent manually, or via WhatsApp / Copy
@@ -3255,7 +3255,7 @@ function renderCalendar(){
   cells.forEach(function(cell){
     const cellMonth = viewMonth + cell.monthOffset;
     const cellDate = new Date(viewYear, cellMonth, cell.day);
-    // Build the ISO string from local Y/M/D directly — toISOString() converts
+    // Build the ISO string from local Y/M/D directly - toISOString() converts
     // to UTC first, which shifts the date by a day in timezones behind UTC.
     const iso = cellDate.getFullYear() + '-' + String(cellDate.getMonth() + 1).padStart(2, '0') + '-' + String(cellDate.getDate()).padStart(2, '0');
 
@@ -3277,7 +3277,7 @@ function renderCalendar(){
       // Show the event name / label the owner typed (e.g. "Taste Port Douglas");
       // fall back to "Jolly" only when nothing was given.
       jolly.textContent = label || 'Special';
-      jolly.title = (label ? ('Blocked — ' + label) : 'Day blocked (Special)') + (bk.published ? ' · published' : '');
+      jolly.title = (label ? ('Blocked - ' + label) : 'Day blocked (Special)') + (bk.published ? ' · published' : '');
       el.appendChild(jolly);
     }
 
@@ -3300,14 +3300,14 @@ function renderCalendar(){
 }
 
 // Fixed pizza counts per package (a flavour selection has no per-flavour
-// quantity — the package size is what the team actually cooks).
+// quantity - the package size is what the team actually cooks).
 const PKG_PIZZAS = { social: 30, party: 50, celebration: 80 };
 let figuresHidden = false;
 try { figuresHidden = localStorage.getItem('vitalia_hide_figures') === '1'; } catch (e) {}
 
 // Month analytics, computed live from the same bookings the calendar draws, for
 // the month currently in view. Integrates every money path: card deposits, full
-// payments, recorded cash, and outstanding balances — plus pizza/dietary totals
+// payments, recorded cash, and outstanding balances - plus pizza/dietary totals
 // and who's overdue. Desktop only (the panel is hidden on small screens).
 // Analytics scope: the month in view, or the whole year in view (read-only
 // figures from the same bookings; persisted per browser).
@@ -3598,7 +3598,7 @@ function computePizzaStats(fromISO, toISO){
 }
 function pzFmtRange(from, to){
   if(!from && !to) return 'All time';
-  function nice(iso){ if(!iso) return '—'; const d = new Date(iso + 'T00:00:00'); return d.toLocaleDateString('en-AU', { day:'numeric', month:'short', year:'numeric' }); }
+  function nice(iso){ if(!iso) return '-'; const d = new Date(iso + 'T00:00:00'); return d.toLocaleDateString('en-AU', { day:'numeric', month:'short', year:'numeric' }); }
   return nice(from) + ' → ' + nice(to);
 }
 function renderPizzaReport(){
@@ -3797,8 +3797,8 @@ function selectDay(iso, preserve){
     add.innerHTML = '<span class="ce-day-add-plus"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.8 11.3 2 22l10.7-3.8"/><path d="M4 3h.01M22 8h.01M15 2h.01M22 20h.01"/><path d="m22 2-2.2.8a2.9 2.9 0 0 0-1.9 3.2c.1.8-.5 1.6-1.4 1.6h-.4c-.9 0-1.6.8-1.4 1.6l.2 1.3"/><path d="M11 13c1.9 1.9 2.4 4.4 1.2 5.7-1.3 1.2-3.8.7-5.7-1.2s-2.4-4.4-1.2-5.7c1.3-1.2 3.8-.7 5.7 1.2z"/></svg></span><span class="ce-day-add-txt"><b>' + (dayBookings.length ? 'Add another private event' : 'Add private event') + '</b><small>Party, wedding, corporate</small></span>';
     add.addEventListener('click', function(){
       if (isBlocked) {
-        // Day is marked unavailable (Jolly). Don't hard-block adding an event —
-        // the owner may still run one on a special-event day — but confirm first.
+        // Day is marked unavailable (Jolly). Don't hard-block adding an event -
+        // the owner may still run one on a special-event day - but confirm first.
         const reason = (manualBlocks[iso] && manualBlocks[iso].reason || '').trim();
         showConfirmModal({
           mode: 'plain',
@@ -3856,7 +3856,7 @@ function renderDayBlockControl(iso){
   if (!isBlocked) stateIco = '<span class="dbk-state-ico add"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>';
   row.innerHTML = '<span class="day-block-label">' + stateIco + stateTitle + '</span>';
 
-  // The switch only TURNS a block ON — a safe, easy action. It's hidden once
+  // The switch only TURNS a block ON - a safe, easy action. It's hidden once
   // the day is blocked; removing a block/event is then a deliberate "Remove"
   // button with confirmation (below), so it can't be undone by an accidental
   // tap on a switch. When blocked, a small status pill sits here instead.
@@ -3982,7 +3982,7 @@ function renderDayBlockControl(iso){
   webField.innerHTML = '<label>Event website (optional)</label>';
   const webInput = document.createElement('input');
   webInput.type = 'text';
-  webInput.placeholder = 'e.g. tasteportdouglas.com.au — leave blank to hide the button';
+  webInput.placeholder = 'e.g. tasteportdouglas.com.au - leave blank to hide the button';
   webInput.value = (block && block.website) || '';
   webField.appendChild(webInput);
   pubFields.appendChild(webField);
@@ -4083,7 +4083,7 @@ function renderDayBlockControl(iso){
 
 // rerenderPanel: rebuild the day panel afterwards. We DON'T do that for the
 // background save fired by flicking the main switch on (the owner is about to
-// fill the form — rebuilding under them would wipe the publish toggle and the
+// fill the form - rebuilding under them would wipe the publish toggle and the
 // type they just picked). We DO rebuild after an explicit "Save", so the form
 // reflects the stored state (correct eventId, publish on, range, etc.).
 async function doBlockDay(payload, input, rerenderPanel){
@@ -4095,7 +4095,7 @@ async function doBlockDay(payload, input, rerenderPanel){
     if (!resp.ok) throw new Error(await resp.text());
     const result = await resp.json();
     const ev = result.event || {};
-    // Patch the local block map straight from the authoritative response —
+    // Patch the local block map straight from the authoritative response -
     // no eventually-consistent re-read, so it's correct and instant. Clear any
     // previous dates of this event first (handles a shrunk/moved range).
     if (payload.eventId) {
@@ -4107,7 +4107,7 @@ async function doBlockDay(payload, input, rerenderPanel){
     __calendarDatesPromise = null; // date pickers re-fetch the fresh blocked list
     renderCalendar();
     if (rerenderPanel && selectedDateISO) selectDay(selectedDateISO, true);
-    // Confirm an explicit Save so the owner sees it took — extra-clear when the
+    // Confirm an explicit Save so the owner sees it took - extra-clear when the
     // event went public.
     if (rerenderPanel) {
       showToast(ev.published ? 'Published to “Out & about” ✓' : (ev.name ? 'Event saved ✓' : 'Day blocked ✓'));
@@ -4454,22 +4454,22 @@ function openEventSheet(b){
 // part-paid cash event with a balance link). Reopens the same WhatsApp / email /
 // copy actions shown at creation, pointing at the hosted /q page (which always
 // shows the correct pay button for the current status). Deliberately NOT shown
-// for card deposits — those already have the "Balance due" reminder card, and we
+// for card deposits - those already have the "Balance due" reminder card, and we
 // don't want to double up.
-// Booking ids with a Record-cash request currently in flight — disables the
+// Booking ids with a Record-cash request currently in flight - disables the
 // share buttons for exactly as long as that takes (no guessed fixed delay).
 let cashPending = new Set();
 
 // Booking ids with ANY money-moving request currently in flight (Stripe
 // refund, cash payment, cash refund, or deleting either). A second click
-// before the first request's response lands — from an itchy trigger finger,
-// a slow connection, or a stray double-tap — must never be allowed to start
+// before the first request's response lands - from an itchy trigger finger,
+// a slow connection, or a stray double-tap - must never be allowed to start
 // a second mutation on the same booking's money while the first is still
 // unresolved.
 let bookingActionInFlight = new Set();
 
 // Booking ids where the owner has explicitly lifted the 3-week full-refund lock
-// this session. Cleared on reload — a deliberate, one-off override each time.
+// this session. Cleared on reload - a deliberate, one-off override each time.
 let fullRefundUnlocked = new Set();
 
 // Unified "collect the money" section: shows for ANY booking that still owes
@@ -4535,7 +4535,7 @@ function shareLinkSection(b){
   section.appendChild(msgEl);
 
   // WhatsApp/Copy are client-only (no server round-trip), unlike "Email it"
-  // below — but sharing the link this way is just as much "handled" a quote
+  // below - but sharing the link this way is just as much "handled" a quote
   // request as emailing it, so clear the same needs-attention pulse here too
   // (fire-and-forget; a failed write just means the pulse stays a bit longer,
   // never blocks the actual share action).
@@ -4598,7 +4598,7 @@ function bookingCard(b){
     ? '<div class="contact-links acc-contacts">' + contactLinksHtml + '</div>'
     : '';
 
-  // ===== EVENT DETAILS — everything about what/when/where, starting with the
+  // ===== EVENT DETAILS - everything about what/when/where, starting with the
   // hero (date, time, occasion, address) so it's clearly its own zone, parallel
   // to Payments & balance and Manage this booking below. =====
   {
@@ -4609,7 +4609,7 @@ function bookingCard(b){
     card.appendChild(detailsDivider);
   }
 
-  // Event hero — occasion, date/time and address all live in one cohesive,
+  // Event hero - occasion, date/time and address all live in one cohesive,
   // clearly-structured block: a top row with the occasion badge (left) and the
   // Edit button (right, since the box is wide enough to hold it), then the
   // date/time as the largest, most prominent line, then address and venue/area
@@ -4627,7 +4627,7 @@ function bookingCard(b){
 
     // Top row (occasion badge + Edit) is built with real DOM nodes, not
     // innerHTML, since the Edit button needs a click handler. Edit is hidden
-    // only for dead records (cancelled/refunded) — everything else gets it,
+    // only for dead records (cancelled/refunded) - everything else gets it,
     // paid bookings opening the content-only "light" edit instead of the full
     // pricing/payment flow.
     const canEdit = ['cancelled', 'refunded'].indexOf(b.paymentStatus) === -1;
@@ -4657,7 +4657,7 @@ function bookingCard(b){
     card.appendChild(hero);
   }
 
-  // Package & menu — package + how many pizzas it includes is shown as a
+  // Package & menu - package + how many pizzas it includes is shown as a
   // banner (same framing as the printed event sheet), then the itemised
   // pizza list (name + ingredients + qty) instead of a raw comma string,
   // plus a one-click printable A4 event sheet.
@@ -4726,7 +4726,7 @@ function bookingCard(b){
     card.appendChild(section);
   }
 
-  // Pricing — the money summary, kept separate from the kitchen-facing
+  // Pricing - the money summary, kept separate from the kitchen-facing
   // package/menu section above.
   {
     const paymentDetails = document.createElement('div');
@@ -4776,7 +4776,7 @@ function bookingCard(b){
     }
   }
 
-  // Internal notes — the customer's own notes now live in the event hero
+  // Internal notes - the customer's own notes now live in the event hero
   // above, so this section is single-purpose: staff-only context the
   // customer never wrote themselves.
   {
@@ -4803,13 +4803,13 @@ function bookingCard(b){
     card.appendChild(notesSection);
   }
 
-  // ===== PAYMENTS & BALANCE — everything about collecting what's owed, in one
+  // ===== PAYMENTS & BALANCE - everything about collecting what's owed, in one
   // place: record cash, and send the customer their payment link. Shown ONLY
-  // if at least one of those two things will actually render below — e.g. a
+  // if at least one of those two things will actually render below - e.g. a
   // cancelled or refunded booking (with no cash history) has nothing left to
   // collect, so the header would otherwise float above an empty gap right
   // before "Manage this booking". These conditions mirror the ones each
-  // section computes for itself just below — keep them in sync if either
+  // section computes for itself just below - keep them in sync if either
   // section's eligibility rule ever changes.
   {
     const outstandingForPay = (b.totalPriceCents || 0) - (b.stripeAmountPaid || 0);
@@ -4825,12 +4825,12 @@ function bookingCard(b){
     }
   }
 
-  // Record cash payment — for any event that still owes money (an admin event
+  // Record cash payment - for any event that still owes money (an admin event
   // awaiting payment, or a deposit with a balance). Enter what was received in
   // cash; if a balance remains, a shareable Stripe link is made for the rest.
   // Every amount is kept as its own dated entry below, so it's easy to remember
   // "$200 then $300" rather than one opaque running total, and each entry can be
-  // removed on its own (mistake, or money returned) — the balance and payment
+  // removed on its own (mistake, or money returned) - the balance and payment
   // link update to match automatically.
   {
     const outstanding = (b.totalPriceCents || 0) - (b.stripeAmountPaid || 0);
@@ -4921,7 +4921,7 @@ function bookingCard(b){
   // anything still owing money (quote, unpaid event, card deposit, part-paid cash).
   { const shareSec = shareLinkSection(b); if (shareSec) card.appendChild(shareSec); }
 
-  // ===== MANAGE THIS BOOKING — status, rescheduling, refunds, delete. =====
+  // ===== MANAGE THIS BOOKING - status, rescheduling, refunds, delete. =====
   {
     const actionsDivider = document.createElement('div');
     actionsDivider.className = 'actions-divider';
@@ -4929,7 +4929,7 @@ function bookingCard(b){
     card.appendChild(actionsDivider);
   }
 
-  // Status — payment status and event lifecycle, the two things touched most.
+  // Status - payment status and event lifecycle, the two things touched most.
   {
     const statusSection = document.createElement('div');
     statusSection.className = 'card-section';
@@ -4939,7 +4939,7 @@ function bookingCard(b){
     controls.className = 'booking-controls';
 
     // Event lifecycle (upcoming/completed/cancelled) first, then payment
-    // status — lifecycle is what you're scanning for day-to-day, payment is
+    // status - lifecycle is what you're scanning for day-to-day, payment is
     // the secondary detail.
     const eventSelect = document.createElement('select');
     ['upcoming','completed','cancelled'].forEach(function(s){
@@ -4965,7 +4965,7 @@ function bookingCard(b){
     });
     controls.appendChild(select);
 
-    // No manual "mark fully paid (cash)" shortcut here anymore — it used to
+    // No manual "mark fully paid (cash)" shortcut here anymore - it used to
     // just flip the status label without ever recording the amount received,
     // so it could leave stripeAmountPaid wrong and stale Stripe links active.
     // "Record cash payment" below (in Payments & balance) does this properly:
@@ -4975,7 +4975,7 @@ function bookingCard(b){
     card.appendChild(statusSection);
   }
 
-  // Move event date — lets the owner reschedule (e.g. rain, venue change)
+  // Move event date - lets the owner reschedule (e.g. rain, venue change)
   // without touching Stripe: the payment/refund records stay keyed to the
   // booking ID, so moving the date is safe and the public calendar and
   // balance-due date recalculate automatically.
@@ -5035,7 +5035,7 @@ function bookingCard(b){
     card.appendChild(section);
   }
 
-  // Refunds — second-to-last, always visible so the owner can see refund
+  // Refunds - second-to-last, always visible so the owner can see refund
   // eligibility at a glance, even for past/settled/already-refunded events.
   // Buttons disable themselves with a plain-English reason rather than
   // disappearing.
@@ -5054,7 +5054,7 @@ function bookingCard(b){
 
     // Within 3 weeks of the event (or past): policy keeps the 30% deposit and a
     // FULL refund is locked. The owner can lift that lock per booking with the
-    // "Remove lock" control below — an explicit, deliberate override.
+    // "Remove lock" control below - an explicit, deliberate override.
     const withinWindow = daysLeft <= 21;
     const windowUnlocked = fullRefundUnlocked.has(b.id);
     // A full refund this close to the event is locked unless explicitly unlocked.
@@ -5083,7 +5083,7 @@ function bookingCard(b){
 
     // If any of this booking's money came in as cash, the amount shown here
     // (from stripeAmountPaid, which mixes card + cash) can overstate what a
-    // Stripe refund can actually move — the button amount is then an upper
+    // Stripe refund can actually move - the button amount is then an upper
     // bound, not a guarantee. The exact result (and any cash shortfall) is
     // always reported back after the fact by doRefund.
     const hasCashMix = (b.cashPayments || []).length > 0;
@@ -5102,7 +5102,7 @@ function bookingCard(b){
         ? '<div style="background:rgba(240,178,90,.12);border:1px solid rgba(240,178,90,.4);color:#ffb02e;border-radius:6px;padding:.6rem .7rem;font-size:.78rem;line-height:1.5;margin-bottom:1rem">⚠ Policy reminder: this event is within 3 weeks (or has already passed). We normally keep the 30% deposit and refund only the amount above it. Continue with a FULL refund anyway?</div>'
         : '';
       const cashNote = hasCashMix
-        ? '<div style="background:rgba(140,123,110,.12);border:1px solid rgba(140,123,110,.35);color:#8C7B6E;border-radius:6px;padding:.6rem .7rem;font-size:.78rem;line-height:1.5;margin-bottom:1rem">This booking includes a cash payment — only the card portion can be refunded via Stripe here. Any cash portion needs a separate "Record cash refund".</div>'
+        ? '<div style="background:rgba(140,123,110,.12);border:1px solid rgba(140,123,110,.35);color:#8C7B6E;border-radius:6px;padding:.6rem .7rem;font-size:.78rem;line-height:1.5;margin-bottom:1rem">This booking includes a cash payment - only the card portion can be refunded via Stripe here. Any cash portion needs a separate "Record cash refund".</div>'
         : '';
       showConfirmModal({
         title: 'Full refund: irreversible',
@@ -5121,7 +5121,7 @@ function bookingCard(b){
     partialBtn.title = partialReason;
     partialBtn.addEventListener('click', function(){
       const cashNote = hasCashMix
-        ? '<div style="background:rgba(140,123,110,.12);border:1px solid rgba(140,123,110,.35);color:#8C7B6E;border-radius:6px;padding:.6rem .7rem;font-size:.78rem;line-height:1.5;margin-bottom:1rem">This booking includes a cash payment — only the card portion can be refunded via Stripe here. Any cash portion needs a separate "Record cash refund".</div>'
+        ? '<div style="background:rgba(140,123,110,.12);border:1px solid rgba(140,123,110,.35);color:#8C7B6E;border-radius:6px;padding:.6rem .7rem;font-size:.78rem;line-height:1.5;margin-bottom:1rem">This booking includes a cash payment - only the card portion can be refunded via Stripe here. Any cash portion needs a separate "Record cash refund".</div>'
         : '';
       showConfirmModal({
         title: 'Partial refund: irreversible',
@@ -5131,7 +5131,7 @@ function bookingCard(b){
     });
     refundWrap.appendChild(partialBtn);
 
-    // Cash refund — the counterpart to "Record cash payment": for money
+    // Cash refund - the counterpart to "Record cash payment": for money
     // handed back by hand rather than through Stripe (works for any booking
     // with something refundable, card-paid or cash-paid alike). Separated by
     // a vertical line since it's a genuinely different action from the two
@@ -5175,7 +5175,7 @@ function bookingCard(b){
             const applied = Math.min(cents, refundableCash);
             showConfirmModal({
               title: 'Record cash refund',
-              body: 'Record <b>' + money(applied) + '</b> refunded in cash to <b>' + esc(b.name) + '</b>? This only updates our records, since the cash has already been handed back — it does not touch Stripe.',
+              body: 'Record <b>' + money(applied) + '</b> refunded in cash to <b>' + esc(b.name) + '</b>? This only updates our records, since the cash has already been handed back - it does not touch Stripe.',
               mode: 'plain', confirmLabel: 'Record refund',
               onConfirm: function(){ doRecordCashRefund(b.id, applied); }
             });
@@ -5203,7 +5203,7 @@ function bookingCard(b){
             delBtn.addEventListener('click', function(){
               showConfirmModal({
                 title: 'Remove cash refund entry',
-                body: 'Remove the <b>' + money(r.amountCents) + '</b> cash refund entry from <b>' + esc(dLabel) + '</b>? Only removes our record of it — use this for a mistake, not to undo an actual refund.',
+                body: 'Remove the <b>' + money(r.amountCents) + '</b> cash refund entry from <b>' + esc(dLabel) + '</b>? Only removes our record of it - use this for a mistake, not to undo an actual refund.',
                 mode: 'checkbox',
                 checkboxLabel: 'I understand this only corrects our records',
                 confirmLabel: 'Remove entry',
@@ -5249,11 +5249,11 @@ function bookingCard(b){
     } else if (hasPayment && !fullyRefunded && paidRemaining > 0 && withinWindow && windowUnlocked) {
       const active = document.createElement('div');
       active.className = 'refund-unlock-active';
-      active.innerHTML = '🔓 Full-refund lock removed — a 100% refund is now allowed as an exception.';
+      active.innerHTML = '🔓 Full-refund lock removed - a 100% refund is now allowed as an exception.';
       section.appendChild(active);
     }
 
-    // Don't repeat the lock message in the small reason line — the unlock
+    // Don't repeat the lock message in the small reason line - the unlock
     // control above already explains it.
     const fullReasonLine = lockedByWindow ? '' : fullReason;
     const reasonLine = fullReasonLine || partialReason;
@@ -5267,7 +5267,7 @@ function bookingCard(b){
     card.appendChild(section);
   }
 
-  // 4. Danger zone — destructive, irreversible actions live last, visually
+  // 4. Danger zone - destructive, irreversible actions live last, visually
   // separated so they're never the first thing seen.
   {
     const section = document.createElement('div');
@@ -5528,7 +5528,7 @@ function reflectPauseSwitch(paused){
   if(card) card.classList.toggle('on', paused);
   if(knob) knob.textContent = paused ? 'OFF' : 'ON';
   if(title) title.textContent = paused ? 'Bookings are paused' : 'Bookings are live';
-  if(state) state.textContent = paused ? 'The booking form is replaced by your notice — nobody can book online.' : 'Customers can book online right now.';
+  if(state) state.textContent = paused ? 'The booking form is replaced by your notice - nobody can book online.' : 'Customers can book online right now.';
   if(sw) sw.setAttribute('aria-checked', paused ? 'true' : 'false');
 }
 
@@ -5973,7 +5973,7 @@ async function doRefund(id, type, name, customerEmail, override){
       return;
     }
     const shortfallNote = result.shortfallCents > 0
-      ? ' A further ' + money(result.shortfallCents) + ' of this booking was paid in cash and was NOT refunded here — use "Record cash refund" for that part.'
+      ? ' A further ' + money(result.shortfallCents) + ' of this booking was paid in cash and was NOT refunded here - use "Record cash refund" for that part.'
       : '';
     showSuccessModal({
       title: 'Refund sent',
@@ -6283,7 +6283,7 @@ async function doRecordCash(id, cents){
     balanceAmount: settled ? '' : money(balance)
   });
   // Disable the share buttons only for as long as the request actually takes
-  // (not a guessed fixed delay) — they unlock the instant the real balance
+  // (not a guessed fixed delay) - they unlock the instant the real balance
   // link is confirmed saved. Correctness itself no longer depends on this
   // timing: /q and the email sender both do a strong-consistency read of the
   // booking at the moment they're used, so they're always accurate regardless
@@ -6397,7 +6397,7 @@ async function updateBooking(id, updates){
   // Patch the local bookings array from the POST response itself, rather
   // than re-fetching via checkAuth(). Netlify Blobs writes are eventually
   // consistent, so a GET immediately after this POST can still return the
-  // pre-update record — re-fetching here was overwriting whatever the admin
+  // pre-update record - re-fetching here was overwriting whatever the admin
   // had just typed (e.g. notes) with stale data a moment later.
   const resp = await fetch('/.netlify/functions/admin-bookings', {
     method: 'POST',

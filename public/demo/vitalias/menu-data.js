@@ -1,5 +1,5 @@
 /* =========================================================================
-   Vitalia's Pizza on Wheels — single front-end source of truth.
+   Vitalia's Pizza on Wheels - single front-end source of truth.
    Loaded by booking.html (public wizard) AND tony.html (admin create-event),
    so the menu, packages, surcharges and pricing rules can never drift apart
    between the two calendars/forms.
@@ -107,11 +107,11 @@
   // Wires Google Places Autocomplete onto an address text input, shared by the
   // public booking form and the admin create/edit-event form (same behaviour,
   // one implementation). Biased to the Cairns region but not restricted to it
-  // — the truck occasionally travels further. When the picked place's postcode
+  // - the truck occasionally travels further. When the picked place's postcode
   // matches one of our serviced POSTCODES, the paired <select> is auto-set and
   // a 'change' event fires so pricing/travel surcharge recompute immediately;
   // outside our serviced area, the select is left alone rather than guessing.
-  // Safe to call before the Google Maps script has finished loading — it waits
+  // Safe to call before the Google Maps script has finished loading - it waits
   // for the 'vitalia:maps-ready' event (fired by the page once google.maps is
   // ready) if it isn't available yet.
   M.attachAddressAutocomplete = function (addressInputId, postcodeSelectId) {
@@ -132,8 +132,8 @@
         // Deliberately DON'T fire an 'input' event on the address field here:
         // Google's Autocomplete listens to it and would re-open the suggestion
         // dropdown for the just-picked value (the leftover white box). Nothing
-        // in either form reacts to the address field's input event anyway — it's
-        // only read on submit — so there's nothing to notify. Pricing/travel is
+        // in either form reacts to the address field's input event anyway - it's
+        // only read on submit - so there's nothing to notify. Pricing/travel is
         // driven by the postcode <select> below, which DOES get a 'change'.
         if (!postcodeSelect || !place.address_components) return;
         var comp = place.address_components.find(function (c) { return c.types.indexOf('postal_code') !== -1; });

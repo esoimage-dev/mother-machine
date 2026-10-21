@@ -84,6 +84,13 @@ def main():
     t = t[:i] + '<script src="demo-tony.js"></script>\n' + t[i:]
     (OUT / 'tony.html').write_text(t, encoding='utf8')
 
+    # nella demo niente trattino lungo, neanche nei testi copiati dal cliente
+    for f in OUT.rglob('*'):
+        if f.suffix in ('.html', '.js', '.css', '.json') and f.is_file():
+            t = f.read_text(encoding='utf8')
+            if '\u2014' in t:
+                f.write_text(t.replace(' \u2014 ', ' - ').replace('\u2014', '-'), encoding='utf8')
+
     for f in OUT.iterdir():
         print(f'{f.name:28} {f.stat().st_size // 1024:6} KB')
 
