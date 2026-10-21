@@ -22,6 +22,7 @@ JS = ROOT / 'public/js'
 PAGINE = {  # pagina del sito <- pagina approvata
     'home': 'home', 'studio': 'studio', 'systems': 'systems', 'brand': 'brand',
     'contact': 'contact', 'progetto': 'progetto', 'privacy': 'privacy-termini',
+    'ristorante': 'progetto',  # 04 Work: il caso di Vitalia's Restaurant, stesso stampo del truck
     'work': 'progetto',  # 04 Work: nasce dalla pagina progetto (stesso piano), con il registro al posto del caso
     'lg': 'progetto',    # LG Machine Room: stessa luce notte, il laboratorio al posto del caso
     'room': 'contact',   # LG, dietro la chiave: il back office (scena 5 del prototipo di Contact)
@@ -44,6 +45,8 @@ META = {
                 'Tell us what slows you down. The first conversation is free, and a real person reads every order.', '#EEC3B1'),
     'progetto': ('/work/vitalias-pizza-on-wheels', "Mother Machine · Vitalia's Pizza on Wheels",
                  'A new business, built from zero: the brand, the website and the system that runs it.', '#0F0F0E'),
+    'ristorante': ('/work/vitalias-restaurant', "Mother Machine · Vitalia's Restaurant",
+                   'A waterfront restaurant in Cairns: a new website, functions planned online, live menus and a back office.', '#0F0F0E'),
     'work': ('/work', 'Mother Machine · Work',
              'The register: every machine we deliver gets a serial number. Who it was for, what we built, what changed.', '#0F0F0E'),
     'lg': ('/lg', 'Mother Machine · Machine Room',
@@ -77,7 +80,7 @@ def testa_meta(nome):
             f'<meta name="twitter:image" content="{img}">')
 
 
-CORRENTE = {'home': '05 Home', 'work': '04 Work', 'progetto': '04 Work', 'brand': '03 Brand', 'systems': '02 Systems',
+CORRENTE = {'home': '05 Home', 'work': '04 Work', 'progetto': '04 Work', 'ristorante': '04 Work', 'brand': '03 Brand', 'systems': '02 Systems',
             'studio': '01 Studio', 'contact': 'G Contact'}
 
 VITALIA_HOME = (
@@ -174,7 +177,46 @@ CASI = {
                   ('t2', '<img src="/work/vitalias/site.webp" alt="The Vitalia\'s Pizza on Wheels website" loading="lazy">', 'Website'),
                   ('t3', '<img src="/work/vitalias/flyer.webp" alt="Tiny truck, big party: the launch flyer" loading="lazy">', 'Print'),
                   ('t4', '<video src="/work/vitalias/truck.mp4" poster="/work/vitalias/truck-poster.webp" muted loop playsinline preload="none" aria-label="The truck at an event"></video>', 'At an event')],
+        look='A brand that holds together on the truck, the website and the menus.',
         prossimo=('/work/vitalias-restaurant', "Vitalia's Restaurant", 'Website · Functions · Menus · Hiring'),
+    ),
+    'ristorante': dict(
+        V='/work/ristorante/', titolo="Vitalia's Restaurant",
+        lede='An Italian restaurant on the water in Cairns. A new website, functions that plan themselves online, menus edited live and a back office that ties it all together.',
+        meta=[('Sector', 'Restaurant'), ('Place', 'Cairns, AU'), ('Year', '2026')], sito='https://vitalias.com.au/',
+        copertina='<img src="/work/ristorante/cover.webp" alt="A long table set for a function at Vitalia\'s" width="1536" height="940" fetchpriority="high">',
+        logo='<img src="/work/ristorante/logo-white.webp" alt="Vitalia\'s Restaurant Pizzeria logo" width="1400" height="559">',
+        fatto=['Website, new from the ground up', 'Functions, planned and quoted online', 'Menus edited live, printed in one click',
+               'Back office for events and payments', 'Hiring, from the job post to the trial shift'],
+        # risultati: Eso dice che le richieste di functions sono cresciute moltissimo, ma senza un numero preciso.
+        # Niente percentuali a occhio: solo fatti veri. Il numero si aggiunge quando arriva.
+        numeri=['<div class="lead"><b>24/7</b><span>function enquiries, with the set menu, dietary needs and drinks already chosen</span></div>',
+                '<div><b data-n="3">0</b><span>menus in three languages: Italian, Japanese and Chinese</span></div>',
+                '<div><b data-n="1">0</b><span>click from the back office to a printed menu</span></div>'],
+        righe=[('Function enquiries', 'Phone calls and long email threads', 'Set menu, dietary needs and drinks, chosen online'),
+               ('Quotes', 'Written one by one', 'A menu and a price, sent from the back office'),
+               ('Menus', 'A new PDF for every change', 'Edited live, printed in one click'),
+               ('Hiring', 'CVs lost in an inbox', 'One list, from application to trial shift')],
+        demo=dict(cartella='/demo/ristorante/', cliente='functions.html', titolare='tony.html', ch='mm-rist-demo', key='mm-rist-demo-1',
+                  h2='Functions that plan themselves.',
+                  p='The real functions page and the real back office, running on invented data. Plan an event as a guest, then switch to Owner and send back a menu and a quote.',
+                  lati=(('Guest', 'The functions page'), ('Owner', 'The back office')),
+                  hint_c='Plan an event on either screen. Then switch to Owner.', hint_o='The back office. Every enquiry lands here with all the details.',
+                  hint_ok='Enquiry sent. Switch to Owner: it is already in the back office.',
+                  voci=[('Planned online.', 'Set menu, guests, allergies, drinks package. Everything a quote needs, before the first call.'),
+                        ('It lands by itself.', 'The enquiry appears in the back office the moment it is sent, with every detail in place.'),
+                        ('Menu and quote in one go.', 'Pick the set menu, adjust it, send it back with the price and a deposit link.'),
+                        ('One menu, everywhere.', 'Change a dish once: the website and the printed menus follow.')]),
+        font='Bricolage Grotesque · Newsreader', frase='Pizza, pasta<em>and the sea.</em>', fonte_fam='RistBricolage',
+        logo_bg='#3C6A4B',
+        frase_stile=';--tb:#17301F;--tt:#F6F3EC;--te:#C6982F;--ef:RistNews;--ew:600',
+        colori=[('Green', '#3C6A4B', ''), ('Laguna', '#17301F', ''), ('Paper', '#F6F3EC', '#1C2420'), ('Gold', '#C6982F', '#17301F')],
+        galleria=[('t1', '<img src="/work/ristorante/logo-white.webp" alt="" loading="lazy">', 'Logo'),
+                  ('t2', '<img src="/work/ristorante/site.webp" alt="The new Vitalia\'s Restaurant website" loading="lazy">', 'Website'),
+                  ('t3', '<img src="/work/ristorante/menus.webp" alt="A custom menu designed for a function" loading="lazy">', 'Function menus'),
+                  ('t4', '<video src="/work/ristorante/burrata.mp4" poster="/work/ristorante/burrata-poster.webp" muted loop playsinline preload="none" aria-label="Burrata at the table"></video>', 'At the table')],
+        look='One look across the website, the function menus and the back office.',
+        prossimo=('/work/vitalias-pizza-on-wheels', "Vitalia's Pizza on Wheels", 'Brand · Website · Booking · Control Room'),
     ),
 }
 
@@ -204,14 +246,17 @@ def caso(t, C):
     s = t.find('<blockquote class="clq">'); e = t.find('</blockquote>', s) + len('</blockquote>')
     assert s > 0 and e > s, 'citazione'
     t = t[:s] + t[e:].lstrip()
+    vecchio = '<p>A brand that holds together on the truck, the website and the menus.</p>'
+    assert t.count(vecchio) == 1, 'the look'
+    t = t.replace(vecchio, '<p>' + C['look'] + '</p>')
     s = t.find('<div class="clg">'); e = t.find('</div>\n  </div></section>', s)
     assert s > 0 and e > s and 'da inviare' in t[s:e], 'galleria'
     t = t[:s] + ('<div class="clb">\n'
-                 '      <div class="clbt" style="--bf:' + C['fonte_fam'] + '"><p lang="en">' + C['frase'] + '</p><span class="mo">' + C['font'] + '</span></div>\n'
+                 '      <div class="clbt" style="--bf:' + C['fonte_fam'] + C.get('frase_stile', '') + '"><p lang="en">' + C['frase'] + '</p><span class="mo">' + C['font'] + '</span></div>\n'
                  '      <ul class="clbs" aria-label="Brand colours">' +
                  ''.join('<li style="--c:' + h + (';--t:' + tt if tt else '') + '"><b>' + n + '</b><span class="mo">' + h + '</span></li>' for n, h, tt in C['colori']) +
                  '</ul>\n    </div>\n    <div class="clg">\n' +
-                 ''.join('      <figure class="t ' + k + '">' + m + '<figcaption class="mo">' + c + '</figcaption></figure>\n' for k, m, c in C['galleria']) +
+                 ''.join('      <figure class="t ' + k + '"' + (' style="--lc:' + C['logo_bg'] + '"' if k == 't1' and C.get('logo_bg') else '') + '>' + m + '<figcaption class="mo">' + c + '</figcaption></figure>\n' for k, m, c in C['galleria']) +
                  '    ') + t[e:]
     s = t.find('<a class="cnx" href="#">'); e = t.find('<i class="arq"', s)
     assert s > 0 and e > s, 'prossimo'

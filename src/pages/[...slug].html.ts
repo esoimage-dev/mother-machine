@@ -4,6 +4,7 @@ import studio from '../html/studio.html?raw';
 import systems from '../html/systems.html?raw';
 import brand from '../html/brand.html?raw';
 import progetto from '../html/progetto.html?raw';
+import ristorante from '../html/ristorante.html?raw';
 import contact from '../html/contact.html?raw';
 import privacy from '../html/privacy.html?raw';
 import work from '../html/work.html?raw';
@@ -17,6 +18,7 @@ const pages: Record<string, string> = {
   brand,
   work,
   'work/vitalias-pizza-on-wheels': progetto,
+  'work/vitalias-restaurant': ristorante,
   'work/project': progetto,   // il vecchio indirizzo resta per chi l'aveva gia'
   contact,
   privacy,
