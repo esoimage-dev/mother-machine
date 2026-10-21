@@ -4,7 +4,7 @@ Lista viva del progetto. Si spunta quando una cosa è fatta, si aggiunge quando 
 Il piano di lancio in 3 giorni, con le decisioni e l'ordine, è in `docs/PIANO.md`.
 
 ## Lancio · giorno 1
-- [ ] Nameserver del dominio da GoDaddy a Cloudflare (Eso, la mattina: la propagazione blocca le mail).
+- [x] Nameserver del dominio da GoDaddy a Cloudflare (21 ottobre).
 - [ ] Materiali e permessi dei quattro lavori veri: Vitalia's Pizza on Wheels, Vitalia's Restaurant, Machine Room, Mother Machine (Eso).
 - [ ] Pagine progetto: Vitalia's Pizza on Wheels, Mother Machine, Vitalia's Restaurant, Machine Room.
 - [ ] Togliere i numeri ai progetti ("No. 012", "Study 03", "No. 001 · 012") da Work, home e pagina progetto.
@@ -20,8 +20,11 @@ Il piano di lancio in 3 giorni, con le decisioni e l'ordine, è in `docs/PIANO.m
 - [ ] Privacy con nome legale, ABN, indirizzo; ABN nel footer; SEO; Open Graph; doctype.
 - [ ] Controllo finale su tutte le pagine e i dispositivi; modulo e mail provati davvero.
 - [ ] Lancio: in `public/_worker.js` `PRIMA_DEL_LANCIO = false` (oggi Google non indicizza), repository privata, Rate Limiting su `/api/porta`.
-- [ ] Sito su `main`, con il blocco per Google acceso (pronto il 21 ottobre, manca il passaggio).
-- [ ] Dominio: nameserver su Cloudflare fatti il 21 ottobre; quando e' attivo, Pages → Custom domains: mothermachine.studio e www.
+- [x] Sito su `main` (pull request #1, 21 ottobre), con il blocco per Google acceso.
+- [x] Dominio collegato: mothermachine.studio e www sono online (21 ottobre).
+- [x] Posta in entrata: hello@mothermachine.studio → mothermachine.studio@gmail.com (Cloudflare Email Routing, provato il 21 ottobre).
+- [ ] Posta in uscita come hello@: Resend (dominio da verificare) e "Invia come" nel Gmail dello studio.
+- [ ] Dopo il lancio: la posta dentro la Machine Room (Email Routing → Worker → D1), il Gmail resta come copia.
 
 ## Dopo il lancio
 - [ ] Machine Room completa e Cloudflare Access.
