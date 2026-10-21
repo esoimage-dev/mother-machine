@@ -219,7 +219,15 @@ def ritocchi(nome, t):
         t = t[:s] + t[e:].lstrip()
         s = t.find('<div class="clg">'); e = t.find('</div>\n  </div></section>', s)
         assert s > 0 and e > s and 'da inviare' in t[s:e], 'galleria'
-        t = t[:s] + ('<div class="clg">\n'
+        t = t[:s] + ('<div class="clb">\n'
+                     '      <div class="clbt"><p lang="en">Your party.<em>Our pizza truck.</em></p><span class="mo">Bodoni Moda · Geist</span></div>\n'
+                     '      <ul class="clbs" aria-label="Brand colours">'
+                     '<li style="--c:#C8212A"><b>Red</b><span class="mo">#C8212A</span></li>'
+                     '<li style="--c:#8C1219"><b>Deep red</b><span class="mo">#8C1219</span></li>'
+                     '<li style="--c:#F3EBDD;--t:#1A1410"><b>Paper</b><span class="mo">#F3EBDD</span></li>'
+                     '<li style="--c:#0E0B09"><b>Charcoal</b><span class="mo">#0E0B09</span></li></ul>\n'
+                     '    </div>\n    '
+                     '<div class="clg">\n'
                      '      <figure class="t t1"><img src="' + V + 'logo-white.svg" alt="" loading="lazy"><figcaption class="mo">Logo</figcaption></figure>\n'
                      '      <figure class="t t2"><img src="' + V + 'site.webp" alt="The Vitalia\'s Pizza on Wheels website" loading="lazy"><figcaption class="mo">Website</figcaption></figure>\n'
                      '      <figure class="t t3"><img src="' + V + 'flyer.webp" alt="Tiny truck, big party: the launch flyer" loading="lazy"><figcaption class="mo">Print</figcaption></figure>\n'
@@ -232,8 +240,8 @@ def ritocchi(nome, t):
         s = t.find('<div class="cdh">'); e = t.find('</div>\n  </div></section>', t.find('<div class="crf"', s))
         assert s > 0 and e > s, 'demo vecchia'
         t = t[:s] + ('<div class="cdh">\n'
-                     '      <div><span class="mo mut">The system</span><h2>Book on the phone. Watch it land.</h2></div>\n'
-                     '      <p>The real booking site and the real Control Room, running on invented data. Book an event on the phone, pay the deposit, and see it arrive on the computer.</p>\n'
+                     '      <div><span class="mo mut">The system</span><h2>The truck books itself.</h2></div>\n'
+                     '      <p>The real booking site and the real Control Room, running on invented data. Book an event on the phone, pay the deposit, and watch the back office fill itself in.</p>\n'
                      '    </div>\n'
                      '    <div class="vd" id="vd">\n'
                      '      <div class="vdtop">\n'
@@ -249,7 +257,7 @@ def ritocchi(nome, t):
                      '        <li><span class="mo">01</span><b>Booked and paid online.</b><p>Package, place, pizzas, date. A 30% deposit by card, day or night.</p></li>\n'
                      '        <li><span class="mo">02</span><b>It lands by itself.</b><p>The booking appears in the Control Room the moment it is paid. Nobody types it in.</p></li>\n'
                      '        <li><span class="mo">03</span><b>Paid without chasing.</b><p>Balance reminders and payment links go out on their own. Refunds in two clicks.</p></li>\n'
-                     '        <li><span class="mo">04</span><b>Phone orders too.</b><p>A call from someone who prefers to talk? The event goes in by hand, same calendar.</p></li>\n'
+                     '        <li><span class="mo">04</span><b>Ready for the kitchen.</b><p>Which pizzas, how many, vegan and gluten-free. One sheet per event, counted for you.</p></li>\n'
                      '      </ol>\n'
                      '    ') + t[e:]
         # lo script della miniatura non serve piu': i numeri che contano e le righe che salgono passano in progetto.js
