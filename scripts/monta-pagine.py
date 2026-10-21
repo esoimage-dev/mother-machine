@@ -197,6 +197,36 @@ def ritocchi(nome, t):
                 '<button type="button" role="tab" aria-selected="false"><span class="sq">03</span>Brand</button></div>'
                 '<div class="mcards">', 'tasti 05.2')
 
+    if nome == 'progetto':
+        # Vitalia's Pizza on Wheels con i materiali veri (21 ottobre). Niente numeri di serie, niente citazione.
+        # I risultati sono quelli veri dati da Eso: 42 eventi in meno di due mesi, circa A$75k (scritto A$70k+).
+        V = '/work/vitalias/'
+        t = una(t, '<a href="#" data-go="4">04 · Work</a> &nbsp;/&nbsp; No. 012</span>', '<a href="#" data-go="4">04 · Work</a></span>', 'numero in testa')
+        t = una(t, '<figure class="chcover"><em>Cover · foto del truck a un evento</em><span class="chlogo mo">Logo del cliente</span></figure>',
+                '<figure class="chcover chimg"><img src="' + V + 'cover.webp" alt="Vitalia\'s pizzas on a branded table at an event" width="1800" height="887" fetchpriority="high">'
+                '<span class="chlogo"><img src="' + V + 'logo-white.svg" alt="Vitalia\'s Pizza on Wheels logo" width="559" height="197"></span></figure>', 'copertina')
+        s = t.find('<div class="cfn" data-c="4">'); e = t.find('</div>\n    <div class="cfba">', s)
+        assert s > 0 and e > s and 'cfdraft' in t[s:e], 'numeri'
+        t = t[:s] + ('<div class="cfn" data-c="3">\n'
+                     '      <div class="lead"><b data-n="42">0</b><span>events booked in under two months, from a standing start</span></div>\n'
+                     '      <div><b data-n="70" data-p="$" data-s="k+">$0k+</b><span>in bookings (AUD), deposits paid by card</span></div>\n'
+                     '      <div><b>24/7</b><span>bookings and payments, with nobody on the phone</span></div>\n'
+                     '    ') + t[e:]
+        t = una(t, '<div class="cfbh mo"><span></span><span class="mut">Before</span><span>After</span></div>',
+                '<div class="cfbh mo"><span></span><span class="mut">The usual way</span><span>Here</span></div>', 'prima e dopo')
+        s = t.find('<blockquote class="clq">'); e = t.find('</blockquote>', s) + len('</blockquote>')
+        assert s > 0 and e > s, 'citazione'
+        t = t[:s] + t[e:].lstrip()
+        s = t.find('<div class="clg">'); e = t.find('</div>\n  </div></section>', s)
+        assert s > 0 and e > s and 'da inviare' in t[s:e], 'galleria'
+        t = t[:s] + ('<div class="clg">\n'
+                     '      <figure class="t t1"><img src="' + V + 'logo-white.svg" alt="" loading="lazy"><figcaption class="mo">Logo</figcaption></figure>\n'
+                     '      <figure class="t t2"><img src="' + V + 'site.webp" alt="The Vitalia\'s Pizza on Wheels website" loading="lazy"><figcaption class="mo">Website</figcaption></figure>\n'
+                     '      <figure class="t t3"><img src="' + V + 'flyer.webp" alt="Tiny truck, big party: the launch flyer" loading="lazy"><figcaption class="mo">Print</figcaption></figure>\n'
+                     '      <figure class="t t4"><video src="' + V + 'truck.mp4" poster="' + V + 'truck-poster.webp" muted loop playsinline preload="none" aria-label="The truck at an event"></video><figcaption class="mo">At an event</figcaption></figure>\n'
+                     '    ') + t[e:]
+        t = una(t, '<span class="mo mut">Next · No. 011</span>', '<span class="mo mut">Next</span>', 'prossimo')
+
     if nome == 'room':
         # il back office: dalla pagina approvata di Contact resta solo la scena 5, accesa, al piano LG
         s = t.find('<nav class="scenes mo"'); e = t.find('</nav>', s) + len('</nav>')
@@ -487,10 +517,12 @@ def monta(nome, src):
 
     if nome == 'home':
         t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/home.css">', 'stile home')
+    if nome == 'progetto':
+        t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/progetto.css">', 'stile progetto')
 
     # 6. coda
     i = t.rfind('</body>')
-    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>'}.get(nome, '')
+    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>', 'progetto': '<script src="/js/progetto.js"></script>'}.get(nome, '')
     t = t[:i] + coda + t[i:] if i > 0 else t + coda
     (OUT / f'{nome}.html').write_text(t, encoding='utf8')
     return luce
