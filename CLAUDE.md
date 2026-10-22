@@ -13,7 +13,7 @@ Ultimo aggiornamento: 26 ottobre 2026 (Studio ritoccato, "free" in due posti sol
   ma **Cloudflare taglia il nome a 28 caratteri** (oggi `https://claude-trusting-johnson-wybh.mother-machine.pages.dev`).
   Il link giusto sta sempre nel commento del bot di Cloudflare nella pull request ("Branch Preview URL").
 - **Prossimi passi, in ordine** (lavorare con pochi token, niente stravolgimenti, proporre in chat prima di toccare):
-  1. **Studio (01):** ritoccato (26 ottobre), da approvare sull'anteprima. Aperto: la regola 03 "One number to move."
+  1. **Studio (01):** rifatto (26 ottobre), da approvare sull'anteprima. Aperto: la regola 03 "One number to move."
      ripete il titolo della home ("Three steps. One number to move."): Eso decide se cambiarla.
   2. **Contact (G):** il modulo vero (vedi sezione 8, punto 1). Eso sta creando gli account **Resend** e **Daily**
      (gratis: Resend 3.000 mail al mese, 100 al giorno; Daily circa 10.000 minuti-partecipante al mese, da verificare
@@ -167,10 +167,12 @@ Fuori dal palazzo: `/privacy`.
 - [x] Brand rifatta (apertura, tre stili dei controlli, quattro caratteri, The system in bozza).
 - [x] Porta di LG con il codice sul server.
 - [x] Systems con il turno di notte e il registro di bordo; LG snella.
-- [x] Studio ritoccato (26 ottobre): via la targhetta grigia (numero di serie e ore inventate), apertura tutta rosa con il
-  "01" grande come la G della porta, "On purpose." che si scioglie da pesante a leggero; "Who we build for": "Built for busy
-  days." (prima diceva che i ristoranti erano nostri: sono clienti) con il nastro dei momenti pieni; le regole si accendono
-  scorrendo; Con chi parli: ogni mestiere porta al suo piano. Stile e comportamenti in `public/css/studio.css` e `public/js/studio.js`.
+- [x] Studio rifatto (26 ottobre), quattro idee nello stile del sito: (1) l'apertura e' un disegno tecnico, il titolo a
+  contorno con le linee di misura vere (altezza delle maiuscole, x-height, linea di base, quota) e scorrendo si riempie, "Drawn -> Built";
+  (2) "Built for busy days." e' l'unico vetro della pagina, sopra gli archi della m che si muovono (tecnica della home); (3) le
+  regole con il display dell'ascensore che rotola da 01 a 05; (4) "Who you talk to" con l'interruttore Design / Code e i
+  mestieri che portano al loro piano. Via la targhetta (numero di serie, ore inventate) e la storia falsa dei ristoranti.
+  Stile e comportamenti in `public/css/studio.css` e `public/js/studio.js`, markup in `def studio` di `monta-pagine.py`.
 - [x] "Free" solo due volte: nella porta verso G ("The first one is free.") e in Contact ("The first conversation is free.").
 
 ## 8 · Scaletta (in ordine)
