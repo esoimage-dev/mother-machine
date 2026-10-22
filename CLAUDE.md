@@ -8,8 +8,8 @@ Ultimo aggiornamento: 25 ottobre 2026 (passaggio a un altro account Claude: legg
 ---
 
 ## 0 · Dove siamo (per chi riprende da qui)
-- **Pull request aperta:** #6 (Brand, LG senza "Staff only"), branch `claude/keen-franklin-rxhwha`. Se Eso l'ha già unita,
-  riparti da `main` aggiornato con lo stesso nome di branch. Anteprima: `https://claude-keen-franklin-rxhwha.mother-machine.pages.dev`.
+- **Tutto il lavoro è su `main`** (ultima pull request unita: #6). Si lavora sul branch `claude/keen-franklin-rxhwha`
+  ripartendo ogni volta dal `main` aggiornato, o su un branch nuovo: con il push si apre la pull request e Eso la unisce. Anteprima: `https://claude-keen-franklin-rxhwha.mother-machine.pages.dev`.
 - **Prossimi passi, in ordine** (lavorare con pochi token, niente stravolgimenti, proporre in chat prima di toccare):
   1. **Studio (01):** testi più corti, tre parti (Survey, Build, Run), via i doppioni. Proporre i testi in chat, poi una modifica sola.
   2. **Contact (G):** il modulo vero (vedi sezione 8, punto 1). Eso sta creando gli account **Resend** e **Daily**
@@ -25,6 +25,28 @@ Ultimo aggiornamento: 25 ottobre 2026 (passaggio a un altro account Claude: legg
   4. Poi: Legale e Google, Lancio (sezione 8). Dopo il lancio: back office vero (Machine Room), fatture automatiche,
      risponditore di mail (sezione 8, punto 6).
 - **Brand (03):** fatto, salvo "The system" che è una bozza statica da animare più avanti.
+
+## 0.1 · Chi siamo (l'essenza, per scrivere e decidere bene)
+- **Mother Machine** è uno studio di design e sviluppo. Costruisce **la macchina dietro un'azienda**: il software su
+  misura che la fa girare (back office, gestionali, app, automazioni, AI privata) e il marchio con cui si presenta
+  (identità, siti, negozi online). "Machine" è il dentro, squadrato e preciso; "Mother" è il fuori, caldo, il vetro.
+- **Cosa vendiamo di più:** i sistemi (Systems, piano 02). Il messaggio: il tuo business lavora anche quando tu non ci sei
+  (prenotazioni e pagamenti da soli, preventivi in due minuti, lavori notturni, niente telefonate).
+- **Come ci vendiamo:** mostrare, non spiegare. Demo vere dei lavori dei clienti, numeri forti decisi da Eso,
+  frasi corte. Il primo incontro è gratis ("Tell us what slows you down."). Niente gergo da agenzia.
+- **Clienti tipo:** piccole e medie attività (ristorazione, catering, negozi, servizi). Oggi Cairns, Australia; domani altri paesi.
+- **Il sito è un palazzo:** ogni pagina un piano, si scende in ascensore. Sotto terra (LG) il laboratorio segreto e il back office.
+- **Chi decide:** Eso. Il resto (Claude) propone da PM, art director e senior designer, in italiano, corto.
+
+## 0.2 · Come leggere la repository senza sprecare (leggere solo quello che serve)
+- **Leggi:** questo file; `scripts/monta-pagine.py` (60 KB, tutte le modifiche alle pagine: cerca con grep il nome della
+  pagina, es. `def marchio`, `def sistemi`, `CASI`); `src/sezioni/*.html`; `public/css/*.css` e `public/js/*.js` della pagina
+  che tocchi.
+- **Non aprire interi** (enormi o generati): `src/html/*.html` (2,6 MB, generati dallo script: si cercano solo con grep),
+  `prototipo/*.html` (5 MB, la verità visiva: grep mirato), `public/demo/` (5 MB, generato dagli script delle demo),
+  `Approvati/` (18 MB, archivio), `sorgenti/` (riferimento), `docs/archivio/` (vecchi piani).
+- **Ciclo di lavoro:** modifica → `python3 scripts/monta-pagine.py` → `npm run build` → `npx astro preview --port 4321`
+  → screenshot con Playwright (1440 e 390) → commit → push → pull request. Un push per blocco di modifiche.
 
 ## 1 · Regole di lavoro (sempre)
 - Rispondere a Eso **in italiano**, corto e schematico: un passo alla volta, percorsi esatti, niente spiegoni.
