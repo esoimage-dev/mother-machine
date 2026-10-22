@@ -1,6 +1,6 @@
 /* Mother Machine · LG Machine Room, la faccia pubblica. Tutto disegnato in codice:
-   la sezione del palazzo (sei piani sopra terra, LG sotto, la cabina che corre, gli impulsi che salgono a ogni piano)
-   e sei macchine. Ogni sezione si ferma quando esce dallo schermo; con prefers-reduced-motion resta un fotogramma fermo. */
+   la sezione del palazzo (sei piani sopra terra, LG sotto, la cabina che corre, gli impulsi che salgono a ogni piano).
+   Ogni sezione si ferma quando esce dallo schermo; con prefers-reduced-motion resta un fotogramma fermo. */
 (function () {
   var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var NS = 'http://www.w3.org/2000/svg';
@@ -134,97 +134,4 @@
     });
   })();
 
-  /* ---- 2 · le macchine ---- */
-  var m2 = $('#m2');
-  if (!m2) return;
-  var E2 = engine(m2);
-
-  /* M-01 · build log: le righe si scrivono una lettera alla volta */
-  var pre = $('.mrterm pre');
-  var RUNS = [
-    ['$ machine build no-012', '  bookings ........... ok', '  back office ........ ok', '  payments ........... ok', '  tests .............. pass', '  deploy ............. live'],
-    ['$ machine run nightly', '  backups ............ ok', '  invoices ........... sent', '  stock .............. synced', '  report ............. ready'],
-    ['$ machine ai --private', '  model .............. local', '  your data .......... stays here', '  answers ............ ready']
-  ];
-  function paint(lines, cur) {
-    pre.innerHTML = lines.map(function (l, i) {
-      var h = l.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-      if (h.charAt(0) === '$') h = '<em>$</em><b>' + h.slice(1) + '</b>';
-      h = h.replace(/(ok|pass|live|sent|synced|ready|local|stays here)$/, '<b>$1</b>');
-      return h + (i === lines.length - 1 && cur ? '<i></i>' : '');
-    }).join('\n');
-  }
-  if (pre) {
-    var run = 0, ln = 0, ch = 0, out = [], wait = 0;
-    if (RM) paint(RUNS[0], false);
-    else E2.every(26, function () {
-      if (wait > 0) { wait -= 26; return }
-      var R = RUNS[run];
-      if (ln >= R.length) { run = (run + 1) % RUNS.length; ln = 0; ch = 0; out = []; return }
-      var full = R[ln];
-      if (ch === 0) out.push('');
-      ch += full.charAt(0) === '$' ? 1 : 3;
-      out[ln] = full.slice(0, ch);
-      if (ch >= full.length) { ln++; ch = 0; wait = ln >= R.length ? 2600 : (ln === 1 ? 500 : 180) }
-      paint(out, true);
-    });
-  }
-
-  /* M-02 · il nastro: la larghezza serve al percorso delle scatole */
-  var rail = $('.mrbelt .mr-rail');
-  function railW() { if (rail) rail.style.setProperty('--w', rail.clientWidth + 'px') }
-  railW(); addEventListener('resize', railW);
-
-  /* M-03 · turno di notte: la lancetta fa il giro delle 24 ore, i lavori partono di notte */
-  var hand = $('.mrnight .hand'), dlab = $('.mrnight .dial b'), jobs = $$('.mrnight .jobs li');
-  var JT = [120, 180, 270, 360], DAY = 24000, clockT = 1.5 * 60 / 1440 * DAY;
-  function night(ms) {
-    var m = Math.floor(ms / DAY * 1440) % 1440;
-    hand.style.rotate = (180 + m / 1440 * 360) + 'deg';
-    dlab.textContent = ('0' + Math.floor(m / 60)).slice(-2) + ':' + ('0' + (Math.floor(m / 10) * 10 % 60)).slice(-2);
-    jobs.forEach(function (j, i) { var a = JT[i]; j.classList.toggle('on', m >= a && m < a + 50); j.classList.toggle('mr-done', m >= a + 50 && m < 480) });
-  }
-  if (hand) {
-    hand.style.animation = 'none';
-    if (RM) night(JT[1] / 1440 * DAY + 10);
-    else { night(clockT); E2.every(50, function () { clockT = (clockT + 50) % DAY; night(clockT) }) }
-  }
-
-  /* M-04 · AI privata: le celle si accendono a onde, come un pensiero */
-  var chip = $('.mrai .mr-chip'), cells = [];
-  if (chip) {
-    for (var i = 0; i < 84; i++) { var c = document.createElement('i'); chip.appendChild(c); cells.push(c) }
-    var wx = 0;
-    function wave() {
-      wx = (wx + 1) % 18;
-      cells.forEach(function (c, i) {
-        var col = i % 12, row = Math.floor(i / 12), d = Math.abs(col - wx + 3) + Math.abs(row - 3) * .6;
-        var lit = d < 1.6 && Math.random() < .8;
-        c.className = lit ? (Math.random() < .12 ? 'hot' : 'on') : '';
-      });
-    }
-    if (RM) { wx = 8; wave() } else E2.every(120, wave);
-  }
-
-  /* M-05 · centralino: i pacchetti viaggiano dagli strumenti al back office */
-  var ws = $('.mrwire svg');
-  if (ws) {
-    var HUB = [160, 100], NODES = [['Payments', 46, 34], ['Shop', 46, 166], ['Accounts', 274, 34], ['Email', 274, 166], ['Calendar', 160, 22]];
-    var paths = [];
-    NODES.forEach(function (n) {
-      var x = n[1], y = n[2], d = n[0] === 'Calendar' ? 'M160 30 V85' : 'M' + x + ' ' + y + ' H' + (x < 160 ? 100 : 220) + ' V100 H' + (x < 160 ? 114 : 206);
-      paths.push(el(ws, 'path', { d: d, class: 'mr-wl' }));
-    });
-    el(ws, 'rect', { x: 114, y: 85, width: 92, height: 30, class: 'hub' });
-    el(ws, 'text', { x: 160, y: 104, 'text-anchor': 'middle', class: 'hubt', style: 'fill:#121211' }, 'Back office');
-    NODES.forEach(function (n) {
-      var w = n[0].length * 6.6 + 16, x = n[0] === 'Calendar' ? 160 - w / 2 : (n[1] < 160 ? 14 : 306 - w);
-      el(ws, 'rect', { x: x, y: n[2] - 10, width: w, height: 20, class: 'mr-nd' });
-      el(ws, 'text', { x: x + w / 2, y: n[2] + 3.5, 'text-anchor': 'middle' }, n[0]);
-    });
-    var pk = paths.map(function (p, i) { var r = el(ws, 'rect', { width: 6, height: 6, class: 'mr-pk', x: -3, y: -3 }); return { r: r, p: p, L: p.getTotalLength(), t: i / paths.length, v: rnd(.00028, .00042) } });
-    function place(k) { var pt = k.p.getPointAtLength(k.L * k.t); k.r.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ' ' + pt.y.toFixed(1) + ')'); k.r.setAttribute('opacity', k.t > .97 ? 0 : 1) }
-    pk.forEach(place);
-    if (!RM) E2.frame = function (dt) { pk.forEach(function (k) { k.t += k.v * dt; if (k.t > 1) { k.t = 0; k.v = rnd(.00028, .00042) } place(k) }) };
-  }
 })();

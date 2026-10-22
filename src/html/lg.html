@@ -1137,8 +1137,8 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
 <div class="navdim" id="navDim"></div>
 <nav class="flr navlift" id="navLift" data-luce="notte" aria-label="Floors"></nav>
 <main class="hm mrp" id="top">
-  <!-- LG · Machine Room, la faccia pubblica: il laboratorio sotto lo studio. Si guarda, non si tocca.
-       Il back office vero sta dietro la chiave (pulsantiera), non in questa pagina. Testi in bozza: da far approvare a Eso. -->
+  <!-- LG · Machine Room, la faccia pubblica: la sezione del palazzo e la porta dello staff. Le macchine che c'erano qui
+       sono passate in Systems o sono state tolte perche' doppioni (23 ottobre). Il back office vero sta dietro la chiave. -->
 
   <!-- 1 · apertura: la sezione del palazzo, LG sotto terra che alimenta tutti i piani -->
   <section class="hs mro" data-luce="notte" data-f="LG" data-n="Machine Room" id="m1"><div class="in">
@@ -1157,60 +1157,8 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
     </figure>
   </div></section>
 
-  <!-- 2 · le macchine: sei pannelli, ognuno una cosa che costruiamo davvero -->
-  <section class="hs mrw" data-luce="notte" data-f="LG.1" data-n="Machines" id="m2"><div class="in">
-    <div class="mrwh">
-      <h2>Down here, things move.</h2>
-      <span class="mo mut">Six machines · drawn in code</span>
-    </div>
-    <div class="mrgrid">
-      <article class="mrm" data-m="log">
-        <header class="mo"><span>M-01 · Build log</span><i class="mrled"></i></header>
-        <div class="mrbox mrterm" aria-hidden="true"><pre></pre></div>
-        <p>Custom software, built to fit.</p>
-      </article>
-      <article class="mrm" data-m="belt">
-        <header class="mo"><span>M-02 · Work orders</span><i class="mrled"></i></header>
-        <div class="mrbox mrbelt" aria-hidden="true">
-          <div class="mr-st mo"><span>Survey</span><span>Build</span><span>Run</span></div>
-          <div class="mr-rail"><i></i><i></i><i></i><i></i><i></i></div>
-        </div>
-        <p>Every order moves the same way: survey, build, run.</p>
-      </article>
-      <article class="mrm" data-m="night">
-        <header class="mo"><span>M-03 · Night shift</span><i class="mrled"></i></header>
-        <div class="mrbox mrnight" aria-hidden="true">
-          <div class="dial"><i class="hand"></i><b class="mo">02:00</b></div>
-          <ol class="jobs mo"><li><span>02:00</span>Backups</li><li><span>03:00</span>Invoices</li><li><span>04:30</span>Stock sync</li><li><span>06:00</span>Morning report</li></ol>
-        </div>
-        <p>Automations that work while nobody is awake.</p>
-      </article>
-      <article class="mrm" data-m="ai">
-        <header class="mo"><span>M-04 · Private AI</span><i class="mrled"></i></header>
-        <div class="mrbox mrai" aria-hidden="true"><div class="mr-chip"></div><span class="mo mut">Your machines · your data</span></div>
-        <p>AI built in, running on your own machines.</p>
-      </article>
-      <article class="mrm" data-m="wire">
-        <header class="mo"><span>M-05 · Switchboard</span><i class="mrled"></i></header>
-        <div class="mrbox mrwire" aria-hidden="true"><svg viewBox="0 0 320 200"></svg></div>
-        <p>Your tools, wired into one back office.</p>
-      </article>
-      <article class="mrm" data-m="reg">
-        <header class="mo"><span>M-06 · Register</span><i class="mrled"></i></header>
-        <div class="mrbox mrreg">
-          <ol class="mo">
-            <li><span>No. 012</span><b>Vitalia's Pizza</b><em class="mr-run"><i></i>Running</em></li>
-            <li><span>No. 011</span><b>Vitalia's Restaurant</b><em class="mr-bld"><i></i>In build</em></li>
-            <li><span>No. 001</span><b>Machine Room</b><em class="mr-bld"><i></i>In build</em></li>
-          </ol>
-        </div>
-        <p>What we have running and on the bench, right now.</p>
-      </article>
-    </div>
-  </div></section>
-
-  <!-- 3 · la porta chiusa: oltre si va solo con la chiave -->
-  <section class="hs mrd" data-luce="notte" data-f="LG.2" data-n="Staff only" id="m3"><div class="in">
+  <!-- 2 · la porta chiusa: oltre si va solo con la chiave -->
+  <section class="hs mrd" data-luce="notte" data-f="LG.1" data-n="Staff only" id="m3"><div class="in">
     <div class="mrdoor" aria-hidden="true"><i class="seam"></i><span class="slot"><i></i></span></div>
     <div class="mrdt">
       <span class="mo mut">LG · Behind this door</span>
@@ -1219,7 +1167,7 @@ html.mmcur input,html.mmcur textarea,html.mmcur [contenteditable]{cursor:text!im
     </div>
   </div></section>
 
-  <!-- 4 · la porta per G: la stessa della home -->
+  <!-- 3 · la porta per G: la stessa della home -->
   <section class="hs gd" data-luce="rosa2" data-f="G" data-n="Door to G" id="g"><div class="in">
     <div>
       <h2>Tell us what slows you down.</h2>

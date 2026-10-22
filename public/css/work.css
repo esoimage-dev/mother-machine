@@ -183,3 +183,16 @@
 .u4 .mo{font-size:10px;opacity:.7}
 .u4 b{font:600 17px/1.1 var(--f-body);letter-spacing:-.01em}
 @media (max-width:860px){.wkh{flex-direction:column;align-items:flex-start;gap:14px}.wkg{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:84%;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:calc(-1*clamp(16px,4vw,56px));padding-inline:clamp(16px,4vw,56px);scroll-padding-inline:clamp(16px,4vw,56px);scrollbar-width:none}.wkg::-webkit-scrollbar{display:none}.wc{scroll-snap-align:start}.wall{flex-direction:column-reverse;align-items:flex-start}.wcta{display:none}}
+
+/* ===== 04 Work, 23 ottobre: niente numeri di serie. I lavori veri in grande, poi tutti in una riga ===== */
+.wkhd,.wkl>li>*{grid-template-columns:minmax(0,1.3fr) minmax(0,1.5fr) 84px 118px minmax(0,1fr)}
+@media (max-width:1080px){.wkhd,.wkl>li>*{grid-template-columns:minmax(0,1.2fr) minmax(0,1.3fr) 104px minmax(0,.9fr)}}
+@media (max-width:760px){.wkl>li>*{grid-template-columns:1fr auto;grid-template-areas:"cl st" "wb wb" "rs rs"}}
+.wkl .wk-rs.mut b{font-size:clamp(22px,2vw,28px);color:var(--mut)}
+
+/* l'anteprima nel registro: le foto vere riempiono la copertina */
+.wv-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.wv-img[style*="C8212A"] img{object-fit:contain;object-position:50% 70%;padding:8%;box-sizing:border-box;background:radial-gradient(120% 90% at 70% 40%,#E0353D,#8C1219)}
+
+}
+.wko+.wkr{padding-top:0}

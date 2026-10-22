@@ -3,13 +3,38 @@
 Lista viva del progetto. Si spunta quando una cosa è fatta, si aggiunge quando nasce. Mai scrivere qui codici o segreti.
 Il piano di lancio in 3 giorni, con le decisioni e l'ordine, è in `docs/PIANO.md`.
 
+## Scaletta aggiornata (23 ottobre)
+Il sito è online su mothermachine.studio, ancora fuori da Google. Fatti: home con i lavori subito dopo l'apertura,
+le due pagine Vitalia's con le demo vere e le fasce, dominio, posta in entrata.
+Deciso da Eso: niente progetti nostri (Mother Machine, Machine Room) nei lavori; "Cairns, Australia" sui lavori si mostra.
+
+1. **Pagina Work (04) a posto.** Oggi online ha ancora "No. 012" e "No. 011" e il ristorante senza link. Lavoro corto.
+2. **Contact vero.** Modulo, ordine salvato (D1), anti spam (Turnstile), mail di conferma al cliente e avviso a noi (Resend),
+   scelta dell'orario e link a una stanza Daily standard. Senza questo il sito non può prendere clienti.
+3. **Systems assorbe le macchine di LG.** Le animazioni migliori di LG vanno nella pagina 02, che diventa più forte;
+   più la riga sulla sicurezza. LG torna a essere solo la porta dello staff (la chiave) verso la Machine Room.
+4. **Brand e Studio.** Testi più corti, un lavoro vero come prova, Studio in tre parti (Survey, Build, Run).
+5. **Legale e Google.** Privacy con nome legale, ABN, indirizzo; ABN nel footer; titoli e descrizioni; anteprime social.
+6. **Lancio.** `PRIMA_DEL_LANCIO = false`, repository privata, Rate Limiting su `/api/porta`, controllo su tutti i dispositivi.
+7. **Dopo il lancio.** Machine Room vera (ordini, risposte, preventivi, call), Cloudflare Access, stanza Daily vestita
+   Mother Machine, promemoria; poi il gioco di LG, animazioni allo scroll, film nuovo, footer.
+
+Serve da Eso: account Resend e Daily (gratis), nome legale, ABN e indirizzo per la privacy, repository privata (un minuto).
+
+Nel back office (Machine Room), chiesto da Eso il 23 ottobre:
+- **Fatture automatiche.** Dal preventivo accettato o dal lavoro chiuso nasce la fattura (tax invoice con ABN, GST se serve),
+  in PDF, numerata da sola, mandata al cliente per mail e segnata pagata o da pagare. Eso non le scrive più a mano.
+- **Risponditore di mail intelligente.** Legge le mail in arrivo su hello@, capisce cosa chiedono, prepara una risposta
+  nel tono Mother Machine; le risposte semplici partono da sole, le altre restano in bozza da approvare con un tocco.
+- **Da riprendere con Eso:** come fare le fatture oggi (prima del back office) e i dati legali (nome, ABN, indirizzo).
+
 ## Lancio · giorno 1
 - [x] Nameserver del dominio da GoDaddy a Cloudflare (21 ottobre).
-- [ ] Materiali e permessi dei quattro lavori veri: Vitalia's Pizza on Wheels, Vitalia's Restaurant, Machine Room, Mother Machine (Eso).
+- [x] Materiali dei due lavori veri: Vitalia's Pizza on Wheels e Vitalia's Restaurant. Machine Room e Mother Machine non vanno nei lavori (deciso da Eso il 23 ottobre).
 - [x] Pagina progetto Vitalia's Pizza on Wheels: materiali veri, numeri veri, demo vera telefono e computer (21 ottobre).
   Per rifare la demo dal codice del cliente: `python3 scripts/demo-vitalias.py /percorso/vitalias-pizza-on-wheels`.
-- [ ] Pagine progetto: Mother Machine, Vitalia's Restaurant, Machine Room.
-- [ ] Togliere i numeri ai progetti ("No. 012", "Study 03", "No. 001 · 012") da Work, home e pagina progetto.
+- [x] Pagina progetto Vitalia's Restaurant con demo, numeri e fasce (22-23 ottobre).
+- [ ] Togliere i numeri ai progetti dalla pagina Work (in home e nelle pagine progetto sono già spariti).
 - [x] Work in home: striscia orizzontale con selettore e macchine in piccolo (22 ottobre). Birrificio Mare e Forno Nove restano segnaposto finché non arrivano lavori veri.
 
 ## Lancio · giorno 2
@@ -59,7 +84,7 @@ Il piano di lancio in 3 giorni, con le decisioni e l'ordine, è in `docs/PIANO.m
 - [ ] LG: sei macchine o quattro più grandi.
 - [ ] Brand apre al buio, il manuale lo vuole bianco.
 - [ ] Footer di Work senza le lingue.
-- [ ] "Cairns" nel testo della pagina progetto (contro la regola).
+- [x] "Cairns": si mostra (deciso da Eso il 23 ottobre).
 - [ ] Numeri di serie dei progetti.
 - [ ] Altre modifiche alla pagina Brand (le dà Eso).
 
@@ -73,6 +98,6 @@ Il piano di lancio in 3 giorni, con le decisioni e l'ordine, è in `docs/PIANO.m
 
 ## Prima di andare online
 - [ ] Doctype nelle pagine, con confronto visivo completo.
-- [ ] Dominio mothermachine.studio: nameserver da GoDaddy a Cloudflare.
+- [x] Dominio mothermachine.studio: nameserver da GoDaddy a Cloudflare.
 - [ ] Mail: Email Routing verso Gmail, invio come hello@ con Resend (serve il dominio verificato).
-- [ ] Merge su `main`.
+- [x] Merge su `main`.
