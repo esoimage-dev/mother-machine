@@ -1,0 +1,125 @@
+/* 01 Studio: i ritocchi sopra la pagina approvata (monta-pagine.py, def studio). Comportamenti in public/js/studio.js */
+
+/* ---- 1 · apertura: il titolo come disegno tecnico, scorrendo si riempie ---- */
+.stbp{padding:0!important;height:230vh}
+.stbpin{position:sticky;top:0;height:100svh;min-height:560px;overflow:hidden;display:flex;align-items:center;padding-top:64px;box-sizing:border-box}
+.stbp .in{display:block;flex:1 1 auto;min-width:0;width:100%;box-sizing:border-box;position:relative;z-index:1}
+.stbtop{display:flex;justify-content:space-between;align-items:center;gap:20px}
+.stbm{display:flex;align-items:center;gap:10px;opacity:1!important;color:var(--mut)}
+.stbm i{position:relative;width:clamp(64px,8vw,120px);height:2px;background:rgba(18,18,17,.18);overflow:hidden}
+.stbm b{position:absolute;inset:0;background:var(--sig,#FF5B3A);transform-origin:left;transform:scaleX(var(--p,1))}
+.stbh{margin:clamp(18px,3vh,36px) 0 0;font-size:clamp(48px,12vw,184px);font-family:var(--f-body)}
+.stvh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.stbl{display:block;position:relative;width:max-content;white-space:nowrap;line-height:.94;padding-bottom:.04em}
+.stbl.l1{font-weight:650;letter-spacing:-.06em}
+.stbl.l2{font-weight:300;letter-spacing:-.05em}
+.stbl .o{color:transparent;-webkit-text-stroke:1.2px rgba(18,18,17,.62)}
+.stbl .f{position:absolute;left:0;top:0;color:#121211;clip-path:inset(-20% calc((1 - var(--f,1)) * 100%) -20% 0)}
+.stbft{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px clamp(32px,6vw,96px);align-items:end;margin-top:clamp(28px,5vh,64px)}
+.stbft .stlede{margin:0}
+.stbft .stfacts{margin:0;padding-top:0;border-top:0}
+/* le linee di misura: a tutta larghezza, come sul tavolo da disegno; spariscono quando il titolo e' costruito */
+.stbpin>.stbg{position:absolute!important;inset:0;margin:0!important;padding:0!important;max-width:none!important;width:auto!important;pointer-events:none;opacity:var(--g,0);transition:opacity .2s linear}
+.stbg i{position:absolute;display:block}
+.stbg .h{left:0;right:0;height:0;border-top:1px solid rgba(18,18,17,.2);transform-origin:left;transform:scaleX(0);transition:transform 1.4s cubic-bezier(.6,0,.2,1)}
+.stbg .v{top:64px;bottom:0;width:0;border-left:1px dashed rgba(18,18,17,.24);transform-origin:top;transform:scaleY(0);transition:transform 1.4s cubic-bezier(.6,0,.2,1)}
+.stbg .t{font:400 10px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mut);transform:translateY(-130%);opacity:0;transition:opacity .6s .9s}
+.stbg .d{height:0;border-top:1px solid rgba(18,18,17,.5);transform-origin:left;transform:scaleX(0);transition:transform 1.2s .3s cubic-bezier(.6,0,.2,1)}
+.stbg .d::before,.stbg .d::after{content:"";position:absolute;top:-5px;width:0;height:9px;border-left:1px solid rgba(18,18,17,.5)}
+.stbg .d::before{left:0}.stbg .d::after{right:0}
+.stbg.in .h,.stbg.in .d{transform:none}
+.stbg.in .v{transform:none}
+.stbg.in .t{opacity:1}
+
+/* ---- 2 · chi serviamo: il momento "mother", l'unico vetro della pagina ---- */
+.sts{padding-block:clamp(56px,7vw,110px)!important}
+.stst2{position:relative;isolation:isolate;overflow:hidden;contain:paint;border-radius:clamp(28px,3vw,44px);min-height:min(720px,88svh);box-sizing:border-box;
+  padding:clamp(24px,4vw,64px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);align-items:end;gap:clamp(28px,4vw,64px);background:#F3DDD3;color:#121211}
+.stfield{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
+.stgrain{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.3;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.ststh,.stglass{position:relative;z-index:2}
+.ststh{align-self:stretch;display:flex;flex-direction:column;justify-content:space-between;gap:40px}
+.ststh .mo{opacity:.75}
+.ststh h2{margin:0;max-width:none;font:650 clamp(52px,8.4vw,136px)/.9 var(--f-body);letter-spacing:-.055em}
+.ststh h2 span{display:block;font-weight:300;letter-spacing:-.05em}
+.stglass{border-radius:clamp(20px,2vw,28px);padding:clamp(22px,2.4vw,34px);overflow:hidden;display:grid;gap:16px;
+  background:linear-gradient(160deg,rgba(255,255,255,.34),rgba(255,255,255,.12));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),inset 0 -1px 0 rgba(255,255,255,.25),0 40px 80px -30px rgba(90,25,10,.32)}
+.stcopy{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block}
+.stglass p{margin:0;font:400 17px/1.55 var(--f-body);color:#33322E;max-width:36ch}
+.stglass p.stbig{font:560 clamp(22px,1.9vw,28px)/1.2 var(--f-body);letter-spacing:-.02em;color:#121211}
+.stglass .go{margin-top:6px}
+
+/* ---- 3 · le regole: il display dell'ascensore rotola da 01 a 05 ---- */
+.strg{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,6vw,96px);align-items:start;margin-top:12px}
+.stctr{position:sticky;top:calc(50svh - 130px)}
+.stdisp{display:flex;align-items:flex-end;gap:clamp(14px,1.6vw,22px);color:#F4F2EC}
+.stdisp .ar{display:grid;gap:8px;margin-bottom:.5em;font-size:clamp(140px,17vw,260px)}
+.stdisp .ar i{display:block;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;opacity:.22;transition:opacity .2s,border-color .2s}
+.stdisp .u{border-bottom:9px solid currentColor}
+.stdisp .d{border-top:9px solid currentColor}
+.stdisp .u.on{opacity:1;border-bottom-color:var(--sig,#FF5B3A)}
+.stdisp .d.on{opacity:1;border-top-color:var(--sig,#FF5B3A)}
+.stroll{display:flex;font:500 clamp(140px,17vw,260px)/1 var(--f-mono);letter-spacing:-.07em}
+.stdig{display:block;height:1em;overflow:hidden}
+.strd{display:block;transform:translateY(calc(var(--n,0) * -1em));transition:transform .75s cubic-bezier(.7,0,.2,1)}
+.strd b{display:block;height:1em;font-weight:500}
+.sttot{margin-bottom:.9em;white-space:nowrap}
+.strg .strl{margin:0;border-top:0}
+.strg .strl li{display:block;padding:clamp(36px,8vh,84px) 0;border-bottom:1px solid rgba(244,242,236,.12)}
+.strg .strl li:first-child{padding-top:clamp(12px,3vh,32px)}
+.strg .strl li>.mo{display:none}
+.strg .strl li b{display:block;font-size:clamp(32px,3.6vw,58px)}
+.strg .strl li p{margin-top:14px!important;max-width:40ch;font-size:17px}
+.strg .strl.on li{opacity:.26;transition:opacity .5s!important}
+.strg .strl.on li.act{opacity:1}
+.strg .strl li.act b{font-weight:760;letter-spacing:-.05em}
+.strg .strl li.act p{color:rgba(244,242,236,.9)}
+
+/* ---- 4 · con chi parli: Design / Code ---- */
+.stdc{display:grid;gap:24px;justify-items:start}
+.stsw{display:flex;padding:3px;border:1.5px solid #121211}
+.stsw button{all:unset;box-sizing:border-box;position:relative;overflow:hidden;isolation:isolate;cursor:pointer;padding:9px 16px;font:600 14px var(--f-body);color:#121211;transition:color .3s}
+.stsw button .fl{position:absolute;inset:0;background:var(--sig,#FF5B3A);transform:translateY(101%);transition:transform .4s cubic-bezier(.7,0,.2,1);z-index:-1}
+.stsw button:hover .fl{transform:none}
+.stsw button[aria-checked="true"]{background:#121211;color:#FBFAF7;cursor:default}
+.stsw button[aria-checked="true"] .fl{display:none}
+.stsw button:focus-visible{outline:2px solid #121211;outline-offset:2px}
+.stdv{display:grid}
+.stdv>*{grid-area:1/1}
+.stdv h2{margin:0;transition:opacity .35s,transform .5s cubic-bezier(.2,.8,.2,1)}
+.stdv h2 span{display:block;font-weight:300;letter-spacing:-.045em}
+.stcode{margin:0;align-self:center;font:400 clamp(14px,1.75vw,25px)/1.6 var(--f-mono);color:#121211;white-space:pre;opacity:0;clip-path:inset(0 100% 0 0);
+  transition:opacity .2s,clip-path .9s cubic-bezier(.6,0,.2,1)}
+.stcode .stck{color:var(--mut)}
+.stcode .stcq{color:#121211;background:rgba(18,18,17,.06)}
+.stdv[data-v="c"] h2{opacity:0;transform:translateY(-14px);pointer-events:none}
+.stdv[data-v="c"] .stcode{opacity:1;clip-path:inset(0 0 0 0)}
+
+/* con chi parli: ogni mestiere e' una riga che porta al suo piano */
+.stcrew li{padding:0!important}
+.stcrew a{display:flex;align-items:center;gap:14px;width:100%;padding:16px 0;color:#121211;text-decoration:none;font:500 clamp(17px,1.5vw,21px)/1.2 var(--f-body);letter-spacing:-.01em;text-transform:none;transition:padding .35s cubic-bezier(.2,.8,.2,1)}
+.stcrew a i{width:8px;height:8px;background:#121211;flex:none;transition:background .3s}
+.stcrew a span{flex:1}
+.stcrew em{font:400 11px var(--f-mono);font-style:normal;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);white-space:nowrap}
+.stcrew a:hover,.stcrew a:focus-visible{padding-left:10px}
+.stcrew a:hover i,.stcrew a:focus-visible i{background:var(--sig,#FF5B3A)}
+
+@media (max-width:900px){
+  .stbp{height:190vh}
+  .stbft{grid-template-columns:1fr}
+  .stbm i{width:56px}
+  .stbg .t:not(:last-child){display:none}
+  .stst2{grid-template-columns:1fr;min-height:0;gap:40px;padding-top:28px}
+  .ststh{gap:56px}
+  .stglass p{font-size:16px}
+  .strg{grid-template-columns:1fr;gap:0}
+  .stctr{top:64px;z-index:3;background:var(--bg);margin-inline:-16px;padding:10px 16px;border-bottom:1px solid rgba(244,242,236,.12)}
+  .stdisp{align-items:center}
+  .stroll{font-size:56px}
+  .stdisp .ar{font-size:56px;margin:0;gap:5px}
+  .sttot{margin:0 0 0 auto}
+}
+@media (prefers-reduced-motion:reduce){
+  .stbg .h,.stbg .v,.stbg .d,.stbg .t,.strd,.stcode,.stdv h2{transition:none}
+}

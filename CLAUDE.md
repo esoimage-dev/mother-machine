@@ -3,15 +3,18 @@
 Chi lavora su questo progetto (una persona o un Claude, anche su un altro account) legge **solo questo file** e sa
 come muoversi: cosa è il sito, come è fatto, le regole, cosa è fatto, cosa manca e in che ordine. Si aggiorna qui e
 basta: si spunta quello che è fatto, si scrive quello che si decide diversamente, si aggiunge quello che nasce.
-Ultimo aggiornamento: 25 ottobre 2026 (passaggio a un altro account Claude: leggi prima la sezione 0).
+Ultimo aggiornamento: 26 ottobre 2026 (Studio ritoccato, "free" in due posti soli).
 
 ---
 
 ## 0 · Dove siamo (per chi riprende da qui)
-- **Tutto il lavoro è su `main`** (ultima pull request unita: #6). Si lavora sul branch `claude/keen-franklin-rxhwha`
-  ripartendo ogni volta dal `main` aggiornato, o su un branch nuovo: con il push si apre la pull request e Eso la unisce. Anteprima: `https://claude-keen-franklin-rxhwha.mother-machine.pages.dev`.
+- **Tutto il lavoro è su `main`** (ultima pull request unita: #8). Ogni sessione di Claude ha il suo branch (oggi `claude/trusting-johnson-wybhvj`),
+  ripartendo dal `main` aggiornato: con il push si apre la pull request e Eso la unisce. Anteprima: `https://<branch con i trattini>.mother-machine.pages.dev`,
+  ma **Cloudflare taglia il nome a 28 caratteri** (oggi `https://claude-trusting-johnson-wybh.mother-machine.pages.dev`).
+  Il link giusto sta sempre nel commento del bot di Cloudflare nella pull request ("Branch Preview URL").
 - **Prossimi passi, in ordine** (lavorare con pochi token, niente stravolgimenti, proporre in chat prima di toccare):
-  1. **Studio (01):** testi più corti, tre parti (Survey, Build, Run), via i doppioni. Proporre i testi in chat, poi una modifica sola.
+  1. **Studio (01):** rifatto (26 ottobre), da approvare sull'anteprima. Aperto: la regola 03 "One number to move."
+     ripete il titolo della home ("Three steps. One number to move."): Eso decide se cambiarla.
   2. **Contact (G):** il modulo vero (vedi sezione 8, punto 1). Eso sta creando gli account **Resend** e **Daily**
      (gratis: Resend 3.000 mail al mese, 100 al giorno; Daily circa 10.000 minuti-partecipante al mese, da verificare
      sulle loro pagine prezzi). Le chiavi API **non** vanno in chat né nella repository: Eso le mette su Cloudflare come
@@ -52,7 +55,12 @@ Ultimo aggiornamento: 25 ottobre 2026 (passaggio a un altro account Claude: legg
 - Rispondere a Eso **in italiano**, corto e schematico: un passo alla volta, percorsi esatti, niente spiegoni.
   Testi del sito in **inglese internazionale**: frasi corte, parole semplici, niente gergo da agenzia.
 - **Mai il trattino lungo** (il carattere U+2014), in nessun testo, codice, commento o messaggio. Solo "-".
-- Ragionare da **PM, art director e senior designer**: critica brutale ma bilanciata. Sito snello, navigabile,
+- Ragionare da **PM, art director e senior designer**: critica brutale ma bilanciata. Solo cose fatte bene: controllate con
+  Playwright (computer e telefono) che non ci siano sovrapposizioni, errori o sbordi, prima di mostrarle.
+- **Processo con Eso:** dopo ogni push dare il **link di anteprima** di Cloudflare; quando siamo convinti, ricordare a Eso di
+  **unire la pull request** su GitHub (così si aggiorna il sito vero). Pensare anche a quello che Eso non pensa.
+- **Design system:** non toccare testata, logo e la sua animazione, pulsantiera, footer. Si lavora dentro le pagine (sezioni,
+  testi, tipografia, animazioni leggere). Il vetro si usa poco e dove serve: "machine" squadrato, "mother" tondo e vetro. Sito snello, navigabile,
   con personalità. **Niente doppioni** (se una cosa è già in home, non si ripete identica in un'altra pagina).
 - Discutere prima in chat quando una scelta cambia contenuti o struttura. Non inventare servizi o voci non richieste.
 - **Numeri:** quelli dei clienti li decide Eso (possono essere forti, è marketing, ma li dà o li approva lui).
@@ -111,7 +119,7 @@ Ogni pagina è un piano. Si naviga con la pulsantiera (il menu) e si scende come
 | 04 | `/work` | notte | l'elenco dei lavori. Pagine: `/work/vitalias-pizza-on-wheels`, `/work/vitalias-restaurant` |
 | 03 | `/brand` | bianco | il fuori: identità, siti e app, negozi online, art direction, grafica |
 | 02 | `/systems` | grigio macchina | il dentro: software, gestionali, app, CMS, automazioni, AI privata |
-| 01 | `/studio` | rosa | chi siamo, metodo Survey, Build, Run |
+| 01 | `/studio` | rosa | chi siamo, come lavoriamo, con chi parli |
 | G | `/contact` | rosa | "Tell us what slows you down." Il modulo (ordine di lavoro). Primo incontro gratis |
 | LG | `/lg` | notte | il laboratorio segreto (oggi solo il palazzo, da riempire) |
 | SL | `/lg/room` | notte | **Secret lab**: il nostro back office, piano segreto sotto LG, con il codice sulla pulsantiera. In testata "SL · Secret lab", nessun quadratino acceso |
@@ -159,6 +167,13 @@ Fuori dal palazzo: `/privacy`.
 - [x] Brand rifatta (apertura, tre stili dei controlli, quattro caratteri, The system in bozza).
 - [x] Porta di LG con il codice sul server.
 - [x] Systems con il turno di notte e il registro di bordo; LG snella.
+- [x] Studio rifatto (26 ottobre), quattro idee nello stile del sito: (1) l'apertura e' un disegno tecnico, il titolo a
+  contorno con le linee di misura vere (altezza delle maiuscole, x-height, linea di base, quota) e scorrendo si riempie, "Drawn -> Built";
+  (2) "Built for busy days." e' l'unico vetro della pagina, sopra gli archi della m che si muovono (tecnica della home); (3) le
+  regole con il display dell'ascensore che rotola da 01 a 05; (4) "Who you talk to" con l'interruttore Design / Code e i
+  mestieri che portano al loro piano. Via la targhetta (numero di serie, ore inventate) e la storia falsa dei ristoranti.
+  Stile e comportamenti in `public/css/studio.css` e `public/js/studio.js`, markup in `def studio` di `monta-pagine.py`.
+- [x] "Free" solo due volte: nella porta verso G ("The first one is free.") e in Contact ("The first conversation is free.").
 
 ## 8 · Scaletta (in ordine)
 1. [ ] **Contact vero.** Modulo → ordine salvato (Cloudflare D1) → anti spam (Turnstile) → mail di conferma al cliente
@@ -176,8 +191,7 @@ Fuori dal palazzo: `/privacy`.
    animare più avanti**. Ordine deciso da Eso (25 ottobre): apertura, controlli, carattere ("One word, four typefaces."),
    sistema, cosa facciamo. L'apertura ha una scheda prodotto vera (pagnotta, prezzo, quantità, bottone) e non si taglia mai.
    Cambiando stile cambiano solo i comandi: etichette e righe sotto restano uguali (deciso da Eso).
-   **Studio, resto:** testi più corti, Studio in tre parti (Survey, Build, Run), un solo "free" in tutto il sito,
-   via i doppioni. Si propone in chat, Eso approva.
+   **Studio:** fatto il 26 ottobre (sezione 7).
 4. [ ] **Legale e Google.** Privacy con chi raccoglie i dati e hello@; titoli e descrizioni; anteprime social (Open Graph).
 5. [ ] **Lancio.** `PRIMA_DEL_LANCIO = false`, repository privata, Rate Limiting su `/api/porta`, controllo su tutti i dispositivi.
 6. [ ] **Dopo il lancio:**

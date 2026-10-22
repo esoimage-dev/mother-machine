@@ -398,6 +398,71 @@ def marchio(t):
     t = una(t, 'data-f="03.4" data-n="What we make" id="b5"', 'data-f="03.5" data-n="What we make" id="b5"', '03.5')
     return t
 
+def studio(t):
+    """01 Studio (ottobre 2026, con Eso). Quattro idee, una per sezione, dentro lo stile del sito:
+    1. l'apertura e' un disegno tecnico: il titolo nasce a contorno con le linee di misura e scorrendo si riempie
+       (chi disegna e' chi costruisce). Via la targhetta grigia con numero di serie e ore inventate.
+    2. Built for busy days. (prima diceva che i ristoranti erano nostri: sono clienti): il momento "mother", l'unico
+       vetro della pagina, sopra gli archi della m che si muovono (stessa tecnica della home: copia sfocata, niente filtri dal vivo).
+    3. le regole: a sinistra il display dell'ascensore che rotola da 01 a 05 mentre scorri.
+    4. con chi parli: un interruttore Design / Code gira il titolo nel suo codice; ogni mestiere porta al suo piano."""
+    # 1 · apertura
+    a = t.find('<section class="hs sto"'); e = t.find('</section>', a) + len('</section>')
+    sez = t[a:e]
+    assert a > 0 and 'Signed, numbered' in sez, 'apertura studio'
+    i = sez.find('<p class="stlede">'); lede = sez[i:sez.find('</p>', i) + 4]
+    i = sez.find('<dl class="stfacts mo">'); fatti = sez[i:sez.find('</dl>', i) + 5]
+    riga = lambda k, s: (f'<span class="stbl {k}"><span class="o">{s}</span><span class="f">{s}</span></span>')
+    t = t[:a] + ('<section class="hs sto stbp" data-luce="rosa2" data-f="01" data-n="Studio" id="s1"><div class="stbpin">'
+                 '<div class="stbg" aria-hidden="true"></div><div class="in">\n'
+                 '    <div class="stbtop"><span class="mo mut">01 · Studio</span>'
+                 '<span class="mo stbm" aria-hidden="true"><span>Drawn</span><i><b></b></i><span>Built</span></span></div>\n'
+                 '    <h1 class="stbh"><span class="stvh">A small studio. On purpose.</span><span aria-hidden="true">'
+                 + riga('l1', 'A small studio.') + riga('l2', 'On purpose.') + '</span></h1>\n'
+                 '    <div class="stbft">' + lede + fatti + '</div>\n'
+                 '  </div></div></section>') + t[e:]
+    # 2 · chi serviamo, nel vetro
+    a = t.find('<section class="hs sts"'); e = t.find('</section>', a) + len('</section>')
+    vecchio = t[a:e]
+    assert a > 0 and 'We run a business too.' in vecchio, 'da dove veniamo'
+    i = vecchio.find('<a class="go"'); link = vecchio[i:vecchio.find('</a>', i) + len('</a>')]
+    link = una(link, '<b>See them on 04 Work</b>', '<b>See the work on 04</b>', 'link lavori')
+    t = t[:a] + ('<section class="hs sts" data-luce="carta" data-f="01.1" data-n="Who we build for" id="s2"><div class="in">\n'
+                 '    <div class="stst2">\n'
+                 '      <canvas class="stfield" aria-hidden="true"></canvas><div class="stgrain" aria-hidden="true"></div>\n'
+                 '      <div class="ststh"><span class="mo">Who we build for</span><h2>Built for <span>busy days.</span></h2></div>\n'
+                 '      <div class="stglass"><canvas class="stcopy" aria-hidden="true"></canvas>\n'
+                 '        <p class="stbig">Most software is made for the demo. Ours is made for the rush.</p>\n'
+                 '        <p>We build for the people who use it on a Monday morning, not for a screenshot.</p>\n'
+                 '        ' + link + '\n'
+                 '      </div>\n'
+                 '    </div>\n'
+                 '  </div></section>') + t[e:]
+    # 3 · le regole con il display dell'ascensore
+    t = una(t, '<ol class="strl">',
+            '<div class="strg"><div class="stctr" aria-hidden="true"><div class="stdisp">'
+            '<span class="ar"><i class="u"></i><i class="d"></i></span>'
+            '<span class="stroll"><span>0</span><span class="stdig"><span class="strd"><b>1</b><b>2</b><b>3</b><b>4</b><b>5</b></span></span></span>'
+            '<span class="sttot mo">of 05</span></div></div>\n    <ol class="strl">', 'display regole')
+    a = t.find('<ol class="strl">'); e = t.find('</ol>', a) + len('</ol>')
+    t = t[:e] + '</div>' + t[e:]
+    # 4 · con chi parli: Design / Code
+    codice = ('<span class="stck">const</span> team = {\n'
+              '  designers: <span class="stcq">"who code"</span>,\n'
+              '  engineers: <span class="stcq">"who care how it looks"</span>,\n'
+              '};')
+    t = una(t, '<h2>Designers who code. Engineers who care how it looks.</h2>',
+            '<div class="stdc"><div class="stsw" role="radiogroup" aria-label="Show the team as">'
+            '<button type="button" role="radio" aria-checked="true" data-v="d"><span class="fl" aria-hidden="true"></span>Design</button>'
+            '<button type="button" role="radio" aria-checked="false" tabindex="-1" data-v="c"><span class="fl" aria-hidden="true"></span>Code</button></div>'
+            '<div class="stdv" data-v="d"><h2>Designers who code. <span>Engineers who care how it looks.</span></h2>'
+            '<pre class="stcode" aria-hidden="true"><code>' + codice + '</code></pre></div></div>', 'design o codice')
+    for nome, piano in (('Brand and art direction', 3), ('Product design, UI and UX', 3), ('Software engineering', 2), ('Systems and automations', 2)):
+        t = una(t, f'<li><i></i>{nome}</li>',
+                f'<li><a href="#" data-go="{piano}"><i></i><span>{nome}</span><em>Floor 0{piano}</em></a></li>', nome)
+    return t
+
+
 def ritocchi(nome, t):
     """Modifiche decise con Eso sopra le pagine approvate (19 ottobre 2026)."""
     # footer: l'elenco del palazzo (ridisegnato il 19 ottobre), generato qui per ogni pagina
@@ -504,6 +569,7 @@ def ritocchi(nome, t):
         s = t.find('  /* 2 · le mail */'); e = t.find('  /* la lingua della call', s)
         assert s > 0 and e > s and '/* 5 · machine room */' in t[s:e], 'script scene 2-5'
         t = t[:s] + t[e:]
+        t = una(t, '<b>Book a free call</b>', '<b>Book a call</b>', 'contact: free')
 
     if nome == 'brand':
         # via la prima sezione (titolo e vetrina): l'apertura diventa la leva "Assembled / Taken apart"
@@ -756,12 +822,20 @@ def monta(nome, src):
     if nome == 'systems':
         t = sistemi(t)
         t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/systems.css">', 'stile systems')
+    if nome == 'studio':
+        t = studio(t)
+        t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/studio.css">', 'stile studio')
     if nome in CASI:
         t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/progetto.css">', 'stile progetto')
 
+    # "free" una volta prima di Contact (nella porta verso G) e una in Contact (deciso con Eso)
+    porta = "Start with a conversation. It's free.</a><span class=\"mo mut\">The first step costs nothing.</span>"
+    if porta in t:
+        t = una(t, porta, 'Start with a conversation</a><span class="mo mut">The first one is free.</span>', 'porta: free')
+
     # 6. coda
     i = t.rfind('</body>')
-    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>', 'systems': '<script src="/js/systems.js"></script>', 'brand': '<script src="/js/brand.js"></script>', 'progetto': '<script src="/js/progetto.js"></script>', 'ristorante': '<script src="/js/progetto.js"></script>'}.get(nome, '')
+    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>', 'systems': '<script src="/js/systems.js"></script>', 'brand': '<script src="/js/brand.js"></script>', 'studio': '<script src="/js/studio.js"></script>','progetto': '<script src="/js/progetto.js"></script>', 'ristorante': '<script src="/js/progetto.js"></script>'}.get(nome, '')
     t = t[:i] + coda + t[i:] if i > 0 else t + coda
     (OUT / f'{nome}.html').write_text(t, encoding='utf8')
     return luce
