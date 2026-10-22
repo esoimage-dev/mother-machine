@@ -109,7 +109,7 @@
     parts.sort(function (a, b) { return b.z - a.z });
     parts.forEach(function (P, i) {
       P.g = el(gAll, 'g', { class: 'lgP ' + P.cls, style: '--w:' + P.w.toFixed(2) + ';--o:' + P.op.toFixed(2) + ';--i:' + i });
-      if (P.hot) P.g.setAttribute('data-hot', P.hot);   /* i clic arrivano nel passo 2 */
+      if (P.hot) { P.g.setAttribute('data-hot', P.hot); P.g.setAttribute('tabindex', '0'); P.g.setAttribute('role', 'button'); P.g.setAttribute('aria-label', P.label || P.hot); P.g.classList.add('hot') }
       P.faces.forEach(function (f) {
         f.g = el(null, 'g', {});
         f.p = el(f.g, 'path', { class: 'dw fc ' + f.fill + ' ' + f.cls, pathLength: 1 });
@@ -215,20 +215,22 @@
     }
   }
 
-  /* il quadro elettrico vicino all'ascensore: le leve spengono la stanza */
+  /* il quadro elettrico in fondo a sinistra, dopo i server: le leve spengono la stanza */
   function quadro() {
-    var p = part({ cls: 'fuse', hot: 'luce', label: 'Fuse box. Lights on and off' });
-    var b = p.box([-5.6, 1.1, 2.4, -5.42, 2.05, 3.2], ID, { hatch: { k: 4 } });
-    var f = b.r, x = -5.42;
-    p.line([[x, 1.16, 2.47], [x, 1.99, 2.47], [x, 1.99, 3.13], [x, 1.16, 3.13]], { closed: true, cls: 'dt', on: f });
-    for (var i = 0; i < 3; i++) { var z = 2.58 + i * .2;
-      var lv = p.box([x, 1.45, z, x + .05, 1.62, z + .09], ID, {});
-      p.line([[x + .05, 1.6, z + .045], [x + .2, 1.75, z + .045]], { cls: 'lever' });
-      p.circle([x + .2, 1.75, z + .045], .022, 'x', { cls: 'knob or', k: 10 }) }
-    p.text([x, 1.92, 2.52], 'LIGHTS', .045, { cls: 'lab', on: f });
-    /* il tubo che sale nel soffitto */
-    p.line([[-5.52, 2.05, 2.8], [-5.52, 3.3, 2.8]], { cls: 'dt' });
-    p.line([[-5.48, 2.05, 2.8], [-5.48, 3.3, 2.8]], { cls: 'dt' });
+    var p = part({ cls: 'fuse', hot: 'luce', label: 'Fuse box. Lights off and on' });
+    var b = p.box([-5.6, .95, 9.95, -5.25, 2.2, 10.95], ID, { hatch: { k: 4 } });
+    var f = b.r, x = -5.25;
+    p.line([[x, 1.02, 10.02], [x, 2.13, 10.02], [x, 2.13, 10.88], [x, 1.02, 10.88]], { closed: true, cls: 'dt', on: f });
+    /* tre leve grosse, con il pomello arancione: si capisce subito che si tirano */
+    for (var i = 0; i < 3; i++) { var z = 10.17 + i * .26;
+      p.box([x, 1.32, z, x + .07, 1.58, z + .12], ID, {});
+      p.line([[x + .07, 1.55, z + .06], [x + .3, 1.8, z + .06]], { cls: 'lever' });
+      p.circle([x + .3, 1.8, z + .06], .035, 'x', { cls: 'knob or', k: 12 }) }
+    for (var r = 0; r < 4; r++) p.line([[x, 1.1 + r * .05, 10.12], [x, 1.1 + r * .05, 10.75]], { cls: 'dt', on: f });
+    /* il fulmine del pericolo e il tubo che sale nel soffitto */
+    p.line([[x, 2.05, 10.5], [x, 1.95, 10.45], [x, 1.95, 10.55], [x, 1.85, 10.5]], { cls: 'or' });
+    p.line([[-5.5, 2.2, 10.45], [-5.5, 3.3, 10.45]], { cls: 'dt' });
+    p.line([[-5.44, 2.2, 10.45], [-5.44, 3.3, 10.45]], { cls: 'dt' });
   }
 
   /* in fondo: la porta blindata con il tastierino (il Secret lab) */
@@ -313,6 +315,18 @@
     c.curve([.2, .01, 9.6], [.8, .01, 10.4], [.9, .01, Z1 - .5], { cls: 'cable' });
   }
 
+  /* la segnaletica dipinta a terra: il corridoio tratteggiato fino al caveau e "LG" stampato grande, consumato */
+  function pavimento() {
+    var p = part({ cls: 'paint' }), y = .003;
+    [-1.15, 1.15].forEach(function (x) { p.line([[x, y, 1.6], [x, y, 10.6]], { cls: 'cn walk' }) });
+    /* le lettere: tratti sul piano del pavimento, la base verso chi guarda */
+    var L = [[[-1.05, 4.7], [-1.05, 3.2], [-.45, 3.2]]], Gp = [];
+    for (var i = 0; i <= 14; i++) { var a = .35 + i / 14 * 5.3; Gp.push([.48 + .42 * Math.cos(a), 3.95 + .75 * Math.sin(a)]) }
+    var G2 = [[.62, 3.9], [.9, 3.9], [.9, 3.4]];
+    L.concat([Gp, G2]).forEach(function (s) { p.line(s.map(function (q) { return [q[0], y, q[1]] }), { cls: 'stencil' }) });
+    p.line([[-1.3, y, 2.95], [1.3, y, 2.95]], { cls: 'cn walk' });
+  }
+
   /* la soglia dell'ascensore, davanti ai piedi: il piano LG */
   function soglia() {
     var p = part({ cls: 'sill' });
@@ -324,7 +338,7 @@
   function init() {
     var st = document.querySelector('.lgst'); if (!st) return;
     svg = st.querySelector('svg');
-    stanza(); server(); quadro(); caveau(); neon(); disordine(); soglia();
+    stanza(); pavimento(); server(); quadro(); caveau(); neon(); disordine(); soglia();
     if (window.STANZA_OGGETTI) window.STANZA_OGGETTI({ part: part, frame: frame, ID: ID, X: X, Y: Y, Z0: Z0, Z1: Z1 });
     defs = el(svg, 'defs', {});
     build(); var sp = luceNeon(); render();
@@ -337,8 +351,32 @@
     if (fine && !RM) st.addEventListener('pointermove', function (e) { var r = st.getBoundingClientRect(); to.x = ((e.clientX - r.left) / r.width - .5) * 1.1; to.y = 1.6 - ((e.clientY - r.top) / r.height - .5) * .55; if (!raf) raf = requestAnimationFrame(tick) }, { passive: true });
     var nn = [].slice.call(svg.querySelectorAll('.lgP.neon')).concat([sp]), cap = capricci(nn);
     if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { on = es[0].isIntersecting; st.classList.toggle('lg-off', !on); if (RM) return; on ? setTimeout(cap.start, 3200) : cap.stop() }).observe(st);
+    /* le cose da premere: il contorno si accende, un'etichetta segue il mouse; con la tastiera Tab e Invio */
+    var tip = document.createElement('div'); tip.className = 'lgtip mo'; tip.setAttribute('aria-hidden', 'true'); st.appendChild(tip);
+    var hint = document.createElement('p'); hint.className = 'lghint mo'; hint.textContent = fine ? 'Move to look around · Click what glows' : 'Drag to look around · Tap what glows'; st.appendChild(hint);
+    function hotOf(e) { var n = e.target; while (n && n !== svg) { if (n.classList && n.classList.contains('hot')) return n; n = n.parentNode } return null }
+    svg.addEventListener('pointerover', function (e) { var h = hotOf(e); if (!h) { tip.classList.remove('on'); return } tip.textContent = h.getAttribute('aria-label'); tip.classList.add('on') });
+    svg.addEventListener('pointermove', function (e) { var r = st.getBoundingClientRect(); tip.style.transform = 'translate(' + (e.clientX - r.left + 16) + 'px,' + (e.clientY - r.top + 18) + 'px)' }, { passive: true });
+    svg.addEventListener('pointerleave', function () { tip.classList.remove('on') });
+    svg.addEventListener('click', function (e) { var h = hotOf(e); if (h) azione(h) });
+    svg.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('hot')) { e.preventDefault(); azione(e.target) } });
+    function piano(k, dest) { if (dest) window.MM_DEST = dest; if (typeof window.go === 'function') window.go(k); else location.href = dest || ['/contact', '/studio', '/systems', '/brand', '/work', '/'][k] }
+    function clack() { try { var a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), v = a.createGain(); o.type = 'square'; o.frequency.setValueAtTime(90, a.currentTime); v.gain.setValueAtTime(.08, a.currentTime); v.gain.exponentialRampToValueAtTime(.0001, a.currentTime + .09); o.connect(v); v.connect(a.destination); o.start(); o.stop(a.currentTime + .1) } catch (x) {} }
+    function azione(h) {
+      var k = h.getAttribute('data-hot'), r = h.getBoundingClientRect();
+      if (k === 'arcade' && window.RUSH) window.RUSH.open(r.left + r.width / 2, r.top + r.height / 3);
+      else if (k === 'truck') piano(4, '/work/vitalias-pizza-on-wheels');
+      else if (k === 'ristorante') piano(4, '/work/vitalias-restaurant');
+      else if (k === 'systems') piano(2);
+      else if (k === 'luce') { clack(); st.classList.toggle('dark'); h.classList.toggle('on') }
+      else if (k === 'film') { clack(); var acc = !h.classList.contains('on'); [].forEach.call(svg.querySelectorAll('[data-hot="film"]'), function (n) { n.classList.toggle('on', acc) }) }
+      else if (k === 'room') { h.classList.remove('deny'); void h.getBoundingClientRect(); h.classList.add('deny'); tip.textContent = 'Staff only. The code is on the lift panel.'; tip.classList.add('on') }
+    }
     /* sul telefono si parte dal centro della stanza */
     if (wrap && wrap.scrollWidth > wrap.clientWidth) wrap.scrollLeft = (wrap.scrollWidth - wrap.clientWidth) / 2;
+    /* e una spinta, finito il disegno: la stanza scivola verso il cabinato e torna, per dire che si trascina */
+    if (wrap && wrap.scrollWidth > wrap.clientWidth && !RM) setTimeout(function () { var x0 = wrap.scrollLeft, d = Math.min(160, (wrap.scrollWidth - wrap.clientWidth) / 2);
+      wrap.scrollTo({ left: x0 + d, behavior: 'smooth' }); setTimeout(function () { wrap.scrollTo({ left: x0, behavior: 'smooth' }) }, 900) }, 3600);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

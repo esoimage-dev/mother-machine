@@ -102,13 +102,14 @@
     S.wait.forEach(function (q, i) { for (var j = q.length - 1; j >= 0; j--) { if (mode !== 'play') return; q[j].t -= dt; if (q[j].t <= 0) { q.splice(j, 1); S.lives--; shake = .35; SFX.miss(); pop(SX + 60, fy(i) + 4, 'LOST', C.or); if (S.lives <= 0) { end(); return } } } });
     floats.forEach(function (f) { f.t -= dt; f.y -= dt * 14 }); floats = floats.filter(function (f) { return f.t > 0 });
   }
-  function end() { mode = 'over'; T0 = performance.now(); SFX.over(); if (S.score > hi) { hi = S.score; try { localStorage.setItem('mm-rush-hi', hi) } catch (e) {} } }
+  function label(x) { var b = box && box.querySelector('.rgo span'); if (b) b.textContent = x }
+  function end() { label('Insert coin'); mode = 'over'; T0 = performance.now(); SFX.over(); if (S.score > hi) { hi = S.score; try { localStorage.setItem('mm-rush-hi', hi) } catch (e) {} } }
   function move(dir) {
     if (mode !== 'play') return;
     var n = Math.max(0, Math.min(N - 1, S.tgt + dir)); if (n !== S.tgt) { S.tgt = n; SFX.move() }
   }
   function coin() {
-    if (mode === 'attract' || mode === 'over') { SFX.coin(); mode = 'ready'; T0 = performance.now(); reset(); setTimeout(function () { if (mode === 'ready') { mode = 'play'; SFX.start(); add(); add() } }, 1100) }
+    if (mode === 'attract' || mode === 'over') { SFX.coin(); mode = 'ready'; label('Playing'); T0 = performance.now(); reset(); setTimeout(function () { if (mode === 'ready') { mode = 'play'; SFX.start(); add(); add() } }, 1100) }
   }
 
   /* ---------- il disegno dello schermo ---------- */

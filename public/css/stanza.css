@@ -83,3 +83,72 @@
 @media (prefers-reduced-motion:reduce){
   .lgW .led.o,.lgW .tx.nsign,.lgW .ln.tube,.lgW .pool,.lgW .nspill{animation:none}
 }
+
+/* oggetti (stanza-oggetti.js) */
+.lgW .ln.kf{fill:#0F0F0E}
+.lgW .ln.wf{fill:#F4F2EC}
+.lgW .ln.pf{fill:#F4F2EC;stroke-width:calc(var(--w) * .45)}
+.lgW .fc.note{fill:#F4F2EC}
+.lgW .fc.ns{stroke:none}
+.lgW .ln.ink{stroke:#0F0F0E;stroke-width:calc(var(--w) * .42)}
+.lgW .ln.px{stroke-linecap:square;stroke-linejoin:miter}
+.lgW .ln.wl{stroke-width:calc(var(--w) * .5)}
+.lgW .ln.stick{stroke-width:calc(var(--w) * 1.5)}
+.lgW .ln.brace{stroke-width:calc(var(--w) * 1.25)}
+.lgW .ln.cn.hole{stroke-opacity:.5;stroke-width:1.5;stroke-linecap:round}
+.lgW .ln.cn.ghost{stroke-opacity:.6;stroke-width:.9;stroke-dasharray:3 3}
+/* il cabinato: l'insegna in attesa, lo schermo vivo, i bottoni */
+.lgW .ln.mq{stroke:#FF5B3A;stroke-width:calc(var(--w) * .75);animation:lgmq 4s steps(1) infinite}
+@keyframes lgmq{0%,100%{opacity:1}70%{opacity:.25}72%{opacity:1}74%{opacity:.4}75%{opacity:1}}
+.lgW .ln.scr{stroke:#FF5B3A;animation:lgscr 5s steps(1) infinite}
+.lgW .ln.scr.dt{stroke-opacity:.7}
+.lgW .ln.scr.cab{animation:lgcab 1.2s steps(1) infinite}
+@keyframes lgscr{0%,100%{opacity:1}41%{opacity:.55}42%{opacity:1}88%{opacity:.7}}
+@keyframes lgcab{50%{fill-opacity:.25}}
+.lgW .ln.coin{stroke:#FF5B3A;fill:#FF5B3A;animation:lgled 2.4s steps(1) infinite}
+.lgW .ln.btn{stroke:#FF5B3A}
+.lgW .ln.btn.b1{animation:lgled 1.6s steps(1) infinite .8s}
+/* la TV: il vetro che sfarfalla, il play */
+.lgW .ln.crt{fill:#F4F2EC;fill-opacity:.07;animation:lgcrt 6s steps(1) infinite}
+@keyframes lgcrt{0%,100%{fill-opacity:.07}30%{fill-opacity:.12}31%{fill-opacity:.05}64%{fill-opacity:.1}}
+.lgW .ln.play{stroke:#FF5B3A;fill:#FF5B3A;animation:lgled 2s steps(1) infinite}
+.lgW .ln.pin{stroke:#FF5B3A;animation:lgled 2.6s steps(1) infinite 1s}
+/* la lampadina e il vapore */
+.lgW .ln.bulb{fill:#FFF4E6;stroke:#FFF4E6;animation:lgbulb 9s steps(1) infinite}
+.lgW .ln.halo{stroke:none;fill:#FFE6D2;fill-opacity:.045}
+.lgW .ln.fil{stroke:#C8A07A;stroke-width:calc(var(--w) * .5)}
+@keyframes lgbulb{0%,100%{opacity:1}52%{opacity:.6}53%{opacity:1}54%{opacity:.75}55%{opacity:1}}
+.lgst .lgW .ln.steam{stroke-opacity:.75;stroke-width:calc(var(--w) * .6);stroke-dasharray:.35 .65;animation:lgsteam 3.2s linear infinite}
+.lgst .lgW .ln.steam.s1{animation-duration:2.7s;animation-delay:-1s}
+.lgst .lgW .ln.steam.s2{animation-duration:3.6s;animation-delay:-2s}
+@keyframes lgsteam{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){
+  .lgW .ln.mq,.lgW .ln.scr,.lgW .ln.coin,.lgW .ln.btn,.lgW .ln.crt,.lgW .ln.play,.lgW .ln.pin,.lgW .ln.bulb,.lgst .lgW .ln.steam{animation:none}
+}
+
+/* le cose da premere (stanza.js): il contorno si accende di pomodoro, l'etichetta segue il mouse */
+.lgW .hot{cursor:pointer;outline:none}
+.lgW .hot:hover .fc,.lgW .hot:focus-visible .fc{stroke:#FF5B3A}
+.lgW .hot:hover .ln.dt,.lgW .hot:focus-visible .ln.dt{stroke:#FFB4A1}
+.lgtip{position:absolute;left:0;top:0;z-index:3;pointer-events:none;padding:7px 10px;background:#0F0F0E;border:1px solid #FF5B3A;color:#F4F2EC;
+  font:400 11px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;opacity:0;transition:opacity .15s}
+.lgtip.on{opacity:1}
+.lghint{position:absolute;left:clamp(16px,4vw,56px);bottom:18px;z-index:2;margin:0;font:400 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(244,242,236,.55);pointer-events:none}
+.lghint::before{content:"";display:inline-block;width:7px;height:7px;margin-right:10px;background:#FF5B3A;vertical-align:0;animation:lgled 1.4s steps(1) infinite}
+@media (hover:none){.lgtip{display:none}.lghint{position:sticky;left:16px}}
+/* le leve: la stanza al buio, restano il neon e le spie */
+.lgst.dark .lgW .dw:not(.led):not(.or):not(.ntube):not(.nglow):not(.ncore){stroke-opacity:.1!important}
+.lgst.dark .lgW .tx:not(.nsign){opacity:.12}
+.lgst.dark .lgW .nspill{opacity:1.6}
+.lgst .lgW .nspill,.lgst .lgW .dw{transition:stroke-opacity .25s steps(2)}
+/* il caveau dice di no: il tastierino lampeggia */
+.lgW .hot.deny .led.o{animation:lgdeny .12s steps(1) 6}
+@keyframes lgdeny{50%{fill-opacity:0;stroke-opacity:0}}
+/* la segnaletica a terra */
+.lgW .ln.walk{stroke-width:1.4;stroke-opacity:.22;stroke-dasharray:14 12}
+.lgW .ln.stencil{stroke-width:calc(var(--w) * 5);stroke-opacity:.2;stroke-linecap:butt}
+/* la TV accesa: la neve del vecchio televisore */
+.lgW .hot.on .ln.crt{fill:#DFF8F5;animation:lgstatic .16s steps(2) infinite}
+@keyframes lgstatic{0%{fill-opacity:.5}50%{fill-opacity:.22}}
+.lgW .hot.on .ln.play{opacity:0}
+.lgW .fuse .ln.or{fill:none;stroke-width:calc(var(--w) * 1.2)}
