@@ -36,19 +36,31 @@
   var cards = [].slice.call(tr.querySelectorAll(':scope > .wkc')), RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var tabs = sel.querySelector('.wsx'), prev = sel.querySelector('[data-d="-1"]'), next = sel.querySelector('[data-d="1"]');
   var cur = -1, IO = 'IntersectionObserver' in window, touched = false, anim = 0, auto = false, swiped = false;
+  /* le icone: Phosphor Icons (MIT, phosphoricons.com), il furgone disegnato da noi nello stesso stile */
+  var IC = {
+    truck: '<path d="M16 50a10 10 0 0 1 10-10h132a10 10 0 0 1 10 10v12a19 19 0 0 1-38 0 19 19 0 0 1-38 0 19 19 0 0 1-38 0 19 19 0 0 1-38 0Z"/><path fill-rule="evenodd" d="M24 96a8 8 0 0 1 8-8h128v96H24Zm20 12v28h96v-28Z"/><path fill-rule="evenodd" d="M168 96h34a10 10 0 0 1 8.7 5l23 40a10 10 0 0 1 1.3 5V184h-67Zm16 12v32h36l-16-28a8 8 0 0 0-7-4Z"/><path fill-rule="evenodd" d="M68 168a28 28 0 1 1 0 56 28 28 0 0 1 0-56Zm0 18a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm124-18a28 28 0 1 1 0 56 28 28 0 0 1 0-56Zm0 18a10 10 0 1 0 0 20 10 10 0 0 0 0-20Z"/>',
+    dish: '<path d="M81.77,55c5.35-6.66,6.67-11.16,6.12-13.14-.42-1.49-2.41-2.26-2.43-2.26A8,8,0,0,1,88,24a8.11,8.11,0,0,1,2.38.36c1,.31,9.91,3.33,12.79,12.76,2.46,8.07-.55,17.45-8.94,27.89-5.35,6.66-6.67,11.16-6.12,13.14.42,1.49,2.37,2.24,2.39,2.25A8,8,0,0,1,88,96a8.11,8.11,0,0,1-2.38-.36c-1-.31-9.91-3.33-12.79-12.76C70.37,74.81,73.38,65.43,81.77,55Zm31.06,27.89c2.88,9.43,11.79,12.45,12.79,12.76A8.11,8.11,0,0,0,128,96a8,8,0,0,0,2.5-15.6s-2-.76-2.39-2.25c-.55-2,.77-6.48,6.12-13.14,8.39-10.44,11.4-19.82,8.94-27.89-2.88-9.43-11.78-12.45-12.79-12.76A8.11,8.11,0,0,0,128,24a8,8,0,0,0-2.54,15.59s2,.77,2.43,2.26c.55,2-.77,6.48-6.12,13.14C113.38,65.43,110.37,74.81,112.83,82.88Zm40,0c2.88,9.43,11.79,12.45,12.79,12.76A8.11,8.11,0,0,0,168,96a8,8,0,0,0,2.5-15.6s-2-.76-2.39-2.25c-.55-2,.77-6.48,6.12-13.14,8.39-10.44,11.4-19.82,8.94-27.89-2.88-9.43-11.78-12.45-12.79-12.76A8.11,8.11,0,0,0,168,24a8,8,0,0,0-2.54,15.59s2,.77,2.43,2.26c.55,2-.77,6.48-6.12,13.14C153.38,65.43,150.37,74.81,152.83,82.88ZM224,112H32a8,8,0,0,0-8,8,104.35,104.35,0,0,0,56,92.28V216a16,16,0,0,0,16,16h64a16,16,0,0,0,16-16v-3.72A104.35,104.35,0,0,0,232,120,8,8,0,0,0,224,112Z"/>',
+    beer: '<path d="M216,88H200V72a40,40,0,0,0-40-40H148.82c-11.91-10.2-28-16-44.82-16C68.71,16,40,41.12,40,72V208a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16v-8h16a24,24,0,0,0,24-24V112A24,24,0,0,0,216,88ZM104,184a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0ZM57,64c4.46-18.24,23.85-32,47-32,13.87,0,27.06,5,36.21,13.78A8,8,0,0,0,145.74,48H160a24,24,0,0,1,22.62,16ZM224,176a8,8,0,0,1-8,8H200V104h16a8,8,0,0,1,8,8Z"/>',
+    bread: '<path d="M200,40H48a40,40,0,0,0-16,76.65V200a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V116.65A40,40,0,0,0,200,40Zm-56,64a8,8,0,0,0,0,16v80H48V120a8,8,0,0,0,0-16,24,24,0,0,1,0-48h96a24,24,0,0,1,0,48Z"/>',
+    plus: '<path d="M228,128a12,12,0,0,1-12,12H140v76a12,12,0,0,1-24,0V140H40a12,12,0,0,1,0-24h76V40a12,12,0,0,1,24,0v76h76A12,12,0,0,1,228,128Z"/>',
+    check: '<path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"/>',
+    half: '<path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM40,128a88.1,88.1,0,0,1,88-88V216A88.1,88.1,0,0,1,40,128Z"/>',
+    pizza: '<path d="M239.54,63a15.91,15.91,0,0,0-7.25-9.9,201.49,201.49,0,0,0-208.58,0,16,16,0,0,0-5.37,22l96,157.27a16,16,0,0,0,27.36,0l96-157.27A15.82,15.82,0,0,0,239.54,63Zm-55.1,68.53a40,40,0,0,0-41.38,67.77L128,224,96.5,172.43a40,40,0,1,0-41.35-67.76L48.8,94.26a152,152,0,0,1,158.39,0Z"/>'
+  };
+  var svg = function (k) { return '<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">' + (IC[k] || '') + '</svg>' };
+  /* dentro le caselle piene del calendario, mezza informazione: pagato, acconto, nuova */
+  [['mxb', 'check'], ['mxp', 'half'], ['mxk', 'pizza']].forEach(function (p) {
+    [].forEach.call(tr.querySelectorAll('.mxc .' + p[0]), function (c) { c.innerHTML = svg(p[1]) });
+  });
 
   cards.forEach(function (c, i) {
     var b = document.createElement('button');
     b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-label', c.dataset.name);
     b.innerHTML = '<i style="--t:' + c.dataset.t + '"></i><span><span class="lg"></span><span class="sh"></span></span>';
-    /* la miniatura del lavoro; i lavori in arrivo hanno la loro iniziale */
-    var th = b.querySelector('i');
-    if (c.dataset.th) th.style.backgroundImage = 'url(' + c.dataset.th + ')';
-    else {
-      th.textContent = c.dataset.mono || '';
-      var h = parseInt((c.dataset.t || '#000').slice(1), 16);
-      th.style.color = ((h >> 16) * .3 + (h >> 8 & 255) * .59 + (h & 255) * .11) > 150 ? '#121211' : '#F4F2EC';
-    }
+    /* l'icona del lavoro, su tinta unita: chiara sui colori scuri, scura sui chiari */
+    var th = b.querySelector('i'), h = parseInt((c.dataset.t || '#000').slice(1), 16);
+    th.innerHTML = svg(c.dataset.ic);
+    th.style.color = ((h >> 16) * .3 + (h >> 8 & 255) * .59 + (h & 255) * .11) > 150 ? '#121211' : '#F4F2EC';
     b.querySelector('.lg').textContent = c.dataset.name;
     b.querySelector('.sh').textContent = c.dataset.s || c.dataset.name;   /* sul telefono il nome corto */
     b.addEventListener('click', function (e) { if (swiped) { e.preventDefault(); return } touched = true; go(i) });

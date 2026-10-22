@@ -156,16 +156,22 @@ html a.wkc:hover .wgo .arq{background:#F4F2EC}
 .mxg::after{content:"";position:absolute;inset:0;background:var(--gt)}
 .mx *{animation-play-state:paused!important}
 .wkc.wkon .mx *{animation-play-state:running!important}
-.mxh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font:500 9.5px var(--f-mono);letter-spacing:.09em;text-transform:uppercase}
+.mxh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font:500 10.5px var(--f-mono);letter-spacing:.09em;text-transform:uppercase}
 .mxh em{display:flex;align-items:center;gap:6px;font-style:normal;opacity:.8}
 .mxh em i{width:6px;height:6px;border-radius:50%;background:var(--sig,#FF5B3A);animation:mxlive 1.4s steps(1) infinite}
 @keyframes mxlive{50%{opacity:.15}}
 /* il truck: il calendario si riempie, arriva la prenotazione pagata */
-.mxt{color:#F3EBDD;--gt:linear-gradient(160deg,rgba(30,22,19,.6),rgba(14,10,9,.44));box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 1px rgba(255,255,255,.08),0 30px 60px -24px rgba(0,0,0,.6)}
-.mxm{display:flex;justify-content:space-between;margin-bottom:8px;font:400 12px 'VitBodoni',Georgia,serif;opacity:.85}
-.mxm span+span{font:400 9.5px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;opacity:.6}
+.mxt{color:#F3EBDD;--gt:linear-gradient(160deg,rgba(30,22,19,.8),rgba(14,10,9,.68));box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 1px rgba(255,255,255,.08),0 30px 60px -24px rgba(0,0,0,.6)}
+.mxm{display:flex;justify-content:space-between;margin-bottom:8px;font:500 14px var(--f-body);letter-spacing:-.01em}
+.mxm span+span{font:500 10.5px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;opacity:.8}
 .mxc{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
-.mxc i{min-width:0;aspect-ratio:1.5;border-radius:2px;background:rgba(243,235,221,.1)}
+.mxc i{min-width:0;aspect-ratio:1.5;border-radius:2px;background:rgba(243,235,221,.1);display:grid;place-items:center;color:#fff}
+.mxc i svg{width:auto;height:52%;opacity:0}
+.mxc .mxb svg,.mxc .mxp svg{animation:mxico 9s cubic-bezier(.2,.8,.2,1) infinite;animation-delay:calc(var(--d)*.28s)}
+.mxc .mxp{color:#3A2405}
+.mxc .mxk svg{animation:mxicn 9s steps(1) infinite}
+@keyframes mxico{0%,5%{opacity:0;transform:scale(.4)}11%,92%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes mxicn{0%,46%{opacity:0}47%,92%{opacity:1}100%{opacity:0}}
 .mxc .mxb{animation:mxfill 9s cubic-bezier(.2,.8,.2,1) infinite;animation-delay:calc(var(--d)*.28s)}
 .mxc .mxp{animation:mxfill 9s cubic-bezier(.2,.8,.2,1) infinite;animation-delay:calc(var(--d)*.28s);--fc:#E8A33D}
 .mxc .mxk{animation:mxnew 9s steps(1) infinite}
@@ -177,7 +183,7 @@ html a.wkc:hover .wgo .arq{background:#F4F2EC}
 .mxn em{justify-self:start;margin-top:4px;padding:3px 7px;border-radius:3px;background:#2F7D5B;color:#fff;font:500 9px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;font-style:normal}
 @keyframes mxpop{0%,44%{opacity:0;transform:translateY(14px) scale(.96)}48%,90%{opacity:1;transform:none}96%,100%{opacity:0;transform:translateY(-6px)}}
 /* il ristorante: arriva la richiesta, parte il preventivo */
-.mxr{color:#1C2420;--gt:linear-gradient(160deg,rgba(255,255,255,.66),rgba(246,243,236,.46));box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 0 0 1px rgba(255,255,255,.35),0 30px 60px -24px rgba(0,0,0,.5)}
+.mxr{color:#1C2420;--gt:linear-gradient(160deg,rgba(255,255,255,.86),rgba(246,243,236,.72));box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 0 0 1px rgba(255,255,255,.35),0 30px 60px -24px rgba(0,0,0,.5)}
 .mxr .mxh{color:#3C6A4B}
 .mxe{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:8px 0;border-top:1px solid rgba(28,36,32,.1)}
 .mxi{display:grid;place-items:center;width:34px;height:34px;border-radius:7px}
@@ -186,9 +192,9 @@ html a.wkc:hover .wgo .arq{background:#F4F2EC}
 .mxi-w{background:#F3DCD6;color:#9A3F2E}
 .mxi-d{background:#DCE6E9;color:#2D5866}
 .mxw{display:grid;gap:2px;min-width:0}
-.mxw b{font:700 12.5px var(--f-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mxw b{font:700 13.5px var(--f-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mxw b em{font-style:normal;font-weight:500;opacity:.55;margin-left:6px}
-.mxw span{font-size:10.5px;opacity:.65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mxw span{font-size:11.5px;opacity:.78;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mxs{display:grid;font-style:normal}
 .mxs s{grid-area:1/1;text-decoration:none;justify-self:end;padding:3px 7px;border-radius:3px;background:#EFE3C2;color:#7A5B12;font:500 9px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
 .mxs.mxok s{background:#DCE8DF;color:#2B5238}
@@ -218,7 +224,8 @@ html a.wkc:hover .wgo .arq{background:#F4F2EC}
 .wsel.swiping .wsx button[aria-selected="true"]{background:rgba(244,242,236,.16)}
 .wsx button{all:unset;box-sizing:border-box;position:relative;display:flex;align-items:center;gap:10px;height:44px;max-width:42px;padding:0 8px;border-radius:3px;overflow:hidden;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;
   transition:max-width .55s cubic-bezier(.2,.8,.2,1),background-color .3s,padding .55s cubic-bezier(.2,.8,.2,1)}
-.wsx button i{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:3px;background:var(--t) center/cover no-repeat;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);font:650 12px/1 var(--f-body);font-style:normal;opacity:.45;transform:scale(.86);transition:opacity .3s,transform .4s cubic-bezier(.2,.8,.2,1)}
+.wsx button i{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:4px;background:var(--t);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);opacity:.5;transform:scale(.86);transition:opacity .3s,transform .4s cubic-bezier(.2,.8,.2,1)}
+.wsx button i svg{width:16px;height:16px}
 .wsx button span{font:600 14.5px var(--f-body);letter-spacing:-.01em;opacity:0;transition:opacity .25s}
 @media (hover:hover){.wsx button:hover i{opacity:.9;transform:none}}
 .wsx button[aria-selected="true"]{max-width:300px;padding:0 16px 0 9px;background:rgba(244,242,236,.08)}
@@ -265,9 +272,14 @@ html .mmc.wdr:not(.hit) i::after{width:0;height:0}
   .wsc{width:90%;right:-8%;bottom:30%}
   .wst-cut::before{bottom:31%;left:30%}
   .mxw b em{display:none}
+  .mxw b{font-size:12.5px}
+  .mxw span{font-size:10.5px}
+  .mxi{width:30px;height:30px}
+  .mxs s{padding:3px 5px;font-size:8.5px}
   .wsb{width:40px;height:44px}
   .wsx button{max-width:26px;padding:0 3px}
-  .wsx button i{width:20px;height:20px;font-size:10px}
+  .wsx button i{width:22px;height:22px}
+  .wsx button i svg{width:13px;height:13px}
   .wsx button[aria-selected="true"]{flex:none;gap:8px;padding:0 10px 0 6px}
   .wsx button span{font-size:13.5px}
   .wsx{justify-content:center}
@@ -279,6 +291,7 @@ html .mmc.wdr:not(.hit) i::after{width:0;height:0}
   .mxn{opacity:1;transform:none}
   .mxe-new .mxs s:first-child{opacity:0}
   .mxc .mxb{background:#2F7D5B}.mxc .mxp{background:#E8A33D}.mxc .mxk{background:#C8212A}
+  .mxc i svg{opacity:1}
 }
 .wsx button .sh{display:none}
 @media (max-width:860px){.wsx button .sh{display:inline}}
