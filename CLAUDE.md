@@ -3,15 +3,17 @@
 Chi lavora su questo progetto (una persona o un Claude, anche su un altro account) legge **solo questo file** e sa
 come muoversi: cosa è il sito, come è fatto, le regole, cosa è fatto, cosa manca e in che ordine. Si aggiorna qui e
 basta: si spunta quello che è fatto, si scrive quello che si decide diversamente, si aggiunge quello che nasce.
-Ultimo aggiornamento: 25 ottobre 2026 (passaggio a un altro account Claude: leggi prima la sezione 0).
+Ultimo aggiornamento: 26 ottobre 2026 (Studio ritoccato, "free" in due posti soli).
 
 ---
 
 ## 0 · Dove siamo (per chi riprende da qui)
-- **Tutto il lavoro è su `main`** (ultima pull request: #8, da unire se non lo è già). Si lavora sul branch `claude/keen-franklin-rxhwha`
-  ripartendo ogni volta dal `main` aggiornato, o su un branch nuovo: con il push si apre la pull request e Eso la unisce. Anteprima: `https://claude-keen-franklin-rxhwha.mother-machine.pages.dev`.
+- **Tutto il lavoro è su `main`** (ultima pull request unita: #8). Ogni sessione di Claude ha il suo branch (oggi `claude/trusting-johnson-wybhvj`),
+  ripartendo dal `main` aggiornato: con il push si apre la pull request e Eso la unisce. Anteprima: `https://<branch con i trattini>.mother-machine.pages.dev`
+  (oggi `https://claude-trusting-johnson-wybhvj.mother-machine.pages.dev`), pronta qualche minuto dopo il push.
 - **Prossimi passi, in ordine** (lavorare con pochi token, niente stravolgimenti, proporre in chat prima di toccare):
-  1. **Studio (01):** testi più corti, via i doppioni. La struttura resta (chi siamo, come lavoriamo, con chi parli): Survey, Build, Run sta solo in home, in Studio sarebbe un doppione. Proporre i testi in chat, poi una modifica sola.
+  1. **Studio (01):** ritoccato (26 ottobre), da approvare sull'anteprima. Aperto: la regola 03 "One number to move."
+     ripete il titolo della home ("Three steps. One number to move."): Eso decide se cambiarla.
   2. **Contact (G):** il modulo vero (vedi sezione 8, punto 1). Eso sta creando gli account **Resend** e **Daily**
      (gratis: Resend 3.000 mail al mese, 100 al giorno; Daily circa 10.000 minuti-partecipante al mese, da verificare
      sulle loro pagine prezzi). Le chiavi API **non** vanno in chat né nella repository: Eso le mette su Cloudflare come
@@ -52,7 +54,12 @@ Ultimo aggiornamento: 25 ottobre 2026 (passaggio a un altro account Claude: legg
 - Rispondere a Eso **in italiano**, corto e schematico: un passo alla volta, percorsi esatti, niente spiegoni.
   Testi del sito in **inglese internazionale**: frasi corte, parole semplici, niente gergo da agenzia.
 - **Mai il trattino lungo** (il carattere U+2014), in nessun testo, codice, commento o messaggio. Solo "-".
-- Ragionare da **PM, art director e senior designer**: critica brutale ma bilanciata. Sito snello, navigabile,
+- Ragionare da **PM, art director e senior designer**: critica brutale ma bilanciata. Solo cose fatte bene: controllate con
+  Playwright (computer e telefono) che non ci siano sovrapposizioni, errori o sbordi, prima di mostrarle.
+- **Processo con Eso:** dopo ogni push dare il **link di anteprima** di Cloudflare; quando siamo convinti, ricordare a Eso di
+  **unire la pull request** su GitHub (così si aggiorna il sito vero). Pensare anche a quello che Eso non pensa.
+- **Design system:** non toccare testata, logo e la sua animazione, pulsantiera, footer. Si lavora dentro le pagine (sezioni,
+  testi, tipografia, animazioni leggere). Il vetro si usa poco e dove serve: "machine" squadrato, "mother" tondo e vetro. Sito snello, navigabile,
   con personalità. **Niente doppioni** (se una cosa è già in home, non si ripete identica in un'altra pagina).
 - Discutere prima in chat quando una scelta cambia contenuti o struttura. Non inventare servizi o voci non richieste.
 - **Numeri:** quelli dei clienti li decide Eso (possono essere forti, è marketing, ma li dà o li approva lui).
@@ -159,6 +166,11 @@ Fuori dal palazzo: `/privacy`.
 - [x] Brand rifatta (apertura, tre stili dei controlli, quattro caratteri, The system in bozza).
 - [x] Porta di LG con il codice sul server.
 - [x] Systems con il turno di notte e il registro di bordo; LG snella.
+- [x] Studio ritoccato (26 ottobre): via la targhetta grigia (numero di serie e ore inventate), apertura tutta rosa con il
+  "01" grande come la G della porta, "On purpose." che si scioglie da pesante a leggero; "Who we build for": "Built for busy
+  days." (prima diceva che i ristoranti erano nostri: sono clienti) con il nastro dei momenti pieni; le regole si accendono
+  scorrendo; Con chi parli: ogni mestiere porta al suo piano. Stile e comportamenti in `public/css/studio.css` e `public/js/studio.js`.
+- [x] "Free" solo due volte: nella porta verso G ("The first one is free.") e in Contact ("The first conversation is free.").
 
 ## 8 · Scaletta (in ordine)
 1. [ ] **Contact vero.** Modulo → ordine salvato (Cloudflare D1) → anti spam (Turnstile) → mail di conferma al cliente
@@ -176,8 +188,7 @@ Fuori dal palazzo: `/privacy`.
    animare più avanti**. Ordine deciso da Eso (25 ottobre): apertura, controlli, carattere ("One word, four typefaces."),
    sistema, cosa facciamo. L'apertura ha una scheda prodotto vera (pagnotta, prezzo, quantità, bottone) e non si taglia mai.
    Cambiando stile cambiano solo i comandi: etichette e righe sotto restano uguali (deciso da Eso).
-   **Studio, resto:** testi più corti (struttura com'è, niente Survey, Build, Run: sta in home), "free" una volta prima di Contact e una in Contact,
-   via i doppioni. Si propone in chat, Eso approva.
+   **Studio:** fatto il 26 ottobre (sezione 7).
 4. [ ] **Legale e Google.** Privacy con chi raccoglie i dati e hello@; titoli e descrizioni; anteprime social (Open Graph).
 5. [ ] **Lancio.** `PRIMA_DEL_LANCIO = false`, repository privata, Rate Limiting su `/api/porta`, controllo su tutti i dispositivi.
 6. [ ] **Dopo il lancio:**
