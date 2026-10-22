@@ -375,3 +375,8 @@ html .mmc.wdr:not(.hit) i::after{width:0;height:0}
   .mxn em{margin-top:2px}
   .mxt .mxn{top:-24px}
 }
+
+/* dove: la citta' del lavoro in alto a destra sulla copertina, speculare al logo */
+.wloc{position:absolute;z-index:2;right:5%;top:6%;display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:3px;background:rgba(15,15,14,.5);color:#F4F2EC;font-size:10px;letter-spacing:.1em;text-transform:uppercase;line-height:1;white-space:nowrap;box-shadow:inset 0 0 0 1px rgba(244,242,236,.12)}
+.wloc::before{content:"";width:5px;height:5px;background:currentColor}
+@media (max-width:860px){.wloc{top:5%;right:4%;padding:6px 8px;font-size:9px}}

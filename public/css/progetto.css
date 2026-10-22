@@ -144,3 +144,17 @@ html a.cnx:hover .arq svg:first-child,html a.cnx:focus-visible .arq svg:first-ch
 .cfm b{font:620 clamp(32px,3.4vw,52px)/1 var(--f-body);letter-spacing:-.04em;white-space:nowrap}
 .cfm span{font-size:15px;line-height:1.4;color:var(--mut);max-width:30ch}
 @media (max-width:700px){.cfm{grid-template-columns:1fr;gap:22px}}
+
+/* le fasce: il perche' in grande. Prima il problema, poi si spegne e arriva la soluzione */
+.cfx{padding-block:clamp(110px,13vw,200px)}
+.cfxi{display:grid;gap:clamp(22px,2.6vw,36px);max-width:1180px}
+.cfxl{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.cfxl::before{content:"";width:8px;height:8px;background:currentColor}
+.cfx .cfxb{margin:0;font:640 clamp(40px,6.4vw,108px)/1 var(--f-body);letter-spacing:-.05em;text-wrap:balance}
+.cfxp{color:var(--mut);transition:color .9s cubic-bezier(.2,.8,.2,1)}
+.cfxs{color:var(--ink);transition:opacity .9s cubic-bezier(.2,.8,.2,1) .35s}
+.cfx.wait .cfxp{color:var(--ink)}
+.cfx.wait .cfxs{opacity:0}
+.cfx .cfxd{margin:0;max-width:44ch;font-size:clamp(17px,1.5vw,21px);line-height:1.45;color:var(--mut)}
+@media (max-width:700px){.cfx{padding-block:96px}.cfx .cfxb{font-size:clamp(34px,10vw,48px);line-height:1.02}}
+@media (prefers-reduced-motion:reduce){.cfxp,.cfxs{transition:none}}

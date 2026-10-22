@@ -87,3 +87,13 @@
     }, { threshold: .25 }).observe(v);
   }
 })();
+
+/* le fasce: il problema resta acceso finche' la fascia non e' in vista, poi si spegne e arriva la soluzione */
+(function () {
+  var F = [].slice.call(document.querySelectorAll('.cfx'));
+  if (!F.length || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { setTimeout(function () { e.target.classList.remove('wait') }, 500); io.unobserve(e.target) } });
+  }, { threshold: .55 });
+  F.forEach(function (f) { f.classList.add('wait'); io.observe(f) });
+})();
