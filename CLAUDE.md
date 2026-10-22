@@ -44,9 +44,9 @@ Ultimo aggiornamento: 23 ottobre 2026.
      verrebbe sovrascritta. Il file usa `una(t, vecchio, nuovo, nome)`, che si ferma se il pezzo non c'è una volta sola.
   3. `src/pages/[...slug].html.ts` serve le pagine (qui si aggiungono gli indirizzi nuovi).
   4. `npm run build` costruisce in `dist/`; `npx astro preview --port 4321` per vederlo in locale.
-- **Pezzi in `src/sezioni/`:** `lavori-home.html` (la striscia dei lavori in home), `work.html` (pagina 04), `systems-notte.html`, `lg.html`.
+- **Pezzi in `src/sezioni/`:** `lavori-home.html` (la striscia dei lavori in home), `work.html` (pagina 04), `systems-notte.html`, `brand-sistema.html`, `lg.html`.
 - **CSS e JS per pagina** in `public/css` e `public/js`: `home.css/js` (striscia lavori, selettore, cursore di trascinamento),
-  `progetto.css/js` (pagine progetto, demo, fasce), `systems.css/js` (turno di notte, registro di bordo), `brand.css/js` (apertura, tre stili dei controlli), `work.css/js`, `mr.css/js` (LG). `mm-sito.*` comuni.
+  `progetto.css/js` (pagine progetto, demo, fasce), `systems.css/js` (turno di notte, registro di bordo), `brand.css/js` (apertura, tre stili dei controlli, sistema; caratteri in `public/brand/fonts`, non in `public/fonts` che lo script rifà da zero), `work.css/js`, `mr.css/js` (LG). `mm-sito.*` comuni.
 - **Pagine progetto:** in `monta-pagine.py` il dizionario `CASI` (una voce per lavoro) e la funzione `caso()` montano
   copertina, demo, cosa abbiamo fatto, numeri, prima e dopo, fasce tipografiche, marchio, galleria, Next.
   Per un lavoro nuovo: una voce in `CASI`, una in `PAGINE`, `META`, `CORRENTE`, l'indirizzo in `[...slug].html.ts` e `public/sitemap.xml`.
@@ -126,7 +126,11 @@ Fuori dal palazzo: `/privacy`.
    LG ora è solo la sezione del palazzo e la porta dello staff: le altre sue macchine erano doppioni e sono state tolte.
 3. [~] **Brand** (24 ottobre): apertura compatta (titolo e leva a sinistra, la macchina a destra) e i controlli in tre
    stili (Minimal, Friendly, Editorial) che cambiano anche il modo d'uso, non solo il colore: mostra che facciamo design
-   system di pezzi funzionali. Le altre idee di Eso per Brand: da sentire.
+   system di pezzi funzionali. 25 ottobre: il peso ha un carattere per stile (Hanken, Fredoka, Fraunces), il cambio di
+   stile trasforma i comandi; Minimal: Saved nero con spunta, Deleted rosso; l'apertura parte da sola a ciclo, strati in
+   vetro, i quattro passi si accendono; il carattere a quattro voci (la quarta: Unbounded) con la parola "Mother";
+   sezione nuova "The system" (segno su griglia, icone, scala del carattere, colori, spazio): **bozza statica, da
+   animare più avanti**. Ordine: apertura, carattere, controlli, sistema, cosa facciamo (i due vetri non si toccano).
    **Brand e Studio, resto:** Testi più corti, una demo protagonista per piano, Studio in tre parti (Survey, Build, Run),
    un solo "free" in tutto il sito, via i doppioni. Io propongo, Eso approva.
 4. [ ] **Legale e Google.** Privacy con chi raccoglie i dati e hello@; titoli e descrizioni; anteprime social (Open Graph).

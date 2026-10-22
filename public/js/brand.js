@@ -37,9 +37,19 @@
     hd.addEventListener('keyup', up);
   }
 
+  /* cambio di stile: i comandi escono sfocati uno dopo l'altro, lo stile cambia, rientrano trasformati */
+  [].forEach.call(g.querySelectorAll('.cel'), function (c, i) { c.style.setProperty('--k', i) });
+  var tm = 0;
+  var apply = function (v) { if (v === 'minimal') g.removeAttribute('data-sty'); else g.setAttribute('data-sty', v) };
   var pick = function (b) {
     tabs.forEach(function (x) { var on = x === b; x.setAttribute('aria-checked', on ? 'true' : 'false'); x.tabIndex = on ? 0 : -1 });
-    if (b.dataset.s === 'minimal') g.removeAttribute('data-sty'); else g.setAttribute('data-sty', b.dataset.s);
+    clearTimeout(tm);
+    if (RM) { apply(b.dataset.s); return }
+    g.classList.remove('m-in'); g.classList.add('m-out');
+    tm = setTimeout(function () {
+      apply(b.dataset.s); g.classList.remove('m-out'); void g.offsetWidth; g.classList.add('m-in');
+      tm = setTimeout(function () { g.classList.remove('m-in') }, 900);
+    }, 380);
   };
   tabs.forEach(function (b, i) {
     b.addEventListener('click', function () { pick(b) });
@@ -48,4 +58,39 @@
       e.preventDefault(); var k = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]; pick(k); k.focus();
     });
   });
+})();
+
+/* l'apertura: la leva si tira da sola, avanti e indietro, finche' non la tocchi; i quattro passi si accendono in ordine */
+(function () {
+  var hero = document.querySelector('.brhero'), xs = hero && hero.querySelector('.xs'), lv = hero && hero.querySelector('.lvr'), xg = hero && hero.querySelector('.xg');
+  if (!xs || !lv) return;
+  var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var steps = [].slice.call(hero.querySelectorAll('.xlist li')), AT = [.1, .28, .46, .64];
+  xg.classList.add('x-steps');
+  var set = function (v) {
+    xs.style.setProperty('--t', v); xs.classList.toggle('x-on', v > .05);
+    var now = -1;
+    steps.forEach(function (li, i) { var on = v >= AT[i]; li.classList.toggle('on', on); if (on) now = i });
+    steps.forEach(function (li, i) { li.classList.toggle('now', i === now) });
+  };
+  var touched = false;
+  ['pointerdown', 'keydown', 'touchstart'].forEach(function (e) { lv.addEventListener(e, function () { touched = true }, { passive: true }) });
+  lv.addEventListener('input', function () { set(lv.value / 100) });
+  if (RM) { lv.value = 70; set(.7); return }
+  /* un giro: fermo montato, si smonta, resta aperto, si rimonta */
+  var CY = [[0, 900], [.82, 2400], [.82, 1700], [0, 2000]], go = false, t0 = 0, raf = 0;
+  var ease = function (p) { return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2 };
+  var tick = function (t) {
+    if (!go || touched) return;
+    if (!t0) t0 = t;
+    var T = CY.reduce(function (a, c) { return a + c[1] }, 0), x = (t - t0) % T, from = CY[CY.length - 1][0], v = 0;
+    for (var i = 0; i < CY.length; i++) { if (x <= CY[i][1]) { v = from + (CY[i][0] - from) * ease(x / CY[i][1]); break } x -= CY[i][1]; from = CY[i][0] }
+    lv.value = v * 100; set(v);
+    raf = requestAnimationFrame(tick);
+  };
+  set(0);
+  new IntersectionObserver(function (es) {
+    go = es[0].isIntersecting;
+    if (go && !touched) { t0 = 0; cancelAnimationFrame(raf); raf = requestAnimationFrame(tick) }
+  }, { threshold: .25 }).observe(hero);
 })();

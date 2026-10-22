@@ -1,4 +1,7 @@
-/* Mother Machine · 03 Brand (24 ottobre): apertura compatta e i tre stili dei controlli */
+/* Mother Machine · 03 Brand (24 ottobre): apertura compatta, i tre stili dei controlli, il carattere, il sistema */
+@font-face{font-family:'MMFredoka';src:url(/brand/fonts/fredoka-wght.woff2) format('woff2');font-weight:300 700;font-display:swap}
+@font-face{font-family:'MMFraunces';src:url(/brand/fonts/fraunces-wght.woff2) format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'MMUnbounded';src:url(/brand/fonts/unbounded-wght.woff2) format('woff2');font-weight:200 900;font-display:swap}
 
 /* ---- apertura: titolo e leva a sinistra, la macchina a destra, tutto nella prima schermata ---- */
 @media (min-width:1000px){
@@ -154,3 +157,104 @@
   .styb button{padding:9px 12px;font-size:13px}
 }
 @media (prefers-reduced-motion:reduce){.ctlg .cel,.ctlg .cel *{transition:none!important}}
+
+
+/* ===== 25 ottobre: ritocchi chiesti da Eso ===== */
+
+/* il peso ha il suo carattere in ogni stile */
+.ctlg[data-sty="friendly"] .wgw{font-family:'MMFredoka',var(--f-body);letter-spacing:-.01em}
+.ctlg[data-sty="editorial"] .wgw{font-family:'MMFraunces',Georgia,serif;letter-spacing:-.03em;font-style:italic}
+
+/* Minimal: Saved resta nero con la spunta pomodoro; Deleted e' rosso pieno con la scritta bianca */
+.ctlg:not([data-sty]) .stb.done{background:#121211}
+.ctlg:not([data-sty]) .stb .ok{display:flex;align-items:center;gap:9px;color:#FBFAF7}
+.ctlg:not([data-sty]) .stb .ok .x-ic{display:block;width:17px;height:17px;color:var(--sig,#FF5B3A)}
+.ctlg:not([data-sty]) .hold.done{border-color:#D7372A}
+.ctlg:not([data-sty]) .hold.done .fill{background:#D7372A}
+.ctlg:not([data-sty]) .hold.done .hl{mix-blend-mode:normal;color:#fff}
+
+/* passando da uno stile all'altro i comandi si trasformano: escono sfocati, rientrano nel nuovo stile, uno dopo l'altro */
+.ctlg .cel>*:nth-child(2){transition:none}
+.ctlg.m-out .cel>*:nth-child(2){animation:mout .2s cubic-bezier(.5,0,.75,0) forwards;animation-delay:calc(var(--k,0)*35ms)}
+.ctlg.m-in .cel>*:nth-child(2){animation:min .55s cubic-bezier(.2,.9,.3,1.15) both;animation-delay:calc(var(--k,0)*55ms)}
+@keyframes mout{to{opacity:0;transform:scale(.9);filter:blur(6px)}}
+@keyframes min{from{opacity:0;transform:scale(.88);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+
+/* ---- il carattere: quattro voci ---- */
+.sp4{font-family:'MMUnbounded',var(--f-body)!important;font-weight:700!important;letter-spacing:-.04em;font-size:clamp(40px,6vw,104px)!important}
+
+/* ---- l'apertura: gli strati si staccano in vetro, i quattro passi si accendono in ordine ---- */
+.brhero .l2,.brhero .l3,.brhero .l4{isolation:isolate}
+.brhero .l2::before,.brhero .l3::before,.brhero .l4::before{content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;pointer-events:none;
+  background:linear-gradient(150deg,rgba(255,255,255,.2),rgba(255,255,255,.04) 55%,rgba(242,205,190,.08));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(255,255,255,.16),0 30px 60px -30px rgba(0,0,0,.6);
+  opacity:calc(var(--t)*1.6)}
+.brhero .xs.x-on .xl{box-shadow:none}
+.brhero .xstage::after{content:"";position:absolute;left:50%;top:55%;width:70%;height:30%;translate:-50% 0;border-radius:50%;background:radial-gradient(closest-side,rgba(242,205,190,.18),transparent);filter:blur(30px);z-index:-1;pointer-events:none}
+.brhero .xlist li{position:relative;opacity:1!important;transition:color .4s}
+.brhero .xlist li::before{content:"";position:absolute;left:-18px;top:16px;width:3px;height:0;background:var(--sig,#FF5B3A);transition:height .45s cubic-bezier(.2,.8,.2,1)}
+.brhero .xlist li b,.brhero .xlist li p{transition:color .4s,opacity .4s}
+.brhero .xlist li .mo{transition:color .4s}
+.brhero .xg.x-steps .xlist li b{color:rgba(244,242,236,.45)}
+.brhero .xg.x-steps .xlist li p{opacity:.45}
+.brhero .xg.x-steps .xlist li.on b{color:#F4F2EC}
+.brhero .xg.x-steps .xlist li.on p{opacity:1}
+.brhero .xg.x-steps .xlist li.on .mo{color:#F4F2EC}
+.brhero .xg.x-steps .xlist li.now::before{height:calc(100% - 32px)}
+
+/* ---- il sistema: bozza statica, in griglia ---- */
+.brs{padding-block:clamp(100px,11vw,170px)}
+.brs .brh2 h2 span{display:block;font-weight:300}
+.brs .brlede{max-width:44ch;color:rgba(244,242,236,.62)}
+.bsg{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-top:clamp(40px,5vw,72px)}
+.bst{margin:0;display:grid;grid-template-rows:auto 1fr auto;gap:18px;padding:clamp(18px,2vw,26px);background:#171715;border:1px solid rgba(244,242,236,.08);border-radius:4px;min-width:0}
+.bst figcaption{display:flex;justify-content:space-between;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,242,236,.5)}
+.bst p{margin:0;font-size:14.5px;line-height:1.45;color:rgba(244,242,236,.6);max-width:34ch}
+.bst-mark{grid-column:span 3;grid-row:span 2}
+.bst-ico{grid-column:span 3}
+.bst-type{grid-column:span 3}
+.bst-col{grid-column:span 4}
+.bst-space{grid-column:span 2}
+/* il segno sulla griglia di costruzione */
+.bsm{position:relative;align-self:center;justify-self:center;width:min(100%,440px);aspect-ratio:1}
+.bsm svg{position:absolute;inset:0;width:100%;height:100%}
+.bsk .gl1{stroke:rgba(244,242,236,.08);stroke-width:1;fill:none}
+.bsk .gl2{stroke:rgba(255,91,58,.55);stroke-width:1;fill:none;stroke-dasharray:3 5}
+.bsmk path{fill:none;stroke:#F4F2EC;stroke-width:34;stroke-linecap:butt;stroke-linejoin:miter}
+.bsx{position:absolute;translate:-50% -50%;padding:3px 6px;font-size:10px;letter-spacing:.06em;color:#121211;background:#F4F2EC}
+/* le icone sulla loro griglia */
+.bsi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-content:center}
+.bsi i{display:grid;place-items:center;aspect-ratio:1;border-radius:3px;color:#F4F2EC;
+  background:linear-gradient(rgba(244,242,236,.06) 1px,transparent 1px) 0 0/12.5% 12.5%,linear-gradient(90deg,rgba(244,242,236,.06) 1px,transparent 1px) 0 0/12.5% 12.5%,#1D1D1B}
+.bsi svg{width:48%;height:48%}
+.bsi .l{fill:none;stroke:currentColor;stroke-width:22;stroke-linecap:round;stroke-linejoin:round}
+.bsi .d{fill:currentColor;opacity:.3}
+/* il carattere in scala */
+.bsty{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,3vw,40px);align-items:center}
+.bsaa{font:640 clamp(90px,9vw,150px)/.8 var(--f-body);letter-spacing:-.06em;color:#F4F2EC}
+.bsty ol{list-style:none;margin:0;padding:0;display:grid}
+.bsty li{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid rgba(244,242,236,.1);color:#F4F2EC}
+.bsty li:nth-child(1) span{font:600 26px/1 var(--f-body);letter-spacing:-.04em;text-transform:none}
+.bsty li:nth-child(2) span{font:600 20px/1 var(--f-body);letter-spacing:-.03em;text-transform:none}
+.bsty li:nth-child(3) span{font:600 16px/1 var(--f-body);letter-spacing:-.02em;text-transform:none}
+.bsty li:nth-child(4) span{font:400 14px/1 var(--f-body);text-transform:none}
+.bsty li:nth-child(5) span{font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.bsty em{font-style:normal;font-size:11px;color:rgba(244,242,236,.45)}
+/* i colori come gettoni */
+.bsc{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.bsc li{display:grid;align-content:end;gap:3px;aspect-ratio:3/4;padding:12px;border-radius:3px;background:var(--c);color:var(--t,#F4F2EC);box-shadow:inset 0 0 0 1px rgba(244,242,236,.1)}
+.bsc b{font:600 14px var(--f-body)}
+.bsc span{font-size:10px;letter-spacing:.06em;opacity:.75}
+/* lo spazio come righello */
+.bss{list-style:none;margin:0;padding:0;display:grid;gap:9px;align-content:center}
+.bss li{display:flex;align-items:center;gap:12px}
+.bss i{display:block;width:calc(var(--s)*2px);height:12px;background:#F4F2EC;opacity:calc(.35 + var(--s)/100)}
+.bss span{font-size:10.5px;color:rgba(244,242,236,.5)}
+@media (max-width:1000px){
+  .bsg{grid-template-columns:1fr 1fr}
+  .bst-mark,.bst-ico,.bst-type,.bst-col,.bst-space{grid-column:span 2;grid-row:auto}
+  .bsc{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .bsc li{aspect-ratio:auto;min-height:110px;padding:9px}
+  .bsc span{display:none}
+}
+@media (prefers-reduced-motion:reduce){.ctlg.m-out .cel>*:nth-child(2),.ctlg.m-in .cel>*:nth-child(2){animation:none}}

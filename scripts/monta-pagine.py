@@ -367,13 +367,34 @@ def sistemi(t):
 
 
 def marchio(t):
-    """03 Brand (24 ottobre, con Eso): apertura compatta (lo stile sta in brand.css) e i controlli in tre stili."""
+    """03 Brand (24 ottobre, con Eso): apertura compatta (lo stile sta in brand.css), i controlli in tre stili,
+    il carattere a quattro voci, la sezione del sistema (bozza statica, da animare piu' avanti)."""
     t = una(t, '<div class="ctlg gl gl-c">',
             '<div class="sty"><span class="mo">Same controls, three brands</span><div class="styb" role="radiogroup" aria-label="Style of the controls">'
             '<button type="button" role="radio" aria-checked="true" data-s="minimal"><span class="fl" aria-hidden="true"></span>Minimal</button>'
             '<button type="button" role="radio" aria-checked="false" tabindex="-1" data-s="friendly"><span class="fl" aria-hidden="true"></span>Friendly</button>'
             '<button type="button" role="radio" aria-checked="false" tabindex="-1" data-s="editorial"><span class="fl" aria-hidden="true"></span>Editorial</button>'
             '</div></div>\n    <div class="ctlg gl gl-c">', 'stili dei controlli')
+    # il carattere: quattro voci, la quarta larga e forte; la parola d'esempio e' Mother (Machine c'e' gia' nel peso)
+    t = una(t, '<input value="Machine" maxlength="18" class="tw"', '<input value="Mother" maxlength="18" class="tw"', 'parola di prova')
+    for k in ('sp1', 'sp2', 'sp3'):
+        t = una(t, '<b class="' + k + '">Machine</b>', '<b class="' + k + '">Mother</b>', 'parola ' + k)
+    t = una(t, '<h2>Same word, three voices.</h2>', '<h2>Same word, four voices.</h2>', 'quattro voci')
+    t = una(t, '<div class="sp"><span class="mo">Mono · technical, exact</span><b class="sp3">Mother</b></div>',
+            '<div class="sp"><span class="mo">Mono · technical, exact</span><b class="sp3">Mother</b></div>\n'
+            '      <div class="sp"><span class="mo">Wide · loud, confident</span><b class="sp4">Mother</b></div>', 'quarta voce')
+    # l'ordine: apertura (vetro), il carattere, i controlli (vetro), il sistema, cosa facciamo. I due vetri non si toccano
+    s0 = t.find('<section class="hs brt"'); e0 = t.find('</section>', s0) + len('</section>')
+    assert s0 > 0, 'sezione carattere'
+    tipo = t[s0:e0]; t = t[:s0] + t[e0:].lstrip()
+    i = t.find('<section class="hs brc"'); assert i > 0, 'sezione controlli'
+    t = t[:i] + tipo + '\n\n  ' + t[i:]
+    i = t.find('<section class="hs brw"'); assert i > 0, 'cosa facciamo'
+    t = t[:i] + (ROOT / 'src/sezioni/brand-sistema.html').read_text(encoding='utf8').strip() + '\n\n  ' + t[i:]
+    for a, b in (('data-f="03.3" data-n="Type" id="b4"', 'data-f="03.2" data-n="Type" id="b4"'),
+                 ('data-f="03.2" data-n="Controls" id="b3"', 'data-f="03.3" data-n="Controls" id="b3"'),
+                 ('data-f="03.4" data-n="What we make" id="b5"', 'data-f="03.5" data-n="What we make" id="b5"')):
+        t = una(t, a, b, b)
     return t
 
 def ritocchi(nome, t):
