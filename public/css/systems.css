@@ -1,0 +1,51 @@
+/* Mother Machine · 02 Systems: le macchine arrivate da LG (23 ottobre). Il turno di notte e il registro di bordo.
+   Ferme fuori schermo (classe .sy-off sulla sezione) e con prefers-reduced-motion. */
+.syled{display:inline-block;width:7px;height:7px;background:var(--sig);margin-right:10px;vertical-align:1px;animation:syblink 1.6s steps(1) infinite}
+@keyframes syblink{50%{opacity:.15}}
+.sy-off *,.sy-off *::before,.sy-off *::after{animation-play-state:paused!important}
+
+/* ---- il turno di notte ---- */
+.syn .in{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(40px,6vw,110px);align-items:center}
+.synt{display:grid;gap:clamp(22px,2.4vw,32px);align-content:start}
+.synt>.mo{font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.synt h2{margin:0;font:640 clamp(44px,5.6vw,92px)/.96 var(--f-body);letter-spacing:-.05em}
+.synt h2 span{display:block;font-weight:300}
+.synt p{margin:0;max-width:38ch;font-size:clamp(17px,1.4vw,20px);line-height:1.45;color:var(--mut)}
+.synm{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(28px,3.4vw,52px);align-items:center;padding:clamp(24px,3vw,40px);background:#141412;border:1px solid var(--ln)}
+.syndial{position:relative;width:clamp(170px,15vw,220px);aspect-ratio:1;border-radius:50%;border:1.5px solid var(--ink);
+  background:repeating-conic-gradient(from -1deg,var(--ink) 0 2deg,transparent 2deg 15deg);-webkit-mask:radial-gradient(circle,#000 0 99%);}
+.syndial::after{content:"";position:absolute;inset:12px;border-radius:50%;background:#141412}
+.syndial::before{content:"";position:absolute;inset:-1px;border-radius:50%;z-index:1;background:conic-gradient(from 180deg,rgba(255,91,58,.0) 0deg,rgba(255,91,58,.0) 0deg);}
+.synh{position:absolute;left:50%;top:50%;width:2px;height:42%;margin-left:-1px;background:var(--sig);transform-origin:50% 0;rotate:180deg;z-index:2;border-radius:2px}
+.synh::after{content:"";position:absolute;left:-4px;top:-5px;width:10px;height:10px;border-radius:50%;background:var(--sig)}
+.syndial b{position:absolute;left:0;right:0;top:58%;text-align:center;font-weight:500;font-size:clamp(16px,1.3vw,19px);letter-spacing:.04em;z-index:3}
+.syndial span{position:absolute;left:0;right:0;top:72%;text-align:center;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);z-index:3}
+.synj{list-style:none;margin:0;padding:0;display:grid}
+.synj li{display:grid;grid-template-columns:56px minmax(0,1fr) 12px;grid-template-areas:"t b k" "t e k";column-gap:16px;row-gap:3px;align-items:center;padding:13px 0;border-bottom:1px solid var(--ln);color:var(--mut);transition:color .35s}
+.synj li:first-child{border-top:1px solid var(--ln)}
+.synj span{grid-area:t;font-size:12px;letter-spacing:.06em}
+.synj b{grid-area:b;font:500 16px var(--f-body);letter-spacing:-.01em;text-transform:none;color:inherit}
+.synj em{grid-area:e;font:400 13px var(--f-body);font-style:normal;opacity:.8;text-transform:none;letter-spacing:0}
+.synj li::after{grid-area:k;content:"";width:9px;height:9px;border:1px solid currentColor;box-sizing:border-box;justify-self:end}
+.synj li.on{color:var(--ink)}
+.synj li.on::after{background:var(--sig);border-color:var(--sig)}
+.synj li.done{color:var(--ink)}
+.synj li.done::after{background:var(--ink);border-color:var(--ink)}
+
+/* ---- il registro di bordo, dentro Built properly ---- */
+.syt .syh2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,5vw,90px);align-items:end}
+.sylog{margin:0;background:#141412;color:#F1EEE7;border-radius:3px;box-shadow:0 30px 60px -30px rgba(18,18,17,.6);overflow:hidden}
+.sylog header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(241,238,231,.12);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8C887F}
+.sylog pre{margin:0;padding:16px 18px;height:12.5em;font:400 12.5px/1.75 var(--f-mono);color:#8C887F;white-space:pre;overflow:hidden}
+.sylog pre b{font-weight:400;color:#F1EEE7}
+.sylog pre em{font-style:normal;color:var(--sig)}
+.sylog pre i{display:inline-block;width:7px;height:13px;background:var(--sig);vertical-align:-2px;animation:syblink 1s steps(1) infinite}
+
+@media (max-width:900px){
+  .syn .in{grid-template-columns:1fr}
+  .synm{grid-template-columns:1fr;justify-items:center}
+  .syndial{width:min(180px,48vw)}
+  .synj{width:100%}
+  .syt .syh2{grid-template-columns:1fr;align-items:start}
+}
+@media (prefers-reduced-motion:reduce){.syled,.sylog pre i{animation:none}}

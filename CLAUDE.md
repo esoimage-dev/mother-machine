@@ -44,9 +44,9 @@ Ultimo aggiornamento: 23 ottobre 2026.
      verrebbe sovrascritta. Il file usa `una(t, vecchio, nuovo, nome)`, che si ferma se il pezzo non c'è una volta sola.
   3. `src/pages/[...slug].html.ts` serve le pagine (qui si aggiungono gli indirizzi nuovi).
   4. `npm run build` costruisce in `dist/`; `npx astro preview --port 4321` per vederlo in locale.
-- **Pezzi in `src/sezioni/`:** `lavori-home.html` (la striscia dei lavori in home), `work.html` (pagina 04), `lg.html`.
+- **Pezzi in `src/sezioni/`:** `lavori-home.html` (la striscia dei lavori in home), `work.html` (pagina 04), `systems-notte.html`, `lg.html`.
 - **CSS e JS per pagina** in `public/css` e `public/js`: `home.css/js` (striscia lavori, selettore, cursore di trascinamento),
-  `progetto.css/js` (pagine progetto, demo, fasce), `work.css/js`, `mr.css/js` (LG). `mm-sito.*` comuni.
+  `progetto.css/js` (pagine progetto, demo, fasce), `systems.css/js` (turno di notte, registro di bordo), `work.css/js`, `mr.css/js` (LG). `mm-sito.*` comuni.
 - **Pagine progetto:** in `monta-pagine.py` il dizionario `CASI` (una voce per lavoro) e la funzione `caso()` montano
   copertina, demo, cosa abbiamo fatto, numeri, prima e dopo, fasce tipografiche, marchio, galleria, Next.
   Per un lavoro nuovo: una voce in `CASI`, una in `PAGINE`, `META`, `CORRENTE`, l'indirizzo in `[...slug].html.ts` e `public/sitemap.xml`.
@@ -103,7 +103,7 @@ Fuori dal palazzo: `/privacy`.
 - **Pagine progetto:** demo vera (Guest/Owner, computer e telefono), poi le fasce tipografiche problema → soluzione,
   poi cosa abbiamo fatto, numeri, marchio, galleria, Next.
 - Ristorante: niente premi; numeri +180% (function), +35% (spesa per ospite), 60% (richieste fuori orario) decisi da Eso.
-- **LG** non è più un elenco di servizi: le sue animazioni migliori passano in Systems; LG resta la porta dello staff.
+- **LG** non è più un elenco di servizi: turno di notte e registro di bordo sono in Systems, il resto tolto. LG è la porta dello staff.
 - Lingue del sito: EN, IT, ES, FR (targhetta in fondo alla pulsantiera).
 - Contatti: niente mail diretta né WhatsApp come canale, tutto passa dal modulo.
 - Privacy: niente cookie di tracciamento, nessun banner.
@@ -115,13 +115,15 @@ Fuori dal palazzo: `/privacy`.
 - [x] Pagine Vitalia's Pizza on Wheels e Vitalia's Restaurant con demo vere, numeri, fasce.
 - [x] Pagina Work (04) senza numeri di serie, solo elenco (pull request #5, da unire).
 - [x] Porta di LG con il codice sul server.
+- [x] Systems con il turno di notte e il registro di bordo; LG snella.
 
 ## 8 · Scaletta (in ordine)
 1. [ ] **Contact vero.** Modulo → ordine salvato (Cloudflare D1) → anti spam (Turnstile) → mail di conferma al cliente
    e avviso a noi (Resend) → scelta dell'orario e link a una stanza Daily standard. Senza questo il sito non prende clienti.
    Dettaglio del percorso (numeri d'ordine, quattro mail, orari): `docs/archivio/percorso-contatto.md`.
-2. [ ] **Systems assorbe LG.** Le animazioni migliori di LG dentro Systems, più la riga sulla sicurezza
-   ("i tuoi dati sono al sicuro": accessi, backup, dati sul tuo server). LG torna solo porta dello staff.
+2. [x] **Systems assorbe LG** (23 ottobre). In Systems: la sezione "Night shift" (il turno di notte) e il registro di
+   bordo dentro "Built properly", con il controllo di sicurezza; "Safe" dice che i dati stanno sul server del cliente.
+   LG ora è solo la sezione del palazzo e la porta dello staff: le altre sue macchine erano doppioni e sono state tolte.
 3. [ ] **Brand e Studio.** Testi più corti, una demo protagonista per piano, Studio in tre parti (Survey, Build, Run),
    un solo "free" in tutto il sito, via i doppioni. Io propongo, Eso approva.
 4. [ ] **Legale e Google.** Privacy con chi raccoglie i dati e hello@; titoli e descrizioni; anteprime social (Open Graph).
