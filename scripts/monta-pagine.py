@@ -178,6 +178,8 @@ CASI = {
                   ('t3', '<img src="/work/vitalias/flyer.webp" alt="Tiny truck, big party: the launch flyer" loading="lazy">', 'Print'),
                   ('t4', '<video src="/work/vitalias/truck.mp4" poster="/work/vitalias/truck-poster.webp" muted loop playsinline preload="none" aria-label="The truck at an event"></video>', 'At an event')],
         look='A brand that holds together on the truck, the website and the menus.',
+        fasce=[('Bookings', 'Twenty phone calls to book one party.', 'Now the truck books itself.',
+                'Date, place, pizzas and deposit, all online. The booking lands in the Control Room already paid, day or night.', 'notte')],
         prossimo=('/work/vitalias-restaurant', "Vitalia's Restaurant", 'Website · Functions · Menus · Hiring'),
     ),
     'ristorante': dict(
@@ -219,6 +221,12 @@ CASI = {
                   ('t3', '<img src="/work/ristorante/menus.webp" alt="A custom wedding menu, printed for a function at Vitalia\'s" loading="lazy">', 'Function menus'),
                   ('t4', '<video src="/work/ristorante/burrata.mp4" poster="/work/ristorante/burrata-poster.webp" muted loop playsinline preload="none" aria-label="Burrata at the table"></video>', 'At the table')],
         look='One look across the website, the function menus and the back office.',
+        fasce=[('Functions', 'Every function used to start with a phone call.', 'Now guests plan it themselves.',
+                'Set menu, guests, allergies and drinks, chosen step by step online. The quote goes out from the back office in one email.', 'notte'),
+               ('Hiring', 'Cairns is a seasonal town. The CVs never stop.', 'Now they sort themselves.',
+                'Every application lands in one place, rated and filed. The team finds the right people fast, without outside job sites.', 'carta'),
+               ('Menus', 'A new dish used to mean a new design job.', 'Now the menu changes in a minute.',
+                'Edit a dish in the back office. The website and the printed menu update together.', 'notte')],
         prossimo=('/work/vitalias-pizza-on-wheels', "Vitalia's Pizza on Wheels", 'Brand · Website · Booking · Control Room'),
     ),
 }
@@ -299,6 +307,15 @@ def caso(t, C):
     sez = t[s:e]; t = t[:s] + t[e:].lstrip('\n')
     i = t.find('  <!-- 2 · cosa e risultati -->'); assert i > 0, 'sezione risultati'
     t = t[:i] + sez + '\n\n' + t[i:]
+    # dopo la demo, le fasce: il perche' in grande, problema e soluzione. Una per ogni cosa che il sistema toglie di mezzo
+    if C.get('fasce'):
+        i = t.find('  <!-- 2 · cosa e risultati -->')
+        t = t[:i] + ''.join(
+            '  <section class="hs cfx" data-luce="' + luce + '" data-f="04.2" data-n="' + nome + '"><div class="in"><div class="cfxi">\n'
+            '    <span class="mo cfxl">' + nome + '</span>\n'
+            '    <p class="cfxb" lang="en"><span class="cfxp">' + prima + '</span> <span class="cfxs">' + ora + '</span></p>\n'
+            '    <p class="cfxd">' + come + '</p>\n'
+            '  </div></div></section>\n\n' for nome, prima, ora, come, luce in C['fasce']) + t[i:]
     # lo script della miniatura non serve piu': i numeri che contano e le righe che salgono stanno in progetto.js
     s = t.find('/* pagina progetto v3: il Control Room in miniatura')
     e = t.find('\n})();', t.find(".cfn b[data-n]", s)) + len('\n})();')
@@ -306,6 +323,31 @@ def caso(t, C):
     return t[:s] + t[e:]
 
 
+
+
+def lavori_home(t):
+    """05.2 Work (22 ottobre, deciso con Eso): subito dopo l'apertura, una striscia orizzontale di lavori.
+    Ogni scheda ha dentro la sua macchina che lavora in piccolo; chi vuole va di lato (trackpad, dito, trascinando o
+    col selettore fisso in basso), chi no continua a scendere. Poi What we build, How we work (separa i due vetri),
+    In motion, la porta verso G."""
+    def taglia(t, inizio):
+        s = t.find(inizio); e = t.find('</section>', s) + len('</section>')
+        assert s > 0 and e > s, inizio
+        return t[:s] + t[e:].lstrip(), t[s:e]
+    t, _ = taglia(t, '<section class="hs wk" data-luce="carta" data-f="05.3" data-n="Proof" id="s2">')
+    t, come = taglia(t, '<section class="hs" data-luce="carta" data-f="05.5" data-n="How we work" id="s4">')
+    sez = (ROOT / 'src/sezioni/lavori-home.html').read_text(encoding='utf8').strip()
+    i = t.find('<section class="hs mmo"'); assert i > 0, 'what we build'
+    t = t[:i] + sez + '\n\n  ' + t[i:]
+    i = t.find('<section class="hs vmo"'); assert i > 0, 'in motion'
+    t = t[:i] + come + '\n\n  ' + t[i:]
+    for a, b in (('data-f="05.2" data-n="What we build" id="s3"', 'data-f="05.3" data-n="What we build" id="s3"'),
+                 ('data-f="05.5" data-n="How we work" id="s4"', 'data-f="05.4" data-n="How we work" id="s4"'),
+                 ('data-f="05.4" data-n="In motion" id="s5"', 'data-f="05.5" data-n="In motion" id="s5"')):
+        t = una(t, a, b, b)
+    t = una(t, '<i class="run"></i>05.2 · What we build</span>', '<i class="run"></i>05.3 · What we build</span>', 'etichetta 05.3')
+    t = una(t, '<i class="run"></i>05.4 · In motion</span>', '<i class="run"></i>05.5 · In motion</span>', 'etichetta 05.5')
+    return t
 
 def ritocchi(nome, t):
     """Modifiche decise con Eso sopra le pagine approvate (19 ottobre 2026)."""
@@ -358,6 +400,7 @@ def ritocchi(nome, t):
                 "var mw=0,x0=h.getBoundingClientRect().left;[].forEach.call(h.children,function(d){mw=Math.max(mw,d.querySelector('.bm').getBoundingClientRect().left-x0)});", 'misura riga')
         # su telefono il film si apre dalla copertina (il link piccolo "Watch the film" non c'e' piu')
         t = una(t, "$('h3wf').addEventListener('click',openF);", "$('h3pf').addEventListener('click',openF);", 'film da copertina')
+        t = lavori_home(t)
         # 05.1 su telefono: il titolo si misura a peso medio (non al 900), cosi' riempie la larghezza
         t = una(t, "make();h.style.fontSize='100px';CH.forEach(function(c){c.el.style.fontWeight=tileOn()?560:HI});",
                 "make();h.style.fontSize='100px';CH.forEach(function(c){c.el.style.fontWeight=tileOn()?560:(innerWidth<700?600:HI)});", 'peso titolo')

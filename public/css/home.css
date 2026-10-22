@@ -78,3 +78,305 @@
   .vrw{padding-top:14px!important;padding-bottom:58px!important;margin-top:-14px;margin-bottom:-42px}
 }
 @media (prefers-reduced-motion:reduce){.mcards .gc.on{animation:none}}
+
+/* ===== 05.2 Work: la striscia dei lavori (22 ottobre). Si va di lato solo se si vuole: lo scroll verticale resta libero ===== */
+.wkx{--gut:clamp(16px,4vw,56px);--edge:max(var(--gut),calc((100vw - 1320px)/2 + var(--gut)));overflow-x:clip;padding-top:clamp(72px,8vw,120px);padding-bottom:clamp(72px,8vw,120px)}
+.wkxh{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:clamp(32px,4vw,56px)}
+.wkxh h2{margin:14px 0 0;font:640 clamp(40px,5.6vw,88px)/.92 var(--f-body);letter-spacing:-.05em}
+.wkxh .wall{display:inline-flex;color:inherit;text-decoration:none;flex:none;padding:0;margin:0;border:0;width:auto}
+.wkxh .wl{display:flex;align-items:center;gap:16px}
+.wkxh .wl b{font:600 17px var(--f-body);letter-spacing:-.01em}
+.wkxh .arq{background:#F4F2EC;color:#121211}
+.wkxh .arq svg:first-child{fill:#121211}
+html .wkxh a:hover .arq{background:#F4F2EC}
+
+.wkt{display:flex;gap:clamp(14px,1.8vw,24px);overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-padding-inline:var(--edge);padding:6px var(--edge) 10px;scrollbar-width:none;overscroll-behavior-x:contain;outline:none;-webkit-overflow-scrolling:touch}
+.wkt::-webkit-scrollbar{display:none}
+.wkt:focus-visible{box-shadow:inset 0 0 0 1px rgba(244,242,236,.25)}
+.wkt.free{scroll-snap-type:none}
+.wkt.drag{user-select:none}
+@media (hover:hover) and (pointer:fine){.wkt{scroll-snap-type:x proximity}}   /* col trackpad lo scorrimento resta libero; col dito si ferma sulle schede */
+.wkt.drag *{pointer-events:none}
+.wkc{flex:none;width:min(1100px,84vw);height:clamp(440px,calc(100svh - 230px),620px);scroll-snap-align:start;display:grid;grid-template-columns:1.42fr 1fr;background:var(--sf);color:inherit;text-decoration:none;border-radius:3px;overflow:hidden;position:relative;-webkit-user-drag:none;-webkit-tap-highlight-color:transparent}
+.wkc img{-webkit-user-drag:none;user-select:none}
+
+/* il palco: foto del lavoro, marchio, la macchina che lavora */
+.wst{position:relative;overflow:hidden;background:var(--c)}
+.wsi{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.5;transition:transform 1.1s cubic-bezier(.2,.8,.2,1),opacity .5s}
+.wst::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,0) 30%,rgba(0,0,0,.25))}
+.wsl{position:absolute;left:6%;top:6%;width:min(150px,22%);height:auto;z-index:1}
+a.wkc:hover .wsi{transform:scale(1.04);opacity:.62}
+/* il truck: il furgone scontornato sul rosso del marchio, si riconosce al primo sguardo */
+.wst-cut{background:radial-gradient(120% 90% at 70% 40%,#E0353D 0%,#C8212A 45%,#8C1219 100%)}
+.wst-cut::after{background:linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,0) 30%)}
+.wst-cut::before{content:"";position:absolute;left:24%;right:2%;bottom:14%;height:7%;border-radius:50%;background:rgba(60,0,4,.45);filter:blur(14px)}
+.wsc{position:absolute;right:-3%;bottom:13%;width:86%;height:auto;transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
+a.wkc:hover .wsc{transform:translateX(-10px)}
+.wst .art{left:50%;top:50%;transform:translate(-50%,-50%) scale(var(--k,1));transform-origin:50% 50%}
+
+/* la scheda: cosa, chi, il risultato, il link */
+.wif{display:grid;grid-template-rows:auto auto auto 1fr auto;align-content:start;gap:14px;padding:clamp(24px,2.8vw,44px)}
+.wif>.mo{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase}
+.wif h3{margin:6px 0 0;font:620 clamp(30px,3vw,46px)/.98 var(--f-body);letter-spacing:-.04em;transition:font-weight .45s cubic-bezier(.2,.8,.2,1)}
+a.wkc:hover .wif h3{font-weight:780}
+.wif p{margin:0;font-size:16.5px;line-height:1.45;color:var(--mut);max-width:34ch}
+.wio{align-self:end;display:grid;gap:10px;padding-top:16px;border-top:1px solid var(--ln)}
+.wio b{font:660 clamp(64px,6.6vw,108px)/.84 var(--f-body);letter-spacing:-.065em;white-space:nowrap}
+.wio span{font-size:14.5px;line-height:1.4;color:var(--mut);max-width:30ch}
+.wgo{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:16px;border-top:1px solid var(--ln);font:600 15px var(--f-body)}
+.wgo .arq{background:#F4F2EC;color:#121211}
+.wgo .arq svg:first-child{fill:#121211}
+html a.wkc:hover .wgo .arq{background:#F4F2EC}
+.wsoon{align-self:end;justify-self:start;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:9px 12px;border:1px dashed rgba(244,242,236,.35);color:var(--mut)}
+.wkc.soon .wst{filter:saturate(.75)}
+
+/* l'ultima: il prossimo lavoro e' il tuo */
+.wkn{grid-template-columns:1fr;width:min(620px,72vw);background:#F2CDBE;color:#121211}
+.wkni{display:grid;align-content:end;gap:18px;padding:clamp(28px,3.4vw,52px)}
+.wkni .mut{color:rgba(18,18,17,.6);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase}
+.wkni h3{margin:0;font:660 clamp(48px,5.6vw,92px)/.9 var(--f-body);letter-spacing:-.055em}
+.wkni p{margin:0;font-size:17px;line-height:1.45;max-width:30ch}
+.wkcta{position:relative;overflow:hidden;isolation:isolate;justify-self:start;display:inline-flex;align-items:center;height:56px;padding:0 26px;margin-top:8px;background:#121211;color:#F4F2EC;font:600 16px var(--f-body);text-decoration:none;transition:color .3s}
+.wkcta .fl{position:absolute;inset:-1px;background:var(--sig,#FF5B3A);transform:translateY(101%);transition:transform .45s cubic-bezier(.7,0,.2,1);z-index:-1}
+.wkcta:hover,.wkcta:focus-visible{color:#121211}
+.wkcta:hover .fl,.wkcta:focus-visible .fl{transform:none}
+
+/* la spinta: la prima volta che la striscia entra, i lavori fanno un passo a sinistra e tornano */
+.wkt.nudge>.wkc{animation:wnudge 1.15s cubic-bezier(.5,0,.2,1) both}
+.wkt.nudge>.wkc:nth-child(2){animation-delay:.04s}
+.wkt.nudge>.wkc:nth-child(n+3){animation-delay:.08s}
+@keyframes wnudge{0%{transform:none}38%{transform:translateX(-72px)}100%{transform:none}}
+
+/* ---- le macchine in piccolo: girano solo quando la scheda si vede (.wkon) ---- */
+.mx{position:absolute;z-index:1;left:6%;bottom:7%;width:min(400px,70%);padding:14px;border-radius:8px;font:500 11px/1.3 var(--f-body);box-shadow:0 30px 60px -24px rgba(0,0,0,.6)}
+.mx{isolation:isolate}
+/* il vetro: la copia sfocata di sotto, poi la velatura */
+.mxg{position:absolute;inset:0;border-radius:inherit;overflow:hidden;z-index:-1;pointer-events:none}
+.mxgb{position:absolute;display:block;filter:blur(16px) saturate(1.3)}
+.mxg::after{content:"";position:absolute;inset:0;background:var(--gt)}
+.mx *{animation-play-state:paused!important}
+.wkc.wkon .mx *{animation-play-state:running!important}
+.mxh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font:500 10.5px var(--f-mono);letter-spacing:.09em;text-transform:uppercase}
+.mxh em{display:flex;align-items:center;gap:6px;font-style:normal;opacity:.8}
+.mxh em i{width:6px;height:6px;border-radius:50%;background:var(--sig,#FF5B3A);animation:mxlive 1.4s steps(1) infinite}
+@keyframes mxlive{50%{opacity:.15}}
+/* il truck: il calendario si riempie, arriva la prenotazione pagata */
+.mxt{color:#F3EBDD;--gt:linear-gradient(160deg,rgba(30,22,19,.8),rgba(14,10,9,.68));box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 1px rgba(255,255,255,.08),0 30px 60px -24px rgba(0,0,0,.6)}
+.mxm{display:flex;justify-content:space-between;margin-bottom:8px;font:500 14px var(--f-body);letter-spacing:-.01em}
+.mxm span+span{font:500 10.5px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;opacity:.8}
+.mxc{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.mxc i{min-width:0;aspect-ratio:1.5;border-radius:2px;background:rgba(243,235,221,.1);display:grid;place-items:center;color:#fff}
+.mxc i svg{width:auto;height:52%;opacity:0}
+.mxc .mxb svg,.mxc .mxp svg{animation:mxico 9s cubic-bezier(.2,.8,.2,1) infinite;animation-delay:calc(var(--d)*.28s)}
+.mxc .mxp{color:#3A2405}
+.mxc .mxk svg{animation:mxicn 9s steps(1) infinite}
+@keyframes mxico{0%,5%{opacity:0;transform:scale(.4)}11%,92%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes mxicn{0%,46%{opacity:0}47%,92%{opacity:1}100%{opacity:0}}
+.mxc .mxb{animation:mxfill 9s cubic-bezier(.2,.8,.2,1) infinite;animation-delay:calc(var(--d)*.28s)}
+.mxc .mxp{animation:mxfill 9s cubic-bezier(.2,.8,.2,1) infinite;animation-delay:calc(var(--d)*.28s);--fc:#E8A33D}
+.mxc .mxk{animation:mxnew 9s steps(1) infinite}
+@keyframes mxfill{0%,4%{background:rgba(243,235,221,.1)}9%,92%{background:var(--fc,#2F7D5B)}100%{background:rgba(243,235,221,.1)}}
+@keyframes mxnew{0%,46%{background:rgba(243,235,221,.1);box-shadow:none}47%,92%{background:#C8212A;box-shadow:0 0 0 2px rgba(200,33,42,.35)}100%{background:rgba(243,235,221,.1)}}
+.mxn{position:absolute;right:-10%;top:-18%;display:grid;gap:3px;padding:12px 14px;border-radius:8px;background:#F3EBDD;color:#1A1410;box-shadow:0 20px 40px -14px rgba(0,0,0,.55);animation:mxpop 9s cubic-bezier(.2,.9,.3,1.2) infinite}
+.mxn b{font:700 13px var(--f-body)}
+.mxn span{font-size:11px;opacity:.7}
+.mxn em{justify-self:start;margin-top:4px;padding:3px 7px;border-radius:3px;background:#2F7D5B;color:#fff;font:500 9px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;font-style:normal}
+@keyframes mxpop{0%,44%{opacity:0;transform:translateY(14px) scale(.96)}48%,90%{opacity:1;transform:none}96%,100%{opacity:0;transform:translateY(-6px)}}
+/* il ristorante: arriva la richiesta, parte il preventivo */
+.mxr{color:#1C2420;--gt:linear-gradient(160deg,rgba(255,255,255,.86),rgba(246,243,236,.72));box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 0 0 1px rgba(255,255,255,.35),0 30px 60px -24px rgba(0,0,0,.5)}
+.mxr .mxh{color:#3C6A4B}
+.mxe{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:8px 0;border-top:1px solid rgba(28,36,32,.1)}
+.mxi{display:grid;place-items:center;width:34px;height:34px;border-radius:7px}
+.mxi svg{width:19px;height:19px}
+.mxi-b{background:#F3E2BF;color:#8A6411}
+.mxi-w{background:#F3DCD6;color:#9A3F2E}
+.mxi-d{background:#DCE6E9;color:#2D5866}
+.mxw{display:grid;gap:2px;min-width:0}
+.mxw b{font:700 13.5px var(--f-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mxw b em{font-style:normal;font-weight:500;opacity:.55;margin-left:6px}
+.mxw span{font-size:11.5px;opacity:.78;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mxs{display:grid;font-style:normal}
+.mxs s{grid-area:1/1;text-decoration:none;justify-self:end;padding:3px 7px;border-radius:3px;background:#EFE3C2;color:#7A5B12;font:500 9px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.mxs.mxok s{background:#DCE8DF;color:#2B5238}
+.mxe-new{animation:mxin 8s cubic-bezier(.2,.9,.3,1) infinite;transform-origin:50% 0}
+.mxe-new .mxs s:first-child{animation:mxa 8s steps(1) infinite}
+.mxe-new .mxs s:last-child{background:#3C6A4B;color:#F6F3EC;animation:mxb 8s steps(1) infinite}
+@keyframes mxin{0%,8%{opacity:0;transform:translateY(-10px);background:transparent}14%{opacity:1;transform:none;background:rgba(198,152,47,.16)}40%,100%{opacity:1;transform:none;background:transparent}}
+@keyframes mxa{0%,58%{opacity:1}59%,100%{opacity:0}}
+@keyframes mxb{0%,58%{opacity:0}59%,100%{opacity:1}}
+
+/* ---- il selettore: una barra scura con i colori dei lavori. Quello corrente si apre e dice il nome ---- */
+.wsel{position:sticky;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;width:max-content;max-width:calc(100vw - 32px);margin:24px auto 0;display:flex;align-items:center;gap:4px;padding:5px;border-radius:6px;color:#F4F2EC;
+  background:rgba(20,20,19,.9);box-shadow:inset 0 0 0 1px rgba(244,242,236,.09),inset 0 1px 0 rgba(255,255,255,.06),0 24px 50px -18px rgba(0,0,0,.7)}
+.wsb{all:unset;box-sizing:border-box;position:relative;overflow:hidden;isolation:isolate;flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:3px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:color .3s,opacity .25s,transform .12s}
+.wsb svg{width:18px;height:18px;fill:currentColor}
+.wsb .fl{position:absolute;inset:0;background:var(--sig,#FF5B3A);transform:translateY(101%);transition:transform .45s cubic-bezier(.7,0,.2,1);z-index:-1}
+@media (hover:hover){.wsb:hover{color:#121211}.wsb:hover .fl{transform:none}}
+.wsb:focus-visible{color:#121211}
+.wsb:focus-visible .fl{transform:none}
+.wsb:focus-visible{outline:none}
+.wsb:active{transform:scale(.94)}
+.wsb[disabled]{opacity:.25;pointer-events:none}
+.wsb.call .fl{transform:none;animation:wcall .45s steps(1) infinite}
+.wsb.call{color:#121211}
+@keyframes wcall{50%{opacity:0}}
+.wsx{display:flex;align-items:center;gap:2px;min-width:0;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.wsel.swiping .wsx button[aria-selected="true"]{background:rgba(244,242,236,.16)}
+.wsx button{all:unset;box-sizing:border-box;position:relative;display:flex;align-items:center;gap:10px;height:44px;max-width:42px;padding:0 8px;border-radius:3px;overflow:hidden;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;
+  transition:max-width .55s cubic-bezier(.2,.8,.2,1),background-color .3s,padding .55s cubic-bezier(.2,.8,.2,1)}
+.wsx button i{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:4px;background:var(--t);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);opacity:.5;transform:scale(.86);transition:opacity .3s,transform .4s cubic-bezier(.2,.8,.2,1)}
+.wsx button i svg{width:16px;height:16px}
+.wsx button span{font:600 14.5px var(--f-body);letter-spacing:-.01em;opacity:0;transition:opacity .25s}
+@media (hover:hover){.wsx button:hover i{opacity:.9;transform:none}}
+.wsx button[aria-selected="true"]{max-width:300px;padding:0 16px 0 9px;background:rgba(244,242,236,.08)}
+.wsx button[aria-selected="true"] i{opacity:1;transform:none}
+.wsx button[aria-selected="true"] span{opacity:1;transition:opacity .35s .18s}
+.wsx button:focus-visible{outline:1px solid rgba(244,242,236,.6);outline-offset:-1px}
+
+/* il cursore sopra la striscia: la cornice si allarga ancora e dentro compaiono due frecce.
+   Sopra un lavoro c'e' anche la luce pomodoro: un clic entra. Tenendo premuto e trascinando la cornice si stira e le frecce si aprono */
+.mmc .war{position:absolute;left:50%;top:50%;width:34px;height:10px;margin:-5px 0 0 -17px;display:flex;justify-content:space-between;opacity:0;transition:opacity .2s,width .35s cubic-bezier(.2,.8,.2,1),margin .35s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.mmc .war::before,.mmc .war::after{content:"";width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent}
+.mmc .war::before{border-right:6px solid var(--cc,#F4F2EC)}
+.mmc .war::after{border-left:6px solid var(--cc,#F4F2EC)}
+.mmc.wdr .war{opacity:1}
+html .mmc.wdr i{width:60px;height:60px;margin:-30px 0 0 -30px;background-color:transparent;box-shadow:inset 0 0 0 1.5px var(--cc,#F4F2EC);transition:width .35s cubic-bezier(.2,.8,.2,1),height .35s cubic-bezier(.2,.8,.2,1),margin .35s cubic-bezier(.2,.8,.2,1),background-color .15s}
+html .mmc.wdr{mix-blend-mode:normal}
+html .mmc.wdr.dn i{width:56px;height:56px;margin:-28px 0 0 -28px}
+html .mmc.wdr.wmv i{width:104px;height:48px;margin:-24px 0 0 -52px}
+html .mmc.wdr.wmv .war{width:84px;margin-left:-42px}
+html .mmc.wdr.wmv i::after{width:0!important;height:0!important}
+html .mmc.wdr:not(.hit) i::after{width:0;height:0}
+
+@media (max-width:860px){
+  .wkxh{align-items:flex-start;flex-direction:column}
+  .wkc{grid-template-columns:none;grid-template-rows:auto 1fr;width:86vw;height:auto}
+  .wst{aspect-ratio:4/3.4}
+  .wif{grid-template-rows:none;gap:12px;padding:22px 20px 22px}
+  .wif h3{font-size:30px}
+  .wif p{font-size:15.5px}
+  .wio b{font-size:64px}
+  .mx{left:5%;bottom:6%;width:78%;padding:11px;font-size:10px}
+  .mxn{right:-8%;top:-24%;padding:10px 12px}
+  .wkn{width:86vw;min-height:420px}
+  .wkni h3{font-size:52px}
+  .wsel{width:auto;margin:18px 16px 0}
+  .wsx{flex:1}
+  .wsx button{max-width:28px;padding:0 7px}
+  .wsx button[aria-selected="true"]{flex:1;max-width:none;min-width:0;padding:0 12px 0 10px}
+  .wsx button span{overflow:hidden;text-overflow:ellipsis;font-size:14px}
+  .wsx button span .lg{display:none}
+  .mx{width:74%}
+  .wst-cut .mx{width:56%;left:5%;bottom:5%;padding:9px}
+  .wst-cut .mxh{margin-bottom:6px}
+  .wsc{width:90%;right:-8%;bottom:30%}
+  .wst-cut::before{bottom:31%;left:30%}
+  .mxw b em{display:none}
+  .mxw b{font-size:12.5px}
+  .mxw span{font-size:10.5px}
+  .mxi{width:30px;height:30px}
+  .mxs s{padding:3px 5px;font-size:8.5px}
+  .wsb{width:40px;height:44px}
+  .wsx button{max-width:26px;padding:0 3px}
+  .wsx button i{width:22px;height:22px}
+  .wsx button i svg{width:13px;height:13px}
+  .wsx button[aria-selected="true"]{flex:none;gap:8px;padding:0 10px 0 6px}
+  .wsx button span{font-size:13.5px}
+  .wsx{justify-content:center}
+  .wsb{width:48px;height:48px}
+}
+@media (prefers-reduced-motion:reduce){
+  .wkt.nudge>.wkc{animation:none}
+  .mx *{animation:none!important}
+  .mxn{opacity:1;transform:none}
+  .mxe-new .mxs s:first-child{opacity:0}
+  .mxc .mxb{background:#2F7D5B}.mxc .mxp{background:#E8A33D}.mxc .mxk{background:#C8212A}
+  .mxc i svg{opacity:1}
+}
+.wsx button .sh{display:none}
+@media (max-width:860px){.wsx button .sh{display:inline}}
+.wst-cut .mx{width:min(370px,60%)}
+.mxe{border-top-color:rgba(28,36,32,.12)}
+.wsx button i .l{fill:none;stroke:currentColor;stroke-width:22;stroke-linecap:round;stroke-linejoin:round}
+.wsx button i .d{fill:currentColor;opacity:.32}
+
+/* il ristorante: due schede che si alternano, Functions e Hiring. A ogni giro arriva una notifica in alto */
+.mxtb{display:flex;gap:4px}
+.mxtb b{padding:4px 8px;border-radius:4px;font-weight:500;color:#3C6A4B;animation:mxtab 16s steps(1) infinite}
+.mxtb .mxt2{animation-name:mxtab2}
+@keyframes mxtab{0%,49%{background:#3C6A4B;color:#F6F3EC}50%,100%{background:transparent;color:#3C6A4B}}
+@keyframes mxtab2{0%,49%{background:transparent;color:#3C6A4B}50%,100%{background:#3C6A4B;color:#F6F3EC}}
+.mxl{display:grid}
+.mxq{grid-area:1/1;animation:mxsw 16s linear infinite}
+.mxq2{animation-name:mxsw2}
+@keyframes mxsw{0%,46%{opacity:1;transform:none}50%,96%{opacity:0;transform:translateX(-10px)}100%{opacity:1;transform:none}}
+@keyframes mxsw2{0%,46%{opacity:0;transform:translateX(10px)}50%,96%{opacity:1;transform:none}100%{opacity:0;transform:translateX(10px)}}
+.mxr .mxq1 .mxe-new{animation:mxin1 16s cubic-bezier(.2,.9,.3,1) infinite}
+.mxr .mxq2 .mxe-new{animation:mxin2 16s cubic-bezier(.2,.9,.3,1) infinite}
+@keyframes mxin1{0%,4%{opacity:0;transform:translateY(-10px);background:transparent}8%{opacity:1;transform:none;background:rgba(198,152,47,.18)}24%,100%{opacity:1;transform:none;background:transparent}}
+@keyframes mxin2{0%,53%{opacity:0;transform:translateY(-10px);background:transparent}57%{opacity:1;transform:none;background:rgba(198,152,47,.18)}74%,100%{opacity:1;transform:none;background:transparent}}
+.mxr .mxq1 .mxe-new .mxs s:first-child{animation:mxa1 16s steps(1) infinite}
+.mxr .mxq1 .mxe-new .mxs s:last-child{animation:mxb1 16s steps(1) infinite}
+.mxr .mxq2 .mxe-new .mxs s:first-child{animation:mxa2 16s steps(1) infinite}
+.mxr .mxq2 .mxe-new .mxs s:last-child{animation:mxb2 16s steps(1) infinite}
+@keyframes mxa1{0%,29%{opacity:1}30%,100%{opacity:0}}
+@keyframes mxb1{0%,29%{opacity:0}30%,100%{opacity:1}}
+@keyframes mxa2{0%,79%{opacity:1}80%,100%{opacity:0}}
+@keyframes mxb2{0%,79%{opacity:0}80%,100%{opacity:1}}
+.mxi-c{background:#F1E5CF;color:#7A5B12}
+.mxi-v{background:#E3E0F0;color:#4B437A}
+.mxi-o{background:#EADDD3;color:#6B4126}
+.mxr .mxn{background:#1C2420;color:#F6F3EC}
+.mxr .mxn em{background:#C6982F;color:#17301F}
+.mxr .mxn1{animation:mxpop1 16s cubic-bezier(.2,.9,.3,1.2) infinite}
+.mxr .mxn2{animation:mxpop2 16s cubic-bezier(.2,.9,.3,1.2) infinite}
+@keyframes mxpop1{0%,5%{opacity:0;transform:translateY(14px) scale(.96)}8%,36%{opacity:1;transform:none}40%,100%{opacity:0;transform:translateY(-6px)}}
+@keyframes mxpop2{0%,55%{opacity:0;transform:translateY(14px) scale(.96)}58%,86%{opacity:1;transform:none}90%,100%{opacity:0;transform:translateY(-6px)}}
+@media (prefers-reduced-motion:reduce){
+  .mxq2,.mxr .mxn{display:none}
+  .mxtb .mxt1{background:#3C6A4B;color:#F6F3EC}
+}
+
+/* telefono (23 ottobre): schede piu' basse, la scheda intera sta fra la testata e il selettore.
+   Titolo su una riga, il risultato col numero a sinistra, il link come riga piena. Il selettore senza frecce: si scorre col dito */
+@media (max-width:860px){
+  .wkc{width:84vw}
+  .wst{aspect-ratio:16/11}
+  .wif{gap:10px;padding:16px 18px 0}
+  .wif>.mo{font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .wif h3{margin:2px 0 0;font-size:clamp(19px,5.6vw,24px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .wif p{font-size:14.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .wio{grid-template-columns:auto 1fr;align-items:center;gap:14px;padding-top:12px}
+  .wio b{font-size:46px}
+  .wio span{font-size:13px}
+  .wgo{margin:0 -18px;padding:0 6px 0 18px;height:56px;font-size:14.5px}
+  .wgo .arq{width:44px;height:44px}
+  .wgo .arq svg{left:10px;top:10px}
+  .wsoon{margin-bottom:18px}
+  .wkn{min-height:0}
+  .wkni{padding:24px 20px;gap:14px}
+  .wkni h3{font-size:44px}
+  .wsel{width:max-content;margin:14px auto 0;padding:4px;gap:2px}
+  .wsel .wsb{display:none}
+  .wsx{flex:none}
+  .wsx button{max-width:36px;padding:0 6px}
+  .wsx button i{width:24px;height:24px}
+  .wsx button i svg{width:14px;height:14px}
+  .wsx button[aria-selected="true"]{padding:0 12px 0 6px}
+  .mxr{width:80%;bottom:6%;padding:10px 11px}
+  .mxr .mxq .mxe:nth-child(3){display:none}
+  .mxe{padding:6px 0;gap:8px}
+  .mxi{width:28px;height:28px;border-radius:6px}
+  .mxi svg{width:16px;height:16px}
+  .mxtb b{padding:3px 6px}
+  .mxn{top:-20px;right:-4%;padding:8px 10px;gap:2px}
+  .mxn b{font-size:11.5px}
+  .mxn span{font-size:10px}
+  .mxn em{margin-top:2px}
+  .mxt .mxn{top:-24px}
+}
+
+/* dove: la citta' del lavoro in alto a destra sulla copertina, speculare al logo */
+.wloc{position:absolute;z-index:2;right:5%;top:6%;display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:3px;background:rgba(15,15,14,.5);color:#F4F2EC;font-size:10px;letter-spacing:.1em;text-transform:uppercase;line-height:1;white-space:nowrap;box-shadow:inset 0 0 0 1px rgba(244,242,236,.12)}
+.wloc::before{content:"";width:5px;height:5px;background:currentColor}
+@media (max-width:860px){.wloc{top:5%;right:4%;padding:6px 8px;font-size:9px}}
