@@ -125,7 +125,7 @@ def footer(nome):
     viti = ''.join(f'<i class="rv" style="{p}"></i>' for p in ('left:14px;top:14px', 'right:14px;top:14px', 'left:14px;bottom:14px', 'right:14px;bottom:14px'))
     # LG come nella pulsantiera: la chiave girata sblocca LG ("Going down."), senza chiave "Not without the key."
     chiave = (f'<div class="fkey{" open" if lg else ""}">'
-              f'<button class="flgb" type="button" data-k="-1" aria-label="Floor LG, Machine room{"" if lg else ", locked"}"{" aria-current=\"page\"" if lg else ""}>'
+              f'<button class="flgb" type="button" data-k="-1" aria-label="Floor LG, Machine room{"" if lg else ", locked"}"{" aria-current=\"page\"" if nome == "lg" else ""}>'
               '<span class="fsq">LG</span><span class="fnm">Machine room</span></button>'
               f'<span class="fko" aria-live="polite">{"You found it." if lg else "Staff only"}</span>'
               f'<button class="fcylb" type="button" aria-label="Key: unlock the machine room" aria-pressed="{"true" if lg else "false"}">'
@@ -476,10 +476,12 @@ def ritocchi(nome, t):
         s = t.find('  /* scene */'); e = t.find('  /* la lingua della call', s)
         assert s > 0 and e > s and '/* 5 · machine room */' in t[s:e], 'script delle scene'
         t = t[:s] + (ROOT / 'src/sezioni/room.js').read_text(encoding='utf8') + t[e:]
-        t = una(t, "fl=0,nm='Contact'", "fl=-1,nm='Machine Room'", 'testata: piano')
-        t = una(t, 'aria-label="Floors: you are on G, Contact', 'aria-label="Floors: you are on LG, Machine Room', 'testata: aria')
+        # il back office e' un piano segreto, sotto LG (deciso da Eso il 25 ottobre): in testata "SL · Secret lab"
+        t = una(t, "fl=0,nm='Contact'", "fl=-1,nm='Secret lab'", 'testata: piano')
+        t = una(t, "function two(n){return n===0?'G':n===-1?'LG':", "function two(n){return n===0?'G':n===-1?'SL':", 'testata: sigla')
+        t = una(t, 'aria-label="Floors: you are on G, Contact', 'aria-label="Floors: you are on the secret lab', 'testata: aria')
         t = una(t, '<b>G</b></span></span><span class="rl nm" id="bL"><b>Contact</b>',
-                '<b>LG</b></span></span><span class="rl nm" id="bL"><b>Machine Room</b>', 'testata: numero')
+                '<b>SL</b></span></span><span class="rl nm" id="bL"><b>Secret lab</b>', 'testata: numero')
         t = una(t, 'onFloor=0', 'onFloor=-1', 'piano corrente')
         t = una(t, "nav.cur(0,'G','Contact')", "nav.cur(-1,'LG','Machine Room')", 'pulsantiera')
         assert t.count('if(k===0') == 3, 'k===0'
@@ -744,6 +746,8 @@ def monta(nome, src):
         t = una(t, "scramble(sp,x.dataset.l.toUpperCase(),60+Math.abs(i-ORDER.indexOf(cur))*55)",
                 "scramble(sp,x.dataset.l.toUpperCase(),30+Math.abs(i-ORDER.indexOf(cur))*40)", 'lingue: lettere')
 
+    if "  lit(5);\n" in t:
+        t = t.replace("  lit(5);\n", "  lit(fl);\n", 1)
     if nome == 'home':
         t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/home.css">', 'stile home')
     if nome == 'brand':

@@ -113,7 +113,8 @@ Ogni pagina è un piano. Si naviga con la pulsantiera (il menu) e si scende come
 | 02 | `/systems` | grigio macchina | il dentro: software, gestionali, app, CMS, automazioni, AI privata |
 | 01 | `/studio` | rosa | chi siamo, metodo Survey, Build, Run |
 | G | `/contact` | rosa | "Tell us what slows you down." Il modulo (ordine di lavoro). Primo incontro gratis |
-| LG | `/lg` → `/lg/room` | notte | il laboratorio segreto (oggi solo il palazzo, da riempire) e, con il codice sulla pulsantiera, il nostro back office |
+| LG | `/lg` | notte | il laboratorio segreto (oggi solo il palazzo, da riempire) |
+| SL | `/lg/room` | notte | **Secret lab**: il nostro back office, piano segreto sotto LG, con il codice sulla pulsantiera. In testata "SL · Secret lab", nessun quadratino acceso |
 
 Systems è al 02 e Brand al 03: scendere vuol dire entrare, e i sistemi sono il lavoro che vogliamo vendere di più.
 Fuori dal palazzo: `/privacy`.

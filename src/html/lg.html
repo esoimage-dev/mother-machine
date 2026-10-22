@@ -1255,7 +1255,7 @@ var HDR=(function(){var b=$('dispB'),N=$('bN'),A=$('bA'),L=$('bL'),K=[].slice.ca
   function label(){roll(L,op?'Close':hv?'All floors':nm,op||hv?1:-1)}
   function lit(k){K.forEach(function(i,j){i.classList.toggle('lit',j===5-k)})}
   function aria(){b.setAttribute('aria-label',(op?'Close the floors panel':'Floors: you are on '+two(fl)+', '+nm+'. Open the floors panel'))}
-  lit(5);
+  lit(fl);
   if(fine){b.addEventListener('pointerenter',function(){hv=true;label()});b.addEventListener('pointerleave',function(){hv=false;label()})}
   return {
     floor:function(k,name){if(k!==fl)roll(N,two(k),k>fl?1:-1);fl=k;nm=name;lit(k);if(!op&&!hv)roll(L,name,1);aria()},
