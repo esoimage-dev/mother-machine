@@ -1,90 +1,149 @@
-# Mother Machine · passaggio al sito vero
+# Mother Machine · il file unico del progetto
 
-Pacchetto del 15 ottobre 2026. Contiene tutto quello che serve per costruire mothermachine.studio partendo dal prototipo approvato. Chi lavora su questo progetto legge prima questo file.
+Chi lavora su questo progetto (una persona o un Claude, anche su un altro account) legge **solo questo file** e sa
+come muoversi: cosa è il sito, come è fatto, le regole, cosa è fatto, cosa manca e in che ordine. Si aggiorna qui e
+basta: si spunta quello che è fatto, si scrive quello che si decide diversamente, si aggiunge quello che nasce.
+Ultimo aggiornamento: 23 ottobre 2026.
 
-## Regole di lavoro (sempre)
-- Rispondere a Eso in italiano. Testi del sito in inglese internazionale: frasi corte, parole semplici, niente gergo da agenzia.
-- **Mai il trattino lungo** (il carattere U+2014), in nessun testo, codice, commento o messaggio. Solo il trattino corto "-" per orari o parole composte.
-- Critica brutale ma bilanciata, da PM, art director e senior designer. Discutere prima in chat quando una scelta cambia contenuti o struttura; non inventare voci, servizi o idee non richieste.
-- Non toccare ciò che è approvato (hero, testata, pulsantiera, cursore, vetro). Portarlo nel sito identico.
-- Tutto leggero e tecnicamente impeccabile: 60 fps, niente backdrop-filter dal vivo su aree grandi, animazioni ferme quando fuori schermo, prefers-reduced-motion rispettato.
-- Fare sempre copie prima di sovrascrivere. Nel sito vero la copia è la storia di git: un commit per ogni passo chiaro.
-- **Push raggruppati** (deciso da Eso il 21 ottobre): Cloudflare Pages gratis fa 500 build al mese e ogni push su qualsiasi branch è un build. Commit piccoli sì, ma push solo quando c'è un blocco di modifiche da vedere (non uno per commit). Su `main` si porta solo a tappe chiare, con l'ok di Eso: anche quello è un build. Per andare veloci (deciso il 21 ottobre): insieme al push sul branch si apre subito la pull request verso `main`; Eso guarda l'anteprima e la unisce lui.
+---
+
+## 1 · Regole di lavoro (sempre)
+- Rispondere a Eso **in italiano**, corto e schematico: un passo alla volta, percorsi esatti, niente spiegoni.
+  Testi del sito in **inglese internazionale**: frasi corte, parole semplici, niente gergo da agenzia.
+- **Mai il trattino lungo** (il carattere U+2014), in nessun testo, codice, commento o messaggio. Solo "-".
+- Ragionare da **PM, art director e senior designer**: critica brutale ma bilanciata. Sito snello, navigabile,
+  con personalità. **Niente doppioni** (se una cosa è già in home, non si ripete identica in un'altra pagina).
+- Discutere prima in chat quando una scelta cambia contenuti o struttura. Non inventare servizi o voci non richieste.
+- **Numeri:** quelli dei clienti li decide Eso (possono essere forti, è marketing, ma li dà o li approva lui).
+  Niente premi dei clienti come se fossero nostri.
+- Verificare sempre con **screenshot a schermo intero**, computer (1440) e telefono (390), prima di dire "fatto".
+- **Git:** commit piccoli, uno per passo chiaro. **Push raggruppati** (Cloudflare gratis: 500 build al mese, ogni push
+  è un build). Con il push sul branch si apre subito la **pull request verso `main`**: Eso guarda l'anteprima e la unisce lui.
+  Il push diretto su `main` non si fa (lo blocca anche il sistema).
+- **Mai segreti nella repository** (codici, chiavi). Stanno solo su Cloudflare. `.dev.vars` è ignorato da git.
 - Non esportare MP4 se non richiesto.
 
-## Cosa c'è nel pacchetto
-- `prototipo/home.html` · **la verità visiva**. La home approvata col nuovo ritmo, file unico. Il sito vero deve essere identico a questo, pixel per pixel.
-- `prototipo/manuale.html` · il manuale del marchio v39 (anche pubblicato: https://claude.ai/artifact/NY2gm7L3Pkwr3PxpDktNk4). Colori, tipografia, piani, linguaggio, componenti, le sei animazioni.
-- `sorgenti/` · i pezzi da cui è montata la home. I file Python (`mkHero.py`, `mkH.py`, `mkF38.py`) usano percorsi assoluti del vecchio ambiente: servono come riferimento di **come** si montano i pezzi, non vanno rieseguiti.
-  - `hero/h3.*` · 05.1 apertura al buio: frase che respira (Hanken variabile, peso dal cursore), bottone Start a project, finestra del film.
-  - `hero/h3_s2.*` · Work: tre progetti.
-  - `hero/h3_s3.html` + `glass.css/js` · What we build: scena vetro caldo, due card Systems e Brand.
-  - `hero/h3_s5.*` + `micro6.js` · In motion: le sei animazioni in vetro freddo (`micro6.js` sono le animazioni pure, `h3_s5.js` le contiene già con il campo animato).
-  - `hero/hdr.*` · la testata. `hero/flr.*` · la pulsantiera. `hero/cur.*` · il cursore.
-  - `hero/bianco.css` · fondo bianco di default.
-  - `home/home.tpl` · lo scheletro della home (testata, sezioni How we work e porta verso G, footer, l'ascensore tra i piani). Il blocco `/*LIFTJS*/` e `SITE` vengono da `manuale/manual.tpl`.
-  - `manuale/` · sorgenti del manuale (`manual_v2r39.tpl` è l'ultimo).
-  - `base/base.css` · token di colore per "luce" (`data-luce`), tipografia, griglia. `base/assets.json` · immagini e marchio (base64). `base/letter2.json` · i numeri dei piani nel lettering del marchio (SVG).
-  - `film/` · il film del marchio (`mm.js`, `mmv.js`, `snd.js`, `logoparts.json`).
-  - `fonts/` · Hanken Grotesk variabile (100-900), DM Mono 400 e 500, Gloock 400.
+## 2 · Accessi che servono
+- **GitHub:** `esoimage-dev/mother-machine`. `main` = produzione. Branch di lavoro attuale: `claude/keen-franklin-rxhwha`.
+  Se la sua pull request è già stata unita, si riparte dal `main` aggiornato con lo stesso nome di branch.
+- **Cloudflare** (account di Eso): Workers & Pages → progetto `mother-machine`.
+  - Ogni push su `main` pubblica su **mothermachine.studio** e www (1-3 minuti).
+  - Ogni push su un altro branch pubblica un'anteprima: `https://<branch con i trattini>.mother-machine.pages.dev`
+    (oggi `https://claude-keen-franklin-rxhwha.mother-machine.pages.dev`).
+  - Segreti già impostati (Production e Preview): `MM_DOOR_CODE`, `MM_DOOR_KEY` (la porta di LG).
+  - Email Routing: hello@mothermachine.studio → mothermachine.studio@gmail.com (il Gmail dello studio, non quello di Eso).
+- **Dominio:** comprato su GoDaddy, nameserver su Cloudflare. Online dal 21 ottobre.
+- Note dall'ambiente cloud di Claude: i siti `pages.dev` e mothermachine.studio di solito non si aprono da lì;
+  il controllo dal vivo lo fa Eso. npm funziona; CDN esterni e Google Fonts no (i font si prendono con `npm pack @fontsource/...`).
 
-## Il sito: un palazzo
+## 3 · Come è fatto il sito (tecnica)
+- **Astro, uscita statica**, su Cloudflare Pages. Ma le pagine **non si scrivono a mano in Astro**:
+  1. `prototipo/*.html` sono le pagine approvate (la verità visiva).
+  2. `python3 scripts/monta-pagine.py` le prende, applica tutti i ritocchi decisi con Eso e scrive `src/html/*.html`.
+     **Ogni modifica a una pagina si fa in `monta-pagine.py`** (o nei file che usa), mai in `src/html` a mano:
+     verrebbe sovrascritta. Il file usa `una(t, vecchio, nuovo, nome)`, che si ferma se il pezzo non c'è una volta sola.
+  3. `src/pages/[...slug].html.ts` serve le pagine (qui si aggiungono gli indirizzi nuovi).
+  4. `npm run build` costruisce in `dist/`; `npx astro preview --port 4321` per vederlo in locale.
+- **Pezzi in `src/sezioni/`:** `lavori-home.html` (la striscia dei lavori in home), `work.html` (pagina 04), `lg.html`.
+- **CSS e JS per pagina** in `public/css` e `public/js`: `home.css/js` (striscia lavori, selettore, cursore di trascinamento),
+  `progetto.css/js` (pagine progetto, demo, fasce), `work.css/js`, `mr.css/js` (LG). `mm-sito.*` comuni.
+- **Pagine progetto:** in `monta-pagine.py` il dizionario `CASI` (una voce per lavoro) e la funzione `caso()` montano
+  copertina, demo, cosa abbiamo fatto, numeri, prima e dopo, fasce tipografiche, marchio, galleria, Next.
+  Per un lavoro nuovo: una voce in `CASI`, una in `PAGINE`, `META`, `CORRENTE`, l'indirizzo in `[...slug].html.ts` e `public/sitemap.xml`.
+- **Demo dal vivo** (il codice vero dei clienti con dati inventati): `public/demo/vitalias` e `public/demo/ristorante`,
+  generate da `scripts/demo-vitalias.py` e `scripts/demo-ristorante.py` partendo dai repository dei clienti
+  (`vitalias-pizza-on-wheels`, `vitalia-restaurant`, sola lettura). Un server finto nel browser (`scripts/demo/*-api.js`)
+  risponde al posto delle loro funzioni; i dati stanno nel browser e si rifanno ogni giorno. Niente dati veri,
+  niente chiavi dei clienti, telefoni e WhatsApp spenti.
+- **`public/_worker.js`:** il piccolo server del sito. Fa la porta di LG (`/api/porta`, cookie firmato), protegge
+  `/lg/room`, e finché `PRIMA_DEL_LANCIO = true` dice a Google di non indicizzare.
+- **Icone:** quelle dei lavori nel selettore le abbiamo disegnate noi; spunta, mezzo cerchio e stellina sono Phosphor (MIT).
+- Altri file: `prototipo/manuale.html` (manuale del marchio), `sorgenti/` (pezzi originali, solo riferimento),
+  `Approvati/` (archivio), `docs/archivio/` (vecchi piani, superati da questo file).
+
+## 4 · Il sito: un palazzo
 Ogni pagina è un piano. Si naviga con la pulsantiera (il menu) e si scende come in ascensore.
 
-| Piano | Nome | Luce (fondo) | Cosa c'è |
+| Piano | Indirizzo | Luce | Cosa c'è |
 |---|---|---|---|
-| 05 | Home | notte, poi bianco | apertura al buio, poi le sezioni 05.2-05.5 |
-| 04 | Work | notte | i progetti, ognuno con la sua pagina. **Niente numeri ai progetti per ora** (deciso da Eso il 21 ottobre: con pochi lavori i numeri fanno vedere quanto sono pochi) |
-| 03 | Brand | bianco (carta) | il fuori: identità, siti e app, negozi online, art direction, grafica |
-| 02 | Systems | grigio macchina | il dentro: software, gestionali, app in codice, CMS, automazioni, AI privata |
-| 01 | Studio | rosa | chi siamo, metodo Survey, Build, Run |
-| G | Contact | rosa | "Tell us what slows you down." Modulo ordine di lavoro. Primo incontro gratuito |
-| LG | Machine Room | notte | il nostro back office (sistema No. 001), solo con la chiave |
+| 05 | `/` | notte, poi bianco | apertura, lavori, What we build, How we work, In motion, porta verso G |
+| 04 | `/work` | notte | l'elenco dei lavori. Pagine: `/work/vitalias-pizza-on-wheels`, `/work/vitalias-restaurant` |
+| 03 | `/brand` | bianco | il fuori: identità, siti e app, negozi online, art direction, grafica |
+| 02 | `/systems` | grigio macchina | il dentro: software, gestionali, app, CMS, automazioni, AI privata |
+| 01 | `/studio` | rosa | chi siamo, metodo Survey, Build, Run |
+| G | `/contact` | rosa | "Tell us what slows you down." Il modulo (ordine di lavoro). Primo incontro gratis |
+| LG | `/lg` → `/lg/room` | notte | la porta dello staff (codice sulla pulsantiera) e il nostro back office, la Machine Room |
 
-**Systems è al 02 e Brand al 03 (deciso il 15 ottobre).** Scendere vuol dire entrare: il piano più vicino alla machine room è quello dei sistemi. Il lavoro che vogliamo vendere di più sono i sistemi.
+Systems è al 02 e Brand al 03: scendere vuol dire entrare, e i sistemi sono il lavoro che vogliamo vendere di più.
+Fuori dal palazzo: `/privacy`.
 
-## La home approvata, in ordine
-- **05.1 Apertura** (notte): "The machine behind your business." su tre righe, Start a project, "Free first call.", film in finestra (muto, al clic tutto schermo con musica). Non si tocca.
-- **05.2 What we build** (vetro caldo, il momento "mother"): titolo "One studio. The inside and the outside." Due card:
-  - **Systems** · Floor 02 · "Inside · custom software" · *The tools your company runs on.*
-    Custom software (Code · built to fit) / Back offices and CRM (Dashboards · clients · orders) / Apps and portals (iOS · Android · client areas) / CMS and catalogues (Content · products · stock) / Automations (Workflows · APIs · integrations). Riquadro "AI inside": We don't plug AI in. We build it in. Private AI that runs on your own machines.
-  - **Brand** · Floor 03 · "Outside · identity" · *So the company looks as good as it runs.*
-    Brand identity (Mark · system · guidelines) / Websites and apps (UI · UX · design systems) / Online shops (Storefronts · product pages) / Art direction (Look · tone · consistency) / Visual design (Layouts · print · graphics).
-  - Queste voci sono ciò che lo studio fa davvero. Niente social, niente packaging, niente shooting o video, niente 3D. Animazioni solo semplici, in codice: non le vendiamo come servizio.
-- **05.3 Work** (bianco): tre progetti (oggi concept: Birrificio Mare, Forno Nove, Lumen Lab), "See all work".
-- **05.4 In motion** (vetro freddo): "Six things we build. Watch them work." Gruppo 03 Brand (Brand identity, Apps and websites, Ecommerce) poi gruppo 02 Systems (Management systems, Custom software, Automation). L'ordine resta così: leggero sopra, peso sotto, e scende come l'ascensore.
-- **05.5 How we work** (bianco).
-- **G** porta verso Contact (rosa).
+## 5 · Regole di design (approvate, non si toccano)
+- **Non toccare** l'apertura della home, la testata, la pulsantiera, il cursore, il vetro: si portano identici.
+- **Pomodoro #FF5B3A** solo su ciò che si muove o risponde. Mai titoli, testo o fondi.
+- Colori: bianco #FBFAF7, carta #F4F2EC, inchiostro #121211, grigio macchina #BEC2BF, notte #0F0F0E, rosa pelle #F2CDBE.
+- Caratteri: Hanken Grotesk (variabile), DM Mono, Gloock.
+- Due linguaggi: "machine" squadrato, "mother" vetro e gradiente. Il vetro al massimo in due momenti per pagina,
+  caldo e freddo, mai uno dopo l'altro. **Tecnica del vetro:** una copia sfocata ferma di quello che sta sotto,
+  **mai backdrop-filter dal vivo** su aree grandi.
+- Testata: numero del piano, nome, colonna di sei quadratini. Niente hamburger.
+- **Bottoni pieni:** al passaggio il pomodoro sale e riempie tutto il bottone. Bottoni dei piani: bordo acceso e anello,
+  chiamati lampeggiano pomodoro. Cursore: quadrato pieno; sulla presa cornice con luce pomodoro; sopra la striscia dei
+  lavori cornice grande con due frecce (trascinando si stira).
+- Tutto leggero: 60 fps, animazioni ferme fuori schermo, `prefers-reduced-motion` rispettato.
 
-## Regole di design
-- **Pomodoro #FF5B3A** solo su ciò che si muove o risponde (punto che lampeggia, bottone chiamato, cursore che prende). Mai titoli, testo o fondi. La freccia della corsa nella testata è nera.
-- Bianco #FBFAF7 fondo di default; carta #F4F2EC superficie calda; inchiostro #121211; grigio macchina #BEC2BF; notte #0F0F0E; rosa pelle #F2CDBE.
-- Due linguaggi: "machine" squadrato, "mother" vetro e gradiente. Il vetro compare al massimo in due momenti per pagina, caldo e freddo, mai uno dopo l'altro.
-- **Tecnica del vetro** (non cambiarla): un campo su una tela piccola (circa 160 px di larghezza) ridisegnata con `ctx.filter` blur; ogni scheda ha una sua tela `.gcopy`/`.vcopy` con la fetta sfocata del campo. Niente backdrop-filter dal vivo (portava a 35 fps). Campo di 05.4 a 30 fps, fermo fuori schermo (IntersectionObserver).
-- Testata: numero del piano (solo il piano, mai "05.1"), nome, colonna di sei quadratini. Niente hamburger.
-- Pulsantiera: vetro scuro, quattro viti, bottoni quadrati col numero, piano corrente retroilluminato, LG con la chiave ("Staff only", "Not without the key.", "Going down.", "You found it.").
-- Cursore: quadrato pieno; sulla presa diventa cornice con luce pomodoro.
-- **Bottoni pieni** (deciso il 19 ottobre): al passaggio il pomodoro sale e riempie **tutto** il bottone, nessun bordo scuro resta. È la stessa logica del bottone dell'apertura e vale ovunque, per ogni bottone nuovo.
-- **Bottoni dei piani** (pulsantiera e footer): al passaggio il bordo si accende e dentro compare l'anello; chiamati, l'anello lampeggia pomodoro. Stessa logica ovunque ci sia un bottone di piano.
-- **Cursore sopra il pomodoro**: il quadratino interno diventa nero nella parte che sta sopra l'arancione (anche solo in parte, mentre il riempimento sale).
+## 6 · Decisioni prese (non si rimettono in discussione senza Eso)
+- **Lavori:** solo quelli dei clienti. **Mai i nostri progetti** (Mother Machine, Machine Room) tra i lavori.
+  Veri oggi: Vitalia's Pizza on Wheels (catering) e Vitalia's Restaurant, Cairns. Birrificio Mare e Forno Nove sono
+  segnaposto dichiarati ("Study", "Case study soon"), finché non arrivano lavori veri. Lumen Lab tolto.
+- **Niente numeri di serie ai progetti** (No. 012, Study 03): con pochi lavori mostrano quanto sono pochi.
+- **"Cairns, Australia" si mostra** sui lavori (domani ci saranno altre città).
+- **Home:** subito dopo l'apertura la striscia orizzontale dei lavori (schede con la macchina che lavora in piccolo,
+  selettore sotto, si trascina; lo scroll verticale resta libero). L'ultima scheda è "Your business, next."
+- **Work (04):** solo l'elenco, snello. Le schede grandi stanno in home: non si ripetono.
+- **Pagine progetto:** demo vera (Guest/Owner, computer e telefono), poi le fasce tipografiche problema → soluzione,
+  poi cosa abbiamo fatto, numeri, marchio, galleria, Next.
+- Ristorante: niente premi; numeri +180% (function), +35% (spesa per ospite), 60% (richieste fuori orario) decisi da Eso.
+- **LG** non è più un elenco di servizi: le sue animazioni migliori passano in Systems; LG resta la porta dello staff.
+- Lingue del sito: EN, IT, ES, FR (targhetta in fondo alla pulsantiera).
+- Contatti: niente mail diretta né WhatsApp come canale, tutto passa dal modulo.
+- Privacy: niente cookie di tracciamento, nessun banner.
 
-## Il piano di costruzione
-**Stack:** Astro (output statico) su Cloudflare Pages. Repository GitHub `esoimage-dev/mother-machine`, Cloudflare pubblica a ogni push. Poi Workers + D1 + R2 + Access per modulo contatti e back office, tutto nel piano gratuito. Dominio mothermachine.studio comprato su GoDaddy, nameserver su Cloudflare e sito online dal 21 ottobre 2026 (`main` è la produzione; fuori da Google finché `PRIMA_DEL_LANCIO` in `public/_worker.js` è true). Email: hello@mothermachine.studio arriva con Cloudflare Email Routing al Gmail dello studio (mothermachine.studio@gmail.com, non quello personale di Eso); invio come hello@ con Resend.
+## 7 · Stato (fatto)
+- [x] Sito online su mothermachine.studio (fuori da Google finché `PRIMA_DEL_LANCIO` è true).
+- [x] Dominio, posta in entrata su hello@.
+- [x] Home con la striscia dei lavori, icone, vetro, notifiche, selettore, cursore di trascinamento.
+- [x] Pagine Vitalia's Pizza on Wheels e Vitalia's Restaurant con demo vere, numeri, fasce.
+- [x] Pagina Work (04) senza numeri di serie, solo elenco (pull request #5, da unire).
+- [x] Porta di LG con il codice sul server.
 
-**Perché Astro:** non riscrive niente. CSS e JS del prototipo si spostano così come sono, divisi in componenti (`Header.astro`, `Floors.astro`, `Cursor.astro`, una sezione per file). Ogni piano diventa una pagina vera con il suo indirizzo (Google, link condivisibili). Font e immagini diventano file in cache, non base64. Il film si carica solo quando serve.
+## 8 · Scaletta (in ordine)
+1. [ ] **Contact vero.** Modulo → ordine salvato (Cloudflare D1) → anti spam (Turnstile) → mail di conferma al cliente
+   e avviso a noi (Resend) → scelta dell'orario e link a una stanza Daily standard. Senza questo il sito non prende clienti.
+   Dettaglio del percorso (numeri d'ordine, quattro mail, orari): `docs/archivio/percorso-contatto.md`.
+2. [ ] **Systems assorbe LG.** Le animazioni migliori di LG dentro Systems, più la riga sulla sicurezza
+   ("i tuoi dati sono al sicuro": accessi, backup, dati sul tuo server). LG torna solo porta dello staff.
+3. [ ] **Brand e Studio.** Testi più corti, una demo protagonista per piano, Studio in tre parti (Survey, Build, Run),
+   un solo "free" in tutto il sito, via i doppioni. Io propongo, Eso approva.
+4. [ ] **Legale e Google.** Privacy con chi raccoglie i dati e hello@; titoli e descrizioni; anteprime social (Open Graph).
+5. [ ] **Lancio.** `PRIMA_DEL_LANCIO = false`, repository privata, Rate Limiting su `/api/porta`, controllo su tutti i dispositivi.
+6. [ ] **Dopo il lancio:**
+   - Machine Room vera (ordini, risposte, preventivi, call) con Cloudflare Access davanti.
+   - **Fatture automatiche:** dal preventivo accettato nasce la fattura (tax invoice con ABN, GST se serve), PDF numerato,
+     mandata al cliente, segnata pagata o da pagare. Eso non le scrive più a mano.
+   - **Risponditore di mail intelligente:** legge le mail su hello@, prepara la risposta nel nostro tono; le semplici
+     partono da sole, le altre restano in bozza da approvare con un tocco.
+   - Stanza Daily vestita Mother Machine, pagina "Your call is confirmed", promemoria.
+   - Posta in uscita come hello@ (Resend e "Invia come" nel Gmail).
+   - Poi: il gioco di LG, animazioni allo scroll, film nuovo, footer ripensato.
 
-**Passi:**
-1. Scheletro Astro, font in `public/fonts`, `base.css` come CSS globale, `data-luce` sul body di ogni pagina.
-2. Header, pulsantiera, cursore come componenti persistenti tra le pagine.
-3. Home sezione per sezione, confrontando sempre con `prototipo/home.html` (screenshot affiancati a 1440, 1100 e 390 px).
-4. L'ascensore tra i piani con le View Transitions di Astro: la testata resta ferma, il contatore gira, la corsa è quella del prototipo. È il punto più delicato: confrontarlo col prototipo finché è identico.
-5. Pagine segnaposto per 04, 03, 02, 01, G, LG con la luce giusta, poi disegnarle una alla volta (prima Work e la pagina progetto).
-6. Contact: modulo con Worker e Resend.
-7. Privacy policy, ABN nel footer, meta e testi per Google, Open Graph.
+## 9 · Da fare per Eso (quando può)
+- [ ] Rendere **privata** la repository GitHub (Settings → Change visibility → Private). Oggi è pubblica.
+- [ ] Creare gli account **Resend** (mail) e **Daily** (videochiamate), gratis, per il Contact.
+- [ ] Parlare insieme della **parte aziendale e fiscale**: ABN australiano o struttura in più paesi, come fatturare oggi
+  (prima del back office), GST, nome legale. L'ABN serve comunque sulle fatture; sul sito basta dire chi raccoglie i dati e hello@.
 
-## Cosa manca ancora
-- Pagine interne: Work e pagina progetto, Systems, Brand, Studio, Contact.
-- Progetti reali (oggi concept) o dichiararli come studi.
-- Privacy policy, ABN, testi SEO.
-- Machine Room: un gestionale vero, progetto a parte.
-- Etichette in alto delle card ("Inside · custom software", "Outside · identity"): da rivedere se serve.
+## 10 · Testi e decisioni aperte (da approvare con Eso)
+- Testi di LG e Systems dopo la fusione.
+- Riga privacy sotto il bottone d'invio di Contact.
+- Brand apre al buio, il manuale lo vuole bianco.
+- Apertura della home: citofono su telefono e versione B su desktop, per ora; si rivede.
