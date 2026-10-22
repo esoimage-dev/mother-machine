@@ -46,7 +46,7 @@ Ultimo aggiornamento: 23 ottobre 2026.
   4. `npm run build` costruisce in `dist/`; `npx astro preview --port 4321` per vederlo in locale.
 - **Pezzi in `src/sezioni/`:** `lavori-home.html` (la striscia dei lavori in home), `work.html` (pagina 04), `systems-notte.html`, `lg.html`.
 - **CSS e JS per pagina** in `public/css` e `public/js`: `home.css/js` (striscia lavori, selettore, cursore di trascinamento),
-  `progetto.css/js` (pagine progetto, demo, fasce), `systems.css/js` (turno di notte, registro di bordo), `work.css/js`, `mr.css/js` (LG). `mm-sito.*` comuni.
+  `progetto.css/js` (pagine progetto, demo, fasce), `systems.css/js` (turno di notte, registro di bordo), `brand.css/js` (apertura, tre stili dei controlli), `work.css/js`, `mr.css/js` (LG). `mm-sito.*` comuni.
 - **Pagine progetto:** in `monta-pagine.py` il dizionario `CASI` (una voce per lavoro) e la funzione `caso()` montano
   copertina, demo, cosa abbiamo fatto, numeri, prima e dopo, fasce tipografiche, marchio, galleria, Next.
   Per un lavoro nuovo: una voce in `CASI`, una in `PAGINE`, `META`, `CORRENTE`, l'indirizzo in `[...slug].html.ts` e `public/sitemap.xml`.
@@ -124,7 +124,10 @@ Fuori dal palazzo: `/privacy`.
 2. [x] **Systems assorbe LG** (23 ottobre). In Systems: la sezione "Night shift" (il turno di notte) e il registro di
    bordo dentro "Built properly", con il controllo di sicurezza; "Safe" dice che i dati stanno sul server del cliente.
    LG ora è solo la sezione del palazzo e la porta dello staff: le altre sue macchine erano doppioni e sono state tolte.
-3. [ ] **Brand e Studio.** Testi più corti, una demo protagonista per piano, Studio in tre parti (Survey, Build, Run),
+3. [~] **Brand** (24 ottobre): apertura compatta (titolo e leva a sinistra, la macchina a destra) e i controlli in tre
+   stili (Minimal, Friendly, Editorial) che cambiano anche il modo d'uso, non solo il colore: mostra che facciamo design
+   system di pezzi funzionali. Le altre idee di Eso per Brand: da sentire.
+   **Brand e Studio, resto:** Testi più corti, una demo protagonista per piano, Studio in tre parti (Survey, Build, Run),
    un solo "free" in tutto il sito, via i doppioni. Io propongo, Eso approva.
 4. [ ] **Legale e Google.** Privacy con chi raccoglie i dati e hello@; titoli e descrizioni; anteprime social (Open Graph).
 5. [ ] **Lancio.** `PRIMA_DEL_LANCIO = false`, repository privata, Rate Limiting su `/api/porta`, controllo su tutti i dispositivi.
@@ -144,7 +147,15 @@ Fuori dal palazzo: `/privacy`.
 - [ ] Parlare insieme della **parte aziendale e fiscale**: ABN australiano o struttura in più paesi, come fatturare oggi
   (prima del back office), GST, nome legale. L'ABN serve comunque sulle fatture; sul sito basta dire chi raccoglie i dati e hello@.
 
-## 10 · Testi e decisioni aperte (da approvare con Eso)
+## 10 · Messe da parte (da rivedere con Eso quando rifacciamo Systems)
+Grafiche tolte da LG il 23 ottobre, salvate nella storia di git (commit prima di `0e61a94`, file `src/sezioni/lg.html`,
+`public/js/mr.js`, `public/css/mr.css`) e in `prototipo/`:
+- Switchboard: i pacchetti che viaggiano dagli strumenti (pagamenti, shop, mail, calendario) al back office.
+- AI privata: il chip con le celle che si accendono a onde.
+- Work orders: il nastro Survey, Build, Run con le scatole.
+- Register: la lista dei lavori (aveva i numeri di serie).
+
+## 11 · Testi e decisioni aperte (da approvare con Eso)
 - Testi di LG e Systems dopo la fusione.
 - Riga privacy sotto il bottone d'invio di Contact.
 - Brand apre al buio, il manuale lo vuole bianco.

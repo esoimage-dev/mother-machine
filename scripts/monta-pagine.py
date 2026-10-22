@@ -365,6 +365,17 @@ def sistemi(t):
             '<b>Safe</b><p>Your data stays on your server. Access by role, every change logged, backups every day.</p>', 'sicurezza')
     return t
 
+
+def marchio(t):
+    """03 Brand (24 ottobre, con Eso): apertura compatta (lo stile sta in brand.css) e i controlli in tre stili."""
+    t = una(t, '<div class="ctlg gl gl-c">',
+            '<div class="sty"><span class="mo">Same controls, three brands</span><div class="styb" role="radiogroup" aria-label="Style of the controls">'
+            '<button type="button" role="radio" aria-checked="true" data-s="minimal"><span class="fl" aria-hidden="true"></span>Minimal</button>'
+            '<button type="button" role="radio" aria-checked="false" tabindex="-1" data-s="friendly"><span class="fl" aria-hidden="true"></span>Friendly</button>'
+            '<button type="button" role="radio" aria-checked="false" tabindex="-1" data-s="editorial"><span class="fl" aria-hidden="true"></span>Editorial</button>'
+            '</div></div>\n    <div class="ctlg gl gl-c">', 'stili dei controlli')
+    return t
+
 def ritocchi(nome, t):
     """Modifiche decise con Eso sopra le pagine approvate (19 ottobre 2026)."""
     # footer: l'elenco del palazzo (ridisegnato il 19 ottobre), generato qui per ogni pagina
@@ -713,6 +724,9 @@ def monta(nome, src):
 
     if nome == 'home':
         t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/home.css">', 'stile home')
+    if nome == 'brand':
+        t = marchio(t)
+        t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/brand.css">', 'stile brand')
     if nome == 'systems':
         t = sistemi(t)
         t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/systems.css">', 'stile systems')
@@ -721,7 +735,7 @@ def monta(nome, src):
 
     # 6. coda
     i = t.rfind('</body>')
-    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>', 'systems': '<script src="/js/systems.js"></script>', 'progetto': '<script src="/js/progetto.js"></script>', 'ristorante': '<script src="/js/progetto.js"></script>'}.get(nome, '')
+    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>', 'systems': '<script src="/js/systems.js"></script>', 'brand': '<script src="/js/brand.js"></script>', 'progetto': '<script src="/js/progetto.js"></script>', 'ristorante': '<script src="/js/progetto.js"></script>'}.get(nome, '')
     t = t[:i] + coda + t[i:] if i > 0 else t + coda
     (OUT / f'{nome}.html').write_text(t, encoding='utf8')
     return luce
