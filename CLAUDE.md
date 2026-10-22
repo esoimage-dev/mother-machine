@@ -11,7 +11,7 @@ Ultimo aggiornamento: 25 ottobre 2026 (passaggio a un altro account Claude: legg
 - **Tutto il lavoro è su `main`** (ultima pull request: #8, da unire se non lo è già). Si lavora sul branch `claude/keen-franklin-rxhwha`
   ripartendo ogni volta dal `main` aggiornato, o su un branch nuovo: con il push si apre la pull request e Eso la unisce. Anteprima: `https://claude-keen-franklin-rxhwha.mother-machine.pages.dev`.
 - **Prossimi passi, in ordine** (lavorare con pochi token, niente stravolgimenti, proporre in chat prima di toccare):
-  1. **Studio (01):** testi più corti, tre parti (Survey, Build, Run), via i doppioni. Proporre i testi in chat, poi una modifica sola.
+  1. **Studio (01):** testi più corti, via i doppioni. La struttura resta (chi siamo, come lavoriamo, con chi parli): Survey, Build, Run sta solo in home, in Studio sarebbe un doppione. Proporre i testi in chat, poi una modifica sola.
   2. **Contact (G):** il modulo vero (vedi sezione 8, punto 1). Eso sta creando gli account **Resend** e **Daily**
      (gratis: Resend 3.000 mail al mese, 100 al giorno; Daily circa 10.000 minuti-partecipante al mese, da verificare
      sulle loro pagine prezzi). Le chiavi API **non** vanno in chat né nella repository: Eso le mette su Cloudflare come
@@ -111,7 +111,7 @@ Ogni pagina è un piano. Si naviga con la pulsantiera (il menu) e si scende come
 | 04 | `/work` | notte | l'elenco dei lavori. Pagine: `/work/vitalias-pizza-on-wheels`, `/work/vitalias-restaurant` |
 | 03 | `/brand` | bianco | il fuori: identità, siti e app, negozi online, art direction, grafica |
 | 02 | `/systems` | grigio macchina | il dentro: software, gestionali, app, CMS, automazioni, AI privata |
-| 01 | `/studio` | rosa | chi siamo, metodo Survey, Build, Run |
+| 01 | `/studio` | rosa | chi siamo, come lavoriamo, con chi parli |
 | G | `/contact` | rosa | "Tell us what slows you down." Il modulo (ordine di lavoro). Primo incontro gratis |
 | LG | `/lg` | notte | il laboratorio segreto (oggi solo il palazzo, da riempire) |
 | SL | `/lg/room` | notte | **Secret lab**: il nostro back office, piano segreto sotto LG, con il codice sulla pulsantiera. In testata "SL · Secret lab", nessun quadratino acceso |
@@ -176,7 +176,7 @@ Fuori dal palazzo: `/privacy`.
    animare più avanti**. Ordine deciso da Eso (25 ottobre): apertura, controlli, carattere ("One word, four typefaces."),
    sistema, cosa facciamo. L'apertura ha una scheda prodotto vera (pagnotta, prezzo, quantità, bottone) e non si taglia mai.
    Cambiando stile cambiano solo i comandi: etichette e righe sotto restano uguali (deciso da Eso).
-   **Studio, resto:** testi più corti, Studio in tre parti (Survey, Build, Run), un solo "free" in tutto il sito,
+   **Studio, resto:** testi più corti (struttura com'è, niente Survey, Build, Run: sta in home), "free" una volta prima di Contact e una in Contact,
    via i doppioni. Si propone in chat, Eso approva.
 4. [ ] **Legale e Google.** Privacy con chi raccoglie i dati e hello@; titoli e descrizioni; anteprime social (Open Graph).
 5. [ ] **Lancio.** `PRIMA_DEL_LANCIO = false`, repository privata, Rate Limiting su `/api/porta`, controllo su tutti i dispositivi.
