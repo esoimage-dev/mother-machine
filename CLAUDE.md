@@ -130,7 +130,8 @@ Fuori dal palazzo: `/privacy`.
    stile trasforma i comandi; Minimal: Saved nero con spunta, Deleted rosso; l'apertura parte da sola a ciclo, strati in
    vetro, i quattro passi si accendono; il carattere a quattro voci (la quarta: Unbounded) con la parola "Mother";
    sezione nuova "The system" (segno su griglia, icone, scala del carattere, colori, spazio): **bozza statica, da
-   animare più avanti**. Ordine: apertura, carattere, controlli, sistema, cosa facciamo (i due vetri non si toccano).
+   animare più avanti**. Ordine deciso da Eso (25 ottobre): apertura, controlli, carattere ("One word, four typefaces."),
+   sistema, cosa facciamo. L'apertura ha una scheda prodotto vera (pagnotta, prezzo, quantità, bottone) e non si taglia mai.
    **Brand e Studio, resto:** Testi più corti, una demo protagonista per piano, Studio in tre parti (Survey, Build, Run),
    un solo "free" in tutto il sito, via i doppioni. Io propongo, Eso approva.
 4. [ ] **Legale e Google.** Privacy con chi raccoglie i dati e hello@; titoli e descrizioni; anteprime social (Open Graph).

@@ -258,3 +258,50 @@
   .bsc span{display:none}
 }
 @media (prefers-reduced-motion:reduce){.ctlg.m-out .cel>*:nth-child(2),.ctlg.m-in .cel>*:nth-child(2){animation:none}}
+
+/* ===== apertura, 25 ottobre sera: niente tagli in nessuna fase, e lo schermo d'esempio e' una vera scheda prodotto ===== */
+.brhero .xstage{overflow:visible}
+.brhero .xs{transform:translateY(calc(var(--t)*4%)) rotateX(calc(var(--t)*52deg)) rotateZ(calc(var(--t)*-32deg)) scale(calc(1 - var(--t)*.2))}
+.brhero .xlab{display:none!important}
+/* la scheda: carta calda, foto della pagnotta, testo, prezzo, quantita' e bottone */
+.brhero .l1{background:linear-gradient(170deg,#FBF4EA,#F1E4D2);box-shadow:0 30px 60px -28px rgba(0,0,0,.7);justify-content:flex-end;padding:0 18px 16px}
+.brhero .l1 .sw{width:18px;height:18px}
+.brhero .l2{background:repeating-linear-gradient(90deg,rgba(200,85,61,.28) 0 1px,transparent 1px calc(100%/6)),repeating-linear-gradient(0deg,rgba(200,85,61,.16) 0 1px,transparent 1px 20px)}
+.brhero .l3{display:block;padding:0}
+.brhero .xt0{position:absolute;left:22px;top:196px;font:500 10px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:#A0663A}
+.brhero .xt1{position:absolute;left:22px;right:22px;top:214px;font-size:clamp(24px,2.1vw,30px);line-height:1}
+.brhero .xt2{position:absolute;left:22px;top:250px;font-size:13px}
+.brhero .xt3{position:absolute;right:22px;top:196px;font:600 15px/1 var(--f-body);color:#3B2A1E}
+.brhero .xc3{position:absolute;left:14px;right:14px;top:14px;height:168px;border-radius:12px;overflow:hidden;
+  background:radial-gradient(120% 90% at 30% 20%,#F6DDB8,#E9B983 55%,#D08F57);box-shadow:inset 0 0 0 1px rgba(59,42,30,.08)}
+.brhero .xc3 svg{position:absolute;left:8%;right:8%;bottom:4%;width:84%;height:auto}
+.brhero .xc2{left:24px;top:24px;padding:5px 10px;font-size:10.5px;letter-spacing:.04em;background:#3B2A1E}
+.brhero .xc4{position:absolute;left:22px;bottom:22px;display:flex;align-items:center;gap:14px;height:44px;padding:0 14px;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1px rgba(59,42,30,.14);font:600 14px var(--f-body);color:#3B2A1E}
+.brhero .xc4 i{font-style:normal;opacity:.55}
+.brhero .xc1{left:auto;right:22px;bottom:22px;width:auto;padding:0 18px;height:44px;line-height:44px;border-radius:10px;font-size:14px}
+/* schermi bassi: l'elenco dei passi si stringe, si vedono solo i nomi */
+@media (min-width:1000px) and (max-height:860px){
+  .brhero .brh2 h1{font-size:clamp(40px,3.9vw,60px)}
+  .brhero .xlist p{display:none}
+  .brhero .xlist li{padding:9px 0}
+  .brhero .xlist li::before{top:10px}
+  .brhero .xg.x-steps .xlist li.now::before{height:calc(100% - 20px)}
+  .brhero .xside{gap:16px}
+}
+@media (max-width:999px){
+  .brhero .xstage{height:min(118vw,520px);margin-block:10px 0}
+}
+/* telefono: la scheda e' piu' piccola, tutto in proporzione */
+@media (max-width:999px){
+  .brhero .xs{width:min(68%,300px)}
+  .brhero .xc3{left:10px;right:10px;top:10px;height:42%;border-radius:10px}
+  .brhero .xc2{left:18px;top:18px;padding:4px 8px;font-size:9px}
+  .brhero .xt0{left:16px;top:49%;font-size:8.5px}
+  .brhero .xt3{right:16px;top:48.5%;font-size:13px}
+  .brhero .xt1{left:16px;right:16px;top:54%;font-size:20px}
+  .brhero .xt2{left:16px;top:62%;font-size:11px}
+  .brhero .xc4{left:16px;bottom:16px;height:36px;gap:10px;padding:0 10px;font-size:12px}
+  .brhero .xc1{right:16px;bottom:16px;height:36px;line-height:36px;padding:0 13px;font-size:12px}
+  .brhero .l1{padding:0 14px 12px}
+  .brhero .l1 .sw{width:14px;height:14px}
+}

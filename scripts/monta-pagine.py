@@ -375,26 +375,27 @@ def marchio(t):
             '<button type="button" role="radio" aria-checked="false" tabindex="-1" data-s="friendly"><span class="fl" aria-hidden="true"></span>Friendly</button>'
             '<button type="button" role="radio" aria-checked="false" tabindex="-1" data-s="editorial"><span class="fl" aria-hidden="true"></span>Editorial</button>'
             '</div></div>\n    <div class="ctlg gl gl-c">', 'stili dei controlli')
-    # il carattere: quattro voci, la quarta larga e forte; la parola d'esempio e' Mother (Machine c'e' gia' nel peso)
+    # l'apertura: lo schermo d'esempio diventa una vera scheda prodotto (25 ottobre)
+    t = una(t, '<div class="xl l3" style="--i:2"><span class="xlab mo">03 · Type</span><b class="xt1">Rye and honey loaf</b><span class="xt2">Baked at five, gone by ten.</span></div>',
+            '<div class="xl l3" style="--i:2"><span class="xt0">Bakery · today</span><b class="xt1">Rye and honey loaf</b><span class="xt2">Baked at five, gone by ten.</span><span class="xt3">$9.50</span></div>', 'scheda: testo')
+    t = una(t, '<div class="xl l4" style="--i:3"><span class="xlab mo">04 · Components</span><span class="xc1">Order for pickup</span><span class="xc2">New</span><span class="xc3"></span></div>',
+            '<div class="xl l4" style="--i:3"><span class="xc3"><svg viewBox="0 0 280 140" aria-hidden="true"><ellipse cx="140" cy="118" rx="96" ry="12" fill="#3B2A1E" opacity=".18"/>'
+            '<path d="M52 104c-6-40 34-70 88-70s94 30 88 70c-2 10-12 14-24 14H76c-12 0-22-4-24-14Z" fill="#B9773F"/>'
+            '<path d="M60 96c4-30 38-50 80-50s76 20 80 50" fill="none" stroke="#D99A5B" stroke-width="6" stroke-linecap="round" opacity=".7"/>'
+            '<path d="M100 58l16 26M134 50l14 28M168 56l12 24" stroke="#F3D3A6" stroke-width="5" stroke-linecap="round"/></svg></span>'
+            '<span class="xc2">New</span><span class="xc4"><i>-</i><b>1</b><i>+</i></span><span class="xc1">Add to order</span></div>', 'scheda: componenti')
+    # il carattere: quattro caratteri, il quarto largo e forte; la parola d'esempio e' Mother (Machine c'e' gia' nel peso)
     t = una(t, '<input value="Machine" maxlength="18" class="tw"', '<input value="Mother" maxlength="18" class="tw"', 'parola di prova')
     for k in ('sp1', 'sp2', 'sp3'):
         t = una(t, '<b class="' + k + '">Machine</b>', '<b class="' + k + '">Mother</b>', 'parola ' + k)
-    t = una(t, '<h2>Same word, three voices.</h2>', '<h2>Same word, four voices.</h2>', 'quattro voci')
+    t = una(t, '<h2>Same word, three voices.</h2>', '<h2>One word, <span>four typefaces.</span></h2>', 'quattro caratteri')
     t = una(t, '<div class="sp"><span class="mo">Mono · technical, exact</span><b class="sp3">Mother</b></div>',
             '<div class="sp"><span class="mo">Mono · technical, exact</span><b class="sp3">Mother</b></div>\n'
             '      <div class="sp"><span class="mo">Wide · loud, confident</span><b class="sp4">Mother</b></div>', 'quarta voce')
-    # l'ordine: apertura (vetro), il carattere, i controlli (vetro), il sistema, cosa facciamo. I due vetri non si toccano
-    s0 = t.find('<section class="hs brt"'); e0 = t.find('</section>', s0) + len('</section>')
-    assert s0 > 0, 'sezione carattere'
-    tipo = t[s0:e0]; t = t[:s0] + t[e0:].lstrip()
-    i = t.find('<section class="hs brc"'); assert i > 0, 'sezione controlli'
-    t = t[:i] + tipo + '\n\n  ' + t[i:]
+    # l'ordine (deciso da Eso il 25 ottobre): apertura, i controlli, il carattere, il sistema, cosa facciamo
     i = t.find('<section class="hs brw"'); assert i > 0, 'cosa facciamo'
     t = t[:i] + (ROOT / 'src/sezioni/brand-sistema.html').read_text(encoding='utf8').strip() + '\n\n  ' + t[i:]
-    for a, b in (('data-f="03.3" data-n="Type" id="b4"', 'data-f="03.2" data-n="Type" id="b4"'),
-                 ('data-f="03.2" data-n="Controls" id="b3"', 'data-f="03.3" data-n="Controls" id="b3"'),
-                 ('data-f="03.4" data-n="What we make" id="b5"', 'data-f="03.5" data-n="What we make" id="b5"')):
-        t = una(t, a, b, b)
+    t = una(t, 'data-f="03.4" data-n="What we make" id="b5"', 'data-f="03.5" data-n="What we make" id="b5"', '03.5')
     return t
 
 def ritocchi(nome, t):
