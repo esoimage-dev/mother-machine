@@ -183,3 +183,55 @@
 .u4 .mo{font-size:10px;opacity:.7}
 .u4 b{font:600 17px/1.1 var(--f-body);letter-spacing:-.01em}
 @media (max-width:860px){.wkh{flex-direction:column;align-items:flex-start;gap:14px}.wkg{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:84%;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:calc(-1*clamp(16px,4vw,56px));padding-inline:clamp(16px,4vw,56px);scroll-padding-inline:clamp(16px,4vw,56px);scrollbar-width:none}.wkg::-webkit-scrollbar{display:none}.wc{scroll-snap-align:start}.wall{flex-direction:column-reverse;align-items:flex-start}.wcta{display:none}}
+
+/* ===== 04 Work, 23 ottobre: niente numeri di serie. I lavori veri in grande, poi tutti in una riga ===== */
+.wkhd,.wkl>li>*{grid-template-columns:minmax(0,1.3fr) minmax(0,1.5fr) 84px 118px minmax(0,1fr)}
+@media (max-width:1080px){.wkhd,.wkl>li>*{grid-template-columns:minmax(0,1.2fr) minmax(0,1.3fr) 104px minmax(0,.9fr)}}
+@media (max-width:760px){.wkl>li>*{grid-template-columns:1fr auto;grid-template-areas:"cl st" "wb wb" "rs rs"}}
+.wkl .wk-rs.mut b{font-size:clamp(22px,2vw,28px);color:var(--mut)}
+
+/* i lavori veri: la copertina a sinistra, cosa e quanto a destra */
+.wpjs{padding-top:0}
+.wpjs .in{display:grid;gap:clamp(18px,2vw,28px)}
+.wpj{display:grid;grid-template-columns:1.35fr 1fr;min-height:clamp(420px,58vh,580px);background:var(--sf);border-radius:3px;overflow:hidden;color:inherit;text-decoration:none}
+.wpjv{position:relative;overflow:hidden;background:var(--c)}
+.wpjv::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.3),rgba(0,0,0,0) 32%);pointer-events:none}
+.wpjf{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85;transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
+.wpjv-cut{background:radial-gradient(120% 90% at 70% 40%,#E0353D 0%,#C8212A 45%,#8C1219 100%)}
+.wpjc{position:absolute;right:-2%;bottom:10%;width:84%;height:auto;transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
+.wpjl{position:absolute;left:6%;top:7%;z-index:1;width:min(160px,24%);height:auto}
+.wpjp{position:absolute;z-index:1;right:5%;top:7%;display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:3px;background:rgba(15,15,14,.5);color:#F4F2EC;font-size:10px;letter-spacing:.1em;text-transform:uppercase;line-height:1;box-shadow:inset 0 0 0 1px rgba(244,242,236,.12)}
+.wpjp::before{content:"";width:5px;height:5px;background:currentColor}
+a.wpj:hover .wpjf{transform:scale(1.04)}
+a.wpj:hover .wpjc{transform:translateX(-12px)}
+.wpji{display:grid;grid-template-rows:auto auto auto 1fr auto;gap:14px;padding:clamp(24px,3vw,48px)}
+.wpji>.mo{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase}
+.wpji h2{margin:6px 0 0;font:620 clamp(32px,3.4vw,54px)/.98 var(--f-body);letter-spacing:-.04em;transition:font-weight .45s cubic-bezier(.2,.8,.2,1)}
+a.wpj:hover .wpji h2{font-weight:780}
+.wpji p{margin:0;font-size:17px;line-height:1.45;color:var(--mut);max-width:34ch}
+.wpjo{align-self:end;display:grid;gap:10px;padding-top:16px;border-top:1px solid var(--ln)}
+.wpjo b{font:660 clamp(64px,6.6vw,112px)/.84 var(--f-body);letter-spacing:-.065em}
+.wpjo span{font-size:14.5px;color:var(--mut)}
+.wpjg{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:16px;border-top:1px solid var(--ln)}
+.wpjg b{font:600 15px var(--f-body)}
+.wpjg .arq{background:#F4F2EC;color:#121211}
+.wpjg .arq svg:first-child{fill:#121211}
+html a.wpj:hover .wpjg .arq{background:#F4F2EC}
+html a.wpj:hover .wpjg .arq svg:first-child{transform:translateX(48px)}
+html a.wpj:hover .wpjg .arq svg+svg{transform:none}
+
+/* l'anteprima nel registro: le foto vere riempiono la copertina */
+.wv-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.wv-img[style*="C8212A"] img{object-fit:contain;object-position:50% 70%;padding:8%;box-sizing:border-box;background:radial-gradient(120% 90% at 70% 40%,#E0353D,#8C1219)}
+
+@media (max-width:860px){
+  .wpj{grid-template-columns:none;min-height:0}
+  .wpjv{aspect-ratio:16/12}
+  .wpji{gap:12px;padding:20px 20px 22px}
+  .wpji h2{font-size:clamp(24px,7vw,32px)}
+  .wpji p{font-size:15.5px}
+  .wpjo{grid-template-columns:auto 1fr;align-items:center;gap:14px}
+  .wpjo b{font-size:52px}
+  .wpjo span{font-size:13.5px}
+  .wpjp{font-size:9px;padding:6px 8px}
+}

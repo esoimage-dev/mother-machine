@@ -21,6 +21,13 @@ Deciso da Eso: niente progetti nostri (Mother Machine, Machine Room) nei lavori;
 
 Serve da Eso: account Resend e Daily (gratis), nome legale, ABN e indirizzo per la privacy, repository privata (un minuto).
 
+Nel back office (Machine Room), chiesto da Eso il 23 ottobre:
+- **Fatture automatiche.** Dal preventivo accettato o dal lavoro chiuso nasce la fattura (tax invoice con ABN, GST se serve),
+  in PDF, numerata da sola, mandata al cliente per mail e segnata pagata o da pagare. Eso non le scrive più a mano.
+- **Risponditore di mail intelligente.** Legge le mail in arrivo su hello@, capisce cosa chiedono, prepara una risposta
+  nel tono Mother Machine; le risposte semplici partono da sole, le altre restano in bozza da approvare con un tocco.
+- **Da riprendere con Eso:** come fare le fatture oggi (prima del back office) e i dati legali (nome, ABN, indirizzo).
+
 ## Lancio · giorno 1
 - [x] Nameserver del dominio da GoDaddy a Cloudflare (21 ottobre).
 - [x] Materiali dei due lavori veri: Vitalia's Pizza on Wheels e Vitalia's Restaurant. Machine Room e Mother Machine non vanno nei lavori (deciso da Eso il 23 ottobre).

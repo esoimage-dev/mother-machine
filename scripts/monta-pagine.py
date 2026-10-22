@@ -48,7 +48,7 @@ META = {
     'ristorante': ('/work/vitalias-restaurant', "Mother Machine · Vitalia's Restaurant",
                    'A waterfront restaurant in Cairns: a new website, functions planned online, live menus and a back office.', '#0F0F0E'),
     'work': ('/work', 'Mother Machine · Work',
-             'The register: every machine we deliver gets a serial number. Who it was for, what we built, what changed.', '#0F0F0E'),
+             'Software and brands for real businesses. What we built, and what changed after.', '#0F0F0E'),
     'lg': ('/lg', 'Mother Machine · Machine Room',
            'LG, the lab under the studio. Every floor above runs on what we build down here.', '#0F0F0E'),
     'room': ('/lg/room', 'Mother Machine · Machine Room', 'Staff only.', '#0F0F0E'),
@@ -589,23 +589,16 @@ def registro():
     g = home[home.find('<div class="wkg">') + len('<div class="wkg">'):home.find('<a class="wall"')]
     schede = re.findall(r'<a class="wc" href="#" data-go="4">(.*?)</a>', g, re.S)
     assert len(schede) == 3, 'copertine della home'
-    studi = [('a1', 'hospitality', 'No. 014', 'Study 03'), ('a2', 'retail', 'No. 011', 'Study 02'), ('a3', 'services', 'No. 009', 'Study 01')]
+    studi = [('a1', 'No. 014'), ('a2', 'No. 011')]   # Lumen Lab non c'e' piu' (22 ottobre)
     out = []
-    for corpo, (cov, settore, vecchio, nuovo) in zip(schede, studi):
+    for corpo, (cov, vecchio) in zip(schede, studi):
         assert f'class="art {cov}"' in corpo and vecchio in corpo, cov
-        corpo = corpo.replace('<span class="wcta mo"><i></i>View project</span>', '').replace(f'<span>{vecchio}</span>', f'<span>{nuovo}</span>')
-        out.append(f'<div class="wc" data-s="{settore}" data-cov="{cov}">{corpo}</div>')
+        corpo = corpo[corpo.find('<div class="wv"'):corpo.find('<div class="wm')].replace('<span class="wcta mo"><i></i>View project</span>', '')
+        out.append(f'<div class="wc" data-cov="{cov}">{corpo}</div>')
     t = una(t, '<!-- MM:COPERTINE-STUDI -->', '\n      '.join(out), 'segnaposto copertine')
     # la porta per G: la stessa della home, testo approvato
     s = home.find('<section class="hs gd"'); e = home.find('</section>', s) + len('</section>')
     t = una(t, '<!-- MM:PORTA-G -->', home[s:e], 'porta G')
-    # la targhetta si conta dalle righe del registro: niente numeri da aggiornare a mano
-    reg = t[t.find('<ol class="wkl">'):t.find('</ol>', t.find('<ol class="wkl">'))]
-    serie = sorted(int(n) for n in re.findall(r'<span class="wk-no mo">No\. (\d+)</span>', reg))
-    t = una(t, '<!-- MM:SERIE -->', f'No. {serie[0]:03d} · {serie[-1]:03d}', 'serie')
-    t = una(t, '<!-- MM:RUNNING -->', str(reg.count('wk-sg wk-run')), 'running')
-    t = una(t, '<!-- MM:BUILD -->', str(reg.count('wk-sg wk-bld')), 'in build')
-    t = una(t, '<!-- MM:STUDIES -->', str(reg.count('wk-sg wk-std')), 'studi')
     return t
 
 
