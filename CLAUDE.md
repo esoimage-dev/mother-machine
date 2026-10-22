@@ -20,7 +20,7 @@ Ultimo aggiornamento: 26 ottobre 2026 (Studio ritoccato, "free" in due posti sol
      sulle loro pagine prezzi). Le chiavi API **non** vanno in chat né nella repository: Eso le mette su Cloudflare come
      segreti (Workers & Pages → mother-machine → Settings → Variables and Secrets). Per Resend serve verificare il dominio
      con i record DNS su Cloudflare.
-  3. **LG (Lower Ground):** oggi c'è solo la sezione del palazzo animata. Va riempita con qualcosa di buffo e grafico,
+  3. **LG (Lower Ground):** FATTA (sezione 7), da approvare sull'anteprima. Prima c'era solo la sezione del palazzo animata. Va riempita con qualcosa di buffo e grafico,
      un laboratorio segreto. Idee proposte (Eso deve scegliere): **(a) il gioco dell'ascensore**, consigliato: porti la
      cabina ai piani giusti per consegnare gli "ordini" prima che scadano, ogni piano è un servizio vero; (b) una parete
      di leve e spie con easter egg ("You found it."); (c) una macchina che da una parola sputa un mini-marchio finto.
@@ -95,7 +95,7 @@ Ultimo aggiornamento: 26 ottobre 2026 (Studio ritoccato, "free" in due posti sol
   4. `npm run build` costruisce in `dist/`; `npx astro preview --port 4321` per vederlo in locale.
 - **Pezzi in `src/sezioni/`:** `lavori-home.html` (la striscia dei lavori in home), `work.html` (pagina 04), `systems-notte.html`, `brand-sistema.html`, `lg.html`.
 - **CSS e JS per pagina** in `public/css` e `public/js`: `home.css/js` (striscia lavori, selettore, cursore di trascinamento),
-  `progetto.css/js` (pagine progetto, demo, fasce), `systems.css/js` (turno di notte, registro di bordo), `brand.css/js` (apertura, tre stili dei controlli, sistema; caratteri in `public/brand/fonts`, non in `public/fonts` che lo script rifà da zero), `work.css/js`, `mr.css/js` (LG). `mm-sito.*` comuni.
+  `progetto.css/js` (pagine progetto, demo, fasce), `systems.css/js` (turno di notte, registro di bordo), `brand.css/js` (apertura, tre stili dei controlli, sistema; caratteri in `public/brand/fonts`, non in `public/fonts` che lo script rifà da zero), `work.css/js`, `mr.css` (LG, resti) e per LG `stanza.css` + `stanza.js` (il motore della prospettiva e la stanza) + `stanza-oggetti.js` (gli oggetti da premere) + `rush.css/js` (il gioco). `mm-sito.*` comuni.
 - **Pagine progetto:** in `monta-pagine.py` il dizionario `CASI` (una voce per lavoro) e la funzione `caso()` montano
   copertina, demo, cosa abbiamo fatto, numeri, prima e dopo, fasce tipografiche, marchio, galleria, Next.
   Per un lavoro nuovo: una voce in `CASI`, una in `PAGINE`, `META`, `CORRENTE`, l'indirizzo in `[...slug].html.ts` e `public/sitemap.xml`.
@@ -121,7 +121,7 @@ Ogni pagina è un piano. Si naviga con la pulsantiera (il menu) e si scende come
 | 02 | `/systems` | grigio macchina | il dentro: software, gestionali, app, CMS, automazioni, AI privata |
 | 01 | `/studio` | rosa | chi siamo, come lavoriamo, con chi parli |
 | G | `/contact` | rosa | "Tell us what slows you down." Il modulo (ordine di lavoro). Primo incontro gratis |
-| LG | `/lg` | notte | il laboratorio segreto (oggi solo il palazzo, da riempire) |
+| LG | `/lg` | notte | la sala macchine disegnata a linee in prospettiva, con le cose da premere e il gioco Rush hour |
 | SL | `/lg/room` | notte | **Secret lab**: il nostro back office, piano segreto sotto LG, con il codice sulla pulsantiera. In testata "SL · Secret lab", nessun quadratino acceso |
 
 Systems è al 02 e Brand al 03: scendere vuol dire entrare, e i sistemi sono il lavoro che vogliamo vendere di più.
@@ -173,6 +173,13 @@ Fuori dal palazzo: `/privacy`.
   regole con il display dell'ascensore che rotola da 01 a 05; (4) "Who you talk to" con l'interruttore Design / Code e i
   mestieri che portano al loro piano. Via la targhetta (numero di serie, ore inventate) e la storia falsa dei ristoranti.
   Stile e comportamenti in `public/css/studio.css` e `public/js/studio.js`, markup in `def studio` di `monta-pagine.py`.
+- [x] **LG, la sala macchine** (26 ottobre): un disegno a linee bianche su nero in prospettiva vera, fatto in codice (`stanza.js`:
+  facce 3D proiettate, riempite di nero, linee piu' sottili in fondo, tratteggio sui lati in ombra). Il mouse sposta la camera
+  (3D vero), sul telefono si trascina di lato. Dentro: server con le spie (-> Systems), neon della m del marchio che fa i capricci
+  e illumina muro e pavimento, caveau con tastierino (Staff only), cabinato arcade (-> Rush hour), banco con attrezzi e menu del
+  ristorante (-> progetto), mensola con il pizza truck rosso (-> progetto), TV a tubo sulla cassa (si accende), quadro con le leve
+  (spegne la stanza), estintore, piantina, post-it "DON'T TOUCH - E.", LG dipinto a terra. **Rush hour** (`rush.js`): il palazzo in
+  sezione, porti gli ordini al loro piano con le frecce, 75 secondi, tre vite, suoni sintetizzati, record nel browser.
 - [x] "Free" solo due volte: nella porta verso G ("The first one is free.") e in Contact ("The first conversation is free.").
 
 ## 8 · Scaletta (in ordine)
@@ -202,7 +209,7 @@ Fuori dal palazzo: `/privacy`.
      partono da sole, le altre restano in bozza da approvare con un tocco.
    - Stanza Daily vestita Mother Machine, pagina "Your call is confirmed", promemoria.
    - Posta in uscita come hello@ (Resend e "Invia come" nel Gmail).
-   - Poi: il gioco di LG, animazioni allo scroll, film nuovo, footer ripensato.
+   - Poi: animazioni allo scroll, film nuovo, footer ripensato. LG: idee in piu' (inquadratura d'angolo, altri giochi).
 
 ## 9 · Da fare per Eso (quando può)
 - [ ] Rendere **privata** la repository GitHub (Settings → Change visibility → Private). Oggi è pubblica.
