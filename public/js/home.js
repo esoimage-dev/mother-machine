@@ -35,15 +35,23 @@
   if (!tr || !sel) return;
   var cards = [].slice.call(tr.querySelectorAll(':scope > .wkc')), RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var tabs = sel.querySelector('.wsx'), prev = sel.querySelector('[data-d="-1"]'), next = sel.querySelector('[data-d="1"]');
-  var cur = -1, IO = 'IntersectionObserver' in window, touched = false, anim = 0, auto = false;
+  var cur = -1, IO = 'IntersectionObserver' in window, touched = false, anim = 0, auto = false, swiped = false;
 
   cards.forEach(function (c, i) {
     var b = document.createElement('button');
     b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-label', c.dataset.name);
     b.innerHTML = '<i style="--t:' + c.dataset.t + '"></i><span><span class="lg"></span><span class="sh"></span></span>';
+    /* la miniatura del lavoro; i lavori in arrivo hanno la loro iniziale */
+    var th = b.querySelector('i');
+    if (c.dataset.th) th.style.backgroundImage = 'url(' + c.dataset.th + ')';
+    else {
+      th.textContent = c.dataset.mono || '';
+      var h = parseInt((c.dataset.t || '#000').slice(1), 16);
+      th.style.color = ((h >> 16) * .3 + (h >> 8 & 255) * .59 + (h & 255) * .11) > 150 ? '#121211' : '#F4F2EC';
+    }
     b.querySelector('.lg').textContent = c.dataset.name;
     b.querySelector('.sh').textContent = c.dataset.s || c.dataset.name;   /* sul telefono il nome corto */
-    b.addEventListener('click', function () { touched = true; go(i) });
+    b.addEventListener('click', function (e) { if (swiped) { e.preventDefault(); return } touched = true; go(i) });
     tabs.appendChild(b);
   });
   var ticks = [].slice.call(tabs.children);
@@ -98,7 +106,7 @@
   tr.addEventListener('pointerdown', function (e) {
     if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('.wkcta')) return;
     cancelAnimationFrame(anim); auto = false;
-    down = { x: e.clientX, l: tr.scrollLeft }; start = tr.scrollLeft; moved = false; hist = [[e.clientX, performance.now()]];
+    down = { x: e.clientX, l: tr.scrollLeft }; start = tr.scrollLeft; moved = false; hist = [[tr.scrollLeft, performance.now()]];
   });
   addEventListener('pointermove', function (e) {
     if (!down) return;
@@ -106,20 +114,45 @@
     if (!moved && Math.abs(dx) > 5) { moved = true; tr.classList.add('drag', 'free'); if (cursor()) mmc.classList.add('wmv') }
     if (!moved) return;
     tr.scrollLeft = down.l - dx;
-    hist.push([e.clientX, performance.now()]); if (hist.length > 6) hist.shift();
+    hist.push([tr.scrollLeft, performance.now()]); if (hist.length > 6) hist.shift();
   });
   addEventListener('pointerup', function () {
     if (!down) return; down = null;
     if (cursor()) mmc.classList.remove('wmv');
     if (!moved) return;
     tr.classList.remove('drag');
-    var a = hist[0], b = hist[hist.length - 1], v = (b[1] - a[1]) > 0 ? (b[0] - a[0]) / (b[1] - a[1]) : 0;   /* px al ms */
-    var aim = tr.scrollLeft - v * 260, i = nearest(aim);
-    var dist = tr.scrollLeft - start;
-    /* una spinta decisa, o un trascinamento di un pezzo di scheda, porta sempre alla scheda dopo */
-    if (i === cur && (Math.abs(v) > .35 || Math.abs(dist) > Math.min(140, cards[cur].offsetWidth * .15))) i = cur + ((Math.abs(v) > .35 ? -v : dist) > 0 ? 1 : -1);
-    go(i);
+    release();
   });
+  /* al rilascio la striscia prosegue con la sua spinta. Una spinta decisa, o un pezzo di scheda, porta sempre alla scheda dopo */
+  var release = function () {
+    var a = hist[0], b = hist[hist.length - 1], v = (b[1] - a[1]) > 0 ? (b[0] - a[0]) / (b[1] - a[1]) : 0;   /* px al ms */
+    var i = nearest(tr.scrollLeft + v * 260), dist = tr.scrollLeft - start;
+    if (i === cur && (Math.abs(v) > .35 || Math.abs(dist) > Math.min(140, cards[cur].offsetWidth * .15))) i = cur + ((Math.abs(v) > .35 ? v : dist) > 0 ? 1 : -1);
+    go(i);
+  };
+
+  /* anche il selettore si trascina: tieni premuto il lavoro acceso e spostalo verso il prossimo, la striscia lo segue */
+  var sw = null;
+  tabs.addEventListener('pointerdown', function (e) {
+    if (e.button) return;
+    cancelAnimationFrame(anim); auto = false; swiped = false;
+    sw = { x: e.clientX, id: e.pointerId }; start = tr.scrollLeft; hist = [[tr.scrollLeft, performance.now()]];
+  });
+  tabs.addEventListener('pointermove', function (e) {
+    if (!sw || e.pointerId !== sw.id) return;
+    var dx = e.clientX - sw.x, step = cards.length > 1 ? at(1) - at(0) : 1;
+    if (!swiped && Math.abs(dx) > 6) { swiped = true; touched = true; tabs.setPointerCapture(sw.id); tr.classList.add('free'); sel.classList.add('swiping') }
+    if (!swiped) return;
+    tr.scrollLeft = start + dx * step / 96;   /* 96 px di dito = un lavoro */
+    hist.push([tr.scrollLeft, performance.now()]); if (hist.length > 6) hist.shift();
+  });
+  var swEnd = function () {
+    if (!sw) return; sw = null;
+    if (!swiped) return;
+    sel.classList.remove('swiping'); release();
+    setTimeout(function () { swiped = false }, 0);
+  };
+  tabs.addEventListener('pointerup', swEnd); tabs.addEventListener('pointercancel', swEnd);
   tr.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false } }, true);
   tr.addEventListener('dragstart', function (e) { e.preventDefault() });
 
@@ -158,4 +191,23 @@
     });
   };
   fit(); addEventListener('resize', fit);
+
+  /* il vetro dei riquadri, con la tecnica del nostro vetro: dentro c'e' una copia ferma e sfocata di quello che sta sotto
+     (niente backdrop-filter dal vivo). La copia si riallinea solo quando cambia la misura */
+  var glass = function () {
+    [].forEach.call(tr.querySelectorAll('.wst > .mx'), function (m) {
+      var st = m.parentNode, g = m.querySelector(':scope > .mxg');
+      if (!g) {
+        g = document.createElement('span'); g.className = 'mxg'; g.setAttribute('aria-hidden', 'true');
+        var b = document.createElement('span'); b.className = 'mxgb';
+        [].forEach.call(st.querySelectorAll(':scope > img'), function (im) { var c = im.cloneNode(); c.removeAttribute('loading'); c.alt = ''; b.appendChild(c) });
+        g.appendChild(b); m.insertBefore(g, m.firstChild);
+      }
+      var bb = g.firstChild, cs = getComputedStyle(st);
+      bb.style.backgroundColor = cs.backgroundColor; bb.style.backgroundImage = cs.backgroundImage;
+      bb.style.width = st.clientWidth + 'px'; bb.style.height = st.clientHeight + 'px';
+      bb.style.left = -(m.offsetLeft + m.clientLeft) + 'px'; bb.style.top = -(m.offsetTop + m.clientTop) + 'px';
+    });
+  };
+  glass(); addEventListener('resize', glass);
 })();
