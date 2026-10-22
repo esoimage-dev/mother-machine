@@ -32,7 +32,7 @@
 .lgW .ln.or{stroke:#FF5B3A;fill:#FF5B3A}
 .lgW .ln.red{stroke:#C8212A;fill:#C8212A}
 .lgW .tx{fill:#F4F2EC;font-family:var(--f-mono);letter-spacing:.08em}
-.lgW .tx.lab{fill-opacity:.62}
+.lgW .tx.tlab{fill-opacity:.62}
 
 /* le spie */
 .lgW .led.w{fill:#F4F2EC;fill-opacity:.35;stroke-width:.4}
@@ -153,7 +153,17 @@
 .lgW .hot.on .ln.crt{fill:#DFF8F5;animation:lgstatic .16s steps(2) infinite}
 @keyframes lgstatic{0%{fill-opacity:.5}50%{fill-opacity:.22}}
 .lgW .hot.on .ln.play{opacity:0}
-.lgW .fuse .ln.or{fill:none;stroke-width:calc(var(--w) * 1.2)}
+/* il quadro: cartello, fulmine, basi e pomelli delle leve */
+.lgW .ln.warn{stroke:#FF5B3A;stroke-width:calc(var(--w) * .9);fill:#0F0F0E}
+.lgW .ln.bolt{stroke:#FF5B3A;fill:#FF5B3A;stroke-width:calc(var(--w) * .4)}
+.lgW .ln.lbase{fill:#1d1c1a;stroke-width:calc(var(--w) * .7)}
+.lgW .ln.knob{stroke:#FF5B3A;fill:#FF5B3A}
+/* l'ascensore: porte spazzolate, display, pulsantiera, il riquadro a terra */
+.lgW .ln.brush{stroke-width:calc(var(--w) * .35);stroke-opacity:.35}
+.lgW .tx.ldisp{fill:#FF5B3A;font-family:var(--f-mono);font-weight:500;letter-spacing:.02em}
+.lgW .ln.ring{fill:none}
+.lgW .ln.strip{stroke-width:1;stroke-opacity:.12}
+.lgW .ln.clamp{stroke-width:calc(var(--w) * .7)}
 /* il pulviscolo */
 .lgW .dust circle{fill:#F4F2EC;opacity:0;animation:lgdust 10s linear infinite}
 @keyframes lgdust{0%{opacity:0;transform:translate(0,0)}20%{opacity:.5}80%{opacity:.35}100%{opacity:0;transform:translate(14px,-46px)}}
