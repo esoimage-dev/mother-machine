@@ -1,0 +1,74 @@
+/* LG · la sala macchine: stile del disegno (public/js/stanza.js). Nero, linee crema, il pomodoro solo su cio' che
+   lampeggia o si preme. Spessori: --w viene dalla distanza di ogni oggetto, --o lo sbiadisce verso il fondo. */
+
+.lgr{padding:64px 0 0!important}
+.lgst{position:relative;background:#0F0F0E;color:#F4F2EC}
+.lgsv{height:calc(100svh - 64px);min-height:540px;max-height:1000px;overflow:hidden}
+.lgsv svg{display:block;width:100%;height:100%}
+
+/* il segno */
+.lgW path{fill:none;stroke:#F4F2EC;stroke-linejoin:round;stroke-linecap:round}
+.lgP{opacity:var(--o,1)}
+.lgW .fc{stroke-width:var(--w)}
+.lgW .fc.bk{fill:#0F0F0E}
+.lgW .fc.red{fill:#C8212A}
+.lgW .fc.or{fill:#FF5B3A}
+.lgW .fc.none{fill:none}
+.lgW .ln{stroke-width:calc(var(--w) * .8)}
+.lgW .ln.dt{stroke-width:calc(var(--w) * .45);stroke-opacity:.8}
+.lgW .ht{stroke-width:calc(var(--w) * .38);stroke-opacity:.7}
+.lgW .ln.fl{stroke-width:.7;stroke-opacity:.3}
+.lgW .ln.cn{stroke-width:.8;stroke-opacity:.16;stroke-dasharray:2 7}
+.lgW .ln.edge{stroke-width:1.5;stroke-opacity:.9}
+.lgW .room{opacity:1}
+.lgW .ln.bk2{stroke-width:.6;stroke-opacity:.16}
+.lgW .pool .ln.cn{stroke-opacity:.12;stroke-dasharray:none}
+.lgW .ln.cable{stroke-width:calc(var(--w) * 1.1)}
+.lgW .ln.tube{stroke-width:calc(var(--w) * 1.6);stroke-opacity:.9}
+.lgW .ln.lever{stroke-width:calc(var(--w) * 1.4)}
+.lgW .ln.spoke{stroke-width:calc(var(--w) * 1.2)}
+.lgW .ln.or{stroke:#FF5B3A;fill:#FF5B3A}
+.lgW .ln.red{stroke:#C8212A;fill:#C8212A}
+.lgW .tx{fill:#F4F2EC;font-family:var(--f-mono);letter-spacing:.08em}
+.lgW .tx.lab{fill-opacity:.62}
+
+/* le spie */
+.lgW .led.w{fill:#F4F2EC;fill-opacity:.35;stroke-width:.4}
+.lgW .led.o{fill:#FF5B3A;stroke:#FF5B3A;stroke-width:.4;animation:lgled 1.4s steps(1) infinite}
+.lgW .lgP .led.o:nth-of-type(3n){animation-duration:2.1s}
+.lgW .lgP .led.o:nth-of-type(4n){animation-duration:.9s;animation-delay:.3s}
+@keyframes lgled{50%{fill-opacity:.15;stroke-opacity:.15}}
+
+/* il neon del marchio: tubo doppio, alone a strati (niente filtri), ombra sul muro */
+.lgW .ln.nshadow{stroke:#F4F2EC;stroke-opacity:.14;stroke-width:1}
+.lgW .ln.nglow{stroke:#FF5B3A;stroke-opacity:.13;stroke-width:24}
+.lgW .ln.ntube{stroke:#FF5B3A;stroke-width:6.5}
+.lgW .ln.ncore{stroke:#FFD9CC;stroke-width:1.4}
+.lgW .neon{animation:lgneon 7s steps(1) infinite}
+@keyframes lgneon{0%,61%,63%,64%,100%{opacity:1}62%{opacity:.35}63.5%{opacity:.6}}
+.lgW .tx.nsign{fill:#F4F2EC;font-family:var(--f-body);font-weight:300;letter-spacing:.12em;animation:lgflick 5s steps(1) infinite}
+@keyframes lgflick{0%,100%{opacity:.95}12%{opacity:.3}13%{opacity:.95}47%{opacity:.5}48%{opacity:.95}}
+
+/* l'arrivo: le linee si disegnano dal fondo verso chi guarda, poi le facce si riempiono */
+.lgst .lgW .dw{stroke-dasharray:1;stroke-dashoffset:0;transition:stroke-dashoffset 1.5s cubic-bezier(.6,0,.2,1) calc(var(--i) * 32ms),fill-opacity .7s calc(var(--i) * 32ms + 1s)}
+.lgst.pre .lgW .dw{stroke-dashoffset:1;fill-opacity:0;transition:none}
+.lgst.pre .lgW .tx{opacity:0}
+.lgW .tx{transition:opacity .8s 2.2s}
+.lgst.lg-off .lgW *{animation-play-state:paused!important}
+
+/* sotto la stanza: il titolo e la frase */
+.lgcap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);gap:24px clamp(32px,6vw,96px);align-items:end;padding-block:clamp(40px,6vw,88px) clamp(56px,7vw,104px)}
+.lgcap .mo{font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.lgcap h1{margin:18px 0 0;font:650 clamp(44px,6vw,96px)/.92 var(--f-body);letter-spacing:-.05em;max-width:12ch}
+.lgcap .mrlede{margin:0}
+
+@media (max-width:900px){
+  /* sul telefono la stanza e' piu' larga dello schermo: si trascina di lato */
+  .lgsv{height:min(78svh,640px);min-height:420px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .lgsv::-webkit-scrollbar{display:none}
+  .lgsv svg{width:auto;height:100%;aspect-ratio:16/9;max-width:none}
+  .lgcap{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .lgW .led.o,.lgW .neon,.lgW .tx.nsign{animation:none}
+}
