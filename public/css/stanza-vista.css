@@ -19,7 +19,7 @@ html.lgx-on,html.lgx-on body{overflow:hidden}
 .lgxsv.grab{cursor:grabbing}
 .lgxsv .ln.ring1{stroke-opacity:.35;stroke-dasharray:none}
 .lgxsv .ln.ring2{stroke-opacity:.18}
-.lgxhint{position:absolute;left:50%;bottom:4%;translate:-50% 0;margin:0;font:400 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(244,242,236,.5)}
+.lgxhint{position:absolute;left:50%;bottom:16%;translate:-50% 0;margin:0;font:400 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(244,242,236,.5)}
 .lgxhint::before{content:"\2190  ";color:#FF5B3A}.lgxhint::after{content:"  \2192";color:#FF5B3A}
 
 /* la scheda: chi e', due righe, i bottoni */
@@ -53,6 +53,7 @@ html.lgx-on,html.lgx-on body{overflow:hidden}
   .lgxin,.lgx.is-srv .lgxin,.lgx.is-film .lgxin{display:block;padding-top:72px;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .lgxst{margin-bottom:28px}
   .lgx.is-3d .lgxst{height:46vh}
+  .lgxhint{bottom:2%}
   .lgxsv{max-height:46vh}
   .lgx .lgxsrv{height:640px}
   .lgx.is-srv .lgxst,.lgx.is-film .lgxst{align-self:start}

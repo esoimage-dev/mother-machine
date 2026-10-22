@@ -45,7 +45,7 @@
     prova.parts.forEach(function (P) { P.faces.forEach(function (f) { f.pts.forEach(acc) }); P.lines.forEach(function (l) { (l.pts || [l.at]).forEach(function (p) { if (p) acc(p) }) }) });
     function acc(p) { for (var i = 0; i < 3; i++) { mn[i] = Math.min(mn[i], p[i]); mx[i] = Math.max(mx[i], p[i]) } }
     var r = Math.max(mx[0] - mn[0], mx[2] - mn[2], mx[1] - mn[1]) * .62 || .3, D = r * 4.2, cx = (mn[0] + mx[0]) / 2, cz = (mn[2] + mx[2]) / 2, hy = (mn[1] + mx[1]) / 2;
-    var W = 900, H = 640, F = H * .6 * D / (r * 2);
+    var W = 900, H = 640, F = H * .78 * D / (r * 2);
     /* la camera sta un po' piu' in alto e non si inclina: si alza l'orizzonte perche' l'oggetto cada al centro */
     var S = SC({ W: W, H: H, F: F, HY: H * .5 - F * r * 1.1 / D, cam: { x: 0, y: hy + r * 1.1 }, spin: [0, 0, D], w: 1.5 });
     var T = FR([-cx, 0, D - cz], 0);
@@ -86,7 +86,7 @@
     box.setAttribute('aria-label', C.h);
     tx.querySelector('.lgxk').textContent = C.k; tx.querySelector('h2').textContent = C.h; tx.querySelector('.lgxp').textContent = C.p;
     var bt = tx.querySelector('.lgxb'); bt.innerHTML = '';
-    if (C.si) { var a = el('a', 'b p lgxsi', '<span class="fl" aria-hidden="true"></span>' + C.si); a.href = C.vai[1]; a.addEventListener('click', function (e) { e.preventDefault(); piano(C.vai[0], C.vai[1]) }); bt.appendChild(a) }
+    if (C.si) { var a = el('a', 'lgxsi', '<span class="fl" aria-hidden="true"></span>' + C.si); a.href = C.vai[1]; a.addEventListener('click', function (e) { e.preventDefault(); piano(C.vai[0], C.vai[1]) }); bt.appendChild(a) }
     var no = el('button', 'lgxno', C.no); no.type = 'button'; no.addEventListener('click', function () { chiudi() }); bt.appendChild(no);
     if (C.modello) { scena = vista(C.modello); if (scena) { stage.appendChild(scena.svg); trascina(scena.svg); stage.appendChild(el('p', 'mo lgxhint', 'Drag to turn it')) } }
     if (C.server && window.SALA_SERVER) { var w = el('div', 'lgxsrv'); stage.appendChild(w); srv = window.SALA_SERVER.mount(w); setTimeout(function () { srv && srv.start() }, 300) }
