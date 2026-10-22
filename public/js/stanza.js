@@ -8,12 +8,6 @@
    Gli oggetti stanno qui sotto (la stanza) e in stanza-oggetti.js (gli oggetti con cui si gioca). */
 (function () {
   var NS = 'http://www.w3.org/2000/svg', RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W = 1600, H = 900, F = 700, HY = .47 * H;
-  var cam = { x: 0, y: 1.6 }, to = { x: 0, y: 1.6 };
-  var parts = [];
-
-  /* ---------- geometria ---------- */
-  function prj(p) { var z = Math.max(p[2], .05); return [W / 2 + F * (p[0] - cam.x) / z, HY - F * (p[1] - cam.y) / z] }
   function sub(a, b) { return [a[0] - b[0], a[1] - b[1], a[2] - b[2]] }
   function dot(a, b) { return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] }
   function lerp(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t] }
@@ -23,129 +17,161 @@
     var f = function (p) { return [at[0] + p[0] * c + p[2] * s, at[1] + p[1], at[2] - p[0] * s + p[2] * c] };
     f.dir = function (n) { return [n[0] * c + n[2] * s, n[1], -n[0] * s + n[2] * c] }; return f }
   var ID = frame([0, 0, 0], 0);
-
-  /* ---------- le parti ---------- */
-  /* part(opt): opt.hot = cosa si apre cliccando (piu' avanti), opt.cls = classe del gruppo */
-  function part(opt) {
-    opt = opt || {};
-    var P = { faces: [], lines: [], cls: opt.cls || '', hot: opt.hot || '', label: opt.label || '', z: 0 };
-    var api = {
-      /* una faccia: punti 3D in ordine, n = normale verso fuori. o.fill: 'bk' (nero, default), 'red', 'or', 'none';
-         o.hatch: numero di righe di tratteggio (lati in ombra); o.cls: classe; ritorna la faccia per appenderci dettagli */
-      face: function (pts, n, o) { o = o || {}; var f = { pts: pts, n: n, fill: o.fill || 'bk', hatch: o.hatch || 0, hd: o.hd || 0, cls: o.cls || '', det: [] }; P.faces.push(f); return f },
-      /* una linea (anche chiusa): o.cls 'dt' dettaglio sottile, 'cn' costruzione tratteggiata, 'or' arancione...; o.on = faccia */
-      line: function (pts, o) { o = o || {}; var l = { pts: pts, cls: o.cls || '', closed: !!o.closed, over: o.over || 0, fill: o.fill || '' }; (o.on ? o.on.det : P.lines).push(l); return l },
-      /* testo su un piano che guarda chi guarda (z costante): at = punto 3D della linea di base, size in metri */
-      text: function (at, txt, size, o) { o = o || {}; var t = { text: 1, at: at, txt: txt, size: size, cls: o.cls || '', anchor: o.anchor || 'start' }; (o.on ? o.on.det : P.lines).push(t); return t },
-      /* scatola: angoli in coordinate locali [x0,y0,z0,x1,y1,z1], T = sistema locale. o.hatch = {l,r,t,b,f,k: righe}; o.fill per tutte */
-      box: function (b, T, o) {
-        T = T || ID; o = o || {}; var h = o.hatch || {}, x0 = b[0], y0 = b[1], z0 = b[2], x1 = b[3], y1 = b[4], z1 = b[5];
-        var v = function (x, y, z) { return T([x, y, z]) }, d = T.dir, fl = o.fill, out = {};
-        out.f = api.face([v(x0, y0, z0), v(x1, y0, z0), v(x1, y1, z0), v(x0, y1, z0)], d([0, 0, -1]), { fill: fl, hatch: h.f, cls: o.cls });
-        out.k = api.face([v(x1, y0, z1), v(x0, y0, z1), v(x0, y1, z1), v(x1, y1, z1)], d([0, 0, 1]), { fill: fl, hatch: h.k, cls: o.cls });
-        out.l = api.face([v(x0, y0, z1), v(x0, y0, z0), v(x0, y1, z0), v(x0, y1, z1)], d([-1, 0, 0]), { fill: fl, hatch: h.l, cls: o.cls });
-        out.r = api.face([v(x1, y0, z0), v(x1, y0, z1), v(x1, y1, z1), v(x1, y1, z0)], d([1, 0, 0]), { fill: fl, hatch: h.r, cls: o.cls });
-        out.t = api.face([v(x0, y1, z0), v(x1, y1, z0), v(x1, y1, z1), v(x0, y1, z1)], d([0, 1, 0]), { fill: fl, hatch: h.t, cls: o.cls });
-        out.b = api.face([v(x0, y0, z1), v(x1, y0, z1), v(x1, y0, z0), v(x0, y0, z0)], d([0, -1, 0]), { fill: fl, hatch: h.b, cls: o.cls });
-        return out;
-      },
-      /* prisma: un profilo 2D [[u,v],...] in senso antiorario (u = profondita' verso z+, v = altezza), estruso lungo x
-         da x0 a x1 nel sistema locale. Serve per il cabinato, il furgone, i tubi (profilo poligonale). */
-      prism: function (prof, x0, x1, T, o) {
-        T = T || ID; o = o || {}; var d = T.dir, n = prof.length, out = { sides: [] };
-        var A = prof.map(function (q) { return T([x0, q[1], q[0]]) }), B = prof.map(function (q) { return T([x1, q[1], q[0]]) });
-        out.l = api.face(A.slice().reverse(), d([-1, 0, 0]), { fill: o.fill, hatch: o.hatchCap, cls: o.cls });
-        out.r = api.face(B.slice(), d([1, 0, 0]), { fill: o.fill, hatch: o.hatchCap, cls: o.cls });
-        for (var i = 0; i < n; i++) { var j = (i + 1) % n, du = prof[j][0] - prof[i][0], dv = prof[j][1] - prof[i][1], L = Math.hypot(du, dv) || 1;
-          out.sides.push(api.face([A[i], A[j], B[j], B[i]], d([0, -du / L, dv / L]), { fill: o.fill, cls: o.cls, hatch: o.hatchSide && o.hatchSide(i) })) }
-        return out;
-      },
-      /* tubo lungo z (cavi, condotte): centro [x,y], da z0 a z1, raggio r, k lati */
-      tubeZ: function (x, y, z0, z1, r, o) { o = o || {}; var k = o.k || 8, F = [];
-        for (var i = 0; i < k; i++) { var a0 = i / k * 2 * Math.PI, a1 = (i + 1) / k * 2 * Math.PI, m = (a0 + a1) / 2;
-          F.push(api.face([[x + r * Math.cos(a0), y + r * Math.sin(a0), z0], [x + r * Math.cos(a1), y + r * Math.sin(a1), z0], [x + r * Math.cos(a1), y + r * Math.sin(a1), z1], [x + r * Math.cos(a0), y + r * Math.sin(a0), z1]],
-            [Math.cos(m), Math.sin(m), 0], { fill: o.fill, cls: o.cls, hatch: Math.sin(m) < -.3 ? (o.hatch || 0) : 0 })) }
-        return F },
-      /* cerchio come linea chiusa, sul piano dato: 'z' (guarda chi guarda), 'x' (parete laterale), 'y' (pavimento) */
-      circle: function (c, r, plane, o) { o = o || {}; var k = o.k || 28, pts = [];
-        for (var i = 0; i < k; i++) { var a = i / k * 2 * Math.PI, u = r * Math.cos(a), w = r * Math.sin(a);
-          pts.push(plane === 'x' ? [c[0], c[1] + w, c[2] + u] : plane === 'y' ? [c[0] + u, c[1], c[2] + w] : [c[0] + u, c[1] + w, c[2]]) }
-        o.closed = true; return api.line(pts, o) },
-      /* curva (cavi che pendono): bezier quadratica in 3D campionata */
-      curve: function (a, c, b, o) { var pts = []; for (var i = 0; i <= 16; i++) { var t = i / 16; pts.push(lerp(lerp(a, c, t), lerp(c, b, t), t)) } return api.line(pts, o) },
-      P: P
-    };
-    parts.push(P);
-    return api;
-  }
-
-  /* ---------- il disegno: dal 3D al foglio ---------- */
-  var svg, defs, gAll;
   function el(p, tag, a) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e }
-  function dpath(pts, closed, over) {
-    if (pts.indexOf(null) >= 0) { var s0 = '', pen = 0; pts.forEach(function (p) { if (!p) { pen = 0; return } var q0 = prj(p); s0 += (pen ? 'L' : 'M') + q0[0].toFixed(1) + ' ' + q0[1].toFixed(1); pen = 1 }); return s0 }
-    var q = pts.map(prj);
-    if (over && q.length === 2) { var dx = q[1][0] - q[0][0], dy = q[1][1] - q[0][1], L = Math.hypot(dx, dy) || 1; dx *= over / L; dy *= over / L; q = [[q[0][0] - dx, q[0][1] - dy], [q[1][0] + dx, q[1][1] + dy]] }
-    var s = 'M' + q.map(function (p) { return p[0].toFixed(1) + ' ' + p[1].toFixed(1) }).join('L');
-    return closed ? s + 'Z' : s;
-  }
-  function hatchD(f) {
-    var p = f.pts, n = f.hatch; if (p.length !== 4 || !n) return '';
-    var s = '', a = f.hd ? [p[0], p[3], p[1], p[2]] : [p[0], p[1], p[3], p[2]];
-    for (var i = 1; i <= n; i++) { var t = i / (n + 1); s += dpath([lerp(a[0], a[1], t), lerp(a[2], a[3], t)]) }
-    return s;
-  }
-  function vis(f) { var c = [cam.x, cam.y, 0]; return dot(sub(c, f.pts[0]), f.n) > 1e-6 }
-  function zOf(f) { var c = f.c || (f.c = cen(f.pts)); return Math.hypot(c[0] - cam.x, c[1] - cam.y, c[2]) }
 
-  function build() {
-    gAll = el(svg, 'g', { class: 'lgW' });
-    parts.forEach(function (P, i) {
-      var all = []; P.faces.forEach(function (f) { all = all.concat(f.pts) }); P.lines.forEach(function (l) { if (l.pts) all = all.concat(l.pts.filter(Boolean)); else all.push(l.at) });
-      var c = cen(all); P.z = c[2];
-      P.w = Math.max(.5, Math.min(2.6, 7.4 / Math.max(1, c[2])));
-      P.op = Math.max(.42, Math.min(1, 1.25 - c[2] / 26));
-    });
-    parts.sort(function (a, b) { return b.z - a.z });
-    parts.forEach(function (P, i) {
-      P.g = el(gAll, 'g', { class: 'lgP ' + P.cls, style: '--w:' + P.w.toFixed(2) + ';--o:' + P.op.toFixed(2) + ';--i:' + i });
-      if (P.hot) { P.g.setAttribute('data-hot', P.hot); P.g.setAttribute('tabindex', '0'); P.g.setAttribute('role', 'button'); P.g.setAttribute('aria-label', P.label || P.hot); P.g.classList.add('hot') }
-      P.faces.forEach(function (f, n) {
-        f.i = n; f.g = el(null, 'g', {});
-        f.p = el(f.g, 'path', { class: 'dw fc ' + f.fill + ' ' + f.cls, pathLength: 1 });
-        if (f.hatch) f.h = el(f.g, 'path', { class: 'dw ht', pathLength: 1 });
-        f.det.forEach(function (l) { l.e = mk(f.g, l) });
+  /* ---------- la scena: un foglio, una camera, le sue parti ----------
+     conf: W, H (il foglio), F (la focale), HY (l'orizzonte), cam {x,y}. conf.spin: un perno [x,y,z] attorno a cui la
+     scena gira (yaw in S.yaw), per il primo piano degli oggetti; in quel caso anche le parti si riordinano a ogni giro. */
+  function Scena(conf) {
+    var S = { parts: [], hooks: [], cam: conf.cam, yaw: 0 }, W = conf.W, H = conf.H, F = conf.F, HY = conf.HY, cam = conf.cam, parts = S.parts;
+    var piv = conf.spin, cy = 1, sy = 0;
+    /* il punto come lo vede la camera: se la scena gira, prima lo si ruota attorno al perno */
+    function tp(p) { if (!piv) return p; var x = p[0] - piv[0], z = p[2] - piv[2]; return [piv[0] + x * cy + z * sy, p[1], piv[2] - x * sy + z * cy] }
+    function tn(n) { if (!piv) return n; return [n[0] * cy + n[2] * sy, n[1], -n[0] * sy + n[2] * cy] }
+    function prj(p) { p = tp(p); var z = Math.max(p[2], .05); return [W / 2 + F * (p[0] - cam.x) / z, HY - F * (p[1] - cam.y) / z] }
+    S.prj = prj; S.F = F;
+
+    /* part(opt): opt.hot = cosa si apre cliccando, opt.cls = classe del gruppo, opt.label = l'etichetta */
+    function part(opt) {
+      opt = opt || {};
+      var P = { faces: [], lines: [], cls: opt.cls || '', hot: opt.hot || '', label: opt.label || '', z: 0 };
+      var api = {
+        /* una faccia: punti 3D in ordine, n = normale verso fuori. o.fill: 'bk' (nero, default), 'red', 'or', 'none';
+           o.hatch: numero di righe di tratteggio (lati in ombra); o.cls: classe; ritorna la faccia per appenderci dettagli */
+        face: function (pts, n, o) { o = o || {}; var f = { pts: pts, n: n, fill: o.fill || 'bk', hatch: o.hatch || 0, hd: o.hd || 0, cls: o.cls || '', det: [] }; P.faces.push(f); return f },
+        /* una linea (anche chiusa): o.cls 'dt' dettaglio sottile, 'cn' costruzione tratteggiata, 'or' arancione...; o.on = faccia */
+        line: function (pts, o) { o = o || {}; var l = { pts: pts, cls: o.cls || '', closed: !!o.closed, over: o.over || 0, fill: o.fill || '' }; (o.on ? o.on.det : P.lines).push(l); return l },
+        /* testo: at = punto 3D della linea di base, size = altezza in metri. Di base sta su un piano che guarda chi guarda;
+           con o.u (direzione della riga) e o.v (l'alto delle lettere) sta su qualunque piano, in prospettiva */
+        text: function (at, txt, size, o) { o = o || {}; var t = { text: 1, at: at, txt: txt, size: size, cls: o.cls || '', anchor: o.anchor || 'start', u: o.u, v: o.v }; (o.on ? o.on.det : P.lines).push(t); return t },
+        /* scatola: angoli in coordinate locali [x0,y0,z0,x1,y1,z1], T = sistema locale. o.hatch = {l,r,t,b,f,k: righe}; o.fill per tutte */
+        box: function (b, T, o) {
+          T = T || ID; o = o || {}; var h = o.hatch || {}, x0 = b[0], y0 = b[1], z0 = b[2], x1 = b[3], y1 = b[4], z1 = b[5];
+          var v = function (x, y, z) { return T([x, y, z]) }, d = T.dir, fl = o.fill, out = {};
+          out.f = api.face([v(x0, y0, z0), v(x1, y0, z0), v(x1, y1, z0), v(x0, y1, z0)], d([0, 0, -1]), { fill: fl, hatch: h.f, cls: o.cls });
+          out.k = api.face([v(x1, y0, z1), v(x0, y0, z1), v(x0, y1, z1), v(x1, y1, z1)], d([0, 0, 1]), { fill: fl, hatch: h.k, cls: o.cls });
+          out.l = api.face([v(x0, y0, z1), v(x0, y0, z0), v(x0, y1, z0), v(x0, y1, z1)], d([-1, 0, 0]), { fill: fl, hatch: h.l, cls: o.cls });
+          out.r = api.face([v(x1, y0, z0), v(x1, y0, z1), v(x1, y1, z1), v(x1, y1, z0)], d([1, 0, 0]), { fill: fl, hatch: h.r, cls: o.cls });
+          out.t = api.face([v(x0, y1, z0), v(x1, y1, z0), v(x1, y1, z1), v(x0, y1, z1)], d([0, 1, 0]), { fill: fl, hatch: h.t, cls: o.cls });
+          out.b = api.face([v(x0, y0, z1), v(x1, y0, z1), v(x1, y0, z0), v(x0, y0, z0)], d([0, -1, 0]), { fill: fl, hatch: h.b, cls: o.cls });
+          return out;
+        },
+        /* prisma: un profilo 2D [[u,v],...] in senso antiorario (u = profondita' verso z+, v = altezza), estruso lungo x
+           da x0 a x1 nel sistema locale. Serve per il cabinato, il furgone, i tubi (profilo poligonale). */
+        prism: function (prof, x0, x1, T, o) {
+          T = T || ID; o = o || {}; var d = T.dir, n = prof.length, out = { sides: [] };
+          var A = prof.map(function (q) { return T([x0, q[1], q[0]]) }), B = prof.map(function (q) { return T([x1, q[1], q[0]]) });
+          out.l = api.face(A.slice().reverse(), d([-1, 0, 0]), { fill: o.fill, hatch: o.hatchCap, cls: o.cls });
+          out.r = api.face(B.slice(), d([1, 0, 0]), { fill: o.fill, hatch: o.hatchCap, cls: o.cls });
+          for (var i = 0; i < n; i++) { var j = (i + 1) % n, du = prof[j][0] - prof[i][0], dv = prof[j][1] - prof[i][1], L = Math.hypot(du, dv) || 1;
+            out.sides.push(api.face([A[i], A[j], B[j], B[i]], d([0, -du / L, dv / L]), { fill: o.fill, cls: o.cls, hatch: o.hatchSide && o.hatchSide(i) })) }
+          return out;
+        },
+        /* tubo lungo z (cavi, condotte): centro [x,y], da z0 a z1, raggio r, k lati */
+        tubeZ: function (x, y, z0, z1, r, o) { o = o || {}; var k = o.k || 8, Fs = [];
+          for (var i = 0; i < k; i++) { var a0 = i / k * 2 * Math.PI, a1 = (i + 1) / k * 2 * Math.PI, m = (a0 + a1) / 2;
+            Fs.push(api.face([[x + r * Math.cos(a0), y + r * Math.sin(a0), z0], [x + r * Math.cos(a1), y + r * Math.sin(a1), z0], [x + r * Math.cos(a1), y + r * Math.sin(a1), z1], [x + r * Math.cos(a0), y + r * Math.sin(a0), z1]],
+              [Math.cos(m), Math.sin(m), 0], { fill: o.fill, cls: o.cls, hatch: Math.sin(m) < -.3 ? (o.hatch || 0) : 0 })) }
+          return Fs },
+        /* cerchio come linea chiusa, sul piano dato: 'z' (guarda chi guarda), 'x' (parete laterale), 'y' (pavimento) */
+        circle: function (c, r, plane, o) { o = o || {}; var k = o.k || 28, pts = [];
+          for (var i = 0; i < k; i++) { var a = i / k * 2 * Math.PI, u = r * Math.cos(a), w = r * Math.sin(a);
+            pts.push(plane === 'x' ? [c[0], c[1] + w, c[2] + u] : plane === 'y' ? [c[0] + u, c[1], c[2] + w] : [c[0] + u, c[1] + w, c[2]]) }
+          o.closed = true; return api.line(pts, o) },
+        /* curva (cavi che pendono): bezier quadratica in 3D campionata */
+        curve: function (a, c, b, o) { var pts = []; for (var i = 0; i <= 16; i++) { var t = i / 16; pts.push(lerp(lerp(a, c, t), lerp(c, b, t), t)) } return api.line(pts, o) },
+        P: P
+      };
+      parts.push(P);
+      return api;
+    }
+    S.part = part;
+
+    function dpath(pts, closed, over) {
+      if (pts.indexOf(null) >= 0) { var s0 = '', pen = 0; pts.forEach(function (p) { if (!p) { pen = 0; return } var q0 = prj(p); s0 += (pen ? 'L' : 'M') + q0[0].toFixed(1) + ' ' + q0[1].toFixed(1); pen = 1 }); return s0 }
+      var q = pts.map(prj);
+      if (over && q.length === 2) { var dx = q[1][0] - q[0][0], dy = q[1][1] - q[0][1], L = Math.hypot(dx, dy) || 1; dx *= over / L; dy *= over / L; q = [[q[0][0] - dx, q[0][1] - dy], [q[1][0] + dx, q[1][1] + dy]] }
+      var s = 'M' + q.map(function (p) { return p[0].toFixed(1) + ' ' + p[1].toFixed(1) }).join('L');
+      return closed ? s + 'Z' : s;
+    }
+    function hatchD(f) {
+      var p = f.pts, n = f.hatch; if (p.length !== 4 || !n) return '';
+      var s = '', a = f.hd ? [p[0], p[3], p[1], p[2]] : [p[0], p[1], p[3], p[2]];
+      for (var i = 1; i <= n; i++) { var t = i / (n + 1); s += dpath([lerp(a[0], a[1], t), lerp(a[2], a[3], t)]) }
+      return s;
+    }
+    function vis(f) { var c = [cam.x, cam.y, 0]; return dot(sub(c, tp(f.pts[0])), tn(f.n)) > 1e-6 }
+    function zOf(f) { var c = tp(f.c || (f.c = cen(f.pts))); return Math.hypot(c[0] - cam.x, c[1] - cam.y, c[2]) }
+
+    S.build = function (svg, cls) {
+      var g = S.g = el(svg, 'g', { class: cls || 'lgW' });
+      parts.forEach(function (P) {
+        var all = []; P.faces.forEach(function (f) { all = all.concat(f.pts) }); P.lines.forEach(function (l) { if (l.pts) all = all.concat(l.pts.filter(Boolean)); else all.push(l.at) });
+        P.c = cen(all); var c = P.c; P.z = P.zf != null ? P.zf : c[2];
+        P.w = conf.w ? conf.w : Math.max(.5, Math.min(2.6, 7.4 / Math.max(1, c[2])));
+        P.op = conf.w ? 1 : Math.max(.42, Math.min(1, 1.25 - c[2] / 26));
       });
-      P.lines.forEach(function (l) { l.e = mk(null, l) });
-    });
-  }
-  function mk(p, l) {
-    if (l.text) { var t = el(p, 'text', { class: 'tx ' + l.cls, 'text-anchor': l.anchor }); t.textContent = l.txt; return t }
-    var a = { class: 'ln ' + l.cls + (l.fill ? ' ' + l.fill : '') }; if (!/\bcn\b/.test(l.cls)) { a.pathLength = 1; a['class'] += ' dw' }
-    return el(p, 'path', a);
-  }
-  function upd(l) {
-    if (l.text) { var q = prj(l.at); l.e.setAttribute('x', q[0].toFixed(1)); l.e.setAttribute('y', q[1].toFixed(1)); l.e.setAttribute('font-size', (F * l.size / Math.max(.3, l.at[2])).toFixed(2)); return }
-    l.e.setAttribute('d', dpath(l.pts, l.closed, l.over));
-  }
-  var hooks = [];
-  function render() {
-    hooks.forEach(function (h) { h() });
-    parts.forEach(function (P) {
-      /* le facce visibili, dalla piu' lontana; nella pagina si spostano solo se l'ordine e' cambiato */
-      var fs = [];
-      P.faces.forEach(function (f) { f.v = vis(f); if (f.v) { f.k = zOf(f); fs.push(f) } else if (f.g.parentNode) f.g.parentNode.removeChild(f.g) });
-      fs.sort(function (a, b) { return b.k - a.k });
-      var ord = fs.map(function (f) { return f.i }).join(','), move = ord !== P.ord; P.ord = ord;
-      fs.forEach(function (f) {
-        f.p.setAttribute('d', dpath(f.pts, true));
-        if (f.h) f.h.setAttribute('d', hatchD(f));
-        f.det.forEach(upd);
-        if (move || !f.g.parentNode) P.g.appendChild(f.g);
+      parts.sort(function (a, b) { return b.z - a.z });
+      parts.forEach(function (P, i) {
+        P.g = el(g, 'g', { class: 'lgP ' + P.cls, style: '--w:' + P.w.toFixed(2) + ';--o:' + P.op.toFixed(2) + ';--i:' + i });
+        if (P.hot) { P.g.setAttribute('data-hot', P.hot); P.g.setAttribute('tabindex', '0'); P.g.setAttribute('role', 'button'); P.g.setAttribute('aria-label', P.label || P.hot); P.g.classList.add('hot') }
+        P.faces.forEach(function (f, n) {
+          f.i = n; f.g = el(null, 'g', {});
+          f.p = el(f.g, 'path', { class: 'dw fc ' + f.fill + ' ' + f.cls, pathLength: 1 });
+          if (f.hatch) f.h = el(f.g, 'path', { class: 'dw ht', pathLength: 1 });
+          f.det.forEach(function (l) { l.e = mk(f.g, l) });
+        });
+        P.lines.forEach(function (l) { l.e = mk(null, l) });
       });
-      P.lines.forEach(function (l) { upd(l); if (move || !l.e.parentNode) P.g.appendChild(l.e) });
-    });
+      return g;
+    };
+    function mk(p, l) {
+      /* 'lab' qui e' 'tlab': la classe .lab del sito fissa le etichette a 11px e la prospettiva sparirebbe */
+      if (l.text) { var t = el(p, 'text', { class: 'tx ' + l.cls.replace(/\blab\b/, 'tlab'), 'text-anchor': l.anchor }); t.textContent = l.txt; return t }
+      var a = { class: 'ln ' + l.cls + (l.fill ? ' ' + l.fill : '') }; if (!/\bcn\b/.test(l.cls)) { a.pathLength = 1; a['class'] += ' dw' }
+      return el(p, 'path', a);
+    }
+    function upd(l) {
+      if (l.text) {
+        if (l.u) { /* in prospettiva: la riga e l'alto delle lettere proiettati, una matrice per il testo alto 1 */
+          var o = prj(l.at), pu = prj([l.at[0] + l.u[0] * l.size, l.at[1] + l.u[1] * l.size, l.at[2] + l.u[2] * l.size]), pv = prj([l.at[0] + l.v[0] * l.size, l.at[1] + l.v[1] * l.size, l.at[2] + l.v[2] * l.size]);
+          /* scritto a 100 e ridotto: i browser non disegnano i caratteri piu' piccoli di qualche pixel */
+          l.e.setAttribute('font-size', '100'); l.e.setAttribute('transform', 'matrix(' + [(pu[0] - o[0]) / 100, (pu[1] - o[1]) / 100, (o[0] - pv[0]) / 100, (o[1] - pv[1]) / 100, o[0], o[1]].map(function (n) { return n.toFixed(4) }).join(' ') + ')'); return }
+        var q = prj(l.at), z = tp(l.at)[2]; l.e.setAttribute('x', q[0].toFixed(1)); l.e.setAttribute('y', q[1].toFixed(1)); l.e.setAttribute('font-size', (F * l.size / Math.max(.3, z)).toFixed(2)); return }
+      l.e.setAttribute('d', dpath(l.pts, l.closed, l.over));
+    }
+    S.render = function () {
+      if (piv) { cy = Math.cos(S.yaw); sy = Math.sin(S.yaw);
+        /* quando la scena gira, anche le parti si riordinano: la piu' lontana prima */
+        var ps = parts.slice().sort(function (a, b) { return tp(b.c)[2] - tp(a.c)[2] });
+        ps.forEach(function (P) { S.g.appendChild(P.g) }) }
+      S.hooks.forEach(function (h) { h() });
+      parts.forEach(function (P) {
+        /* le facce visibili, dalla piu' lontana; nella pagina si spostano solo se l'ordine e' cambiato */
+        var fs = [];
+        P.faces.forEach(function (f) { f.v = vis(f); if (f.v) { f.k = zOf(f); fs.push(f) } else if (f.g.parentNode) f.g.parentNode.removeChild(f.g) });
+        fs.sort(function (a, b) { return b.k - a.k });
+        var ord = fs.map(function (f) { return f.i }).join(','), move = ord !== P.ord; P.ord = ord;
+        fs.forEach(function (f) {
+          f.p.setAttribute('d', dpath(f.pts, true));
+          if (f.h) f.h.setAttribute('d', hatchD(f));
+          f.det.forEach(upd);
+          if (move || !f.g.parentNode) P.g.appendChild(f.g);
+        });
+        P.lines.forEach(function (l) { upd(l); if (move || !l.e.parentNode) P.g.appendChild(l.e) });
+      });
+    };
+    return S;
   }
+  window.STANZA_SCENA = Scena; window.STANZA_FRAME = frame;
+
+  /* la scena della stanza */
+  var W = 1600, H = 900, F = 700, HY = .47 * H;
+  var cam = { x: 0, y: 1.6 }, to = { x: 0, y: 1.6 };
+  var SC = Scena({ W: W, H: H, F: F, HY: HY, cam: cam });
+  var part = SC.part, prj = SC.prj, hooks = SC.hooks, render = SC.render, parts = SC.parts;
+  var svg, defs, gAll;
+  function build() { gAll = SC.build(svg) }
 
   /* ---------- la stanza ---------- */
   var X = 5.6, Y = 3.3, Z0 = 1.2, Z1 = 11.5;
@@ -183,11 +209,18 @@
       d.line([[-3.95, 2.62, za + .05], [-3.95, 2.62, zb - .05]], { cls: 'dt', on: db.b });
       var t1 = part({ cls: 'ceil' }); t1.tubeZ(3.55, 2.86, za, zb, .11, { hatch: 3 });
       var t2 = part({ cls: 'ceil' }); t2.tubeZ(4.0, 2.9, za, zb, .065, {});
+      /* le staffe: un tirante dal soffitto e il collare attorno a ogni tubo, a meta' tratto */
+      var zm = (za + zb) / 2;
+      t1.line([[3.55, 2.97, zm], [3.55, Y, zm]], { cls: 'dt' }); t1.circle([3.55, 2.86, zm], .125, 'z', { k: 12, cls: 'clamp' });
+      t2.line([[4.0, 2.965, zm + .3], [4.0, Y, zm + .3]], { cls: 'dt' }); t2.circle([4.0, 2.9, zm + .3], .08, 'z', { k: 10, cls: 'clamp' });
       /* la plafoniera: un pannello piatto sotto il soffitto, la luce che cade come una pozza sul pavimento */
       if (i > 0 && i < ZB.length) {
         var l = part({ cls: 'lamp' });
-        var lb = l.box([-.3, 2.99, za + .4, .3, 3.04, zb - .4], ID, {});
-        l.line([[-.22, 2.955, za + .5], [-.22, 2.955, zb - .5]], { cls: 'tube', on: lb.b }); l.line([[.22, 2.955, za + .5], [.22, 2.955, zb - .5]], { cls: 'tube', on: lb.b });
+        var lb = l.box([-.3, 2.86, za + .45, .3, 2.94, zb - .45], ID, { hatch: { f: 0 } });
+        /* i due tiranti che la tengono appesa, e le stecche del diffusore */
+        l.line([[0, 2.94, za + .7], [0, Y, za + .7]], { cls: 'dt' }); l.line([[0, 2.94, zb - .7], [0, Y, zb - .7]], { cls: 'dt' });
+        for (var zd = za + .65; zd < zb - .5; zd += .25) l.line([[-.3, 2.86, zd], [.3, 2.86, zd]], { cls: 'dt', on: lb.b });
+        l.line([[-.2, 2.855, za + .5], [-.2, 2.855, zb - .5]], { cls: 'tube', on: lb.b }); l.line([[.2, 2.855, za + .5], [.2, 2.855, zb - .5]], { cls: 'tube', on: lb.b });
         var pz = part({ cls: 'pool' }); pz.circle([0, .004, (za + zb) / 2], 1.25, 'y', { cls: 'cn', k: 36 });
       }
     });
@@ -210,7 +243,7 @@
       for (var k = 0; k < 11; k++) { var y = .32 + k * .17, z = z0 + .22;
         p.line([[xf, y, z], [xf, y + .04, z], [xf, y + .04, z + .05], [xf, y, z + .05]], { closed: true, cls: 'led ' + (k % 3 ? 'w' : 'o'), on: f });
         p.line([[xf, y + .02, z + .12], [xf, y + .02, z + .38 + (k * 7 % 5) * .08]], { cls: 'dt', on: f }) }
-      p.text([xf, 2.08, z1 - .2], 'R0' + (i + 1), .07, { cls: 'lab', on: f, anchor: 'end' });
+      p.text([xf + .001, 2.06, z0 + .12], 'R0' + (i + 1), .08, { cls: 'lab', on: f, u: [0, 0, 1], v: [0, 1, 0] });
       /* i cavi che salgono nella canalina */
       p.curve([-5.1, 2.3, z0 + .4], [-5.0, 2.6, z0 + .2], [-5.0, 2.52, z0 + .6], { cls: 'dt' });
       p.curve([-4.9, 2.3, z0 + .8], [-4.75, 2.7, z0 + .9], [-4.8, 2.52, z0 + 1.1], { cls: 'dt' });
@@ -224,37 +257,48 @@
     var b = p.box([x0, .95, z, x1, 2.15, Z1 - .01], ID, { hatch: { r: 4 } });
     var f = b.f;
     p.line([[x0 + .05, 1.0, z], [x1 - .05, 1.0, z], [x1 - .05, 2.1, z], [x0 + .05, 2.1, z]], { closed: true, cls: 'dt', on: f });
-    /* tre leve grosse con il pomello arancione, verso chi guarda: si capisce subito che si tirano */
-    for (var i = 0; i < 3; i++) { var x = x0 + .15 + i * .24;
-      p.box([x, 1.3, z - .06, x + .12, 1.56, z], ID, {});
-      p.line([[x + .06, 1.52, z - .06], [x + .06, 1.82, z - .26]], { cls: 'lever' });
-      p.circle([x + .06, 1.82, z - .26], .035, 'z', { cls: 'knob or', k: 12 }) }
-    for (var r = 0; r < 4; r++) p.line([[x0 + .12, 1.08 + r * .05, z], [x1 - .12, 1.08 + r * .05, z]], { cls: 'dt', on: f });
-    /* il fulmine del pericolo e il tubo che sale nel soffitto */
-    p.line([[x1 - .2, 2.03, z], [x1 - .26, 1.95, z], [x1 - .18, 1.95, z], [x1 - .24, 1.86, z]], { cls: 'or' });
+    /* il cartello del pericolo in alto: triangolo e fulmine pieni, ben lontani dalle leve */
+    var cx = (x0 + x1) / 2;
+    p.line([[cx - .14, 1.8, z], [cx + .14, 1.8, z], [cx, 2.04, z]], { closed: true, cls: 'warn', on: f });
+    p.line([[cx + .015, 1.99, z], [cx - .045, 1.89, z], [cx - .005, 1.89, z], [cx - .02, 1.82, z], [cx + .045, 1.93, z], [cx + .005, 1.93, z]], { closed: true, cls: 'bolt', on: f });
+    /* tre leve: la base disegnata sul quadro (sempre visibile), il braccio che esce verso chi guarda, il pomello pieno */
+    for (var i = 0; i < 3; i++) { var x = x0 + .17 + i * .25;
+      p.line([[x, 1.12, z], [x + .12, 1.12, z], [x + .12, 1.4, z], [x, 1.4, z]], { closed: true, cls: 'lbase', on: f });
+      p.line([[x + .06, 1.36, z], [x + .06, 1.58, z - .24]], { cls: 'lever' });
+      p.circle([x + .06, 1.58, z - .24], .04, 'z', { cls: 'knob', k: 12 }) }
+    /* il tubo che sale nel soffitto */
     p.line([[x0 + .3, 2.15, Z1 - .1], [x0 + .3, Y, Z1 - .1]], { cls: 'dt' });
     p.line([[x0 + .36, 2.15, Z1 - .1], [x0 + .36, Y, Z1 - .1]], { cls: 'dt' });
   }
 
-  /* in fondo: la porta blindata con il tastierino (il Secret lab) */
-  function caveau() {
-    var p = part({ cls: 'vault', hot: 'room', label: 'Vault door. Staff only' });
-    var zc = Z1 - .02, cx = 1.6, cy = 1.25;
-    var fr = p.box([cx - 1.25, 0, zc - .12, cx + 1.25, 2.5, zc], ID, { hatch: { l: 6 } });
-    p.circle([cx, cy, zc - .121], 1.02, 'z', { on: fr.f, k: 40 });
-    p.circle([cx, cy, zc - .121], .9, 'z', { on: fr.f, k: 40, cls: 'dt' });
-    p.circle([cx, cy, zc - .121], .18, 'z', { on: fr.f, k: 18 });
-    for (var i = 0; i < 6; i++) { var a = i / 6 * Math.PI * 2 + .3; p.line([[cx + .18 * Math.cos(a), cy + .18 * Math.sin(a), zc - .121], [cx + .62 * Math.cos(a), cy + .62 * Math.sin(a), zc - .121]], { on: fr.f, cls: 'spoke' });
-      p.circle([cx + .66 * Math.cos(a), cy + .66 * Math.sin(a), zc - .121], .045, 'z', { on: fr.f, k: 10 }) }
-    for (var j = 0; j < 12; j++) { var b2 = j / 12 * Math.PI * 2; p.circle([cx + .96 * Math.cos(b2), cy + .96 * Math.sin(b2), zc - .121], .025, 'z', { on: fr.f, k: 8, cls: 'dt' }) }
-    /* il tastierino */
-    var k = p.box([cx + 1.45, 1.05, zc - .08, cx + 1.8, 1.6, zc], ID, {});
-    for (var r = 0; r < 4; r++) for (var q = 0; q < 3; q++) { var x0 = cx + 1.5 + q * .1, y0 = 1.12 + r * .09;
-      p.line([[x0, y0, zc - .081], [x0 + .07, y0, zc - .081], [x0 + .07, y0 + .06, zc - .081], [x0, y0 + .06, zc - .081]], { closed: true, cls: 'dt', on: k.f }) }
-    p.line([[cx + 1.52, 1.5, zc - .081], [cx + 1.56, 1.5, zc - .081], [cx + 1.56, 1.54, zc - .081], [cx + 1.52, 1.54, zc - .081]], { closed: true, cls: 'led o', on: k.f });
-    /* le strisce di pericolo sulla soglia */
-    for (var s = 0; s < 9; s++) { var xs = cx - 1.2 + s * .28; p.line([[xs, .002, zc - .5], [xs + .2, .002, zc - .14]], { cls: 'dt' }) }
-    p.line([[cx - 1.25, .002, zc - .5], [cx + 1.25, .002, zc - .5]], { cls: 'dt' });
+  /* in fondo: l'ascensore, quello che ti ha portato quaggiu'. Cornice, due porte, il display LG, la pulsantiera di fuori
+     con un tasto solo: su, perche' piu' giu' di cosi' non si va. Premuto, apre la pulsantiera del sito */
+  function ascensore() {
+    var p = part({ cls: 'lift', hot: 'lift', label: 'Lift. Pick a floor' });
+    var zc = Z1, x0 = .35, x1 = 2.85, xa = .62, xb = 2.58, yt = 2.28, d = .16;
+    /* le porte, appena rientrate, con la fessura in mezzo e la spazzolatura */
+    var dl = p.face([[xa, 0, zc - .03], [1.6, 0, zc - .03], [1.6, yt, zc - .03], [xa, yt, zc - .03]], [0, 0, -1], {});
+    var dr = p.face([[1.6, 0, zc - .03], [xb, 0, zc - .03], [xb, yt, zc - .03], [1.6, yt, zc - .03]], [0, 0, -1], {});
+    [[dl, xa, 1.6], [dr, 1.6, xb]].forEach(function (q) { for (var x = q[1] + .14; x < q[2] - .05; x += .14) p.line([[x, .06, zc - .031], [x, yt - .06, zc - .031]], { cls: 'brush', on: q[0] }) });
+    p.line([[1.6, 0, zc - .032], [1.6, yt, zc - .032]], { on: dl });
+    /* la cornice: due stipiti e l'architrave che sporgono dal muro */
+    p.box([x0, 0, zc - d, xa, yt + .2, zc], ID, { hatch: { r: 5 } });
+    p.box([xb, 0, zc - d, x1, yt + .2, zc], ID, { hatch: { l: 5 } });
+    var hd = p.box([x0, yt, zc - d, x1, yt + .2, zc], ID, { hatch: { b: 3 } });
+    /* il display sopra: LG in arancione e la freccia */
+    var ds = p.box([1.24, 2.58, zc - .07, 1.96, 2.86, zc], ID, {});
+    p.text([1.38, 2.645, zc - .071], 'LG', .17, { cls: 'ldisp', on: ds.f });
+    p.line([[1.74, 2.78, zc - .071], [1.84, 2.78, zc - .071], [1.79, 2.68, zc - .071]], { closed: true, cls: 'or', on: ds.f });
+    /* la pulsantiera di fuori: un tasto, su */
+    var pl = p.box([2.98, 1.0, zc - .03, 3.2, 1.48, zc], ID, {});
+    p.circle([3.09, 1.24, zc - .031], .065, 'z', { cls: 'or ring', k: 16, on: pl.f });
+    p.line([[3.06, 1.21, zc - .032], [3.12, 1.21, zc - .032], [3.09, 1.27, zc - .032]], { closed: true, cls: 'or', on: pl.f });
+    p.text([3.09, 1.39, zc - .031], 'UP', .045, { cls: 'lab', anchor: 'middle', on: pl.f });
+    /* davanti, a terra: il riquadro da lasciare libero, a strisce */
+    var y = .003, za = zc - 1.3;
+    p.line([[x0, y, za], [x1, y, za], [x1, y, zc - .02], [x0, y, zc - .02]], { closed: true, cls: 'cn walk' });
+    var st = []; for (var s = 0; s < 10; s++) { var xs = x0 + .1 + s * .24; st.push([xs, y, za + .08], [Math.min(x1 - .05, xs + .5), y, zc - .2], null) }
+    p.line(st, { cls: 'strip' });
   }
 
   /* il neon del marchio: la m del logo, due archi con le aste lunghe e due archi piccoli sotto, in tubo doppio */
@@ -274,7 +318,7 @@
     p.curve(e, [e[0] + .3, .2, zc], [e[0] + .9, .02, zc - .3], { cls: 'dt' });
     /* "Staff only": la scritta al neon sopra il caveau, che sfarfalla */
     var t = part({ cls: 'neon2' });
-    t.text([1.6, 2.72, Z1 - .03], 'STAFF ONLY', .2, { cls: 'nsign', anchor: 'middle' });
+    t.text([-4.975, 2.42, Z1 - .03], 'STAFF ONLY', .14, { cls: 'nsign', anchor: 'middle' });
   }
 
   /* la luce del neon: una chiazza calda sul muro e una sul pavimento (gradienti, niente filtri). Le disegna il motore
@@ -307,27 +351,15 @@
   /* scatoloni, il carrello, i cavi per terra */
   function disordine() {
     var p = part({ cls: 'mess' });
-    var a = p.box([3.6, 0, 9.9, 4.6, .7, 10.8], ID, { hatch: { l: 5 } }); p.line([[4.1, .7, 9.9], [4.1, .7, 10.8]], { cls: 'dt', on: a.t }); p.text([3.75, .3, 9.899], 'FRAGILE', .09, { cls: 'lab', on: a.f });
+    var a = p.box([3.3, 0, 10.6, 4.15, .62, 11.4], ID, { hatch: { l: 5 } }); p.line([[3.72, .62, 10.6], [3.72, .62, 11.4]], { cls: 'dt', on: a.t }); p.text([3.42, .26, 10.599], 'FRAGILE', .09, { cls: 'lab', on: a.f });
     var p2 = part({ cls: 'mess' });
-    var b = p2.box([3.75, .7, 10.05, 4.45, 1.15, 10.65], ID, { hatch: { l: 4 } }); p2.text([3.85, .85, 10.049], 'CABLES', .07, { cls: 'lab', on: b.f });
+    var b = p2.box([3.45, .62, 10.75, 4.0, .98, 11.25], ID, { hatch: { l: 4 } }); p2.text([3.52, .74, 10.749], 'CABLES', .07, { cls: 'lab', on: b.f });
     var p3 = part({ cls: 'mess' });
-    p3.box([4.7, 0, 8.9, 5.5, .55, 9.7], ID, { hatch: { l: 4 } });
+    p3.box([4.35, 0, 10.75, 5.1, .45, 11.42], ID, { hatch: { l: 4 } });
     var c = part({ cls: 'mess' });
     c.curve([-4.6, .01, 6], [-2.4, .01, 4.4], [-1.9, .01, 7.4], { cls: 'cable' });
     c.curve([-4.6, .01, 8.2], [-1.2, .01, 8.6], [.2, .01, 9.6], { cls: 'cable' });
     c.curve([.2, .01, 9.6], [.8, .01, 10.4], [.9, .01, Z1 - .5], { cls: 'cable' });
-  }
-
-  /* la segnaletica dipinta a terra: il corridoio tratteggiato fino al caveau e "LG" stampato grande, consumato */
-  function pavimento() {
-    var p = part({ cls: 'paint' }), y = .003;
-    [-1.15, 1.15].forEach(function (x) { p.line([[x, y, 1.6], [x, y, 10.6]], { cls: 'cn walk' }) });
-    /* le lettere: tratti sul piano del pavimento, la base verso chi guarda */
-    var L = [[[-1.05, 4.7], [-1.05, 3.2], [-.45, 3.2]]], Gp = [];
-    for (var i = 0; i <= 14; i++) { var a = .35 + i / 14 * 5.3; Gp.push([.48 + .42 * Math.cos(a), 3.95 + .75 * Math.sin(a)]) }
-    var G2 = [[.62, 3.9], [.9, 3.9], [.9, 3.4]];
-    L.concat([Gp, G2]).forEach(function (s) { p.line(s.map(function (q) { return [q[0], y, q[1]] }), { cls: 'stencil' }) });
-    p.line([[-1.3, y, 2.95], [1.3, y, 2.95]], { cls: 'cn walk' });
   }
 
   /* la soglia dell'ascensore, davanti ai piedi: il piano LG */
@@ -341,7 +373,7 @@
   function init() {
     var st = document.querySelector('.lgst'); if (!st) return;
     svg = st.querySelector('svg');
-    stanza(); pavimento(); server(); quadro(); caveau(); neon(); disordine(); soglia();
+    stanza(); server(); quadro(); ascensore(); neon(); disordine(); soglia();
     if (window.STANZA_OGGETTI) window.STANZA_OGGETTI({ part: part, frame: frame, ID: ID, X: X, Y: Y, Z0: Z0, Z1: Z1 });
     defs = el(svg, 'defs', {});
     build(); var sp = luceNeon(); render();
@@ -368,17 +400,16 @@
     svg.addEventListener('pointerleave', function () { tip.classList.remove('on') });
     svg.addEventListener('click', function (e) { var h = hotOf(e); if (h) azione(h) });
     svg.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('hot')) { e.preventDefault(); azione(e.target) } });
-    function piano(k, dest) { if (dest) window.MM_DEST = dest; if (typeof window.go === 'function') window.go(k); else location.href = dest || ['/contact', '/studio', '/systems', '/brand', '/work', '/'][k] }
     function clack() { try { var a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), v = a.createGain(); o.type = 'square'; o.frequency.setValueAtTime(90, a.currentTime); v.gain.setValueAtTime(.08, a.currentTime); v.gain.exponentialRampToValueAtTime(.0001, a.currentTime + .09); o.connect(v); v.connect(a.destination); o.start(); o.stop(a.currentTime + .1) } catch (x) {} }
     function azione(h) {
-      var k = h.getAttribute('data-hot'), r = h.getBoundingClientRect();
-      if (k === 'arcade' && window.RUSH) window.RUSH.open(r.left + r.width / 2, r.top + r.height / 3);
-      else if (k === 'truck') piano(4, '/work/vitalias-pizza-on-wheels');
-      else if (k === 'ristorante') piano(4, '/work/vitalias-restaurant');
-      else if (k === 'systems') piano(2);
+      var k = h.getAttribute('data-hot'), r = h.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+      tip.classList.remove('on');
+      if (k === 'arcade' && window.RUSH) window.RUSH.open(x, r.top + r.height / 3);
+      /* l'ascensore apre la pulsantiera del sito */
+      else if (k === 'lift') { var d = document.getElementById('dispB'); if (d) d.click() }
       else if (k === 'luce') { clack(); st.classList.toggle('dark'); h.classList.toggle('on') }
-      else if (k === 'film') { clack(); var acc = !h.classList.contains('on'); [].forEach.call(svg.querySelectorAll('[data-hot="film"]'), function (n) { n.classList.toggle('on', acc) }) }
-      else if (k === 'room') { h.classList.remove('deny'); void h.getBoundingClientRect(); h.classList.add('deny'); tip.textContent = 'Staff only. The code is on the lift panel.'; tip.classList.add('on') }
+      /* il resto viene in primo piano: l'oggetto che gira, o la sua finestra */
+      else if (window.LGVISTA) window.LGVISTA.open(k, x, y);
     }
     /* sul telefono si parte dal centro della stanza */
     if (wrap && wrap.scrollWidth > wrap.clientWidth) wrap.scrollLeft = (wrap.scrollWidth - wrap.clientWidth) / 2;

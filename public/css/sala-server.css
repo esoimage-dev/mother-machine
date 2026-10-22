@@ -1,0 +1,71 @@
+/* Sala server: the machine room, live. Every selector starts with .ssv */
+.ssv{
+  --ssv-ink:#F4F2EC;--ssv-bg:#0F0F0E;--ssv-tom:#FF5B3A;
+  position:relative;box-sizing:border-box;width:100%;height:100%;
+  display:flex;flex-direction:column;
+  padding:20px 24px 16px;
+  background:var(--ssv-bg);color:var(--ssv-ink);
+  font-family:var(--f-body,system-ui,sans-serif);
+  overflow:hidden;user-select:none;-webkit-user-select:none
+}
+.ssv *{box-sizing:border-box}
+
+.ssv .ssv-top{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font:500 10.5px/1 var(--f-mono,ui-monospace,monospace);letter-spacing:.12em;text-transform:uppercase}
+.ssv .ssv-tag{display:flex;align-items:center;gap:9px;min-width:0;white-space:nowrap}
+.ssv .ssv-mut{opacity:.5}
+.ssv .ssv-dot{width:7px;height:7px;background:var(--ssv-tom);flex:0 0 auto;animation:ssv-blink 1.6s steps(1,end) infinite}
+.ssv .ssv-clock{font-variant-numeric:tabular-nums;opacity:.75}
+@keyframes ssv-blink{0%{opacity:1}70%{opacity:.15}}
+
+.ssv .ssv-lede{margin:12px 0 0;font:560 19px/1.2 var(--f-body,system-ui,sans-serif);letter-spacing:-.02em}
+
+.ssv .ssv-dia{position:relative;flex:1 1 auto;min-height:0;margin-top:16px}
+.ssv .ssv-dia svg{position:absolute;left:0;top:0;width:100%;height:100%;display:block;overflow:hidden}
+
+.ssv .ssv-k{font-family:var(--f-mono,ui-monospace,monospace);fill:var(--ssv-ink);letter-spacing:.04em}
+.ssv .ssv-id{letter-spacing:.12em}
+.ssv .ssv-sub{opacity:.5}
+.ssv .ssv-stat{opacity:.62;font-variant-numeric:tabular-nums}
+.ssv .ssv-n{font-family:var(--f-body,system-ui,sans-serif);font-weight:600;letter-spacing:-.01em;fill:var(--ssv-ink)}
+.ssv .ssv-box{fill:var(--ssv-bg);stroke:var(--ssv-ink);stroke-opacity:.55;stroke-width:1}
+.ssv .ssv-rack{fill:var(--ssv-bg);stroke:var(--ssv-ink);stroke-opacity:.85;stroke-width:1}
+.ssv .ssv-div{fill:none;stroke:var(--ssv-ink);stroke-opacity:.22;stroke-width:1}
+.ssv .ssv-unit{fill:none;stroke:var(--ssv-ink);stroke-opacity:.38;stroke-width:1}
+.ssv .ssv-vent{fill:none;stroke:var(--ssv-ink);stroke-opacity:.2;stroke-width:1}
+.ssv .ssv-ledb{fill:var(--ssv-ink);fill-opacity:.14}
+.ssv .ssv-pwr{fill:var(--ssv-ink);fill-opacity:.8}
+.ssv .ssv-pin{fill:var(--ssv-ink);fill-opacity:.6}
+.ssv .ssv-wire{fill:none;stroke:var(--ssv-ink);stroke-opacity:.28;stroke-width:1;shape-rendering:crispEdges}
+.ssv .ssv-track{fill:none;stroke:var(--ssv-ink);stroke-opacity:.35;stroke-width:1}
+.ssv .ssv-fill{fill:var(--ssv-ink);fill-opacity:.82}
+.ssv .ssv-wave{fill:none;stroke:var(--ssv-ink);stroke-opacity:.8;stroke-width:1.2}
+
+.ssv .ssv-log{flex:0 0 auto;height:124px;margin-top:14px;padding-top:9px;
+  border-top:1px solid rgba(244,242,236,.18);display:flex;flex-direction:column}
+.ssv .ssv-logh{display:flex;justify-content:space-between;gap:12px;
+  font:500 9.5px/1 var(--f-mono,ui-monospace,monospace);letter-spacing:.12em;text-transform:uppercase;opacity:.45}
+.ssv .ssv-lines{flex:1 1 auto;min-height:0;margin-top:6px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 55%);mask-image:linear-gradient(to bottom,transparent 0,#000 55%)}
+.ssv .ssv-ln{flex:0 0 auto;display:grid;grid-template-columns:8ch 3ch minmax(0,1fr) auto;column-gap:2ch;
+  font:400 11.5px/18px var(--f-mono,ui-monospace,monospace);white-space:nowrap;opacity:.62;font-variant-numeric:tabular-nums}
+.ssv .ssv-ln:last-child{opacity:1}
+.ssv .ssv-ln .t,.ssv .ssv-ln .r{opacity:.5}
+.ssv .ssv-ln.is-past .t{opacity:.32}
+.ssv .ssv-ln .m{overflow:hidden;text-overflow:ellipsis}
+.ssv .ssv-ln .v{text-align:left;opacity:.7}
+.ssv:not(.ssv--v) .ssv-ln{grid-template-columns:8ch 3ch minmax(0,34ch) minmax(0,1fr)}
+.ssv.ssv--v .ssv-ln .v{text-align:right}
+.ssv .ssv-cur{display:inline-block;width:.6em;height:.95em;margin-left:1px;vertical-align:-.12em;background:var(--ssv-tom)}
+
+/* phone */
+.ssv.ssv--v{padding:16px 14px 12px}
+.ssv.ssv--v .ssv-top{font-size:9.5px;letter-spacing:.1em}
+.ssv.ssv--v .ssv-lede{margin-top:10px;font-size:16px}
+.ssv.ssv--v .ssv-dia{margin-top:14px}
+.ssv.ssv--v .ssv-log{height:138px;margin-top:12px}
+.ssv.ssv--v .ssv-ln{grid-template-columns:8ch 3ch minmax(0,1fr) auto;column-gap:1.2ch;font-size:10px;line-height:16px}
+
+.ssv.ssv--paused .ssv-dot,.ssv.ssv--still .ssv-dot{animation-play-state:paused}
+.ssv.ssv--still .ssv-dot{animation:none}
+@media (prefers-reduced-motion:reduce){.ssv .ssv-dot{animation:none}}
