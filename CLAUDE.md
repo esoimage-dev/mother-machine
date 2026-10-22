@@ -20,7 +20,8 @@ Ultimo aggiornamento: 26 ottobre 2026 (Studio ritoccato, "free" in due posti sol
      sulle loro pagine prezzi). Le chiavi API **non** vanno in chat né nella repository: Eso le mette su Cloudflare come
      segreti (Workers & Pages → mother-machine → Settings → Variables and Secrets). Per Resend serve verificare il dominio
      con i record DNS su Cloudflare.
-  3. **LG (Lower Ground):** FATTA (sezione 7), da approvare sull'anteprima. Prima c'era solo la sezione del palazzo animata. Va riempita con qualcosa di buffo e grafico,
+  3. **LG (Lower Ground):** FATTA (sezione 7), da approvare sull'anteprima. Aperti: il gioco (Eso lo vuole cambiare), la frase
+     sotto la stanza ("You can watch. Only we touch." contro "Click what glows"). Prima c'era solo la sezione del palazzo animata. Va riempita con qualcosa di buffo e grafico,
      un laboratorio segreto. Idee proposte (Eso deve scegliere): **(a) il gioco dell'ascensore**, consigliato: porti la
      cabina ai piani giusti per consegnare gli "ordini" prima che scadano, ogni piano è un servizio vero; (b) una parete
      di leve e spie con easter egg ("You found it."); (c) una macchina che da una parola sputa un mini-marchio finto.
@@ -173,13 +174,17 @@ Fuori dal palazzo: `/privacy`.
   regole con il display dell'ascensore che rotola da 01 a 05; (4) "Who you talk to" con l'interruttore Design / Code e i
   mestieri che portano al loro piano. Via la targhetta (numero di serie, ore inventate) e la storia falsa dei ristoranti.
   Stile e comportamenti in `public/css/studio.css` e `public/js/studio.js`, markup in `def studio` di `monta-pagine.py`.
-- [x] **LG, la sala macchine** (26 ottobre): un disegno a linee bianche su nero in prospettiva vera, fatto in codice (`stanza.js`:
-  facce 3D proiettate, riempite di nero, linee piu' sottili in fondo, tratteggio sui lati in ombra). Il mouse sposta la camera
-  (3D vero), sul telefono si trascina di lato. Dentro: server con le spie (-> Systems), neon della m del marchio che fa i capricci
-  e illumina muro e pavimento, caveau con tastierino (Staff only), cabinato arcade (-> Rush hour), banco con attrezzi e menu del
-  ristorante (-> progetto), mensola con il pizza truck rosso (-> progetto), TV a tubo sulla cassa (si accende), quadro con le leve
-  (spegne la stanza), estintore, piantina, post-it "DON'T TOUCH - E.", LG dipinto a terra. **Rush hour** (`rush.js`): il palazzo in
-  sezione, porti gli ordini al loro piano con le frecce, 75 secondi, tre vite, suoni sintetizzati, record nel browser.
+- [x] **LG, la sala macchine** (26-27 ottobre): un disegno a linee bianche su nero in prospettiva vera, fatto in codice.
+  Il motore (`stanza.js`, `STANZA_SCENA`) fa scene: facce 3D proiettate e riempite di nero, linee piu' sottili in fondo,
+  tratteggio, testo in prospettiva su qualunque piano. Il mouse sposta la camera, sul telefono si trascina di lato. Niente
+  footer e niente porta per G: la stanza e' tutta la pagina. Dentro: server (-> popup "machine room live", `sala-server.js`,
+  poi Systems), neon della m che fa i capricci e illumina muro e pavimento, **ascensore** sul fondo con display LG e il solo
+  tasto su (apre la pulsantiera), quadro con le leve (spegne la stanza), cabinato a destra (-> Rush hour), banco con
+  attrezzi, disegno tecnico e mensola col pizza truck, divano con tavolino (menu del ristorante e telefono), TV sulla cassa
+  (-> il film, `public/film.html`), macchina del caffe', calendario del robot, poster "Dead Pixels", estintore, post-it.
+  **Primo piano stile inventario** (`stanza-vista.js`): truck, menu e telefono vengono avanti e girano (trascinandoli si
+  ruotano), con una frase e due bottoni (vai al progetto o a Contact, oppure "Put it back"). I modelli stanno in
+  `stanza-oggetti.js` (`STANZA_MODELLI`). **Rush hour** (`rush.js`): da rivedere, Eso vuole cambiarlo.
 - [x] "Free" solo due volte: nella porta verso G ("The first one is free.") e in Contact ("The first conversation is free.").
 
 ## 8 · Scaletta (in ordine)
