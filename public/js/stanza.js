@@ -96,7 +96,7 @@
     return s;
   }
   function vis(f) { var c = [cam.x, cam.y, 0]; return dot(sub(c, f.pts[0]), f.n) > 1e-6 }
-  function zOf(f) { var c = cen(f.pts); return Math.hypot(c[0] - cam.x, c[1] - cam.y, c[2]) }
+  function zOf(f) { var c = f.c || (f.c = cen(f.pts)); return Math.hypot(c[0] - cam.x, c[1] - cam.y, c[2]) }
 
   function build() {
     gAll = el(svg, 'g', { class: 'lgW' });
@@ -110,8 +110,8 @@
     parts.forEach(function (P, i) {
       P.g = el(gAll, 'g', { class: 'lgP ' + P.cls, style: '--w:' + P.w.toFixed(2) + ';--o:' + P.op.toFixed(2) + ';--i:' + i });
       if (P.hot) { P.g.setAttribute('data-hot', P.hot); P.g.setAttribute('tabindex', '0'); P.g.setAttribute('role', 'button'); P.g.setAttribute('aria-label', P.label || P.hot); P.g.classList.add('hot') }
-      P.faces.forEach(function (f) {
-        f.g = el(null, 'g', {});
+      P.faces.forEach(function (f, n) {
+        f.i = n; f.g = el(null, 'g', {});
         f.p = el(f.g, 'path', { class: 'dw fc ' + f.fill + ' ' + f.cls, pathLength: 1 });
         if (f.hatch) f.h = el(f.g, 'path', { class: 'dw ht', pathLength: 1 });
         f.det.forEach(function (l) { l.e = mk(f.g, l) });
@@ -132,16 +132,18 @@
   function render() {
     hooks.forEach(function (h) { h() });
     parts.forEach(function (P) {
-      var fs = P.faces.filter(vis);
-      fs.sort(function (a, b) { return zOf(b) - zOf(a) });
-      P.faces.forEach(function (f) { if (fs.indexOf(f) < 0 && f.g.parentNode) f.g.parentNode.removeChild(f.g) });
+      /* le facce visibili, dalla piu' lontana; nella pagina si spostano solo se l'ordine e' cambiato */
+      var fs = [];
+      P.faces.forEach(function (f) { f.v = vis(f); if (f.v) { f.k = zOf(f); fs.push(f) } else if (f.g.parentNode) f.g.parentNode.removeChild(f.g) });
+      fs.sort(function (a, b) { return b.k - a.k });
+      var ord = fs.map(function (f) { return f.i }).join(','), move = ord !== P.ord; P.ord = ord;
       fs.forEach(function (f) {
         f.p.setAttribute('d', dpath(f.pts, true));
         if (f.h) f.h.setAttribute('d', hatchD(f));
         f.det.forEach(upd);
-        P.g.appendChild(f.g);
+        if (move || !f.g.parentNode) P.g.appendChild(f.g);
       });
-      P.lines.forEach(function (l) { upd(l); P.g.appendChild(l.e) });
+      P.lines.forEach(function (l) { upd(l); if (move || !l.e.parentNode) P.g.appendChild(l.e) });
     });
   }
 
@@ -215,22 +217,23 @@
     }
   }
 
-  /* il quadro elettrico in fondo a sinistra, dopo i server: le leve spengono la stanza */
+  /* il quadro elettrico sul muro di fondo, nell'angolo a sinistra: le leve spengono la stanza */
   function quadro() {
     var p = part({ cls: 'fuse', hot: 'luce', label: 'Fuse box. Lights off and on' });
-    var b = p.box([-5.6, .95, 9.95, -5.25, 2.2, 10.95], ID, { hatch: { k: 4 } });
-    var f = b.r, x = -5.25;
-    p.line([[x, 1.02, 10.02], [x, 2.13, 10.02], [x, 2.13, 10.88], [x, 1.02, 10.88]], { closed: true, cls: 'dt', on: f });
-    /* tre leve grosse, con il pomello arancione: si capisce subito che si tirano */
-    for (var i = 0; i < 3; i++) { var z = 10.17 + i * .26;
-      p.box([x, 1.32, z, x + .07, 1.58, z + .12], ID, {});
-      p.line([[x + .07, 1.55, z + .06], [x + .3, 1.8, z + .06]], { cls: 'lever' });
-      p.circle([x + .3, 1.8, z + .06], .035, 'x', { cls: 'knob or', k: 12 }) }
-    for (var r = 0; r < 4; r++) p.line([[x, 1.1 + r * .05, 10.12], [x, 1.1 + r * .05, 10.75]], { cls: 'dt', on: f });
+    var z = Z1 - .3, x0 = -5.4, x1 = -4.55;
+    var b = p.box([x0, .95, z, x1, 2.15, Z1 - .01], ID, { hatch: { r: 4 } });
+    var f = b.f;
+    p.line([[x0 + .05, 1.0, z], [x1 - .05, 1.0, z], [x1 - .05, 2.1, z], [x0 + .05, 2.1, z]], { closed: true, cls: 'dt', on: f });
+    /* tre leve grosse con il pomello arancione, verso chi guarda: si capisce subito che si tirano */
+    for (var i = 0; i < 3; i++) { var x = x0 + .15 + i * .24;
+      p.box([x, 1.3, z - .06, x + .12, 1.56, z], ID, {});
+      p.line([[x + .06, 1.52, z - .06], [x + .06, 1.82, z - .26]], { cls: 'lever' });
+      p.circle([x + .06, 1.82, z - .26], .035, 'z', { cls: 'knob or', k: 12 }) }
+    for (var r = 0; r < 4; r++) p.line([[x0 + .12, 1.08 + r * .05, z], [x1 - .12, 1.08 + r * .05, z]], { cls: 'dt', on: f });
     /* il fulmine del pericolo e il tubo che sale nel soffitto */
-    p.line([[x, 2.05, 10.5], [x, 1.95, 10.45], [x, 1.95, 10.55], [x, 1.85, 10.5]], { cls: 'or' });
-    p.line([[-5.5, 2.2, 10.45], [-5.5, 3.3, 10.45]], { cls: 'dt' });
-    p.line([[-5.44, 2.2, 10.45], [-5.44, 3.3, 10.45]], { cls: 'dt' });
+    p.line([[x1 - .2, 2.03, z], [x1 - .26, 1.95, z], [x1 - .18, 1.95, z], [x1 - .24, 1.86, z]], { cls: 'or' });
+    p.line([[x0 + .3, 2.15, Z1 - .1], [x0 + .3, Y, Z1 - .1]], { cls: 'dt' });
+    p.line([[x0 + .36, 2.15, Z1 - .1], [x0 + .36, Y, Z1 - .1]], { cls: 'dt' });
   }
 
   /* in fondo: la porta blindata con il tastierino (il Secret lab) */
@@ -342,9 +345,14 @@
     if (window.STANZA_OGGETTI) window.STANZA_OGGETTI({ part: part, frame: frame, ID: ID, X: X, Y: Y, Z0: Z0, Z1: Z1 });
     defs = el(svg, 'defs', {});
     build(); var sp = luceNeon(); render();
+    /* il pulviscolo nella luce delle plafoniere: pochi puntini che salgono piano */
+    if (!RM) { var du = el(gAll, 'g', { class: 'dust' });
+      [[0, 4.1], [0, 6.3], [0, 8.4]].forEach(function (c, n) { var q = prj([c[0], 1.6, c[1]]), s = F / c[1];
+        for (var i = 0; i < 7; i++) el(du, 'circle', { cx: (q[0] + (Math.random() - .5) * s * 1.6).toFixed(1), cy: (q[1] + (Math.random() - .3) * s * 1.4).toFixed(1), r: (.6 + Math.random() * 1.1).toFixed(2),
+          style: 'animation-duration:' + (7 + Math.random() * 7).toFixed(1) + 's;animation-delay:-' + (Math.random() * 9).toFixed(1) + 's' }) }) }
     /* l'arrivo: le linee si disegnano, dal fondo verso chi guarda; poi le facce si riempiono */
     var wrap = st.querySelector('.lgsv');
-    if (!RM) { st.classList.add('pre'); requestAnimationFrame(function () { requestAnimationFrame(function () { st.classList.remove('pre'); st.classList.add('drawn') }) }) } else st.classList.add('drawn');
+    if (!RM) { st.classList.add('pre'); requestAnimationFrame(function () { requestAnimationFrame(function () { st.classList.remove('pre'); st.classList.add('drawn'); setTimeout(function () { st.classList.add('done') }, 4800) }) }) } else st.classList.add('drawn', 'done');
     /* la camera segue il mouse, piano */
     var fine = matchMedia('(hover:hover) and (pointer:fine)').matches, raf = 0, on = true;
     function tick() { raf = 0; if (!on) return; var dx = to.x - cam.x, dy = to.y - cam.y; cam.x += dx * .08; cam.y += dy * .08; render(); if (Math.abs(dx) + Math.abs(dy) > .0008) raf = requestAnimationFrame(tick) }

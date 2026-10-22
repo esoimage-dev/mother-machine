@@ -63,6 +63,8 @@
 /* l'arrivo: le linee si disegnano dal fondo verso chi guarda, poi le facce si riempiono */
 .lgst .lgW .dw{stroke-dasharray:1;stroke-dashoffset:0;transition:stroke-dashoffset 1.5s cubic-bezier(.6,0,.2,1) calc(var(--i) * 32ms),fill-opacity .7s calc(var(--i) * 32ms + 1s)}
 .lgst.pre .lgW .dw{stroke-dashoffset:1;fill-opacity:0;transition:none}
+/* finito l'arrivo, via le transizioni: muovendo la camera il browser non deve ricontrollarle su ogni linea */
+.lgst.done .lgW .dw{transition:none;stroke-dasharray:none}
 .lgst.pre .lgW .tx{opacity:0}
 .lgW .tx{transition:opacity .8s 2.2s}
 .lgst.lg-off .lgW *{animation-play-state:paused!important}
@@ -140,7 +142,7 @@
 .lgst.dark .lgW .dw:not(.led):not(.or):not(.ntube):not(.nglow):not(.ncore){stroke-opacity:.1!important}
 .lgst.dark .lgW .tx:not(.nsign){opacity:.12}
 .lgst.dark .lgW .nspill{opacity:1.6}
-.lgst .lgW .nspill,.lgst .lgW .dw{transition:stroke-opacity .25s steps(2)}
+.lgst .lgW .nspill{transition:opacity .25s steps(2)}
 /* il caveau dice di no: il tastierino lampeggia */
 .lgW .hot.deny .led.o{animation:lgdeny .12s steps(1) 6}
 @keyframes lgdeny{50%{fill-opacity:0;stroke-opacity:0}}
@@ -152,3 +154,6 @@
 @keyframes lgstatic{0%{fill-opacity:.5}50%{fill-opacity:.22}}
 .lgW .hot.on .ln.play{opacity:0}
 .lgW .fuse .ln.or{fill:none;stroke-width:calc(var(--w) * 1.2)}
+/* il pulviscolo */
+.lgW .dust circle{fill:#F4F2EC;opacity:0;animation:lgdust 10s linear infinite}
+@keyframes lgdust{0%{opacity:0;transform:translate(0,0)}20%{opacity:.5}80%{opacity:.35}100%{opacity:0;transform:translate(14px,-46px)}}

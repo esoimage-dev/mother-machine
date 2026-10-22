@@ -69,7 +69,7 @@
   /* ---------- il gioco ---------- */
   var g, cv, S = null, hi = 0, raf = 0, last = 0, keys = {}, mode = 'attract', T0 = 0, shake = 0, floats = [];
   try { hi = +localStorage.getItem('mm-rush-hi') || 0 } catch (e) {}
-  var TOP = 30, FH = 26, SX = 114, SW = 28, CAP = 4, ROUND = 75;
+  var TOP = 28, FH = 27, SX = 114, SW = 28, CAP = 4, ROUND = 75;
   function fy(i) { return TOP + i * FH }
   function reset() {
     S = { pos: 5, at: 5, tgt: 5, load: [], wait: FL.map(function () { return [] }), score: 0, lives: 3, t: ROUND, spawn: 1.2, made: 0, combo: 0, stopT: 0 };
@@ -86,7 +86,7 @@
     var i = S.at, got = S.load.filter(function (o) { return o.to === i });
     if (got.length) { S.load = S.load.filter(function (o) { return o.to !== i }); S.combo = got.length;
       var pts = got.reduce(function (a, o) { return a + 100 + Math.round(o.t / o.max * 50) }, 0) * got.length;
-      S.score += pts; pop(SX + SW / 2, fy(i) + 4, '+' + pts, got.length > 1 ? C.yl : C.cy); SFX.drop(got.length) }
+      S.score += pts; pop(SX + SW / 2, fy(i) + 4, '+' + pts, got.length > 1 ? C.yl : C.cy); if (got.length > 1) pop(SX + SW / 2, fy(i) - 6, 'X' + got.length + ' COMBO', C.pk); SFX.drop(got.length) }
     var q = S.wait[i], took = 0;
     while (q.length && S.load.length < CAP) { S.load.push(q.shift()); took++ }
     if (took) SFX.pick(); else if (!got.length) SFX.ding();
@@ -139,8 +139,8 @@
     var cy = TOP + S.pos * FH;
     g.fillStyle = C.dim; g.fillRect(SX + SW / 2, TOP - 2, 1, cy - TOP + 2);
     g.fillStyle = C.cy; g.globalAlpha = .18; g.fillRect(SX - 3, cy - 2, SW + 6, FH + 2); g.globalAlpha = 1;
-    g.strokeStyle = C.cy; g.lineWidth = 1; g.strokeRect(SX + .5, cy + .5, SW - 1, FH - 3);
-    S.load.forEach(function (o, j) { var x = SX + 3 + (j % 2) * 12, y = cy + 2 + (j / 2 | 0) * 11; spr(x, y, o.k, o.c); txt(x, y + 7, FL[o.to], C.ink) });
+    g.strokeStyle = C.cy; g.lineWidth = 1; g.strokeRect(SX + .5, cy + .5, SW - 1, FH - 2);
+    S.load.forEach(function (o, j) { var x = SX + 3 + (j % 2) * 12, y = cy + 1 + (j / 2 | 0) * 12; spr(x, y, o.k, o.c); txt(x, y + 7, FL[o.to], C.ink) });
     /* chi aspetta: icona, piano di arrivo, la barra della pazienza */
     S.wait.forEach(function (q, i) { q.forEach(function (o, j) { var x = SX + SW + 14 + j * 24, y = fy(i) + 5, k = o.t / o.max;
       var blink = k < .3 && (t * 6 | 0) % 2; spr(x, y, o.k, blink ? C.or : o.c);
