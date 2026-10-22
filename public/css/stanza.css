@@ -167,3 +167,24 @@
 /* il pulviscolo */
 .lgW .dust circle{fill:#F4F2EC;opacity:0;animation:lgdust 10s linear infinite}
 @keyframes lgdust{0%{opacity:0;transform:translate(0,0)}20%{opacity:.5}80%{opacity:.35}100%{opacity:0;transform:translate(14px,-46px)}}
+
+/* oggetti, giro 2 (stanza-oggetti.js) */
+.lgW .ln.cord{stroke-width:calc(var(--w) * .45)}
+.lgW .ln.dots{stroke-width:calc(var(--w) * .3);stroke-dasharray:.02 .04}
+.lgW .ln.tape{fill:#F4F2EC;fill-opacity:.2;stroke-opacity:.45;stroke-width:calc(var(--w) * .3)}
+.lgW .fc.pap{fill:#0F0F0E;fill-opacity:.92}
+.lgW .ln.vlit{fill:#F4F2EC;fill-opacity:.09}
+/* il menu: inchiostro sulla carta, il pomodoro che si preme */
+.lgW .tx.mink{fill:#0F0F0E;font-family:Georgia,'Times New Roman',serif;font-style:italic;letter-spacing:0}
+.lgW .tx.mink.mo2{font-family:var(--f-mono);font-style:normal;letter-spacing:.06em}
+.lgW .ln.mtom{fill:#FF5B3A;stroke:#FF5B3A;stroke-width:calc(var(--w) * .3);animation:lgled 2.6s steps(1) infinite .5s}
+/* i manifesti: lettere grosse, l'antenna della robot, il pixel morto */
+.lgW .tx.ptx{font-family:var(--f-body);font-weight:800;letter-spacing:.06em}
+.lgW .tx.ptx.gig{font-style:italic;letter-spacing:-.02em}
+.lgW .ln.abulb{fill:#FF5B3A;stroke:#FF5B3A;animation:lgled 1.8s steps(1) infinite}
+.lgW .ln.dpx{fill:#FF5B3A;stroke:#FF5B3A;stroke-width:.3;animation:lgdpx 3.7s steps(1) infinite}
+@keyframes lgdpx{0%,100%{opacity:1}30%{opacity:.1}31%{opacity:1}33%{opacity:.2}34%{opacity:1}70%{opacity:0}78%{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  .lgW .ln.mtom,.lgW .ln.abulb,.lgW .ln.dpx{animation:none}
+}
+.lgW .ln.inkst{stroke:#0F0F0E;stroke-width:calc(var(--w) * .7)}
