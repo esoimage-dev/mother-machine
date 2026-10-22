@@ -128,7 +128,9 @@
     if (l.text) { var q = prj(l.at); l.e.setAttribute('x', q[0].toFixed(1)); l.e.setAttribute('y', q[1].toFixed(1)); l.e.setAttribute('font-size', (F * l.size / Math.max(.3, l.at[2])).toFixed(2)); return }
     l.e.setAttribute('d', dpath(l.pts, l.closed, l.over));
   }
+  var hooks = [];
   function render() {
+    hooks.forEach(function (h) { h() });
     parts.forEach(function (P) {
       var fs = P.faces.filter(vis);
       fs.sort(function (a, b) { return zOf(b) - zOf(a) });
@@ -270,6 +272,33 @@
     t.text([1.6, 2.72, Z1 - .03], 'STAFF ONLY', .2, { cls: 'nsign', anchor: 'middle' });
   }
 
+  /* la luce del neon: una chiazza calda sul muro e una sul pavimento (gradienti, niente filtri). Le disegna il motore
+     sotto tutto il resto; il neon le accende e le spegne insieme a se' */
+  var spill = [];
+  function luceNeon() {
+    var g = el(null, 'g', { class: 'nspill' });
+    var gr = el(defs, 'radialGradient', { id: 'lgSpill' });
+    el(gr, 'stop', { offset: '0', 'stop-color': '#FF5B3A', 'stop-opacity': '.34' }); el(gr, 'stop', { offset: '1', 'stop-color': '#FF5B3A', 'stop-opacity': '0' });
+    var w = el(g, 'ellipse', { fill: 'url(#lgSpill)' }), f = el(g, 'ellipse', { fill: 'url(#lgSpill)', opacity: '.6' });
+    gAll.insertBefore(g, gAll.firstChild);
+    hooks.push(function () {
+      var c = prj([-2.4, 1.7, Z1]), e = prj([-.4, 1.7, Z1]), r = e[0] - c[0];
+      w.setAttribute('cx', c[0].toFixed(1)); w.setAttribute('cy', c[1].toFixed(1)); w.setAttribute('rx', (r * 1.3).toFixed(1)); w.setAttribute('ry', (r * 1.1).toFixed(1));
+      var a = prj([-2.4, 0, Z1 - 1.4]), b = prj([-.6, 0, Z1 - 1.4]), d = prj([-2.4, 0, Z1 - 2.6]);
+      f.setAttribute('cx', a[0].toFixed(1)); f.setAttribute('cy', a[1].toFixed(1)); f.setAttribute('rx', (b[0] - a[0]).toFixed(1)); f.setAttribute('ry', Math.max(4, d[1] - a[1]).toFixed(1));
+    });
+    return g;
+  }
+  /* lo sfarfallio del neon: mai uguale. Ogni 3-9 secondi un capriccio: due lampi, un buio, un ronzio a mezza luce */
+  function capricci(nodes) {
+    var seq = [[[0, 70], [1, 50], [0, 130], [1, 0]], [[.35, 900], [1, 0]], [[0, 60], [1, 40], [0, 60], [1, 30], [0, 700], [1, 80], [0, 50], [1, 0]], [[0, 1400], [.5, 90], [0, 120], [1, 0]], [[.6, 120], [1, 80], [.6, 140], [1, 0]]];
+    var on = true, T;
+    function set(v) { nodes.forEach(function (n) { n.style.opacity = v }) }
+    function play(s, i) { if (i >= s.length) { plan(); return } set(s[i][0]); T = setTimeout(function () { play(s, i + 1) }, s[i][1]) }
+    function plan() { clearTimeout(T); if (!on) return; T = setTimeout(function () { play(seq[Math.random() * seq.length | 0], 0) }, 3000 + Math.random() * 6000) }
+    return { start: function () { if (on && T) return; on = true; plan() }, stop: function () { on = false; clearTimeout(T); T = 0; set(1) } };
+  }
+
   /* scatoloni, il carrello, i cavi per terra */
   function disordine() {
     var p = part({ cls: 'mess' });
@@ -297,7 +326,8 @@
     svg = st.querySelector('svg');
     stanza(); server(); quadro(); caveau(); neon(); disordine(); soglia();
     if (window.STANZA_OGGETTI) window.STANZA_OGGETTI({ part: part, frame: frame, ID: ID, X: X, Y: Y, Z0: Z0, Z1: Z1 });
-    build(); render();
+    defs = el(svg, 'defs', {});
+    build(); var sp = luceNeon(); render();
     /* l'arrivo: le linee si disegnano, dal fondo verso chi guarda; poi le facce si riempiono */
     var wrap = st.querySelector('.lgsv');
     if (!RM) { st.classList.add('pre'); requestAnimationFrame(function () { requestAnimationFrame(function () { st.classList.remove('pre'); st.classList.add('drawn') }) }) } else st.classList.add('drawn');
@@ -305,7 +335,8 @@
     var fine = matchMedia('(hover:hover) and (pointer:fine)').matches, raf = 0, on = true;
     function tick() { raf = 0; if (!on) return; var dx = to.x - cam.x, dy = to.y - cam.y; cam.x += dx * .08; cam.y += dy * .08; render(); if (Math.abs(dx) + Math.abs(dy) > .0008) raf = requestAnimationFrame(tick) }
     if (fine && !RM) st.addEventListener('pointermove', function (e) { var r = st.getBoundingClientRect(); to.x = ((e.clientX - r.left) / r.width - .5) * 1.1; to.y = 1.6 - ((e.clientY - r.top) / r.height - .5) * .55; if (!raf) raf = requestAnimationFrame(tick) }, { passive: true });
-    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { on = es[0].isIntersecting; st.classList.toggle('lg-off', !on) }).observe(st);
+    var nn = [].slice.call(svg.querySelectorAll('.lgP.neon')).concat([sp]), cap = capricci(nn);
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { on = es[0].isIntersecting; st.classList.toggle('lg-off', !on); if (RM) return; on ? setTimeout(cap.start, 3200) : cap.stop() }).observe(st);
     /* sul telefono si parte dal centro della stanza */
     if (wrap && wrap.scrollWidth > wrap.clientWidth) wrap.scrollLeft = (wrap.scrollWidth - wrap.clientWidth) / 2;
   }

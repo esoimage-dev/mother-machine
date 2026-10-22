@@ -21,6 +21,8 @@
 .lgW .ln.cn{stroke-width:.8;stroke-opacity:.16;stroke-dasharray:2 7}
 .lgW .ln.edge{stroke-width:1.5;stroke-opacity:.9}
 .lgW .room{opacity:1}
+.lgW .beam .fc{stroke-opacity:.5}
+.lgW .ceil .fc{stroke-opacity:.8}
 .lgW .ln.bk2{stroke-width:.6;stroke-opacity:.16}
 .lgW .pool .ln.cn{stroke-opacity:.12;stroke-dasharray:none}
 .lgW .ln.cable{stroke-width:calc(var(--w) * 1.1)}
@@ -44,10 +46,19 @@
 .lgW .ln.nglow{stroke:#FF5B3A;stroke-opacity:.13;stroke-width:24}
 .lgW .ln.ntube{stroke:#FF5B3A;stroke-width:6.5}
 .lgW .ln.ncore{stroke:#FFD9CC;stroke-width:1.4}
-.lgW .neon{animation:lgneon 7s steps(1) infinite}
-@keyframes lgneon{0%,61%,63%,64%,100%{opacity:1}62%{opacity:.35}63.5%{opacity:.6}}
+/* lo sfarfallio del neon lo decide stanza.js (capricci): mai uguale */
+.lgW .nspill{pointer-events:none}
+.lgW .lgP.neon{opacity:1}
 .lgW .tx.nsign{fill:#F4F2EC;font-family:var(--f-body);font-weight:300;letter-spacing:.12em;animation:lgflick 5s steps(1) infinite}
 @keyframes lgflick{0%,100%{opacity:.95}12%{opacity:.3}13%{opacity:.95}47%{opacity:.5}48%{opacity:.95}}
+
+/* le plafoniere: finito il disegno si accendono come i tubi al neon, a scatti; poi le pozze di luce */
+.lgW .ln.tube{animation:lgfluo 1.3s steps(1) 2.6s both}
+.lgW .lamp:nth-of-type(odd) .ln.tube{animation-delay:3s}
+@keyframes lgfluo{0%{stroke-opacity:.12}12%{stroke-opacity:.9}18%{stroke-opacity:.12}34%{stroke-opacity:.9}40%{stroke-opacity:.3}55%,100%{stroke-opacity:.9}}
+.lgW .pool{animation:lgpool 1s ease-out 3.6s both}
+@keyframes lgpool{from{opacity:0}}
+.lgW .nspill{animation:lgpool 1.2s ease-out 2.4s both}
 
 /* l'arrivo: le linee si disegnano dal fondo verso chi guarda, poi le facce si riempiono */
 .lgst .lgW .dw{stroke-dasharray:1;stroke-dashoffset:0;transition:stroke-dashoffset 1.5s cubic-bezier(.6,0,.2,1) calc(var(--i) * 32ms),fill-opacity .7s calc(var(--i) * 32ms + 1s)}
@@ -70,5 +81,5 @@
   .lgcap{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){
-  .lgW .led.o,.lgW .neon,.lgW .tx.nsign{animation:none}
+  .lgW .led.o,.lgW .tx.nsign,.lgW .ln.tube,.lgW .pool,.lgW .nspill{animation:none}
 }
