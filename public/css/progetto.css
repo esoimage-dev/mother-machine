@@ -20,7 +20,7 @@
 @media (max-width:700px){
   .cfn[data-c="3"] b,.cfn[data-c="3"] .lead b{font-size:clamp(72px,24vw,120px)}
   .cfn[data-c="3"] .lead b{font-size:clamp(104px,36vw,170px)}
-  .cfn[data-c="3"] .lead b[data-s="%"]{font-size:clamp(88px,28vw,170px)}   /* +200%: cinque segni, non tocca il bordo */
+  .cfn[data-c="3"] .lead b[data-s="%"]{font-size:clamp(88px,28vw,170px)}   /* +180%: cinque segni, non tocca il bordo */
 }
 .cfn[data-c="3"] b{padding-bottom:.1em}   /* la barra di 24/7 scende sotto la riga: non tocca la didascalia */
 
@@ -138,3 +138,9 @@ html .cnx .arq svg,html .cnx .arq svg:first-child{fill:#121211}
 html a.cnx:hover .arq,html a.cnx:focus-visible .arq{background:#F4F2EC;color:#121211;box-shadow:none}
 html .cnx .arq svg:first-child{left:15px;top:15px;width:26px;height:26px;transform:none}
 html a.cnx:hover .arq svg:first-child,html a.cnx:focus-visible .arq svg:first-child{transform:translateX(4px)}   /* una freccia sola: resta e si sposta appena, non esce */
+/* sotto i risultati: come ci si arriva, numeri piccoli */
+.cfm{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,48px);margin-top:clamp(40px,5vw,72px)}
+.cfm>div{display:grid;gap:8px;align-content:start;padding-top:14px;border-top:1px solid var(--line,rgba(18,18,17,.18))}
+.cfm b{font:620 clamp(32px,3.4vw,52px)/1 var(--f-body);letter-spacing:-.04em;white-space:nowrap}
+.cfm span{font-size:15px;line-height:1.4;color:var(--mut);max-width:30ch}
+@media (max-width:700px){.cfm{grid-template-columns:1fr;gap:22px}}

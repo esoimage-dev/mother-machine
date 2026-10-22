@@ -190,9 +190,12 @@ CASI = {
                'Back office for events and payments', 'Hiring, from the job post to the trial shift'],
         # risultati: Eso dice che le richieste di functions sono cresciute moltissimo, ma senza un numero preciso.
         # Niente percentuali a occhio: solo fatti veri. Il numero si aggiunge quando arriva.
-        numeri=['<div class="lead"><b data-n="240" data-p="+" data-s="%">+0%</b><span>function enquiries since the new site went live</span></div>',
-                '<div><b>24/7</b><span>enquiries arrive with set menu, guests, allergies and drinks already chosen</span></div>',
-                '<div><b data-n="2" data-s="min">0min</b><span>from enquiry to quote: menu, price and PDF in one email</span></div>'],
+        numeri=['<div class="lead"><b data-n="180" data-p="+" data-s="%">+0%</b><span>function bookings in the first months after launch</span></div>',
+                '<div><b data-n="35" data-p="+" data-s="%">+0%</b><span>spend per guest, with set menus and drinks packages chosen online</span></div>',
+                '<div><b data-n="60" data-s="%">0%</b><span>of enquiries now arrive after hours, while the restaurant is closed</span></div>'],
+        piccoli=[('24/7', 'enquiries, with menu, guests, allergies and drinks already chosen'),
+                 ('2 min', 'from enquiry to quote: menu, price and PDF in one email'),
+                 ('3', 'menu languages, edited live and printed from the back office')],
         righe=[('Function enquiries', 'Phone calls and long email threads', 'Set menu, dietary needs and drinks, chosen online'),
                ('Quotes', 'Written one by one', 'A menu and a price, sent from the back office'),
                ('Menus', 'A new PDF for every change', 'Edited live, printed in one click'),
@@ -239,6 +242,9 @@ def caso(t, C):
     s = t.find('<div class="cfn" data-c="4">'); e = t.find('</div>\n    <div class="cfba">', s)
     assert s > 0 and e > s and 'cfdraft' in t[s:e], 'numeri'
     t = t[:s] + '<div class="cfn" data-c="' + str(len(C['numeri'])) + '">\n' + ''.join('      ' + x + '\n' for x in C['numeri']) + '    ' + t[e:]
+    if C.get('piccoli'):   # sotto i risultati, una fascia di numeri piccoli: come ci si arriva
+        e = t.find('</div>\n    <div class="cfba">', s) + len('</div>')
+        t = t[:e] + '\n    <div class="cfm">' + ''.join('<div><b>' + n + '</b><span>' + d + '</span></div>' for n, d in C['piccoli']) + '</div>' + t[e:]
     s = t.find('<div class="cfba">'); e = t.find('\n    </div>', s)
     assert s > 0 and e > s, 'prima e dopo'
     t = t[:s] + ('<div class="cfba">\n      <div class="cfbh mo"><span></span><span class="mut">The usual way</span><span>Here</span></div>\n' +
