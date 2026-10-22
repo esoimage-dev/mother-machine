@@ -8,7 +8,7 @@ Ultimo aggiornamento: 25 ottobre 2026 (passaggio a un altro account Claude: legg
 ---
 
 ## 0 · Dove siamo (per chi riprende da qui)
-- **Tutto il lavoro è su `main`** (ultima pull request unita: #6). Si lavora sul branch `claude/keen-franklin-rxhwha`
+- **Tutto il lavoro è su `main`** (ultima pull request: #8, da unire se non lo è già). Si lavora sul branch `claude/keen-franklin-rxhwha`
   ripartendo ogni volta dal `main` aggiornato, o su un branch nuovo: con il push si apre la pull request e Eso la unisce. Anteprima: `https://claude-keen-franklin-rxhwha.mother-machine.pages.dev`.
 - **Prossimi passi, in ordine** (lavorare con pochi token, niente stravolgimenti, proporre in chat prima di toccare):
   1. **Studio (01):** testi più corti, tre parti (Survey, Build, Run), via i doppioni. Proporre i testi in chat, poi una modifica sola.
