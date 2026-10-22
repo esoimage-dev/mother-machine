@@ -10,13 +10,13 @@ Il piano di lancio in 3 giorni, con le decisioni e l'ordine, è in `docs/PIANO.m
   Per rifare la demo dal codice del cliente: `python3 scripts/demo-vitalias.py /percorso/vitalias-pizza-on-wheels`.
 - [ ] Pagine progetto: Mother Machine, Vitalia's Restaurant, Machine Room.
 - [ ] Togliere i numeri ai progetti ("No. 012", "Study 03", "No. 001 · 012") da Work, home e pagina progetto.
-- [ ] Work in home: due proposte con screenshot, poi costruire la scelta.
+- [x] Work in home: striscia orizzontale con selettore e macchine in piccolo (22 ottobre). Birrificio Mare e Forno Nove restano segnaposto finché non arrivano lavori veri.
 
 ## Lancio · giorno 2
 - [ ] Contact vero: Worker, D1, Turnstile, Resend (conferma al cliente, avviso a noi), call con stanza Daily standard.
 - [ ] Machine Room v1: lista e dettaglio degli ordini veri da D1.
 - [ ] Testi: Studio a 3 sezioni, Brand e Systems piu' corti, riga sicurezza in Systems, un solo "free", via i doppioni.
-- [ ] Ordine della home (Work subito dopo l'apertura): screenshot e conferma.
+- [x] Ordine della home: apertura, Work, What we build, How we work, In motion, porta verso G (22 ottobre).
 
 ## Lancio · giorno 3
 - [ ] Privacy con nome legale, ABN, indirizzo; ABN nel footer; SEO; Open Graph; doctype.

@@ -307,6 +307,29 @@ def caso(t, C):
 
 
 
+
+def lavori_home(t):
+    """05.2 Work (22 ottobre, deciso con Eso): subito dopo l'apertura, una striscia orizzontale di lavori.
+    Ogni scheda ha dentro la sua macchina che lavora in piccolo; chi vuole va di lato (trackpad, dito, trascinando o
+    col selettore fisso in basso), chi no continua a scendere. Poi What we build, How we work (separa i due vetri),
+    In motion, la porta verso G."""
+    def taglia(t, inizio):
+        s = t.find(inizio); e = t.find('</section>', s) + len('</section>')
+        assert s > 0 and e > s, inizio
+        return t[:s] + t[e:].lstrip(), t[s:e]
+    t, _ = taglia(t, '<section class="hs wk" data-luce="carta" data-f="05.3" data-n="Proof" id="s2">')
+    t, come = taglia(t, '<section class="hs" data-luce="carta" data-f="05.5" data-n="How we work" id="s4">')
+    sez = (ROOT / 'src/sezioni/lavori-home.html').read_text(encoding='utf8').strip()
+    i = t.find('<section class="hs mmo"'); assert i > 0, 'what we build'
+    t = t[:i] + sez + '\n\n  ' + t[i:]
+    i = t.find('<section class="hs vmo"'); assert i > 0, 'in motion'
+    t = t[:i] + come + '\n\n  ' + t[i:]
+    for a, b in (('data-f="05.2" data-n="What we build" id="s3"', 'data-f="05.3" data-n="What we build" id="s3"'),
+                 ('data-f="05.5" data-n="How we work" id="s4"', 'data-f="05.4" data-n="How we work" id="s4"'),
+                 ('data-f="05.4" data-n="In motion" id="s5"', 'data-f="05.5" data-n="In motion" id="s5"')):
+        t = una(t, a, b, b)
+    return t
+
 def ritocchi(nome, t):
     """Modifiche decise con Eso sopra le pagine approvate (19 ottobre 2026)."""
     # footer: l'elenco del palazzo (ridisegnato il 19 ottobre), generato qui per ogni pagina
@@ -358,6 +381,7 @@ def ritocchi(nome, t):
                 "var mw=0,x0=h.getBoundingClientRect().left;[].forEach.call(h.children,function(d){mw=Math.max(mw,d.querySelector('.bm').getBoundingClientRect().left-x0)});", 'misura riga')
         # su telefono il film si apre dalla copertina (il link piccolo "Watch the film" non c'e' piu')
         t = una(t, "$('h3wf').addEventListener('click',openF);", "$('h3pf').addEventListener('click',openF);", 'film da copertina')
+        t = lavori_home(t)
         # 05.1 su telefono: il titolo si misura a peso medio (non al 900), cosi' riempie la larghezza
         t = una(t, "make();h.style.fontSize='100px';CH.forEach(function(c){c.el.style.fontWeight=tileOn()?560:HI});",
                 "make();h.style.fontSize='100px';CH.forEach(function(c){c.el.style.fontWeight=tileOn()?560:(innerWidth<700?600:HI)});", 'peso titolo')
