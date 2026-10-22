@@ -39,9 +39,6 @@
 /* ===== Friendly: tondo, colorato, a molla. Stessi comandi, si usano in un altro modo ===== */
 .ctlg[data-sty="friendly"]{--fv:#6E4BFF;--fl:#EEE8FF;--fp:#FF6F9C;--fg:#1FB57A}
 .ctlg[data-sty="friendly"] .cel{background:rgba(255,250,244,.66)}
-.ctlg[data-sty="friendly"] .cel>.mo{color:var(--fv)}
-.ctlg[data-sty="friendly"] .spec{color:#8C82AE}
-.ctlg[data-sty="friendly"] .spec b{color:var(--fv)}
 .ctlg[data-sty="friendly"] .x-ic{display:block}
 /* switch: la manopola ha la campanella; accesa suona */
 .ctlg[data-sty="friendly"] .sws{width:72px;height:40px;border-radius:999px;background:var(--fl)}
@@ -99,9 +96,6 @@
 /* ===== Editorial: carattere graziato, solo parole e linee, niente scatole ===== */
 .ctlg[data-sty="editorial"]{--ei:#1F1A15;--em:#8F8576}
 .ctlg[data-sty="editorial"] .cel{background:rgba(246,241,232,.82);color:var(--ei)}
-.ctlg[data-sty="editorial"] .cel>.mo{font:italic 400 16px/1 'Gloock',serif;letter-spacing:0;text-transform:none;color:var(--em)}
-.ctlg[data-sty="editorial"] .spec{font:italic 400 14px 'Gloock',serif;letter-spacing:0;text-transform:none;color:var(--em)}
-.ctlg[data-sty="editorial"] .spec b{font-weight:400;color:var(--ei)}
 /* switch: due parole, la linea scivola sotto quella scelta */
 .ctlg[data-sty="editorial"] .sws{width:auto;height:auto;background:transparent;display:flex;gap:22px;padding-bottom:8px;font:400 30px/1 'Gloock',serif;color:var(--em)}
 .ctlg[data-sty="editorial"] .sws::before{content:"Off";color:var(--ei);transition:color .35s}
