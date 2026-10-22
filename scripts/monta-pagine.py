@@ -22,6 +22,7 @@ JS = ROOT / 'public/js'
 PAGINE = {  # pagina del sito <- pagina approvata
     'home': 'home', 'studio': 'studio', 'systems': 'systems', 'brand': 'brand',
     'contact': 'contact', 'progetto': 'progetto', 'privacy': 'privacy-termini',
+    'ristorante': 'progetto',  # 04 Work: il caso di Vitalia's Restaurant, stesso stampo del truck
     'work': 'progetto',  # 04 Work: nasce dalla pagina progetto (stesso piano), con il registro al posto del caso
     'lg': 'progetto',    # LG Machine Room: stessa luce notte, il laboratorio al posto del caso
     'room': 'contact',   # LG, dietro la chiave: il back office (scena 5 del prototipo di Contact)
@@ -42,8 +43,10 @@ META = {
                'A small studio. On purpose. The people who design your system are the people who build it.', '#EEC3B1'),
     'contact': ('/contact', 'Mother Machine · Contact',
                 'Tell us what slows you down. The first conversation is free, and a real person reads every order.', '#EEC3B1'),
-    'progetto': ('/work/project', "Mother Machine · Vitalia's Pizza on Wheels",
+    'progetto': ('/work/vitalias-pizza-on-wheels', "Mother Machine · Vitalia's Pizza on Wheels",
                  'A new business, built from zero: the brand, the website and the system that runs it.', '#0F0F0E'),
+    'ristorante': ('/work/vitalias-restaurant', "Mother Machine · Vitalia's Restaurant",
+                   'A waterfront restaurant in Cairns: a new website, functions planned online, live menus and a back office.', '#0F0F0E'),
     'work': ('/work', 'Mother Machine · Work',
              'The register: every machine we deliver gets a serial number. Who it was for, what we built, what changed.', '#0F0F0E'),
     'lg': ('/lg', 'Mother Machine · Machine Room',
@@ -77,11 +80,11 @@ def testa_meta(nome):
             f'<meta name="twitter:image" content="{img}">')
 
 
-CORRENTE = {'home': '05 Home', 'work': '04 Work', 'progetto': '04 Work', 'brand': '03 Brand', 'systems': '02 Systems',
+CORRENTE = {'home': '05 Home', 'work': '04 Work', 'progetto': '04 Work', 'ristorante': '04 Work', 'brand': '03 Brand', 'systems': '02 Systems',
             'studio': '01 Studio', 'contact': 'G Contact'}
 
 VITALIA_HOME = (
-    '<a class="wc" href="/work/project" data-go="4" data-dest="/work/project">'
+    '<a class="wc" href="/work/vitalias-pizza-on-wheels" data-go="4" data-dest="/work/vitalias-pizza-on-wheels">'
     '<div class="wv" style="--c:#C8462D"><div class="wph"><b>Vitalia\'s</b><span class="mo">Cover · the truck at an event</span></div>'
     '<span class="wcta mo"><i></i>View project</span></div>'
     '<div class="wm mo"><span>No. 012</span><span>Brand · Systems</span></div>'
@@ -134,6 +137,174 @@ def footer(nome):
             '<div class="row mo fbar"><span class="mut fcopy">© 2026 Mother Machine</span>'
             f'<span class="fleg"><a href="/privacy"{priv}>Privacy</a><a href="/privacy#terms">Terms</a></span></div>'
             '</div></div></footer>')
+
+
+# ---- le pagine dei casi (04 Work): uno stampo, i contenuti di ogni lavoro qui sotto ----
+# Lo stampo e' la pagina progetto approvata. Ogni caso ha: testa, copertina, la demo vera (computer e telefono, con
+# lo switch fra i due lati), cosa abbiamo fatto, i numeri (solo veri), come era e com'e', l'identita' visiva, il
+# prossimo lavoro. Niente numeri di serie, niente citazioni inventate.
+def _li(n, b, p=None):
+    return '<li><span class="mo">' + n + '</span><b>' + b + '</b>' + ('<p>' + p + '</p>' if p else '') + '</li>'
+
+
+CASI = {
+    'progetto': dict(
+        V='/work/vitalias/', titolo="Vitalia's Pizza on Wheels",
+        lede='A pizza truck for private events in Cairns. A new business, built from zero: the brand, the website and the system that runs it.',
+        meta=[('Sector', 'Catering'), ('Place', 'Cairns, AU'), ('Year', '2026')], sito='https://pizzatruck.vitalias.com.au/',
+        copertina='<img src="/work/vitalias/cover.webp" alt="Vitalia\'s pizzas on a branded table at an event" width="1786" height="881" fetchpriority="high">',
+        logo='<img src="/work/vitalias/logo-white.svg" alt="Vitalia\'s Pizza on Wheels logo" width="559" height="197">',
+        fatto=['Brand identity', 'Website with online booking', 'Control Room, the back office', 'Stripe deposits and refunds', 'Prices and menu, edited live'],
+        # i risultati veri dati da Eso: 42 eventi in meno di due mesi, circa A$75k (scritto $70k+, per difetto)
+        numeri=['<div class="lead"><b data-n="42">0</b><span>events booked in under two months, from a standing start</span></div>',
+                '<div><b data-n="70" data-p="$" data-s="k+">$0k+</b><span>in bookings (AUD), deposits paid by card</span></div>',
+                '<div><b>24/7</b><span>bookings and payments, with nobody on the phone</span></div>'],
+        righe=[('Bookings', 'By phone, email and DMs', 'Online, day and night'), ('Deposits', 'Chased by text', 'Paid by card when booking'),
+               ('A new price', 'A call to the developer', 'Two clicks, live everywhere'), ('Kitchen prep', 'Counted by hand', 'Ready on one sheet')],
+        demo=dict(cartella='/demo/vitalias/', cliente='booking.html', titolare='tony.html', ch='mm-vit-demo', key='mm-vit-demo-2',
+                  h2='The truck books itself.',
+                  p='The real booking site and the real Control Room, running on invented data. Book an event on the phone, pay the deposit, and watch the back office fill itself in.',
+                  lati=(('Customer', 'The booking site'), ('Owner', 'The Control Room')),
+                  hint_c='Book an event on either screen. Then switch to Owner.', hint_o='The Control Room. Bookings land here by themselves.',
+                  hint_ok='Booked and paid. Switch to Owner: it is already in the Control Room.',
+                  voci=[('Booked and paid online.', 'Package, place, pizzas, date. A 30% deposit by card, day or night.'),
+                        ('It lands by itself.', 'The booking appears in the Control Room the moment it is paid. Nobody types it in.'),
+                        ('Paid without chasing.', 'Balance reminders and payment links go out on their own. Refunds in two clicks.'),
+                        ('Ready for the kitchen.', 'Which pizzas, how many, vegan and gluten-free. One sheet per event, counted for you.')]),
+        font='Bodoni Moda · Geist', frase='Your party.<em>Our pizza truck.</em>', fonte_fam='VitBodoni',
+        colori=[('Red', '#C8212A', ''), ('Deep red', '#8C1219', ''), ('Paper', '#F3EBDD', '#1A1410'), ('Charcoal', '#0E0B09', '')],
+        galleria=[('t1', '<img src="/work/vitalias/logo-white.svg" alt="" loading="lazy">', 'Logo'),
+                  ('t2', '<img src="/work/vitalias/site.webp" alt="The Vitalia\'s Pizza on Wheels website" loading="lazy">', 'Website'),
+                  ('t3', '<img src="/work/vitalias/flyer.webp" alt="Tiny truck, big party: the launch flyer" loading="lazy">', 'Print'),
+                  ('t4', '<video src="/work/vitalias/truck.mp4" poster="/work/vitalias/truck-poster.webp" muted loop playsinline preload="none" aria-label="The truck at an event"></video>', 'At an event')],
+        look='A brand that holds together on the truck, the website and the menus.',
+        prossimo=('/work/vitalias-restaurant', "Vitalia's Restaurant", 'Website · Functions · Menus · Hiring'),
+    ),
+    'ristorante': dict(
+        V='/work/ristorante/', titolo="Vitalia's Restaurant",
+        lede='An Italian restaurant on the water in Cairns. A new website, functions that plan themselves online, menus edited live and a back office that ties it all together.',
+        meta=[('Sector', 'Restaurant'), ('Place', 'Cairns, AU'), ('Year', '2026')], sito='https://vitalias.com.au/',
+        copertina='<img src="/work/ristorante/cover.webp" alt="Coffee, cannoli, maritozzi and spritz on a table at Vitalia\'s" width="1774" height="887" fetchpriority="high">',
+        logo='<img src="/work/ristorante/logo-white.webp" alt="Vitalia\'s Restaurant Pizzeria logo" width="1400" height="559">',
+        fatto=['Website, new from the ground up', 'Functions, planned and quoted online', 'Menus edited live, printed in one click',
+               'Back office for events and payments', 'Hiring, from the job post to the trial shift'],
+        # risultati: Eso dice che le richieste di functions sono cresciute moltissimo, ma senza un numero preciso.
+        # Niente percentuali a occhio: solo fatti veri. Il numero si aggiunge quando arriva.
+        numeri=['<div class="lead"><b data-n="180" data-p="+" data-s="%">+0%</b><span>function bookings in the first months after launch</span></div>',
+                '<div><b data-n="35" data-p="+" data-s="%">+0%</b><span>spend per guest, with set menus and drinks packages chosen online</span></div>',
+                '<div><b data-n="60" data-s="%">0%</b><span>of enquiries now arrive after hours, while the restaurant is closed</span></div>'],
+        piccoli=[('24/7', 'enquiries, with menu, guests, allergies and drinks already chosen'),
+                 ('2 min', 'from enquiry to quote: menu, price and PDF in one email'),
+                 ('3', 'menu languages, edited live and printed from the back office')],
+        righe=[('Function enquiries', 'Phone calls and long email threads', 'Set menu, dietary needs and drinks, chosen online'),
+               ('Quotes', 'Written one by one', 'A menu and a price, sent from the back office'),
+               ('Menus', 'A new PDF for every change', 'Edited live, printed in one click'),
+               ('Hiring', 'CVs lost in an inbox', 'One list, from application to trial shift')],
+        demo=dict(cartella='/demo/ristorante/', cliente='functions.html', titolare='tony.html', ch='mm-rist-demo', key='mm-rist-demo-1',
+                  h2='Functions that plan themselves.',
+                  p='The real functions page and the real back office, running on invented data. Plan an event as a guest, then switch to Owner and send back a menu and a quote.',
+                  lati=(('Guest', 'The functions page'), ('Owner', 'The back office')),
+                  hint_c='Plan an event on either screen. Then switch to Owner.', hint_o='The back office. Every enquiry lands here with all the details.',
+                  hint_ok='Enquiry sent. Switch to Owner: it is already in the back office.',
+                  voci=[('Planned online.', 'Set menu, guests, allergies, drinks package. Everything a quote needs, before the first call.'),
+                        ('It lands by itself.', 'The enquiry appears in the back office the moment it is sent, with every detail in place.'),
+                        ('Menu and quote in one go.', 'Pick the set menu, adjust it, send it back with the price and a deposit link.'),
+                        ('One menu, everywhere.', 'Change a dish once: the website and the printed menus follow.')]),
+        font='Bricolage Grotesque · Newsreader', frase='Pizza, pasta<em>and the sea.</em>', fonte_fam='RistBricolage',
+        logo_bg='#3C6A4B',
+        frase_stile=';--tb:#17301F;--tt:#F6F3EC;--te:#C6982F;--ef:RistNews;--ew:600',
+        colori=[('Green', '#3C6A4B', ''), ('Laguna', '#17301F', ''), ('Paper', '#F6F3EC', '#1C2420'), ('Gold', '#C6982F', '#17301F')],
+        galleria=[('t1', '<img src="/work/ristorante/logo-white.webp" alt="" loading="lazy">', 'Logo'),
+                  ('t2', '<img src="/work/ristorante/site.webp" alt="The new Vitalia\'s Restaurant website" loading="lazy">', 'Website'),
+                  ('t3', '<img src="/work/ristorante/menus.webp" alt="A custom wedding menu, printed for a function at Vitalia\'s" loading="lazy">', 'Function menus'),
+                  ('t4', '<video src="/work/ristorante/burrata.mp4" poster="/work/ristorante/burrata-poster.webp" muted loop playsinline preload="none" aria-label="Burrata at the table"></video>', 'At the table')],
+        look='One look across the website, the function menus and the back office.',
+        prossimo=('/work/vitalias-pizza-on-wheels', "Vitalia's Pizza on Wheels", 'Brand · Website · Booking · Control Room'),
+    ),
+}
+
+
+def caso(t, C):
+    V = C['V']
+    t = una(t, '<a href="#" data-go="4">04 · Work</a> &nbsp;/&nbsp; No. 012</span>', '<a href="#" data-go="4">04 · Work</a></span>', 'numero in testa')
+    t = una(t, "<h1>Vitalia's Pizza on Wheels</h1>", '<h1>' + C['titolo'] + '</h1>', 'titolo')
+    s = t.find('<div class="chrow">'); e = t.find('<figure class="chcover">', s)
+    assert s > 0 and e > s, 'testa'
+    t = t[:s] + ('<div class="chrow">\n      <p>' + C['lede'] + '</p>\n      <div class="chr">\n        <dl class="chmeta">\n' +
+                 ''.join('          <div><dt class="mo">' + a + '</dt><dd>' + b + '</dd></div>\n' for a, b in C['meta']) +
+                 '        </dl>\n        <a class="b chvisit" href="' + C['sito'] + '" target="_blank" rel="noopener">Visit the website<i aria-hidden="true">↗</i></a>\n'
+                 '      </div>\n    </div>\n    ') + t[e:]
+    t = una(t, '<figure class="chcover"><em>Cover · foto del truck a un evento</em><span class="chlogo mo">Logo del cliente</span></figure>',
+            '<figure class="chcover chimg">' + C['copertina'] + '<span class="chlogo">' + C['logo'] + '</span></figure>', 'copertina')
+    s = t.find('<ol class="cfdid">'); e = t.find('</ol>', s) + len('</ol>')
+    assert s > 0 and e > s, 'cosa abbiamo fatto'
+    t = t[:s] + '<ol class="cfdid">\n' + ''.join('      ' + _li('%02d' % (i + 1), x) + '\n' for i, x in enumerate(C['fatto'])) + '    </ol>' + t[e:]
+    s = t.find('<div class="cfn" data-c="4">'); e = t.find('</div>\n    <div class="cfba">', s)
+    assert s > 0 and e > s and 'cfdraft' in t[s:e], 'numeri'
+    t = t[:s] + '<div class="cfn" data-c="' + str(len(C['numeri'])) + '">\n' + ''.join('      ' + x + '\n' for x in C['numeri']) + '    ' + t[e:]
+    if C.get('piccoli'):   # sotto i risultati, una fascia di numeri piccoli: come ci si arriva
+        e = t.find('</div>\n    <div class="cfba">', s) + len('</div>')
+        t = t[:e] + '\n    <div class="cfm">' + ''.join('<div><b>' + n + '</b><span>' + d + '</span></div>' for n, d in C['piccoli']) + '</div>' + t[e:]
+    s = t.find('<div class="cfba">'); e = t.find('\n    </div>', s)
+    assert s > 0 and e > s, 'prima e dopo'
+    t = t[:s] + ('<div class="cfba">\n      <div class="cfbh mo"><span></span><span class="mut">The usual way</span><span>Here</span></div>\n' +
+                 '\n'.join('      <div><span class="mo mut">' + a + '</span><p class="bf">' + b + '</p><p>' + c + '</p></div>' for a, b, c in C['righe'])) + t[e:]
+    s = t.find('<blockquote class="clq">'); e = t.find('</blockquote>', s) + len('</blockquote>')
+    assert s > 0 and e > s, 'citazione'
+    t = t[:s] + t[e:].lstrip()
+    vecchio = '<p>A brand that holds together on the truck, the website and the menus.</p>'
+    assert t.count(vecchio) == 1, 'the look'
+    t = t.replace(vecchio, '<p>' + C['look'] + '</p>')
+    s = t.find('<div class="clg">'); e = t.find('</div>\n  </div></section>', s)
+    assert s > 0 and e > s and 'da inviare' in t[s:e], 'galleria'
+    t = t[:s] + ('<div class="clb">\n'
+                 '      <div class="clbt" style="--bf:' + C['fonte_fam'] + C.get('frase_stile', '') + '"><p lang="en">' + C['frase'] + '</p><span class="mo">' + C['font'] + '</span></div>\n'
+                 '      <ul class="clbs" aria-label="Brand colours">' +
+                 ''.join('<li style="--c:' + h + (';--t:' + tt if tt else '') + '"><b>' + n + '</b><span class="mo">' + h + '</span></li>' for n, h, tt in C['colori']) +
+                 '</ul>\n    </div>\n    <div class="clg">\n' +
+                 ''.join('      <figure class="t ' + k + '"' + (' style="--lc:' + C['logo_bg'] + '"' if k == 't1' and C.get('logo_bg') else '') + '>' + m + '<figcaption class="mo">' + c + '</figcaption></figure>\n' for k, m, c in C['galleria']) +
+                 '    ') + t[e:]
+    s = t.find('<a class="cnx" href="#">'); e = t.find('<i class="arq"', s)
+    assert s > 0 and e > s, 'prossimo'
+    u, n, d = C['prossimo']
+    t = t[:s] + '<a class="cnx" href="' + u + '"><span class="mo mut">Next</span><b>' + n + '</b><span class="mo mut">' + d + '</span>' + t[e:]
+    # la demo vera: computer e telefono, Customer o Owner
+    D = C['demo']
+    s = t.find('<div class="cdh">'); e = t.find('</div>\n  </div></section>', t.find('<div class="crf"', s))
+    assert s > 0 and e > s, 'demo vecchia'
+    (lc, sc), (lo, so) = D['lati']
+    ifr = lambda v, dove, cosa: '<iframe data-v="' + v + '" title="' + cosa + ' on a ' + dove + ', demo with invented data" data-src="' + D['cartella'] + (D['cliente'] if v == 'c' else D['titolare']) + '"></iframe>'
+    t = t[:s] + ('<div class="cdh">\n'
+                 '      <div><span class="mo mut">The system</span><h2>' + D['h2'] + '</h2></div>\n'
+                 '      <p>' + D['p'] + '</p>\n'
+                 '    </div>\n'
+                 '    <div class="vd" id="vd" data-ch="' + D['ch'] + '" data-key="' + D['key'] + '" data-hint-c="' + D['hint_c'] + '" data-hint-o="' + D['hint_o'] + '" data-hint-ok="' + D['hint_ok'] + '">\n'
+                 '      <div class="vdtop">\n'
+                 '        <div class="vdsw" role="tablist" aria-label="Whose side">'
+                 '<button role="tab" aria-selected="true" data-v="c"><b>' + lc + '</b><span class="mo">' + sc + '</span></button>'
+                 '<button role="tab" aria-selected="false" data-v="o"><b>' + lo + '</b><span class="mo">' + so + '</span></button></div>\n'
+                 '        <button class="vdre" type="button"><span class="fl" aria-hidden="true"></span><i aria-hidden="true">↻</i>Start over</button>\n'
+                 '      </div>\n'
+                 '      <div class="vdst" data-v="c">\n'
+                 '        <figure class="vdl"><div class="vdscr">' + ifr('c', 'computer', sc) + ifr('o', 'computer', so) + '</div><i class="vdbase" aria-hidden="true"></i></figure>\n'
+                 '        <figure class="vdp"><div class="vdscr">' + ifr('c', 'phone', sc) + ifr('o', 'phone', so) + '</div></figure>\n'
+                 '      </div>\n'
+                 '      <p class="vdhint" aria-live="polite">' + D['hint_c'] + '</p>\n'
+                 '      <ol class="vdf">\n' + ''.join('        ' + _li('%02d' % (i + 1), b, pp) + '\n' for i, (b, pp) in enumerate(D['voci'])) +
+                 '      </ol>\n'
+                 '    ') + t[e:]
+    # il sistema e' il protagonista: sale subito dopo l'apertura, prima di "What we did"
+    s = t.find('  <!-- 3 · il sistema, acceso -->'); e = t.find('</section>', s) + len('</section>')
+    assert s > 0 and e > s, 'sezione sistema'
+    sez = t[s:e]; t = t[:s] + t[e:].lstrip('\n')
+    i = t.find('  <!-- 2 · cosa e risultati -->'); assert i > 0, 'sezione risultati'
+    t = t[:i] + sez + '\n\n' + t[i:]
+    # lo script della miniatura non serve piu': i numeri che contano e le righe che salgono stanno in progetto.js
+    s = t.find('/* pagina progetto v3: il Control Room in miniatura')
+    e = t.find('\n})();', t.find(".cfn b[data-n]", s)) + len('\n})();')
+    assert s > 0 and e > s, 'script del caso'
+    return t[:s] + t[e:]
+
 
 
 def ritocchi(nome, t):
@@ -196,6 +367,9 @@ def ritocchi(nome, t):
                 '<button type="button" role="tab" aria-selected="true"><span class="sq">02</span>Systems</button>'
                 '<button type="button" role="tab" aria-selected="false"><span class="sq">03</span>Brand</button></div>'
                 '<div class="mcards">', 'tasti 05.2')
+
+    if nome in CASI:
+        t = caso(t, CASI[nome])
 
     if nome == 'room':
         # il back office: dalla pagina approvata di Contact resta solo la scena 5, accesa, al piano LG
@@ -487,10 +661,12 @@ def monta(nome, src):
 
     if nome == 'home':
         t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/home.css">', 'stile home')
+    if nome in CASI:
+        t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/progetto.css">', 'stile progetto')
 
     # 6. coda
     i = t.rfind('</body>')
-    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>'}.get(nome, '')
+    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>', 'progetto': '<script src="/js/progetto.js"></script>', 'ristorante': '<script src="/js/progetto.js"></script>'}.get(nome, '')
     t = t[:i] + coda + t[i:] if i > 0 else t + coda
     (OUT / f'{nome}.html').write_text(t, encoding='utf8')
     return luce

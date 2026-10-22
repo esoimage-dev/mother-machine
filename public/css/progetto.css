@@ -1,0 +1,146 @@
+/* Mother Machine · 04 Work, pagina progetto: i materiali veri del caso sopra la pagina approvata. */
+
+/* la copertina: la foto vera, il logo del cliente su una targhetta scura */
+.chcover.chimg{position:relative;overflow:hidden;padding:0;background:#1E1411;display:block}
+.chcover.chimg>img{display:block;width:100%;height:100%;object-fit:cover}
+.chcover.chimg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,15,14,.45) 0,rgba(15,15,14,0) 38%);pointer-events:none}
+.chcover.chimg .chlogo{position:absolute;left:clamp(16px,2vw,28px);top:clamp(16px,2vw,28px);z-index:1;padding:0;border:0;display:block;width:clamp(110px,13vw,190px)}
+.chcover.chimg .chlogo img{display:block;width:100%;height:auto;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
+
+/* the look: logo, sito, stampa, il truck che si muove */
+.clg .t{position:relative;overflow:hidden;margin:0;padding:0;border:0;background:#1E1411}
+.clg .t>img,.clg .t>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.clg .t1{background:#C8212A;display:grid;place-items:center;align-content:center}
+.clg .t1>img{position:relative;inset:auto;width:72%;height:auto;max-height:46%;object-fit:contain}
+.clg .t2>img{object-position:left top}
+.clg figcaption{position:absolute;left:12px;bottom:12px;z-index:1;padding:5px 8px;border-radius:4px;background:rgba(15,15,14,.78);color:#F4F2EC;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+
+/* i tre numeri veri: misura che tiene "$70k+" e "24/7" dentro la colonna */
+.cfn[data-c="3"]{--fs:clamp(64px,9vw,150px)}
+@media (max-width:700px){
+  .cfn[data-c="3"] b,.cfn[data-c="3"] .lead b{font-size:clamp(72px,24vw,120px)}
+  .cfn[data-c="3"] .lead b{font-size:clamp(104px,36vw,170px)}
+  .cfn[data-c="3"] .lead b[data-s="%"]{font-size:clamp(88px,28vw,170px)}   /* +180%: cinque segni, non tocca il bordo */
+}
+.cfn[data-c="3"] b{padding-bottom:.1em}   /* la barra di 24/7 scende sotto la riga: non tocca la didascalia */
+
+/* ---- The system: computer e telefono, il codice vero del cliente su dati inventati ----
+   Uno switch sceglie il lato (Customer: il sito di prenotazione; Owner: la Control Room) e lo mostra sia sul computer
+   sia sul telefono. Le pagine si caricano solo quando servono. */
+.vd{margin-top:clamp(28px,4vw,52px)}
+.vdtop{display:flex;align-items:center;gap:14px;margin-bottom:clamp(18px,2.4vw,28px);flex-wrap:wrap}
+.vdsw{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:14px;background:rgba(18,18,17,.09);min-width:min(100%,460px)}
+.vdsw button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:2px;padding:12px 18px;border-radius:10px;color:var(--ink);-webkit-tap-highlight-color:transparent;transition:background-color .25s,color .25s}
+.vdsw b{font:600 17px/1.15 var(--f-body);letter-spacing:-.01em}
+.vdsw .mo{color:var(--mut);transition:color .25s}
+.vdsw button[aria-selected="true"]{background:#121211;color:#F4F2EC}
+.vdsw button[aria-selected="true"] .mo{color:rgba(244,242,236,.6)}
+.vdsw button:not([aria-selected="true"]):hover{background:rgba(18,18,17,.07)}
+.vdsw button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+/* ricomincia: un bottone vero; al passaggio il pomodoro sale e lo riempie tutto (regola dei bottoni pieni) */
+.vdre{all:unset;box-sizing:border-box;position:relative;overflow:hidden;isolation:isolate;cursor:pointer;margin-left:auto;display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 18px;border-radius:10px;border:1.5px solid #121211;color:#121211;font:600 15px var(--f-body);-webkit-tap-highlight-color:transparent}
+.vdre .fl{position:absolute;inset:-2px;background:var(--sig,#FF5B3A);transform:translateY(101%);transition:transform .45s cubic-bezier(.7,0,.2,1);z-index:-1}
+.vdre i{font-style:normal;font-size:17px;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.vdre:hover,.vdre:focus-visible{border-color:transparent}
+.vdre:hover .fl,.vdre:focus-visible .fl{transform:none}
+.vdre:hover i{transform:rotate(-180deg)}
+.vdre:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.vdst{display:grid;grid-template-columns:minmax(0,1fr) clamp(240px,21vw,310px);gap:clamp(24px,3vw,48px);align-items:end}
+.vd figure{margin:0}
+.vdscr{position:relative;overflow:hidden;background:#110E0C}
+.vdscr iframe{position:absolute;left:0;top:0;border:0;transform-origin:0 0;background:#110E0C}
+.vdst[data-v="c"] iframe[data-v="o"],.vdst[data-v="o"] iframe[data-v="c"]{visibility:hidden;pointer-events:none}
+/* il computer */
+.vdl .vdscr{aspect-ratio:16/10;border-radius:14px;border:10px solid #1A1A18;box-shadow:0 1px 0 rgba(255,255,255,.08) inset,0 40px 70px -40px rgba(18,18,17,.6)}
+.vdl .vdscr iframe{width:1120px;height:700px}
+.vdbase{display:block;position:relative;height:34px;margin:-12px -4% 0;border-radius:4px 4px 22px 22px;background:linear-gradient(#34342F,#1E1E1B 40%,#121210);box-shadow:0 22px 34px -20px rgba(0,0,0,.6)}
+.vdbase::after{content:"";position:absolute;left:50%;top:12px;width:18%;height:6px;margin-left:-9%;border-radius:0 0 8px 8px;background:rgba(0,0,0,.35)}   /* la tacca per aprirlo: il computer ha una base vera, lo schermo sale */
+/* il telefono */
+.vdp .vdscr{aspect-ratio:390/800;border-radius:42px;border:9px solid #1A1A18;box-shadow:0 1px 0 rgba(255,255,255,.08) inset,0 40px 70px -40px rgba(18,18,17,.6)}
+.vdp .vdscr iframe{width:375px;height:770px;top:22px}
+.vdp .vdscr::before{content:"";position:absolute;left:50%;top:7px;width:64px;height:8px;margin-left:-32px;border-radius:6px;background:#000;z-index:1}   /* la tacca: lo schermo parte sotto, niente testi attaccati al bordo */
+.vd .vdhint{margin:56px 0 0;font-size:15px;line-height:1.4;color:var(--mut)}
+/* le quattro cose che fa, sotto */
+.vdf{list-style:none;margin:clamp(36px,4vw,56px) 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(16px,2vw,32px)}
+.vdf li{display:grid;grid-template-columns:30px 1fr;gap:0 8px;padding-top:14px;border-top:1px solid var(--ln)}
+.vdf .mo{color:var(--mut);padding-top:3px}
+.vdf b{font:600 17px/1.25 var(--f-body);letter-spacing:-.015em}
+.vdf p{grid-column:2;margin:6px 0 0;font-size:14px;line-height:1.45;color:var(--mut)}
+/* il nostro cursore si spegne quando il mouse entra in uno schermo: dentro comanda il cursore della pagina vera */
+html.mm-inframe .mmc{opacity:0!important;transition:none}
+
+/* su telefono: lo switch resta, si vede solo il telefono */
+@media (max-width:760px){
+  .vdsw{min-width:0;width:100%}
+  .vdsw button{padding:11px 14px}
+  .vdre{margin-left:0;height:40px;font-size:14px}
+  .vdst{grid-template-columns:1fr;justify-items:center}
+  .vd .vdl{display:none}
+  .vdp{width:min(100%,330px)}
+  .vdhint{text-align:center}
+  .vdf{grid-template-columns:1fr 1fr;gap:22px 16px}
+}
+@media (max-width:420px){.vdf{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.vdre .fl,.vdre i{transition:none}}
+
+/* ---- The look: l'identita' del cliente, caratteri e colori veri ---- */
+@font-face{font-family:"VitBodoni";src:url(/work/vitalias/fonts/bodoni-moda-latin-400-normal.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"VitBodoni";src:url(/work/vitalias/fonts/bodoni-moda-latin-400-italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:"RistBricolage";src:url(/work/ristorante/fonts/bricolage-grotesque-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"RistNews";src:url(/work/ristorante/fonts/newsreader-latin-400-italic.woff2) format("woff2");font-style:italic;font-weight:400;font-display:swap}
+@font-face{font-family:"VitGeist";src:url(/work/vitalias/fonts/geist-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+.clb{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:12px;margin-top:22px}
+.clbt{display:grid;align-content:space-between;gap:28px;padding:clamp(22px,2.6vw,40px);border-radius:16px;background:var(--tb,#0E0B09);color:var(--tt,#F3EBDD);min-height:clamp(220px,22vw,320px)}
+.clbt p{margin:0;font:var(--ew,400) clamp(40px,5.2vw,84px)/.98 var(--bf),Georgia,serif;letter-spacing:-.02em}
+.clbt em{display:block;color:var(--te,#E8353E);font-style:italic;font-family:var(--ef,var(--bf)),Georgia,serif;font-weight:400}
+.clbt .mo{color:var(--tt,#F3EBDD);opacity:.55}
+.clbs{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.clbs li{display:grid;align-content:end;gap:4px;padding:14px;border-radius:16px;background:var(--c);color:var(--t,#F3EBDD);font-family:"VitGeist",var(--f-body);min-height:100px}
+.clbs li[style*="F3EBDD"]{box-shadow:inset 0 0 0 1px rgba(18,18,17,.12)}
+.clbs b{font-weight:400;font-size:15px}
+.clbs .mo{opacity:.7}
+@media (max-width:760px){
+  .clb{grid-template-columns:1fr}
+  .clbt{min-height:0}
+}
+
+/* ---- prima e dopo: come era e come e' adesso. Le scritte sopra restano; il nuovo e' piu' grande, piu' nero, piu' bold ---- */
+.cfba>div{grid-template-columns:minmax(0,.45fr) minmax(0,.85fr) minmax(0,1.5fr);align-items:center;padding:clamp(16px,2vw,24px) 0}
+@media (max-width:760px){.cfba>div{grid-template-columns:1fr}}
+.cfba p.bf{font:400 clamp(17px,1.5vw,22px)/1.25 var(--f-body);letter-spacing:-.01em;color:var(--mut)}
+.cfba p:not(.bf){font:650 clamp(24px,2.7vw,40px)/1.08 var(--f-body);letter-spacing:-.03em;color:var(--ink);padding-left:clamp(34px,3vw,46px)}
+.cfba p:not(.bf)::before{color:var(--ink);font-weight:400}
+.cfbh span:last-child{color:var(--ink)}
+@media (max-width:760px){
+  .cfba p:not(.bf){font-size:clamp(24px,7vw,32px);padding-left:30px}
+}
+
+/* ---- la testa piu' corta: la copertina meno alta, "What we did" piu' compatto ---- */
+.chcover.chimg{aspect-ratio:21/8}
+.cfdid b{font-size:clamp(26px,3vw,48px)!important}
+@media (max-width:760px){.chcover.chimg{aspect-ratio:16/10}}
+
+/* ---- il logo nella galleria piu' grande ---- */
+.clg{grid-template-columns:1.25fr 1.6fr 1fr 1.2fr}
+.clg .t1>img{width:84%;max-height:62%}
+/* il lato Owner "chiamato": l'anello pomodoro lampeggia, come un bottone di piano */
+.vdsw button.call{box-shadow:inset 0 0 0 2px var(--sig,#FF5B3A);animation:vdcall .45s steps(1) 8}
+@keyframes vdcall{50%{box-shadow:inset 0 0 0 2px transparent}}
+@media (prefers-reduced-motion:reduce){.vdsw button.call{animation:none}}
+.vd,.vd *{overflow-anchor:none}   /* lo switch non deve spostare la pagina */
+
+/* il riquadro del logo prende il colore del marchio del caso */
+.clg .t1{background:var(--lc,#C8212A)}
+
+/* Next: quadrato chiaro con freccia nera; al passaggio sale il pomodoro, la freccia resta nera. Niente passaggio dal nero */
+html .cnx .arq{background:#F4F2EC;color:#121211;box-shadow:inset 0 0 0 1.5px #121211}
+html .cnx .arq svg,html .cnx .arq svg:first-child{fill:#121211}
+html a.cnx:hover .arq,html a.cnx:focus-visible .arq{background:#F4F2EC;color:#121211;box-shadow:none}
+html .cnx .arq svg:first-child{left:15px;top:15px;width:26px;height:26px;transform:none}
+html a.cnx:hover .arq svg:first-child,html a.cnx:focus-visible .arq svg:first-child{transform:translateX(4px)}   /* una freccia sola: resta e si sposta appena, non esce */
+/* sotto i risultati: come ci si arriva, numeri piccoli */
+.cfm{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,48px);margin-top:clamp(40px,5vw,72px)}
+.cfm>div{display:grid;gap:8px;align-content:start;padding-top:14px;border-top:1px solid var(--line,rgba(18,18,17,.18))}
+.cfm b{font:620 clamp(32px,3.4vw,52px)/1 var(--f-body);letter-spacing:-.04em;white-space:nowrap}
+.cfm span{font-size:15px;line-height:1.4;color:var(--mut);max-width:30ch}
+@media (max-width:700px){.cfm{grid-template-columns:1fr;gap:22px}}

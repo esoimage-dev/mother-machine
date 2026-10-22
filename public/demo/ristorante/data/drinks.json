@@ -1,0 +1,1989 @@
+{
+  "id": "drinks",
+  "style": "serif",
+  "title": {
+    "en": "Drinks",
+    "zh": "饮品",
+    "ja": "ドリンク"
+  },
+  "surcharge": {
+    "en": "10% surcharge applies on weekends | 15% surcharge on public holidays",
+    "zh": "周末加收 10% 服务费 | 公共假期加收 15% 服务费",
+    "ja": "週末は10%、祝日は15%の追加料金がかかります。"
+  },
+  "cover": {
+    "since": {
+      "en": "SINCE 2017",
+      "zh": "始于 2017",
+      "ja": "2017年創業"
+    },
+    "title": {
+      "en": "VITALIA'S"
+    },
+    "script": {
+      "en": "Wine & Drink List",
+      "zh": "酒水单",
+      "ja": "ワイン & ドリンクリスト"
+    },
+    "memory": {
+      "en": "Inspired by Vitalia’s spirit,\na toast to love, life, and good company.",
+      "zh": "承 Vitalia 的心意，\n敬爱、生活与相聚的良伴。",
+      "ja": "ヴィタリアの心を受け継いで、\n愛と人生、そして良き仲間に乾杯を。"
+    }
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "type": "cover"
+    },
+    {
+      "id": "d1",
+      "panels": [
+        [
+          "soft-coffee"
+        ],
+        [
+          "beers"
+        ]
+      ],
+      "foot": [
+        {
+          "en": "Add to your coffee  •  Soy $1  •  Almond $1  •  Oat $1  •  Lactose Free $1  •  Ice Cream $2",
+          "zh": "咖啡可加  •  豆奶 $1  •  杏仁奶 $1  •  燕麦奶 $1  •  无乳糖 $1  •  冰淇淋 $2",
+          "ja": "コーヒーに追加  •  豆乳 $1  •  アーモンド $1  •  オーツ $1  •  乳糖不使用 $1  •  アイスクリーム $2"
+        },
+        {
+          "en": "Local and imported favourites, always refreshing",
+          "zh": "本地与进口的人气之选，始终清爽",
+          "ja": "地元と輸入の人気銘柄、いつでも爽快に"
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "panels": [
+        [
+          "cocktails"
+        ],
+        [
+          "mocktails"
+        ]
+      ],
+      "foot": [
+        {
+          "en": "Other classic cocktails available",
+          "zh": "另有其他经典鸡尾酒供应",
+          "ja": "その他の定番カクテルもご用意しています"
+        },
+        {
+          "en": "Alcohol-free creations with vibrant flavours and Italian style",
+          "zh": "无酒精创意饮品，风味鲜明，意式格调",
+          "ja": "鮮やかな味わいとイタリアらしさを纏うノンアルコールの一杯"
+        }
+      ]
+    },
+    {
+      "id": "d3",
+      "panels": [
+        [
+          "red-wines"
+        ],
+        [
+          "white-wines"
+        ]
+      ],
+      "foot": [
+        {
+          "en": "Ask our team for pairing suggestions to enhance your meal",
+          "zh": "欢迎询问我们的团队，为您的餐点推荐搭配",
+          "ja": "お料理に合わせたペアリングはスタッフにお尋ねください"
+        },
+        {
+          "en": "Fresh, balanced whites that pair beautifully with our dishes",
+          "zh": "清新平衡的白葡萄酒，与我们的菜肴相得益彰",
+          "ja": "フレッシュでバランスの取れた白、料理と美しく調和します"
+        }
+      ]
+    },
+    {
+      "id": "d4",
+      "panels": [
+        [
+          "sparkling"
+        ],
+        [
+          "cellar"
+        ]
+      ],
+      "foot": [
+        {
+          "en": "Bubbles that celebrate every occasion",
+          "zh": "为每个值得庆祝的时刻而生的气泡",
+          "ja": "どんな時も華やかに彩る泡"
+        },
+        {
+          "en": "An exclusive collection of prestigious Italian wines, crafted with heritage and passion",
+          "zh": "珍藏意大利名酒精选，承袭传统与热忱",
+          "ja": "伝統と情熱が生んだ、イタリア銘醸ワインの特別なコレクション"
+        }
+      ]
+    },
+    {
+      "id": "d5",
+      "panels": [
+        [
+          "spirits"
+        ],
+        [
+          "liqueurs"
+        ]
+      ],
+      "foot": [
+        {
+          "en": "A curated range of iconic spirits from around the world, perfect to savour neat or mixed",
+          "zh": "精选世界经典烈酒，纯饮或调饮皆宜",
+          "ja": "世界の名酒を厳選、ストレートでもカクテルでも"
+        },
+        {
+          "en": "Classic Italian and world-famous liqueurs to complete your dining experience",
+          "zh": "意大利经典与世界知名利口酒，为您的用餐画上句点",
+          "ja": "イタリアの定番と世界の名リキュールで、お食事の締めくくりを"
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "soft-coffee",
+      "name": {
+        "en": "Soft Drinks & Coffee",
+        "zh": "软饮与咖啡",
+        "ja": "ソフトドリンク & コーヒー"
+      },
+      "cols": [
+        {},
+        {}
+      ],
+      "groups": [
+        {
+          "id": "soft-drinks",
+          "label": {
+            "en": "SOFT DRINKS",
+            "zh": "软饮",
+            "ja": "ソフトドリンク"
+          },
+          "items": [
+            {
+              "id": "sparkling-water",
+              "prices": [
+                "",
+                "8"
+              ],
+              "en": {
+                "name": "Sparkling Water 750ml"
+              },
+              "zh": {
+                "name": "气泡水 750ml"
+              },
+              "ja": {
+                "name": "スパークリングウォーター 750ml"
+              }
+            },
+            {
+              "id": "sanpellegrino-water",
+              "prices": [
+                "",
+                "12"
+              ],
+              "en": {
+                "name": "Sanpellegrino Sparkling Water 1L"
+              },
+              "zh": {
+                "name": "Sanpellegrino 气泡水 1L"
+              },
+              "ja": {
+                "name": "サンペレグリノ スパークリングウォーター 1L"
+              }
+            },
+            {
+              "id": "sanpellegrino-soft",
+              "prices": [
+                "",
+                "5.5"
+              ],
+              "en": {
+                "name": "Sanpellegrino Soft Drinks",
+                "desc": "Aranciata – Limonata – Arancia Rossa – Clementina"
+              },
+              "zh": {
+                "name": "Sanpellegrino 果味汽水",
+                "desc": "香橙 – 柠檬 – 血橙 – 克莱门氏小柑橘"
+              },
+              "ja": {
+                "name": "サンペレグリノ ソフトドリンク",
+                "desc": "アランチャータ – リモナータ – ブラッドオレンジ – クレメンティーナ"
+              }
+            },
+            {
+              "id": "classic-soft",
+              "prices": [
+                "",
+                "5.5"
+              ],
+              "en": {
+                "name": "Classic Soft Drinks",
+                "desc": "Coke – Zero – LLB"
+              },
+              "zh": {
+                "name": "经典汽水",
+                "desc": "可乐 – 零度可乐 – LLB"
+              },
+              "ja": {
+                "name": "定番ソフトドリンク",
+                "desc": "コーラ – ゼロ – LLB"
+              }
+            },
+            {
+              "id": "juices",
+              "prices": [
+                "",
+                "5"
+              ],
+              "en": {
+                "name": "Juices",
+                "desc": "Orange – Pineapple – Apple – Mango"
+              },
+              "zh": {
+                "name": "果汁",
+                "desc": "橙汁 – 菠萝 – 苹果 – 芒果"
+              },
+              "ja": {
+                "name": "ジュース",
+                "desc": "オレンジ – パイナップル – アップル – マンゴー"
+              }
+            },
+            {
+              "id": "ginger-beer",
+              "prices": [
+                "",
+                "6"
+              ],
+              "en": {
+                "name": "Ginger Beer"
+              },
+              "zh": {
+                "name": "姜汁汽水"
+              },
+              "ja": {
+                "name": "ジンジャービア"
+              }
+            }
+          ]
+        },
+        {
+          "id": "coffee",
+          "label": {
+            "en": "COFFEE",
+            "zh": "咖啡",
+            "ja": "コーヒー"
+          },
+          "items": [
+            {
+              "id": "espresso",
+              "prices": [
+                "3.5",
+                "4.5"
+              ],
+              "en": {
+                "name": "Espresso"
+              },
+              "zh": {
+                "name": "意式浓缩咖啡"
+              },
+              "ja": {
+                "name": "エスプレッソ"
+              }
+            },
+            {
+              "id": "cappuccino",
+              "prices": [
+                "6.5",
+                "7.5"
+              ],
+              "en": {
+                "name": "Cappuccino / Latte / Flat White"
+              },
+              "zh": {
+                "name": "卡布奇诺 / 拿铁 / 馥芮白"
+              },
+              "ja": {
+                "name": "カプチーノ / ラテ / フラットホワイト"
+              }
+            },
+            {
+              "id": "hot-chocolate",
+              "prices": [
+                "6.5",
+                "7.5"
+              ],
+              "en": {
+                "name": "Hot Chocolate"
+              },
+              "zh": {
+                "name": "热巧克力"
+              },
+              "ja": {
+                "name": "ホットチョコレート"
+              }
+            },
+            {
+              "id": "long-black",
+              "prices": [
+                "5.5",
+                "6.5"
+              ],
+              "en": {
+                "name": "Long Black"
+              },
+              "zh": {
+                "name": "澳式黑咖啡"
+              },
+              "ja": {
+                "name": "ロングブラック"
+              }
+            },
+            {
+              "id": "chai-latte",
+              "prices": [
+                "7",
+                "8"
+              ],
+              "en": {
+                "name": "Chai Latte"
+              },
+              "zh": {
+                "name": "香料奶茶拿铁"
+              },
+              "ja": {
+                "name": "チャイラテ"
+              }
+            },
+            {
+              "id": "iced-coffee",
+              "prices": [
+                "",
+                "9"
+              ],
+              "en": {
+                "name": "Iced Coffee",
+                "desc": "Coffee - Chai - Mocha - Latte - Chocolate"
+              },
+              "zh": {
+                "name": "冰咖啡",
+                "desc": "咖啡 - 香料奶茶 - 摩卡 - 拿铁 - 巧克力"
+              },
+              "ja": {
+                "name": "アイスコーヒー",
+                "desc": "コーヒー - チャイ - モカ - ラテ - チョコレート"
+              }
+            },
+            {
+              "id": "hot-tea",
+              "prices": [
+                "",
+                "5"
+              ],
+              "en": {
+                "name": "Hot Tea",
+                "desc": "English breakfast - Green - Peppermint - Chamomile - Lemongrass & Ginger"
+              },
+              "zh": {
+                "name": "热茶",
+                "desc": "英式早餐茶 - 绿茶 - 薄荷 - 洋甘菊 - 香茅生姜"
+              },
+              "ja": {
+                "name": "ホットティー",
+                "desc": "イングリッシュブレックファスト - 緑茶 - ペパーミント - カモミール - レモングラス & ジンジャー"
+              }
+            },
+            {
+              "id": "caffe-corretto",
+              "prices": [
+                "",
+                "7"
+              ],
+              "en": {
+                "name": "Caffè Corretto",
+                "desc": "Espresso with Grappa - Baileys - Sambuca"
+              },
+              "zh": {
+                "name": "加烈浓缩咖啡",
+                "desc": "浓缩咖啡配格拉帕 - 百利甜 - 珊布卡"
+              },
+              "ja": {
+                "name": "カフェ・コレット",
+                "desc": "エスプレッソにグラッパ - ベイリーズ - サンブーカ"
+              }
+            },
+            {
+              "id": "affogato",
+              "prices": [
+                "",
+                "9.5"
+              ],
+              "en": {
+                "name": "Affogato",
+                "desc": "• Add liqueur $9 Baileys - Amaretto - Frangelico - Kahlua"
+              },
+              "zh": {
+                "name": "阿芙佳朵",
+                "desc": "• 加酒 $9 百利甜 - 杏仁酒 - 榛子酒 - 咖啡利口酒"
+              },
+              "ja": {
+                "name": "アフォガート",
+                "desc": "• リキュール追加 $9 ベイリーズ - アマレット - フランジェリコ - カルーア"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "beers",
+      "name": {
+        "en": "Beers & Ciders",
+        "zh": "啤酒与苹果酒",
+        "ja": "ビール & サイダー"
+      },
+      "cols": [
+        {},
+        {}
+      ],
+      "groups": [
+        {
+          "id": "bottled",
+          "label": {
+            "en": "BOTTLED",
+            "zh": "瓶装",
+            "ja": "ボトル"
+          },
+          "items": [
+            {
+              "id": "zero-beer",
+              "prices": [
+                "",
+                "9"
+              ],
+              "en": {
+                "name": "0% Alcohol Beer 330ml"
+              },
+              "zh": {
+                "name": "无酒精啤酒 330ml"
+              },
+              "ja": {
+                "name": "ノンアルコールビール 330ml"
+              }
+            },
+            {
+              "id": "peroni-leggera",
+              "prices": [
+                "",
+                "11"
+              ],
+              "en": {
+                "name": "Peroni Leggera 330ml"
+              }
+            },
+            {
+              "id": "peroni-red",
+              "prices": [
+                "",
+                "11.5"
+              ],
+              "en": {
+                "name": "Peroni Red Label 330ml"
+              }
+            },
+            {
+              "id": "moretti",
+              "prices": [
+                "",
+                "13"
+              ],
+              "en": {
+                "name": "Moretti 330ml"
+              }
+            }
+          ]
+        },
+        {
+          "id": "premium-bottled",
+          "label": {
+            "en": "PREMIUM BOTTLED",
+            "zh": "精品瓶装",
+            "ja": "プレミアムボトル"
+          },
+          "note": {
+            "en": "*Stock subject to availability",
+            "zh": "*视库存供应情况而定",
+            "ja": "*在庫状況によります"
+          },
+          "items": [
+            {
+              "id": "peroni-gran-riserva",
+              "prices": [
+                "",
+                "19"
+              ],
+              "en": {
+                "name": "Peroni Gran Riserva Doppio Malto 330ml"
+              }
+            },
+            {
+              "id": "ichnusa",
+              "prices": [
+                "",
+                "19.5"
+              ],
+              "en": {
+                "name": "Ichnusa Sardinian Lager 330ml"
+              }
+            },
+            {
+              "id": "baladin",
+              "prices": [
+                "",
+                "21"
+              ],
+              "en": {
+                "name": "Baladin Nazionale Gluten Free 330ml"
+              }
+            }
+          ]
+        },
+        {
+          "id": "tap",
+          "label": {
+            "en": "TAP",
+            "zh": "生啤",
+            "ja": "生ビール"
+          },
+          "items": [
+            {
+              "id": "beaches-blonde",
+              "prices": [
+                "11",
+                "14.5"
+              ],
+              "en": {
+                "name": "Beaches Blonde Lager"
+              }
+            },
+            {
+              "id": "freefall-pale",
+              "prices": [
+                "12",
+                "15.5"
+              ],
+              "en": {
+                "name": "Freefall Extra Pale Ale"
+              }
+            }
+          ]
+        },
+        {
+          "id": "ciders",
+          "label": {
+            "en": "CIDERS",
+            "zh": "苹果酒",
+            "ja": "サイダー"
+          },
+          "items": [
+            {
+              "id": "apple-cider",
+              "prices": [
+                "",
+                "11"
+              ],
+              "en": {
+                "name": "Apple Cider 330ml"
+              },
+              "zh": {
+                "name": "苹果酒 330ml"
+              },
+              "ja": {
+                "name": "アップルサイダー 330ml"
+              }
+            },
+            {
+              "id": "pear-cider",
+              "prices": [
+                "",
+                "11"
+              ],
+              "en": {
+                "name": "Pear Cider 330ml"
+              },
+              "zh": {
+                "name": "梨子酒 330ml"
+              },
+              "ja": {
+                "name": "ペアサイダー 330ml"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cocktails",
+      "name": {
+        "en": "Cocktails",
+        "zh": "鸡尾酒",
+        "ja": "カクテル"
+      },
+      "items": [
+        {
+          "id": "aperol-spritz",
+          "price": "18.5",
+          "en": {
+            "name": "Aperol Spritz",
+            "desc": "Aperol, prosecco, soda"
+          },
+          "zh": {
+            "name": "Aperol 气泡开胃酒",
+            "desc": "Aperol、普罗塞克、苏打水"
+          },
+          "ja": {
+            "name": "アペロールスプリッツ",
+            "desc": "アペロール、プロセッコ、ソーダ"
+          }
+        },
+        {
+          "id": "campari-spritz",
+          "price": "20.5",
+          "en": {
+            "name": "Campari Spritz",
+            "desc": "Campari bitter, prosecco, soda"
+          },
+          "zh": {
+            "name": "Campari 气泡开胃酒",
+            "desc": "Campari 苦味酒、普罗塞克、苏打水"
+          },
+          "ja": {
+            "name": "カンパリスプリッツ",
+            "desc": "カンパリ、プロセッコ、ソーダ"
+          }
+        },
+        {
+          "id": "limoncello-spritz",
+          "price": "20.5",
+          "en": {
+            "name": "Limoncello Spritz",
+            "desc": "Limoncello, prosecco, soda"
+          },
+          "zh": {
+            "name": "柠檬酒气泡开胃酒",
+            "desc": "柠檬利口酒、普罗塞克、苏打水"
+          },
+          "ja": {
+            "name": "リモンチェッロスプリッツ",
+            "desc": "リモンチェッロ、プロセッコ、ソーダ"
+          }
+        },
+        {
+          "id": "negroni",
+          "price": "23",
+          "en": {
+            "name": "Negroni",
+            "desc": "Gin, Campari, red vermouth"
+          },
+          "zh": {
+            "name": "尼格罗尼",
+            "desc": "金酒、Campari 苦味酒、红味美思"
+          },
+          "ja": {
+            "name": "ネグローニ",
+            "desc": "ジン、カンパリ、レッドベルモット"
+          }
+        },
+        {
+          "id": "espresso-martini",
+          "price": "20.5",
+          "en": {
+            "name": "Espresso Martini",
+            "desc": "Vodka, coffee liqueur, fresh espresso, sugar syrup"
+          },
+          "zh": {
+            "name": "浓缩咖啡马天尼",
+            "desc": "伏特加、咖啡利口酒、现萃浓缩咖啡、糖浆"
+          },
+          "ja": {
+            "name": "エスプレッソマティーニ",
+            "desc": "ウォッカ、コーヒーリキュール、淹れたてエスプレッソ、シュガーシロップ"
+          }
+        },
+        {
+          "id": "moscow-mule",
+          "price": "21.5",
+          "en": {
+            "name": "Moscow Mule",
+            "desc": "Lime juice, vodka, ginger beer"
+          },
+          "zh": {
+            "name": "莫斯科骡子",
+            "desc": "青柠汁、伏特加、姜汁汽水"
+          },
+          "ja": {
+            "name": "モスコミュール",
+            "desc": "ライムジュース、ウォッカ、ジンジャービア"
+          }
+        },
+        {
+          "id": "margarita",
+          "price": "21.5",
+          "en": {
+            "name": "Margarita",
+            "desc": "Tequila, Cointreau, lime juice, salt, sugar"
+          },
+          "zh": {
+            "name": "玛格丽特",
+            "desc": "龙舌兰、君度橙酒、青柠汁、盐、糖"
+          },
+          "ja": {
+            "name": "マルガリータ",
+            "desc": "テキーラ、コアントロー、ライムジュース、塩、砂糖"
+          }
+        },
+        {
+          "id": "mojito",
+          "price": "22.5",
+          "en": {
+            "name": "Mojito",
+            "desc": "Lime juice, mint, rum, soda"
+          },
+          "zh": {
+            "name": "莫吉托",
+            "desc": "青柠汁、薄荷、朗姆酒、苏打水"
+          },
+          "ja": {
+            "name": "モヒート",
+            "desc": "ライムジュース、ミント、ラム、ソーダ"
+          }
+        },
+        {
+          "id": "tiramisu-martini",
+          "price": "23.5",
+          "en": {
+            "name": "Tiramisù Martini",
+            "desc": "Coffee-infused vodka, Frangelico, coffee, sugar syrup, cocoa powder"
+          },
+          "zh": {
+            "name": "提拉米苏马天尼",
+            "desc": "咖啡浸渍伏特加、榛子利口酒、咖啡、糖浆、可可粉"
+          },
+          "ja": {
+            "name": "ティラミスマティーニ",
+            "desc": "コーヒー漬けウォッカ、フランジェリコ、コーヒー、シュガーシロップ、ココアパウダー"
+          }
+        },
+        {
+          "id": "long-island",
+          "price": "24.5",
+          "en": {
+            "name": "Long Island",
+            "desc": "Vodka, gin, white rum, tequila, triple sec, lemon juice, cola"
+          },
+          "zh": {
+            "name": "长岛冰茶",
+            "desc": "伏特加、金酒、白朗姆、龙舌兰、白橙皮酒、柠檬汁、可乐"
+          },
+          "ja": {
+            "name": "ロングアイランド",
+            "desc": "ウォッカ、ジン、ホワイトラム、テキーラ、トリプルセック、レモンジュース、コーラ"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mocktails",
+      "name": {
+        "en": "Mocktails 0%",
+        "zh": "无酒精鸡尾酒 0%",
+        "ja": "ノンアルコールカクテル 0%"
+      },
+      "items": [
+        {
+          "id": "blue-mediteranneo",
+          "price": "15.5",
+          "en": {
+            "name": "Blue Mediterraneo",
+            "desc": "Ginger ale, blue curaçao syrup, lime juice"
+          },
+          "zh": {
+            "name": "蓝色地中海",
+            "desc": "姜汁汽水、蓝橙糖浆、青柠汁"
+          },
+          "ja": {
+            "name": "ブルー・メディテラネオ",
+            "desc": "ジンジャーエール、ブルーキュラソーシロップ、ライムジュース"
+          }
+        },
+        {
+          "id": "sunrise",
+          "price": "15.5",
+          "en": {
+            "name": "Sunrise",
+            "desc": "Pineapple and orange juice, strawberry syrup"
+          },
+          "zh": {
+            "name": "日出",
+            "desc": "菠萝汁与橙汁、草莓糖浆"
+          },
+          "ja": {
+            "name": "サンライズ",
+            "desc": "パイナップルとオレンジジュース、ストロベリーシロップ"
+          }
+        },
+        {
+          "id": "ginger-pear",
+          "price": "15.5",
+          "en": {
+            "name": "Ginger Pear",
+            "desc": "Pear juice, lemon juice, ginger beer"
+          },
+          "zh": {
+            "name": "姜香洋梨",
+            "desc": "梨汁、柠檬汁、姜汁汽水"
+          },
+          "ja": {
+            "name": "ジンジャーペア",
+            "desc": "洋梨ジュース、レモンジュース、ジンジャービア"
+          }
+        },
+        {
+          "id": "citrus-mule",
+          "price": "15.5",
+          "en": {
+            "name": "Citrus Mule",
+            "desc": "Lime juice, ginger beer, Sanpellegrino Limonata"
+          },
+          "zh": {
+            "name": "柑橘骡子",
+            "desc": "青柠汁、姜汁汽水、Sanpellegrino 柠檬汽水"
+          },
+          "ja": {
+            "name": "シトラスミュール",
+            "desc": "ライムジュース、ジンジャービア、サンペレグリノ リモナータ"
+          }
+        },
+        {
+          "id": "golden-orchard",
+          "price": "15.5",
+          "en": {
+            "name": "Golden Orchard",
+            "desc": "Apple juice, pear juice, Sanpellegrino Aranciata"
+          },
+          "zh": {
+            "name": "金色果园",
+            "desc": "苹果汁、梨汁、Sanpellegrino 香橙汽水"
+          },
+          "ja": {
+            "name": "ゴールデンオーチャード",
+            "desc": "アップルジュース、洋梨ジュース、サンペレグリノ アランチャータ"
+          }
+        }
+      ]
+    },
+    {
+      "id": "red-wines",
+      "name": {
+        "en": "Red Wines",
+        "zh": "红葡萄酒",
+        "ja": "赤ワイン"
+      },
+      "cols": [
+        {
+          "icon": "glass-s"
+        },
+        {
+          "icon": "glass-l"
+        },
+        {
+          "icon": "bottle"
+        }
+      ],
+      "groups": [
+        {
+          "id": "red-italian",
+          "label": {
+            "en": "ITALIAN",
+            "zh": "意大利",
+            "ja": "イタリア"
+          },
+          "items": [
+            {
+              "id": "sangiovese",
+              "prices": [
+                "13",
+                "22",
+                "55"
+              ],
+              "en": {
+                "name": "Sangiovese",
+                "region": "Emilia Romagna",
+                "desc": "Light and fruity Italian classic with soft tannins"
+              },
+              "zh": {
+                "desc": "轻盈果香的意大利经典之作，单宁柔和",
+                "region": "艾米利亚-罗马涅"
+              },
+              "ja": {
+                "desc": "軽やかで果実味豊かなイタリアの定番、柔らかなタンニン",
+                "region": "エミリア・ロマーニャ"
+              }
+            },
+            {
+              "id": "primitivo",
+              "prices": [
+                "12",
+                "20",
+                "54"
+              ],
+              "en": {
+                "name": "Primitivo",
+                "region": "Puglia",
+                "desc": "Rich and medium-bodied with ripe cherry and plum aromas"
+              },
+              "zh": {
+                "desc": "酒体中等而醇厚，带成熟樱桃与李子香气",
+                "region": "普利亚"
+              },
+              "ja": {
+                "desc": "コクのあるミディアムボディ、熟したチェリーとプラムの香り",
+                "region": "プーリア"
+              }
+            },
+            {
+              "id": "montepulciano",
+              "prices": [
+                "12.5",
+                "21",
+                "54"
+              ],
+              "en": {
+                "name": "Montepulciano",
+                "region": "Abruzzo",
+                "desc": "Dry and savoury red with red fruit and subtle spice"
+              },
+              "zh": {
+                "desc": "干型醇香红酒，带红色浆果与细腻香料气息",
+                "region": "阿布鲁佐"
+              },
+              "ja": {
+                "desc": "辛口で旨みのある赤、赤い果実とほのかなスパイス",
+                "region": "アブルッツォ"
+              }
+            },
+            {
+              "id": "valpolicella",
+              "prices": [
+                "",
+                "",
+                "69"
+              ],
+              "en": {
+                "name": "Valpolicella Superiore",
+                "region": "Veneto",
+                "desc": "Fresh and light-bodied, ideal for lighter dishes"
+              },
+              "zh": {
+                "desc": "清新轻盈，适合搭配清淡菜肴",
+                "region": "威尼托"
+              },
+              "ja": {
+                "desc": "フレッシュで軽やか、軽めの料理にぴったり",
+                "region": "ヴェネト"
+              }
+            },
+            {
+              "id": "chianti",
+              "prices": [
+                "",
+                "",
+                "67"
+              ],
+              "en": {
+                "name": "Chianti Bell’Antonio",
+                "region": "Toscana",
+                "desc": "Vibrant and smooth Tuscan red with notes of cherry and spice"
+              },
+              "zh": {
+                "desc": "鲜活顺滑的托斯卡纳红酒，带樱桃与香料气息",
+                "region": "托斯卡纳"
+              },
+              "ja": {
+                "desc": "生き生きとして滑らかなトスカーナの赤、チェリーとスパイスの風味",
+                "region": "トスカーナ"
+              }
+            }
+          ]
+        },
+        {
+          "id": "red-house",
+          "label": {
+            "en": "HOUSE",
+            "zh": "招牌",
+            "ja": "ハウス"
+          },
+          "items": [
+            {
+              "id": "house-red",
+              "prices": [
+                "11",
+                "18.5",
+                "48"
+              ],
+              "en": {
+                "name": "Vitalia’s House Red",
+                "region": "South Australia",
+                "desc": "Bold Australian Shiraz with dark berries and gentle spice"
+              },
+              "zh": {
+                "desc": "浓郁的澳洲西拉，带深色浆果与柔和香料",
+                "region": "南澳大利亚"
+              },
+              "ja": {
+                "desc": "力強いオーストラリアのシラーズ、黒い果実と穏やかなスパイス",
+                "region": "南オーストラリア"
+              }
+            }
+          ]
+        },
+        {
+          "id": "red-australasian",
+          "label": {
+            "en": "AUSTRALASIAN",
+            "zh": "澳新",
+            "ja": "オセアニア"
+          },
+          "items": [
+            {
+              "id": "pinot-noir-nugan",
+              "prices": [
+                "12.5",
+                "21",
+                "54"
+              ],
+              "en": {
+                "name": "Pinot Noir Nugan",
+                "region": "South Australia",
+                "desc": "Light and silky, with red cherry and strawberry notes"
+              },
+              "zh": {
+                "desc": "轻盈丝滑，带红樱桃与草莓香气",
+                "region": "南澳大利亚"
+              },
+              "ja": {
+                "desc": "軽やかでシルキー、レッドチェリーと苺の香り",
+                "region": "南オーストラリア"
+              }
+            },
+            {
+              "id": "shiraz-alexander",
+              "prices": [
+                "12.5",
+                "21",
+                "54"
+              ],
+              "en": {
+                "name": "Shiraz Alexander Hill",
+                "region": "South Australia",
+                "desc": "Rich fruit and warm spice, classic smooth texture"
+              },
+              "zh": {
+                "desc": "丰富果味与温暖香料，口感经典顺滑",
+                "region": "南澳大利亚"
+              },
+              "ja": {
+                "desc": "豊かな果実と温かなスパイス、なめらかな口当たり",
+                "region": "南オーストラリア"
+              }
+            },
+            {
+              "id": "merlot-berrigan",
+              "prices": [
+                "",
+                "",
+                "72"
+              ],
+              "en": {
+                "name": "Merlot Berrigan Mount Benson",
+                "region": "South Australia",
+                "desc": "Soft and plummy, with dark cherry and a smooth finish"
+              },
+              "zh": {
+                "desc": "柔顺的李子果香，带黑樱桃气息，余味顺滑",
+                "region": "南澳大利亚"
+              },
+              "ja": {
+                "desc": "柔らかなプラムの果実味、ダークチェリーと滑らかな余韻",
+                "region": "南オーストラリア"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "white-wines",
+      "name": {
+        "en": "White Wines",
+        "zh": "白葡萄酒",
+        "ja": "白ワイン"
+      },
+      "cols": [
+        {
+          "icon": "glass-s"
+        },
+        {
+          "icon": "glass-l"
+        },
+        {
+          "icon": "bottle"
+        }
+      ],
+      "groups": [
+        {
+          "id": "white-italian",
+          "label": {
+            "en": "ITALIAN",
+            "zh": "意大利",
+            "ja": "イタリア"
+          },
+          "items": [
+            {
+              "id": "soave",
+              "prices": [
+                "12",
+                "20",
+                "53"
+              ],
+              "en": {
+                "name": "Soave",
+                "region": "Veneto",
+                "desc": "Dry and fruity, crisp and versatile"
+              },
+              "zh": {
+                "desc": "干型果香，清爽百搭",
+                "region": "威尼托"
+              },
+              "ja": {
+                "desc": "辛口で果実味があり、爽やかで合わせやすい",
+                "region": "ヴェネト"
+              }
+            },
+            {
+              "id": "pinot-grigio",
+              "prices": [
+                "13",
+                "22",
+                "56"
+              ],
+              "en": {
+                "name": "Pinot Grigio delle Venezie",
+                "region": "Veneto",
+                "desc": "Light and floral, pear and citrus notes"
+              },
+              "zh": {
+                "desc": "轻盈花香，带梨与柑橘气息",
+                "region": "威尼托"
+              },
+              "ja": {
+                "desc": "軽やかで華やか、洋梨と柑橘の香り",
+                "region": "ヴェネト"
+              }
+            },
+            {
+              "id": "rose-nerello",
+              "prices": [
+                "14.5",
+                "23",
+                "61"
+              ],
+              "en": {
+                "name": "Rosé Nerello Mascalese",
+                "region": "Sicilia",
+                "desc": "Dry and medium-bodied, with vibrant floral tones"
+              },
+              "zh": {
+                "desc": "干型中等酒体，花香鲜明",
+                "region": "西西里"
+              },
+              "ja": {
+                "desc": "辛口ミディアムボディ、華やかな花の香り",
+                "region": "シチリア"
+              }
+            },
+            {
+              "id": "gavi-valentino",
+              "prices": [
+                "",
+                "",
+                "69"
+              ],
+              "en": {
+                "name": "Gavi Valentino DOCG",
+                "region": "Lombardia",
+                "desc": "Bright acidity and refined minerality, elegant profile"
+              },
+              "zh": {
+                "desc": "酸度明亮，矿物感精致，风格优雅",
+                "region": "伦巴第"
+              },
+              "ja": {
+                "desc": "明るい酸と繊細なミネラル感、優雅な味わい",
+                "region": "ロンバルディア"
+              }
+            },
+            {
+              "id": "fiano-avellino",
+              "prices": [
+                "",
+                "",
+                "89"
+              ],
+              "en": {
+                "name": "Fiano di Avellino Macchialupa",
+                "region": "Campania",
+                "desc": "Aromatic and floral, fruit and firm acidity, elegant structure"
+              },
+              "zh": {
+                "desc": "芳香花香，果味与坚实酸度，结构优雅",
+                "region": "坎帕尼亚"
+              },
+              "ja": {
+                "desc": "芳香豊かで華やか、果実味としっかりした酸、優雅な構成",
+                "region": "カンパーニア"
+              }
+            }
+          ]
+        },
+        {
+          "id": "white-house",
+          "label": {
+            "en": "HOUSE",
+            "zh": "招牌",
+            "ja": "ハウス"
+          },
+          "items": [
+            {
+              "id": "house-white",
+              "prices": [
+                "11",
+                "18.5",
+                "48"
+              ],
+              "en": {
+                "name": "Vitalia’s House White",
+                "region": "South Australia",
+                "desc": "Sauvignon Blanc with citrus and tropical fruit, crisp and clean finish"
+              },
+              "zh": {
+                "desc": "长相思，带柑橘与热带水果香气，清爽干净",
+                "region": "南澳大利亚"
+              },
+              "ja": {
+                "desc": "ソーヴィニヨン・ブラン、柑橘とトロピカルフルーツ、爽やかでクリーンな余韻",
+                "region": "南オーストラリア"
+              }
+            }
+          ]
+        },
+        {
+          "id": "white-australasian",
+          "label": {
+            "en": "AUSTRALASIAN",
+            "zh": "澳新",
+            "ja": "オセアニア"
+          },
+          "items": [
+            {
+              "id": "chardonnay-haselgrove",
+              "prices": [
+                "12",
+                "20",
+                "54"
+              ],
+              "en": {
+                "name": "Chardonnay H Haselgrove",
+                "region": "South Australia",
+                "desc": "Citrus and stone fruit, subtle almond oak, fine acidity"
+              },
+              "zh": {
+                "desc": "柑橘与核果，淡淡杏仁橡木香，酸度细腻",
+                "region": "南澳大利亚"
+              },
+              "ja": {
+                "desc": "柑橘と核果、ほのかなアーモンドとオーク、繊細な酸",
+                "region": "南オーストラリア"
+              }
+            },
+            {
+              "id": "sauvignon-ten-rock",
+              "prices": [
+                "14",
+                "23",
+                "60"
+              ],
+              "en": {
+                "name": "Sauvignon Blanc Ten Rock",
+                "region": "New Zealand",
+                "desc": "Gooseberry, green apple and fresh herbs, dry and zesty"
+              },
+              "zh": {
+                "desc": "醋栗、青苹果与清新草本，干型爽脆",
+                "region": "新西兰"
+              },
+              "ja": {
+                "desc": "グーズベリー、青リンゴ、フレッシュハーブ、辛口で爽快",
+                "region": "ニュージーランド"
+              }
+            },
+            {
+              "id": "riesling-ems-table",
+              "prices": [
+                "14",
+                "23",
+                "61"
+              ],
+              "en": {
+                "name": "Riesling Organic Em’s Table",
+                "region": "South Australia",
+                "desc": "Floral and zesty, citrus lift with sweet spice"
+              },
+              "zh": {
+                "desc": "花香爽利，柑橘提升与甜香料",
+                "region": "南澳大利亚"
+              },
+              "ja": {
+                "desc": "華やかで爽やか、柑橘の高まりと甘いスパイス",
+                "region": "南オーストラリア"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sparkling",
+      "name": {
+        "en": "Sparkling Wines",
+        "zh": "起泡酒",
+        "ja": "スパークリングワイン"
+      },
+      "cols": [
+        {
+          "icon": "glass-s"
+        },
+        {
+          "icon": "glass-l"
+        },
+        {
+          "icon": "bottle"
+        }
+      ],
+      "groups": [
+        {
+          "id": "sparkling-200ml",
+          "label": {
+            "en": "200ml BOTTLE",
+            "zh": "200ml 瓶装",
+            "ja": "200ml ボトル"
+          },
+          "items": [
+            {
+              "id": "prosecco-au",
+              "prices": [
+                "",
+                "",
+                "17.5"
+              ],
+              "en": {
+                "name": "Prosecco",
+                "region": "Australia",
+                "desc": "Light and crisp bubbles with green apple and pear notes"
+              },
+              "zh": {
+                "desc": "轻盈清爽的气泡，带青苹果与梨的香气",
+                "region": "澳大利亚"
+              },
+              "ja": {
+                "desc": "軽やかで爽快な泡、青リンゴと洋梨の香り",
+                "region": "オーストラリア"
+              }
+            },
+            {
+              "id": "moscato-au",
+              "prices": [
+                "",
+                "",
+                "17"
+              ],
+              "en": {
+                "name": "Moscato",
+                "region": "Australia",
+                "desc": "Sweet and gently sparkling, with fresh grape and peach notes"
+              },
+              "zh": {
+                "desc": "清甜微泡，带新鲜葡萄与桃子香气",
+                "region": "澳大利亚"
+              },
+              "ja": {
+                "desc": "甘口でやさしい発泡、フレッシュなブドウと白桃の香り",
+                "region": "オーストラリア"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sparkling-house",
+          "label": {
+            "en": "HOUSE",
+            "zh": "招牌",
+            "ja": "ハウス"
+          },
+          "items": [
+            {
+              "id": "house-prosecco",
+              "prices": [
+                "12",
+                "20",
+                "50"
+              ],
+              "en": {
+                "name": "Vitalia’s House Prosecco",
+                "region": "Victoria",
+                "desc": "From the King Valley: light, crisp and fruity bubbles"
+              },
+              "zh": {
+                "desc": "来自 King Valley：轻盈清爽的果味气泡",
+                "region": "维多利亚州"
+              },
+              "ja": {
+                "desc": "キングヴァレー産：軽やかで爽快、果実味のある泡",
+                "region": "ビクトリア州"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sparkling-italian",
+          "label": {
+            "en": "ITALIAN",
+            "zh": "意大利",
+            "ja": "イタリア"
+          },
+          "items": [
+            {
+              "id": "lambrusco",
+              "prices": [
+                "",
+                "",
+                "46"
+              ],
+              "en": {
+                "name": "Lambrusco di Modena",
+                "region": "Emilia Romagna",
+                "desc": "Lightly sparkling red with fresh berries and a soft, fruity finish"
+              },
+              "zh": {
+                "desc": "微起泡红酒，带清新浆果香气，余味柔和果香",
+                "region": "艾米利亚-罗马涅"
+              },
+              "ja": {
+                "desc": "微発泡の赤、フレッシュなベリーと柔らかな果実味の余韻",
+                "region": "エミリア・ロマーニャ"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sparkling-french",
+          "label": {
+            "en": "FRENCH",
+            "zh": "法国",
+            "ja": "フランス"
+          },
+          "items": [
+            {
+              "id": "moet-chandon",
+              "prices": [
+                "",
+                "",
+                "198"
+              ],
+              "en": {
+                "name": "Moët & Chandon Champagne",
+                "region": "France",
+                "desc": "Fine bubbles, elegant balance and refined character"
+              },
+              "zh": {
+                "desc": "细腻气泡，优雅平衡，格调精致",
+                "region": "法国"
+              },
+              "ja": {
+                "desc": "きめ細かな泡、優雅なバランスと洗練された個性",
+                "region": "フランス"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cellar",
+      "name": {
+        "en": "Italian Cellar Selection",
+        "zh": "意大利酒窖精选",
+        "ja": "イタリア厳選ワインセラー"
+      },
+      "groups": [
+        {
+          "id": "cellar-red",
+          "style": "head",
+          "label": {
+            "en": "RED",
+            "zh": "红葡萄酒",
+            "ja": "赤ワイン"
+          },
+          "items": [
+            {
+              "id": "taurasi",
+              "year": "2015",
+              "price": "179",
+              "en": {
+                "name": "Macchialupa Taurasi DOCG",
+                "region": "Campania",
+                "desc": "A majestic red from Aglianico grapes aged in oak, deep notes of dark cherry, violet and spice, with a lingering finish"
+              },
+              "zh": {
+                "desc": "以 Aglianico 葡萄酿造并经橡木陈酿的雄浑红酒，深邃的黑樱桃、紫罗兰与香料气息，余韵悠长",
+                "region": "坎帕尼亚"
+              },
+              "ja": {
+                "desc": "オーク熟成のアリアニコ種による堂々たる赤、ダークチェリー、スミレ、スパイスの深い香りと長い余韻",
+                "region": "カンパーニア"
+              }
+            },
+            {
+              "id": "amarone",
+              "year": "2018",
+              "price": "199",
+              "en": {
+                "name": "Amarone della Valpolicella Riondo DOCG",
+                "region": "Veneto",
+                "desc": "Full-bodied and complex, made from semi-dried grapes, aromas of raisin, chocolate and plum, balanced with smooth tannins"
+              },
+              "zh": {
+                "desc": "酒体饱满复杂，以半干葡萄酿造，带葡萄干、巧克力与李子香气，单宁顺滑平衡",
+                "region": "威尼托"
+              },
+              "ja": {
+                "desc": "半乾燥ブドウから造られるフルボディで複雑な味わい、レーズン、チョコレート、プラムの香り、滑らかなタンニン",
+                "region": "ヴェネト"
+              }
+            },
+            {
+              "id": "brunello",
+              "year": "2017",
+              "price": "249",
+              "en": {
+                "name": "Brunello di Montalcino La Fornace",
+                "region": "Toscana",
+                "desc": "Intense ruby red with ripe cherry and forest-berry aromas, firm elegant tannins and a lingering refined finish"
+              },
+              "zh": {
+                "desc": "浓郁宝石红，成熟樱桃与森林浆果香气，单宁坚实优雅，余韵精致悠长",
+                "region": "托斯卡纳"
+              },
+              "ja": {
+                "desc": "濃いルビー色、熟したチェリーと森の果実の香り、しっかりとした上品なタンニンと洗練された余韻",
+                "region": "トスカーナ"
+              }
+            },
+            {
+              "id": "barolo",
+              "year": "2018",
+              "price": "229",
+              "en": {
+                "name": "Barolo Massimo Rivetti DOCG",
+                "region": "Piemonte",
+                "desc": "The king of wines from Nebbiolo grapes, intense bouquet of rose, cherry and truffle, full-bodied with long persistence"
+              },
+              "zh": {
+                "desc": "以 Nebbiolo 葡萄酿造的酒中之王，玫瑰、樱桃与松露的浓郁芬芳，酒体饱满，回味悠长",
+                "region": "皮埃蒙特"
+              },
+              "ja": {
+                "desc": "ネッビオーロ種による王のワイン、バラ、チェリー、トリュフの豊かな芳香、フルボディで長い持続性",
+                "region": "ピエモンテ"
+              }
+            },
+            {
+              "id": "barbaresco",
+              "year": "2019",
+              "price": "189",
+              "en": {
+                "name": "Barbaresco Manuel Marinacci DOCG",
+                "region": "Piemonte",
+                "desc": "Delicate yet structured Nebbiolo from a small artisan producer, aromas of berries, rose and licorice, elegant and silky finish"
+              },
+              "zh": {
+                "desc": "来自小型匠人酒庄的 Nebbiolo，细腻而有结构，带浆果、玫瑰与甘草香气，收结优雅丝滑",
+                "region": "皮埃蒙特"
+              },
+              "ja": {
+                "desc": "小規模生産者による繊細かつ骨格のあるネッビオーロ、ベリー、バラ、リコリスの香り、優雅で絹のような余韻",
+                "region": "ピエモンテ"
+              }
+            },
+            {
+              "id": "montefalco",
+              "year": "2017",
+              "price": "179",
+              "en": {
+                "name": "Montefalco Sagrantino Carapace DOCG",
+                "region": "Umbria",
+                "desc": "Powerful Umbrian red from Sagrantino grapes, aromas of blackberry, cherry and spice, with firm tannins and a long finish"
+              },
+              "zh": {
+                "desc": "以 Sagrantino 葡萄酿造的翁布里亚浓郁红酒，带黑莓、樱桃与香料香气，单宁坚实，余韵悠长优雅",
+                "region": "翁布里亚"
+              },
+              "ja": {
+                "desc": "サグランティーノ種から造るウンブリアの力強い赤、ブラックベリー、チェリー、スパイスの香り、しっかりしたタンニンと長く優雅な余韻",
+                "region": "ウンブリア"
+              }
+            }
+          ]
+        },
+        {
+          "id": "cellar-white",
+          "style": "head",
+          "label": {
+            "en": "WHITE",
+            "zh": "白葡萄酒",
+            "ja": "白ワイン"
+          },
+          "items": [
+            {
+              "id": "greco-di-tufo",
+              "year": "2022",
+              "price": "119",
+              "en": {
+                "name": "Greco di Tufo Macchialupa",
+                "region": "Campania",
+                "desc": "Deep straw yellow wine with apricot and almond aromas, warm dry palate with excellent structure and balance"
+              },
+              "zh": {
+                "desc": "深稻草黄色，带杏与杏仁香气，口感温暖干爽，结构与平衡出色",
+                "region": "坎帕尼亚"
+              },
+              "ja": {
+                "desc": "濃い麦わら色、アプリコットとアーモンドの香り、温かみのある辛口で優れた構成とバランス",
+                "region": "カンパーニア"
+              }
+            },
+            {
+              "id": "ca-maiol",
+              "year": "2021",
+              "price": "129",
+              "en": {
+                "name": "Ca’ Maiol - Prestige Lugana",
+                "region": "Lombardia",
+                "desc": "Bright white with green apple and citrus, light tropical hints and a crisp mineral finish with freshness"
+              },
+              "zh": {
+                "desc": "明亮白葡萄酒，青苹果与柑橘，淡淡热带气息，收结清爽带矿物感",
+                "region": "伦巴第"
+              },
+              "ja": {
+                "desc": "明るい白ワイン、青リンゴと柑橘、軽いトロピカルなニュアンス、爽快でミネラリーな余韻",
+                "region": "ロンバルディア"
+              }
+            },
+            {
+              "id": "de-coccio",
+              "year": "2021",
+              "price": "129",
+              "en": {
+                "name": "De Coccio IGP - Verdicchio in Amphora",
+                "region": "Lazio",
+                "desc": "Golden straw colour, rich bouquet of honeyed fruit and delicate herbs, full smooth body with elegant minerality"
+              },
+              "zh": {
+                "desc": "金稻草色，蜜饯果香与细腻草本的丰富芬芳，酒体饱满顺滑，矿物感优雅",
+                "region": "拉齐奥"
+              },
+              "ja": {
+                "desc": "黄金色、蜜のような果実と繊細なハーブの豊かな香り、まろやかな厚みと優雅なミネラル感",
+                "region": "ラツィオ"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spirits",
+      "name": {
+        "en": "Whiskey, Rum & Premium Spirits",
+        "zh": "威士忌、朗姆酒与精品烈酒",
+        "ja": "ウイスキー、ラム & プレミアムスピリッツ"
+      },
+      "groups": [
+        {
+          "id": "whiskey-rum",
+          "label": {
+            "en": "WHISKEY / RUM / BOURBONS",
+            "zh": "威士忌 / 朗姆 / 波本",
+            "ja": "ウイスキー / ラム / バーボン"
+          },
+          "items": [
+            {
+              "id": "jack-daniels",
+              "price": "14.5",
+              "en": {
+                "name": "Jack Daniel’s"
+              }
+            },
+            {
+              "id": "johnny-walker",
+              "price": "14.5",
+              "en": {
+                "name": "Johnnie Walker"
+              }
+            },
+            {
+              "id": "ballantines",
+              "price": "14.5",
+              "en": {
+                "name": "Ballantine’s"
+              }
+            },
+            {
+              "id": "bacardi",
+              "price": "13.5",
+              "en": {
+                "name": "Bacardi"
+              }
+            },
+            {
+              "id": "malibu",
+              "price": "13.5",
+              "en": {
+                "name": "Malibu"
+              }
+            },
+            {
+              "id": "sailor-jerry",
+              "price": "14.5",
+              "en": {
+                "name": "Sailor Jerry"
+              }
+            },
+            {
+              "id": "jameson",
+              "price": "14.5",
+              "en": {
+                "name": "Jameson"
+              }
+            },
+            {
+              "id": "canadian-club",
+              "price": "13.5",
+              "en": {
+                "name": "Canadian Club"
+              }
+            },
+            {
+              "id": "jim-beam",
+              "price": "13.5",
+              "en": {
+                "name": "Jim Beam"
+              }
+            },
+            {
+              "id": "makers-mark",
+              "price": "14.5",
+              "en": {
+                "name": "Maker’s Mark"
+              }
+            }
+          ]
+        },
+        {
+          "id": "premium-spirits",
+          "label": {
+            "en": "PREMIUM SPIRITS",
+            "zh": "精品烈酒",
+            "ja": "プレミアムスピリッツ"
+          },
+          "items": [
+            {
+              "id": "courvoisier",
+              "price": "17.9",
+              "en": {
+                "name": "Courvoisier Cognac"
+              }
+            },
+            {
+              "id": "grey-goose",
+              "price": "18.5",
+              "en": {
+                "name": "Grey Goose"
+              }
+            },
+            {
+              "id": "gin-malfy",
+              "price": "18.5",
+              "en": {
+                "name": "Gin Malfy"
+              }
+            },
+            {
+              "id": "gin-tanqueray",
+              "price": "17.5",
+              "en": {
+                "name": "Gin Tanqueray"
+              }
+            },
+            {
+              "id": "diplomatico",
+              "price": "19.9",
+              "en": {
+                "name": "Diplomatico Reserva"
+              }
+            },
+            {
+              "id": "grappa-piave",
+              "price": "16.5",
+              "en": {
+                "name": "Grappa Bianca Piave"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "liqueurs",
+      "name": {
+        "en": "Liqueurs & Digestives",
+        "zh": "利口酒与餐后酒",
+        "ja": "リキュール & 食後酒"
+      },
+      "items": [
+        {
+          "id": "amaretto",
+          "price": "13.5",
+          "en": {
+            "name": "Amaretto"
+          }
+        },
+        {
+          "id": "frangelico",
+          "price": "13.5",
+          "en": {
+            "name": "Frangelico"
+          }
+        },
+        {
+          "id": "baileys",
+          "price": "13.5",
+          "en": {
+            "name": "Baileys"
+          }
+        },
+        {
+          "id": "kahlua",
+          "price": "13.5",
+          "en": {
+            "name": "Kahlua"
+          }
+        },
+        {
+          "id": "cointreau",
+          "price": "14.5",
+          "en": {
+            "name": "Cointreau"
+          }
+        },
+        {
+          "id": "midori",
+          "price": "13.5",
+          "en": {
+            "name": "Midori"
+          }
+        },
+        {
+          "id": "limoncello",
+          "price": "13.5",
+          "en": {
+            "name": "Limoncello"
+          }
+        },
+        {
+          "id": "sambuca-bianca",
+          "price": "14.5",
+          "en": {
+            "name": "Sambuca Bianca"
+          }
+        },
+        {
+          "id": "sambuca-nera",
+          "price": "14.5",
+          "en": {
+            "name": "Sambuca Nera"
+          }
+        },
+        {
+          "id": "amaro-del-capo",
+          "price": "14.5",
+          "en": {
+            "name": "Amaro del Capo"
+          }
+        },
+        {
+          "id": "montenegro",
+          "price": "14.5",
+          "en": {
+            "name": "Montenegro"
+          }
+        },
+        {
+          "id": "averna",
+          "price": "14.5",
+          "en": {
+            "name": "Averna"
+          }
+        },
+        {
+          "id": "lucano",
+          "price": "14.5",
+          "en": {
+            "name": "Lucano"
+          }
+        },
+        {
+          "id": "mirto",
+          "price": "15",
+          "en": {
+            "name": "Mirto Liqueur"
+          }
+        }
+      ]
+    }
+  ]
+}

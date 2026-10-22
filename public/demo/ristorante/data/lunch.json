@@ -1,0 +1,1018 @@
+{
+  "id": "lunch",
+  "note": "English is the source of truth, verified column by column against the rendered pages. Chinese and Japanese transcribed from their own rendered pages, then checked ingredient by ingredient against the English; the Calzone was missing parmesan in both and was brought in line. Two typos in the printed English were corrected on the owner's instruction: 'Iced Coffes' and 'Chamomille' (both were already correct in Chinese and Japanese).",
+  "title": {
+    "en": "Lunch",
+    "zh": "午餐",
+    "ja": "ランチ"
+  },
+  "hours": {
+    "lunch": "11:00am - 4:30pm",
+    "dinner": "4:30pm - 9:00pm"
+  },
+  "legend": [
+    {
+      "code": "V",
+      "en": "Vegetarian",
+      "zh": "素食",
+      "ja": "ベジタリアン"
+    },
+    {
+      "code": "VG",
+      "en": "Vegan",
+      "zh": "纯素",
+      "ja": "ヴィーガン"
+    },
+    {
+      "code": "GF",
+      "en": "Gluten Free",
+      "zh": "无麸质",
+      "ja": "グルテンフリー"
+    },
+    {
+      "code": "DF",
+      "en": "Dairy Free",
+      "zh": "无乳制品",
+      "ja": "乳製品不使用"
+    }
+  ],
+  "surcharge": {
+    "en": "10% surcharge applies on weekends | 15% surcharge on public holidays",
+    "zh": "周末加收 10% 服务费 | 公共假期加收 15% 服务费",
+    "ja": "週末は10%、祝日は15%の追加料金がかかります。"
+  },
+  "cover": {
+    "since": {
+      "en": "SINCE 2017",
+      "zh": "始于 2017",
+      "ja": "2017年創業"
+    },
+    "memory": {
+      "en": "In loving memory of Vitalia Zanda,\nthe heart and inspiration behind everything we do.",
+      "zh": "怀念 Vitalia Zanda，\n她是我们一切的核心与灵感。",
+      "ja": "私たちのすべての中心であり、\nインスピレーションの源となったヴィタリア・ザンダを偲んで。"
+    },
+    "title": {
+      "en": "LUNCH",
+      "zh": "午餐",
+      "ja": "ランチ"
+    }
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "type": "cover"
+    },
+    {
+      "id": "l1",
+      "panels": [
+        [
+          "salads",
+          "mains"
+        ],
+        [
+          "pasta"
+        ]
+      ]
+    },
+    {
+      "id": "l2",
+      "panels": [
+        [
+          "pizza-1"
+        ],
+        [
+          "pizza-2"
+        ]
+      ]
+    },
+    {
+      "id": "l3",
+      "panels": [
+        [
+          "dolce"
+        ],
+        [
+          "soft-drinks"
+        ]
+      ]
+    },
+    {
+      "id": "l4",
+      "panels": [
+        [
+          "coffee"
+        ]
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "salads",
+      "name": {
+        "en": "Salads",
+        "zh": "沙拉",
+        "ja": "サラダ"
+      },
+      "items": [
+        {
+          "id": "burrata-caprese",
+          "price": "22.5",
+          "tags": [
+            "V",
+            "GF"
+          ],
+          "en": {
+            "name": "Burrata Caprese",
+            "desc": "Creamy Italian burrata with rocket, cherry tomatoes, zucchini cream, and balsamic vinegar dressing"
+          },
+          "zh": {
+            "name": "布拉塔卡布里沙拉",
+            "desc": "意大利布拉塔奶酪、芝麻菜、樱桃番茄、西葫芦奶油、意式香醋汁"
+          },
+          "ja": {
+            "name": "ブラータ・カプレーゼ",
+            "desc": "イタリア産ブラータチーズ、ルッコラ、チェリートマト、ズッキーニクリーム、バルサミコドレッシング"
+          }
+        },
+        {
+          "id": "prawns-salad",
+          "price": "25.5",
+          "tags": [
+            "GF"
+          ],
+          "en": {
+            "name": "Prawns Salad",
+            "desc": "Local prawns, mixed salad with tomatoes, quinoa, carrots and zesty yoghurt cream"
+          },
+          "zh": {
+            "name": "大虾沙拉",
+            "desc": "本地鲜虾、混合生菜、番茄、藜麦、胡萝卜、清爽酸奶酱"
+          },
+          "ja": {
+            "name": "海老のサラダ",
+            "desc": "地元産の海老、ミックスサラダ、トマト、キヌア、にんじん、さわやかなヨーグルトクリーム"
+          }
+        },
+        {
+          "id": "chicken-salad",
+          "price": "22.5",
+          "tags": [
+            "GF"
+          ],
+          "en": {
+            "name": "Chicken Salad",
+            "desc": "Mixed leaves with chicken, olives, capsicum sauce, balsamic vinegar dressing, and shaved parmesan"
+          },
+          "zh": {
+            "name": "鸡肉沙拉",
+            "desc": "混合生菜、嫩鸡肉、橄榄、红椒酱、意式香醋汁、帕尔玛干酪片"
+          },
+          "ja": {
+            "name": "チキンサラダ",
+            "desc": "ミックスリーフ、チキン、オリーブ、パプリカソース、バルサミコドレッシング、削りパルメザン"
+          }
+        },
+        {
+          "id": "la-vegana",
+          "price": "22.5",
+          "tags": [
+            "VG",
+            "GF"
+          ],
+          "en": {
+            "name": "La Vegana",
+            "desc": "Mixed leaves and colourful mix of quinoa, celeriac sauce, mushrooms, fried cauliflower and almond flakes"
+          },
+          "zh": {
+            "name": "纯素田园沙拉",
+            "desc": "混合生菜、彩色藜麦、芹菜根酱、蘑菇、炸花椰菜、杏仁片"
+          },
+          "ja": {
+            "name": "ラ・ヴェガーナ",
+            "desc": "ミックスリーフ、カラフルなキヌア、セロリアックソース、きのこ、揚げカリフラワー、アーモンドフレーク"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pasta",
+      "name": {
+        "en": "Pasta",
+        "zh": "意面",
+        "ja": "パスタ"
+      },
+      "items": [
+        {
+          "id": "spaghetti-pomodoro",
+          "price": "25",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Spaghetti al Pomodoro",
+            "desc": "Fresh tomato sauce with basil and parmesan"
+          },
+          "zh": {
+            "name": "番茄罗勒意面",
+            "desc": "新鲜番茄酱、罗勒、帕尔玛干酪"
+          },
+          "ja": {
+            "name": "スパゲッティ・ポモドーロ",
+            "desc": "フレッシュトマトソース、バジル、パルメザンチーズ"
+          }
+        },
+        {
+          "id": "lunch-carbonara",
+          "price": "26",
+          "tags": [],
+          "en": {
+            "name": "Spaghetti Carbonara",
+            "desc": "Creamy sauce with eggs, pecorino cheese, crispy guanciale, and freshly ground black pepper"
+          },
+          "zh": {
+            "name": "卡邦纳拉意面",
+            "desc": "鸡蛋奶油酱、佩科里诺奶酪、香脆猪颊肉、现磨黑胡椒"
+          },
+          "ja": {
+            "name": "スパゲッティ・カルボナーラ",
+            "desc": "卵とペコリーノチーズのクリーミーソース、カリカリのグアンチャーレ、挽きたてブラックペッパー"
+          }
+        },
+        {
+          "id": "gnocchi-quattro",
+          "price": "26",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Gnocchi Quattro Formaggi",
+            "desc": "Soft gnocchi in a smooth, creamy blend of gorgonzola, parmesan, provolone, and pecorino cheese"
+          },
+          "zh": {
+            "name": "四种奶酪马铃薯团子",
+            "desc": "软糯马铃薯团子、戈尔贡佐拉、帕尔玛干酪、普罗沃洛内与佩科里诺四味奶酪浓郁酱汁"
+          },
+          "ja": {
+            "name": "ニョッキ・クワトロフォルマッジ",
+            "desc": "やわらかいニョッキ、ゴルゴンゾーラ・パルメザン・プロヴォローネ・ペコリーノの濃厚な4種チーズソース"
+          }
+        },
+        {
+          "id": "cavatelli-bolognese",
+          "price": "25",
+          "tags": [],
+          "en": {
+            "name": "Cavatelli alla Bolognese",
+            "desc": "Cavatelli with slow-cooked beef ragù in a rich Napoli sauce, topped with grated parmesan"
+          },
+          "zh": {
+            "name": "博洛尼亚肉酱贝壳面",
+            "desc": "贝壳面配慢炖牛肉拉古酱与浓郁那不勒斯番茄底，顶部撒帕尔玛干酪碎"
+          },
+          "ja": {
+            "name": "カヴァテッリ・ボロネーゼ",
+            "desc": "じっくり煮込んだビーフラグー、リッチなナポリソース、パルメザンチーズがけ"
+          }
+        },
+        {
+          "id": "linguine-vongole",
+          "price": "28",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Linguine alle Vongole",
+            "desc": "Linguine with juicy vongole, cherry tomatoes, fresh parsley, and white wine sauce"
+          },
+          "zh": {
+            "name": "蛤蜊扁面",
+            "desc": "扁面配鲜嫩蛤蜊、樱桃番茄、新鲜欧芹、白葡萄酒酱汁"
+          },
+          "ja": {
+            "name": "リングイネ・ボンゴレ",
+            "desc": "あさり、チェリートマト、フレッシュパセリ、白ワインソース"
+          }
+        }
+      ],
+      "foot": {
+        "en": "Gluten Free Pasta +$5",
+        "zh": "无麸质意面 +$5",
+        "ja": "グルテンフリーパスタ +$5"
+      }
+    },
+    {
+      "id": "pizza-1",
+      "name": {
+        "en": "Pizza",
+        "zh": "比萨",
+        "ja": "ピザ"
+      },
+      "items": [
+        {
+          "id": "margherita",
+          "price": "26.5",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Margherita",
+            "desc": "San Marzano tomatoes, mozzarella, basil, EVOO"
+          },
+          "zh": {
+            "name": "玛格丽特",
+            "desc": "圣马扎诺番茄、马苏里拉奶酪、新鲜罗勒、特级初榨橄榄油"
+          },
+          "ja": {
+            "name": "マルゲリータ",
+            "desc": "サン・マルツァーノトマト、モッツァレラ、バジル、エキストラバージンオリーブオイル"
+          }
+        },
+        {
+          "id": "bufalina",
+          "price": "36",
+          "tags": [],
+          "en": {
+            "name": "Bufalina",
+            "desc": "San Marzano tomatoes, fresh buffalo mozzarella, prosciutto crudo, cherry tomatoes, basil, EVOO"
+          },
+          "zh": {
+            "name": "水牛奶酪比萨",
+            "desc": "圣马扎诺番茄、新鲜水牛马苏里拉奶酪、意式生火腿、樱桃番茄、罗勒、特级初榨橄榄油"
+          },
+          "ja": {
+            "name": "ブファリーナ",
+            "desc": "サン・マルツァーノトマト、フレッシュ水牛モッツァレラ、プロシュット・クルード、チェリートマト、バジル、オリーブオイル"
+          }
+        },
+        {
+          "id": "capricciosa",
+          "price": "30.5",
+          "tags": [],
+          "en": {
+            "name": "Capricciosa",
+            "desc": "San Marzano tomatoes, mozzarella, ham, mushrooms, artichokes, olives"
+          },
+          "zh": {
+            "name": "随心比萨",
+            "desc": "圣马扎诺番茄、马苏里拉奶酪、火腿、蘑菇、朝鲜蓟、橄榄"
+          },
+          "ja": {
+            "name": "カプリチョーザ",
+            "desc": "サン・マルツァーノトマト、モッツァレラ、ハム、マッシュルーム、アーティチョーク、オリーブ"
+          }
+        },
+        {
+          "id": "vegetariana",
+          "price": "31.5",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Vegetariana 2.0",
+            "desc": "Zucchini cream base, mozzarella, fried eggplant, roasted capsicum"
+          },
+          "zh": {
+            "name": "蔬菜比萨 2.0",
+            "desc": "西葫芦奶油底酱、马苏里拉奶酪、炸茄子、烤红椒"
+          },
+          "ja": {
+            "name": "ヴェジタリアーナ 2.0",
+            "desc": "ズッキーニクリームベース、モッツァレラ、揚げナス、ローストパプリカ"
+          }
+        },
+        {
+          "id": "sardegna",
+          "price": "29.5",
+          "tags": [
+            "VG"
+          ],
+          "en": {
+            "name": "Sardegna",
+            "desc": "San Marzano, vegan-mozzarella, cherry tomatoes, artichokes, oregano, basil"
+          },
+          "zh": {
+            "name": "撒丁岛",
+            "desc": "圣马扎诺番茄、纯素马苏里拉、樱桃番茄、朝鲜蓟、牛至、罗勒"
+          },
+          "ja": {
+            "name": "サルデーニャ",
+            "desc": "サン・マルツァーノトマト、ヴィーガンモッツァレラ、チェリートマト、アーティチョーク、オレガノ、バジル"
+          }
+        },
+        {
+          "id": "umbria",
+          "price": "29.5",
+          "tags": [
+            "VG"
+          ],
+          "en": {
+            "name": "Umbria",
+            "desc": "Vegan-mozzarella, pumpkin pure' mushrooms, walnuts, truffle cream"
+          },
+          "zh": {
+            "name": "翁布里亚",
+            "desc": "纯素马苏里拉、南瓜泥、蘑菇、核桃、松露奶油"
+          },
+          "ja": {
+            "name": "ウンブリア",
+            "desc": "ヴィーガンモッツァレラ、かぼちゃのピューレ、マッシュルーム、くるみ、トリュフクリーム"
+          }
+        },
+        {
+          "id": "napule",
+          "price": "34.5",
+          "tags": [],
+          "en": {
+            "name": "Napule'",
+            "desc": "Mozzarella, smoked scamorza, Italian sausage, broccoli rabe (friarielli)"
+          },
+          "zh": {
+            "name": "那不勒斯风情",
+            "desc": "马苏里拉奶酪、烟熏斯卡莫扎奶酪、意大利香肠、西兰花苗"
+          },
+          "ja": {
+            "name": "ナポレ",
+            "desc": "モッツァレラ、スモークスカモルツァ、イタリアンソーセージ、イタリア産菜の花（フリアリエッリ）"
+          }
+        },
+        {
+          "id": "diavola",
+          "price": "31.5",
+          "tags": [],
+          "en": {
+            "name": "Diavola",
+            "desc": "San Marzano tomatoes, mozzarella, Calabrese salami, caramelized onion, 'nduja"
+          },
+          "zh": {
+            "name": "魔鬼比萨",
+            "desc": "圣马扎诺番茄、马苏里拉奶酪、卡拉布里亚辣味萨拉米、焦糖洋葱、辣肠酱"
+          },
+          "ja": {
+            "name": "ディアヴォラ",
+            "desc": "サン・マルツァーノトマト、モッツァレラ、カラブリア産スパイシーサラミ、キャラメライズドオニオン、’ンドゥイヤ"
+          }
+        }
+      ],
+      "foot": {
+        "en": "Gluten Free Pizza +$8",
+        "zh": "无麸质披萨 +$8",
+        "ja": "グルテンフリーピザ +$8"
+      }
+    },
+    {
+      "id": "pizza-2",
+      "name": {
+        "en": "Pizza",
+        "zh": "比萨",
+        "ja": "ピザ"
+      },
+      "items": [
+        {
+          "id": "leonardo",
+          "price": "34.5",
+          "tags": [],
+          "en": {
+            "name": "Leonardo da Vinci",
+            "desc": "San Marzano tomatoes, mozzarella, prosciutto crudo, rocket, shaved parmesan, EVOO"
+          },
+          "zh": {
+            "name": "达芬奇",
+            "desc": "圣马扎诺番茄、马苏里拉奶酪、意式生火腿、芝麻菜、帕尔玛干酪片、特级初榨橄榄油"
+          },
+          "ja": {
+            "name": "レオナルド・ダ・ヴィンチ",
+            "desc": "サン・マルツァーノトマト、モッツァレラ、プロシュット・クルード、ルッコラ、削りパルメザン、オリーブオイル"
+          }
+        },
+        {
+          "id": "mortazza",
+          "price": "35",
+          "tags": [],
+          "en": {
+            "name": "Mortazza",
+            "desc": "Mozzarella, mortadella, sun-dried tomatoes, pistachio burrata"
+          },
+          "zh": {
+            "name": "莫尔塔扎",
+            "desc": "马苏里拉奶酪、意式博洛尼亚香肠、风干番茄、开心果布拉塔奶酪"
+          },
+          "ja": {
+            "name": "モルタッツァ",
+            "desc": "モッツァレラ、モルタデッラ、セミドライトマト、ピスタチオブラータ"
+          }
+        },
+        {
+          "id": "il-padrino",
+          "price": "36.5",
+          "tags": [],
+          "en": {
+            "name": "Il Padrino (The Godfather)",
+            "desc": "San Marzano tomatoes, mozzarella, soppressa salami, rocket, cherry tomatoes, burrata"
+          },
+          "zh": {
+            "name": "教父",
+            "desc": "圣马扎诺番茄、马苏里拉奶酪、索普雷萨萨拉米、芝麻菜、樱桃番茄、布拉塔奶酪"
+          },
+          "ja": {
+            "name": "ゴッドファーザー",
+            "desc": "サン・マルツァーノトマト、モッツァレラ、ソプレッササラミ、ルッコラ、チェリートマト、ブラータ"
+          }
+        },
+        {
+          "id": "quattro-formaggi",
+          "price": "31.5",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Quattro Formaggi e Tartufo",
+            "desc": "Mozzarella, gorgonzola, smoked scamorza, parmesan, truffle cream"
+          },
+          "zh": {
+            "name": "四种奶酪配松露",
+            "desc": "马苏里拉、戈尔贡佐拉蓝纹奶酪、烟熏斯卡莫扎、帕尔玛干酪、松露奶油"
+          },
+          "ja": {
+            "name": "クワトロフォルマッジ・タルトゥーフォ",
+            "desc": "モッツァレラ、ゴルゴンゾーラ、スモークスカモルツァ、パルメザン、トリュフクリーム"
+          }
+        },
+        {
+          "id": "zuccotta",
+          "price": "34",
+          "tags": [],
+          "en": {
+            "name": "Zuccotta",
+            "desc": "Pumpkin cream base, mozzarella, guanciale, grated pecorino"
+          },
+          "zh": {
+            "name": "南瓜奶油比萨",
+            "desc": "南瓜奶油底酱、马苏里拉奶酪、猪脸颊培根、研磨佩科里诺奶酪"
+          },
+          "ja": {
+            "name": "ズッコッタ",
+            "desc": "かぼちゃクリームベース、モッツァレラ、グアンチャーレ、すりおろしペコリーノ"
+          }
+        },
+        {
+          "id": "frutti-di-mare",
+          "price": "39.5",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Frutti di Mare",
+            "desc": "San Marzano garlic tomatoes, prawns, calamari, mussels, clams, parsley"
+          },
+          "zh": {
+            "name": "海鲜比萨",
+            "desc": "圣马扎诺蒜香番茄酱、大虾、鱿鱼、贻贝、蛤蜊、新鲜欧芹"
+          },
+          "ja": {
+            "name": "フルッティ・ディ・マーレ",
+            "desc": "サン・マルツァーノガーリックトマトソース、海老、イカ、ムール貝、あさり、パセリ"
+          }
+        },
+        {
+          "id": "calzone",
+          "price": "30.5",
+          "tags": [],
+          "en": {
+            "name": "Calzone (Folded Pizza)",
+            "desc": "San Marzano tomatoes, mozzarella, mild salami, ricotta, black pepper, parmesan"
+          },
+          "zh": {
+            "name": "意式对折披萨",
+            "desc": "圣马扎诺番茄、马苏里拉奶酪、温和萨拉米、瑞可塔奶酪、现磨黑胡椒、帕尔玛干酪"
+          },
+          "ja": {
+            "name": "カルツォーネ（折りたたみピザ）",
+            "desc": "サン・マルツァーノトマト、モッツァレラ、マイルドサラミ、リコッタ、ブラックペッパー、パルメザン"
+          }
+        }
+      ],
+      "foot": {
+        "en": "Gluten Free Pizza +$8",
+        "zh": "无麸质披萨 +$8",
+        "ja": "グルテンフリーピザ +$8"
+      }
+    },
+    {
+      "id": "mains",
+      "name": {
+        "en": "Mains",
+        "zh": "主菜",
+        "ja": "メイン"
+      },
+      "items": [
+        {
+          "id": "lunch-lasagna",
+          "price": "26.5",
+          "tags": [],
+          "en": {
+            "name": "Lasagna",
+            "desc": "Traditional layers of pasta with slow-cooked beef ragù and creamy béchamel sauce"
+          },
+          "zh": {
+            "name": "意式千层面",
+            "desc": "传统多层面片、慢炖牛肉拉古酱、浓郁白酱"
+          },
+          "ja": {
+            "name": "ラザニア",
+            "desc": "伝統的な重ね生地、じっくり煮込んだビーフラグー、濃厚ベシャメルソース"
+          }
+        },
+        {
+          "id": "pollo-cacciatora",
+          "price": "26.5",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Pollo alla Cacciatora",
+            "desc": "Braised chicken thigh with cherry tomatoes, olives, capers and red wine Napoli sauce, served with house focaccia"
+          },
+          "zh": {
+            "name": "猎人风味鸡腿",
+            "desc": "红酒番茄酱焖鸡腿、樱桃番茄、橄榄、刺山柑，配自制佛卡夏面包"
+          },
+          "ja": {
+            "name": "鶏もも肉のカッチャトーラ",
+            "desc": "チェリートマト・オリーブ・ケーパー・赤ワインナポリソースで煮込んだ鶏もも肉、自家製フォカッチャ添え"
+          }
+        },
+        {
+          "id": "calamari-prawns-frittura",
+          "price": "26.5",
+          "tags": [
+            "DF",
+            "GF"
+          ],
+          "en": {
+            "name": "Calamari & Prawns Frittura",
+            "desc": "Crispy fried calamari and prawns served with chips, salad and aioli sauce"
+          },
+          "zh": {
+            "name": "炸鱿鱼大虾",
+            "desc": "香脆炸鱿鱼与大虾，配薯条、沙拉及蒜泥蛋黄酱"
+          },
+          "ja": {
+            "name": "イカと海老のフリット",
+            "desc": "サクサクに揚げたイカと海老、フライドポテト・サラダ・アイオリソース添え"
+          }
+        }
+      ],
+      "foot": {
+        "en": "legend",
+        "zh": "legend",
+        "ja": "legend"
+      }
+    },
+    {
+      "id": "dolce",
+      "name": {
+        "en": "Dolce",
+        "zh": "甜品",
+        "ja": "デザート"
+      },
+      "items": [
+        {
+          "id": "tiramisu",
+          "price": "16.5",
+          "tags": [],
+          "en": {
+            "name": "Tiramisù",
+            "desc": "Classic espresso, mascarpone dessert, dusted with cocoa powder"
+          },
+          "zh": {
+            "name": "提拉米苏",
+            "desc": "经典意式浓缩咖啡与马斯卡彭奶酪甜点，顶部撒可可粉"
+          },
+          "ja": {
+            "name": "ティラミス",
+            "desc": "エスプレッソとマスカルポーネの定番イタリアンデザート、ココアパウダーがけ"
+          }
+        },
+        {
+          "id": "cannolo",
+          "price": "12.5",
+          "tags": [],
+          "en": {
+            "name": "Cannolo Siciliano",
+            "desc": "Crispy cannoli shells filled with silky ricotta cream, chocolate bits, orange zest and crunchy pistachios"
+          },
+          "zh": {
+            "name": "西西里卷管饼",
+            "desc": "香脆卷管饼外壳、丝滑瑞可塔奶油馅、巧克力碎、橙皮丁、脆开心果"
+          },
+          "ja": {
+            "name": "カンノーロ・シチリアーノ",
+            "desc": "サクサクのカンノーロシェル、なめらかなリコッタクリーム、チョコチップ、オレンジピール、砕きピスタチオ"
+          }
+        },
+        {
+          "id": "gelato-nutella",
+          "price": "15.5",
+          "tags": [
+            "GF"
+          ],
+          "en": {
+            "name": "Gelato alla Nutella",
+            "desc": "House-made Nutella gelato with whipped cream and crunchy hazelnuts"
+          },
+          "zh": {
+            "name": "能多益冰淇淋",
+            "desc": "自制能多益榛子巧克力冰淇淋、鲜奶油、香脆榛子"
+          },
+          "ja": {
+            "name": "ヌテッラジェラート",
+            "desc": "自家製ヌテッラジェラート、ホイップクリーム、砕きヘーゼルナッツ"
+          }
+        },
+        {
+          "id": "sorbet",
+          "price": "15.5",
+          "tags": [
+            "VG",
+            "GF"
+          ],
+          "en": {
+            "name": "Lemon and Mango Sorbet",
+            "desc": "Refreshing vegan sorbet paired with tangy red berries coulis"
+          },
+          "zh": {
+            "name": "柠檬芒果雪葩",
+            "desc": "清爽纯素雪葩、酸甜红莓果泥"
+          },
+          "ja": {
+            "name": "レモン＆マンゴーソルベ",
+            "desc": "さわやかなヴィーガンソルベ、タンジーな赤いベリーのクーリ添え"
+          }
+        }
+      ]
+    },
+    {
+      "id": "soft-drinks",
+      "name": {
+        "en": "Soft Drinks",
+        "zh": "软饮",
+        "ja": "ドリンク"
+      },
+      "items": [
+        {
+          "id": "sparkling-750",
+          "price": "8",
+          "tags": [],
+          "en": {
+            "name": "Sparkling Water",
+            "size": "750ml",
+            "desc": ""
+          },
+          "zh": {
+            "name": "气泡水 750ml",
+            "desc": ""
+          },
+          "ja": {
+            "name": "スパークリングウォーター 750ml",
+            "desc": ""
+          }
+        },
+        {
+          "id": "sanpellegrino-1l",
+          "price": "12",
+          "tags": [],
+          "en": {
+            "name": "Sanpellegrino Sparkling Water",
+            "size": "1L",
+            "desc": ""
+          },
+          "zh": {
+            "name": "圣培露气泡水 1L",
+            "desc": ""
+          },
+          "ja": {
+            "name": "サンペレグリノ スパークリングウォーター 1L",
+            "desc": ""
+          }
+        },
+        {
+          "id": "sanpellegrino-soft",
+          "price": "5.5",
+          "tags": [],
+          "en": {
+            "name": "San Pellegrino Soft Drinks",
+            "desc": "Aranciata - Limonata - Clementina - Arancia Rossa"
+          },
+          "zh": {
+            "name": "圣培露果味气泡饮",
+            "desc": "橙味 · 柠檬味 · 橘子味 · 血橙味"
+          },
+          "ja": {
+            "name": "サンペレグリノ フルーツドリンク",
+            "desc": "オレンジ · レモン · クレメンティーナ · ブラッドオレンジ"
+          }
+        },
+        {
+          "id": "classic-soft",
+          "price": "5.5",
+          "tags": [],
+          "en": {
+            "name": "Classic Soft Drinks",
+            "desc": "Coke - Zero - LLB"
+          },
+          "zh": {
+            "name": "经典汽水",
+            "desc": "可口可乐 · 零度可乐 · LLB"
+          },
+          "ja": {
+            "name": "定番ソフトドリンク",
+            "desc": "コカ・コーラ · ゼロコーラ · LLB"
+          }
+        },
+        {
+          "id": "juice",
+          "price": "5",
+          "tags": [],
+          "en": {
+            "name": "Juice",
+            "desc": "Pineapple - Orange - Apple - Mango"
+          },
+          "zh": {
+            "name": "鲜榨果汁",
+            "desc": "菠萝 · 橙汁 · 苹果 · 芒果"
+          },
+          "ja": {
+            "name": "ジュース",
+            "desc": "パイナップル · オレンジ · アップル · マンゴー"
+          }
+        },
+        {
+          "id": "ginger-beer",
+          "price": "6",
+          "tags": [],
+          "en": {
+            "name": "Ginger Beer",
+            "desc": ""
+          },
+          "zh": {
+            "name": "姜汁啤酒",
+            "desc": ""
+          },
+          "ja": {
+            "name": "ジンジャービア",
+            "desc": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "coffee",
+      "name": {
+        "en": "Coffee",
+        "zh": "咖啡",
+        "ja": "コーヒー"
+      },
+      "priceColumns": 2,
+      "items": [
+        {
+          "id": "espresso",
+          "price": "3.5",
+          "price2": "4.5",
+          "tags": [],
+          "en": {
+            "name": "Espresso",
+            "desc": "Single - Double"
+          },
+          "zh": {
+            "name": "浓缩咖啡",
+            "desc": "单份 · 双份 / Single · Double"
+          },
+          "ja": {
+            "name": "エスプレッソ",
+            "desc": "シングル · ダブル / Single · Double"
+          }
+        },
+        {
+          "id": "cappuccino",
+          "price": "6.5",
+          "price2": "7.5",
+          "tags": [],
+          "en": {
+            "name": "Cappuccino · Latte · Flat White",
+            "desc": "Medium - Large"
+          },
+          "zh": {
+            "name": "卡布奇诺 · 拿铁 · 白咖啡",
+            "desc": "中杯 · 大杯 / Medium · Large"
+          },
+          "ja": {
+            "name": "カプチーノ · カフェラテ · フラットホワイト",
+            "desc": "Mサイズ · Lサイズ / Medium · Large"
+          }
+        },
+        {
+          "id": "hot-chocolate",
+          "price": "6.5",
+          "price2": "7.5",
+          "tags": [],
+          "en": {
+            "name": "Hot Chocolate",
+            "desc": "Medium - Large"
+          },
+          "zh": {
+            "name": "热巧克力",
+            "desc": "中杯 · 大杯 / Medium · Large"
+          },
+          "ja": {
+            "name": "ホットチョコレート",
+            "desc": "Mサイズ · Lサイズ / Medium · Large"
+          }
+        },
+        {
+          "id": "long-black",
+          "price": "5.5",
+          "price2": "6.5",
+          "tags": [],
+          "en": {
+            "name": "Long Black",
+            "desc": "Medium - Large"
+          },
+          "zh": {
+            "name": "长黑咖啡",
+            "desc": "中杯 · 大杯 / Medium · Large"
+          },
+          "ja": {
+            "name": "ロングブラック",
+            "desc": "Mサイズ · Lサイズ / Medium · Large"
+          }
+        },
+        {
+          "id": "chai-latte",
+          "price": "7",
+          "price2": "8",
+          "tags": [],
+          "en": {
+            "name": "Chai Latte",
+            "desc": "Medium - Large"
+          },
+          "zh": {
+            "name": "印度香料拿铁",
+            "desc": "中杯 · 大杯 / Medium · Large"
+          },
+          "ja": {
+            "name": "チャイラテ",
+            "desc": "Mサイズ · Lサイズ / Medium · Large"
+          }
+        },
+        {
+          "id": "iced-coffee",
+          "price": "",
+          "price2": "9",
+          "tags": [],
+          "en": {
+            "name": "Iced Coffees",
+            "desc": "Coffee · Chai · Mocha · Latte · Chocolate"
+          },
+          "zh": {
+            "name": "冰咖啡",
+            "desc": "冰咖 · 冰茶 · 冰摩卡 · 冰拿铁 · 冰巧克力"
+          },
+          "ja": {
+            "name": "アイスコーヒー各種",
+            "desc": "コーヒー · チャイ · モカ · ラテ · チョコレート"
+          }
+        },
+        {
+          "id": "tea",
+          "price": "",
+          "price2": "5",
+          "tags": [],
+          "en": {
+            "name": "Tea",
+            "desc": "English Breakfast · Green · Peppermint · Chamomile · Lemongrass & Ginger"
+          },
+          "zh": {
+            "name": "茶",
+            "desc": "英式早餐茶 · 绿茶 · 薄荷茶 · 洋甘菊茶 · 柠檬草姜茶"
+          },
+          "ja": {
+            "name": "ティー",
+            "desc": "イングリッシュブレックファスト · グリーン · ペパーミント · カモミール · レモングラス＆ジンジャー"
+          }
+        }
+      ],
+      "colHead": {
+        "en": "M · L",
+        "zh": "中杯 · 大杯",
+        "ja": "M · L"
+      },
+      "foot": {
+        "en": "surcharge",
+        "zh": "surcharge",
+        "ja": "surcharge"
+      }
+    }
+  ],
+  "style": "serif"
+}

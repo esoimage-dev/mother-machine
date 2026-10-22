@@ -9,7 +9,7 @@ Pacchetto del 15 ottobre 2026. Contiene tutto quello che serve per costruire mot
 - Non toccare ciò che è approvato (hero, testata, pulsantiera, cursore, vetro). Portarlo nel sito identico.
 - Tutto leggero e tecnicamente impeccabile: 60 fps, niente backdrop-filter dal vivo su aree grandi, animazioni ferme quando fuori schermo, prefers-reduced-motion rispettato.
 - Fare sempre copie prima di sovrascrivere. Nel sito vero la copia è la storia di git: un commit per ogni passo chiaro.
-- **Push raggruppati** (deciso da Eso il 21 ottobre): Cloudflare Pages gratis fa 500 build al mese e ogni push su qualsiasi branch è un build. Commit piccoli sì, ma push solo quando c'è un blocco di modifiche da vedere (non uno per commit). Su `main` si porta solo a tappe chiare, con l'ok di Eso: anche quello è un build.
+- **Push raggruppati** (deciso da Eso il 21 ottobre): Cloudflare Pages gratis fa 500 build al mese e ogni push su qualsiasi branch è un build. Commit piccoli sì, ma push solo quando c'è un blocco di modifiche da vedere (non uno per commit). Su `main` si porta solo a tappe chiare, con l'ok di Eso: anche quello è un build. Per andare veloci (deciso il 21 ottobre): insieme al push sul branch si apre subito la pull request verso `main`; Eso guarda l'anteprima e la unisce lui.
 - Non esportare MP4 se non richiesto.
 
 ## Cosa c'è nel pacchetto
@@ -69,7 +69,7 @@ Ogni pagina è un piano. Si naviga con la pulsantiera (il menu) e si scende come
 - **Cursore sopra il pomodoro**: il quadratino interno diventa nero nella parte che sta sopra l'arancione (anche solo in parte, mentre il riempimento sale).
 
 ## Il piano di costruzione
-**Stack:** Astro (output statico) su Cloudflare Pages. Repository GitHub `esoimage-dev/mother-machine`, Cloudflare pubblica a ogni push. Poi Workers + D1 + R2 + Access per modulo contatti e back office, tutto nel piano gratuito. Dominio mothermachine.studio comprato su GoDaddy (18 ottobre 2026: non ancora collegato); i nameserver andranno spostati su Cloudflare. Email: Cloudflare Email Routing verso Gmail in entrata; invio come hello@mothermachine.studio con Resend.
+**Stack:** Astro (output statico) su Cloudflare Pages. Repository GitHub `esoimage-dev/mother-machine`, Cloudflare pubblica a ogni push. Poi Workers + D1 + R2 + Access per modulo contatti e back office, tutto nel piano gratuito. Dominio mothermachine.studio comprato su GoDaddy, nameserver su Cloudflare e sito online dal 21 ottobre 2026 (`main` è la produzione; fuori da Google finché `PRIMA_DEL_LANCIO` in `public/_worker.js` è true). Email: hello@mothermachine.studio arriva con Cloudflare Email Routing al Gmail dello studio (mothermachine.studio@gmail.com, non quello personale di Eso); invio come hello@ con Resend.
 
 **Perché Astro:** non riscrive niente. CSS e JS del prototipo si spostano così come sono, divisi in componenti (`Header.astro`, `Floors.astro`, `Cursor.astro`, una sezione per file). Ogni piano diventa una pagina vera con il suo indirizzo (Google, link condivisibili). Font e immagini diventano file in cache, non base64. Il film si carica solo quando serve.
 

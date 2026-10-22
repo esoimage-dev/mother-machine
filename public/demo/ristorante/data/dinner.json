@@ -1,0 +1,1139 @@
+{
+  "id": "dinner",
+  "hours": {
+    "lunch": "11:00am - 4:30pm",
+    "dinner": "4:30pm - 9:00pm"
+  },
+  "title": {
+    "en": "Dinner",
+    "zh": "晚餐",
+    "ja": "ディナー"
+  },
+  "legend": [
+    {
+      "code": "V",
+      "en": "Vegetarian",
+      "zh": "素食",
+      "ja": "ベジタリアン"
+    },
+    {
+      "code": "VG",
+      "en": "Vegan",
+      "zh": "纯素",
+      "ja": "ヴィーガン"
+    },
+    {
+      "code": "GF",
+      "en": "Gluten Free",
+      "zh": "无麸质",
+      "ja": "グルテンフリー"
+    },
+    {
+      "code": "DF",
+      "en": "Dairy Free",
+      "zh": "无乳制品",
+      "ja": "乳製品不使用"
+    }
+  ],
+  "surcharge": {
+    "en": "10% surcharge applies on weekends | 15% surcharge on public holidays",
+    "zh": "周末加收 10% 服务费 | 公共假期加收 15% 服务费",
+    "ja": "週末は10%、祝日は15%の追加料金がかかります。"
+  },
+  "cover": {
+    "since": {
+      "en": "SINCE 2017",
+      "zh": "始于 2017",
+      "ja": "2017年創業"
+    },
+    "memory": {
+      "en": "In loving memory of Vitalia Zanda,\nthe heart and inspiration behind everything we do.",
+      "zh": "怀念 Vitalia Zanda，\n她是我们一切的核心与灵感。",
+      "ja": "私たちのすべての中心であり、\nインスピレーションの源となったヴィタリア・ザンダを偲んで。"
+    },
+    "title": {
+      "en": "DINNER",
+      "zh": "晚餐",
+      "ja": "ディナー"
+    }
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "type": "cover"
+    },
+    {
+      "id": "p1",
+      "panels": [
+        [
+          "starters"
+        ],
+        [
+          "pasta"
+        ]
+      ]
+    },
+    {
+      "id": "p2",
+      "panels": [
+        [
+          "pizza-1"
+        ],
+        [
+          "pizza-2"
+        ]
+      ]
+    },
+    {
+      "id": "p3",
+      "panels": [
+        [
+          "mains"
+        ],
+        [
+          "sides"
+        ]
+      ]
+    },
+    {
+      "id": "p4",
+      "panels": [
+        [
+          "dolce"
+        ]
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "starters",
+      "name": {
+        "en": "Starters",
+        "zh": "开胃菜",
+        "ja": "前菜"
+      },
+      "foot": {
+        "en": "legend",
+        "zh": "legend",
+        "ja": "legend"
+      },
+      "items": [
+        {
+          "id": "garlic-focaccia",
+          "price": "15.5",
+          "tags": [
+            "VG"
+          ],
+          "en": {
+            "name": "Garlic Focaccia",
+            "desc": "House focaccia infused with garlic and rosemary"
+          },
+          "zh": {
+            "name": "大蒜佛卡夏",
+            "desc": "自制佛卡夏配大蒜和迷迭香"
+          },
+          "ja": {
+            "name": "ガーリックフォカッチャ",
+            "desc": "ガーリックとローズマリーを練り込んだ自家製フォカッチャ"
+          },
+          "options": [
+            {
+              "en": "Add Anchovies $4",
+              "zh": "加凤尾鱼 $4",
+              "ja": "アンチョビ追加 $4"
+            },
+            {
+              "en": "Add San Marzano tomato purée $4",
+              "zh": "加圣马扎诺番茄酱 $4",
+              "ja": "サンマルツァーノトマトソース追加 $4"
+            }
+          ]
+        },
+        {
+          "id": "bruscofocaccia",
+          "price": "11",
+          "tags": [
+            "V"
+          ],
+          "tagNote": {
+            "en": "VG Option Available",
+            "zh": "可提供纯素",
+            "ja": "ヴィーガン対応可"
+          },
+          "en": {
+            "name": "Bruscofocaccia",
+            "desc": "Crunchy bruschetta-style focaccia bread topped with fresh tomatoes, parmesan and fresh basil"
+          },
+          "zh": {
+            "name": "意式烤佛卡夏",
+            "desc": "配新鲜番茄、帕玛森芝士和罗勒"
+          },
+          "ja": {
+            "name": "ブルスコフォカッチャ",
+            "desc": "トマト・パルメザン・バジルをのせたブルスケッタ風フォカッチャ"
+          }
+        },
+        {
+          "id": "mussels",
+          "price": "29.5",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Mussels",
+            "desc": "Fresh mussels steamed and served with a warm pizza basket"
+          },
+          "zh": {
+            "name": "青口贝",
+            "desc": "新鲜蒸制，配温热披萨面包篮"
+          },
+          "ja": {
+            "name": "ムール貝",
+            "desc": "蒸しムール貝＋ピザバスケット付き"
+          },
+          "choiceLabel": {
+            "en": "Choice of:",
+            "zh": "可选：",
+            "ja": "選べるソース："
+          },
+          "options": [
+            {
+              "en": "Garlic and white wine",
+              "zh": "大蒜白葡萄酒",
+              "ja": "ガーリック白ワイン"
+            },
+            {
+              "en": "Spicy Napoli sauce",
+              "zh": "辣味那不勒斯酱",
+              "ja": "スパイシーナポリソース"
+            }
+          ]
+        },
+        {
+          "id": "truffle-burrata",
+          "price": "24.5",
+          "tags": [
+            "V",
+            "GF"
+          ],
+          "en": {
+            "name": "Truffle Burrata Salad",
+            "desc": "Creamy burrata with cherry tomatoes, rocket and finished with a delicate truffle sauce"
+          },
+          "zh": {
+            "name": "松露布拉塔沙拉",
+            "desc": "布拉塔芝士配樱桃番茄和芝麻菜，淋松露酱"
+          },
+          "ja": {
+            "name": "トリュフ・ブッラータサラダ",
+            "desc": "ブッラータ、チェリートマト、ルッコラ、トリュフソース"
+          }
+        },
+        {
+          "id": "calamari-fritti",
+          "price": "22.5",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Calamari Fritti",
+            "desc": "Crispy battered squid rings with parsley, aioli and fresh lemon"
+          },
+          "zh": {
+            "name": "酥炸鱿鱼",
+            "desc": "配欧芹、蒜味蛋黄酱和新鲜柠檬"
+          },
+          "ja": {
+            "name": "カラマリフリット",
+            "desc": "イカのフリット、アイオリソース＆レモン添え"
+          }
+        },
+        {
+          "id": "cured-meat-platter",
+          "price": "36",
+          "tags": [],
+          "en": {
+            "name": "Mixed Cured Meat Platter",
+            "desc": "Chef's choice of three artisanal cured meat, served with toasted focaccia and nduja butter, olives"
+          },
+          "zh": {
+            "name": "冷切肉拼盘",
+            "desc": "主厨精选三种意式风干肉，配烤佛卡夏、nduja 黄油和橄榄"
+          },
+          "ja": {
+            "name": "生ハム盛り合わせ",
+            "desc": "シェフおすすめの3種の生ハム＋フォカッチャ"
+          }
+        },
+        {
+          "id": "polenta-porcini",
+          "price": "19.5",
+          "tags": [
+            "VG",
+            "GF"
+          ],
+          "en": {
+            "name": "Polenta & Porcini with Truffle Oil",
+            "desc": "Golden crispy polenta on a bed of olive tapenade, with sautéed porcini and cherry tomatoes, finished with aromatic truffle oil"
+          },
+          "zh": {
+            "name": "波伦塔牛肝菌松露",
+            "desc": "香脆波伦塔配橄榄酱、牛肝菌和樱桃番茄，淋松露油"
+          },
+          "ja": {
+            "name": "ポレンタ（ポルチーニ＆トリュフオイル）",
+            "desc": "トウモロコシの粉を使用した北イタリアの伝統的な家庭料理"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pasta",
+      "name": {
+        "en": "Pasta",
+        "zh": "意面",
+        "ja": "パスタ"
+      },
+      "foot": {
+        "en": "Gluten Free Pasta +$5",
+        "zh": "无麸质意面 +$5",
+        "ja": "グルテンフリーパスタ +$5"
+      },
+      "items": [
+        {
+          "id": "lasagna",
+          "price": "36",
+          "tags": [],
+          "en": {
+            "name": "Lasagna",
+            "desc": "Traditional layers of pasta with slow-cooked beef ragù and creamy béchamel sauce"
+          },
+          "zh": {
+            "name": "千层意面",
+            "desc": "慢炖牛肉酱与白酱层叠"
+          },
+          "ja": {
+            "name": "ラザニア",
+            "desc": "牛ラグーとベシャメルソースの伝統的なラザニア"
+          }
+        },
+        {
+          "id": "rigatoni-bolognese",
+          "price": "31",
+          "tags": [],
+          "en": {
+            "name": "Rigatoni Bolognese Al Tegamino",
+            "desc": "Rigatoni served with Italy's most celebrated sauce, classic Bolognese, grated Parmesan"
+          },
+          "zh": {
+            "name": "博洛尼亚肉酱管面",
+            "desc": "经典博洛尼亚肉酱配帕玛森芝士"
+          },
+          "ja": {
+            "name": "リガトーニ・ボロネーゼ",
+            "desc": "自家製ボロネーゼ、パルメザン"
+          }
+        },
+        {
+          "id": "gnocchi-gamberi",
+          "price": "35",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Gnocchi Zucchine e Gamberi",
+            "desc": "Soft potato gnocchi coated in zucchini cream, topped with tiger prawns, bottarga, and parsley"
+          },
+          "zh": {
+            "name": "西葫芦虾仁面疙瘩",
+            "desc": "土豆面疙瘩配西葫芦酱，搭配虎虾、乌鱼子和欧芹"
+          },
+          "ja": {
+            "name": "ズッキーニとエビのニョッキ",
+            "desc": "ズッキーニクリーム、エビ、ボッタルガ（カラスミ）"
+          }
+        },
+        {
+          "id": "truffle-risotto",
+          "price": "35",
+          "tags": [
+            "V"
+          ],
+          "tagNote": {
+            "en": "VG Option Available",
+            "zh": "可选纯素",
+            "ja": "ヴィーガン対応可"
+          },
+          "en": {
+            "name": "Truffle And Porcini Risotto",
+            "desc": "Creamy risotto with truffle and porcini, basil & cashew pesto, toasted almond flakes"
+          },
+          "zh": {
+            "name": "松露牛肝菌烩饭",
+            "desc": "配罗勒腰果青酱和烤杏仁片"
+          },
+          "ja": {
+            "name": "トリュフとポルチーニのリゾット",
+            "desc": "クリーミーリゾット、ポルチーニ"
+          }
+        },
+        {
+          "id": "carbonara",
+          "price": "29.5",
+          "tags": [],
+          "en": {
+            "name": "Spaghetti Carbonara",
+            "desc": "Spaghetti tossed with crispy guanciale in a silky egg and Pecorino Romano sauce, finished with cracked black pepper"
+          },
+          "zh": {
+            "name": "卡邦尼意面",
+            "desc": "配意式猪脸颊肉、蛋液和佩科里诺芝士"
+          },
+          "ja": {
+            "name": "カルボナーラ",
+            "desc": "グアンチャーレ、卵、ペコリーノチーズ"
+          }
+        },
+        {
+          "id": "linguine-marinara",
+          "price": "49",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Linguine alla Marinara",
+            "desc": "Linguine with local tiger prawns, mussels, 1/2 bug, squid, clams and Napoli sauce"
+          },
+          "zh": {
+            "name": "海鲜细扁面",
+            "desc": "配本地虎虾、青口贝、蛤蜊、半只琵琶虾和鱿鱼"
+          },
+          "ja": {
+            "name": "シーフード・リングイネ",
+            "desc": "エビ・ムール貝・イカなどの新鮮なシーフード"
+          }
+        },
+        {
+          "id": "paccheri-salsiccia",
+          "price": "30.5",
+          "tags": [],
+          "en": {
+            "name": "Paccheri Salsiccia e funghi",
+            "desc": "Wide tube-shaped pasta with Italian pork sausage and mushrooms in a rich & creamy saffron cheese sauce"
+          },
+          "zh": {
+            "name": "香肠菌菇大管面",
+            "desc": "配浓郁藏红花芝士酱"
+          },
+          "ja": {
+            "name": "サルシッチャとマッシュルームのパスタ",
+            "desc": "ソーセージとキノコのクリームソース"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pizza-1",
+      "name": {
+        "en": "Pizza",
+        "zh": "披萨",
+        "ja": "ピッツァ"
+      },
+      "foot": {
+        "en": "Gluten Free Pizza +$8",
+        "zh": "无麸质披萨 +$8",
+        "ja": "グルテンフリーピザ +$8"
+      },
+      "items": [
+        {
+          "id": "margherita",
+          "price": "26.5",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Margherita",
+            "desc": "San Marzano tomatoes, mozzarella, basil, EVOO"
+          },
+          "zh": {
+            "name": "玛格丽塔披萨",
+            "desc": "圣马扎诺番茄、马苏里拉、罗勒、特级初榨橄榄油"
+          },
+          "ja": {
+            "name": "マルゲリータ",
+            "desc": "イタリアントマト、モッツァレラ、バジル、エクストラバージンオリーブオイル"
+          }
+        },
+        {
+          "id": "bufalina",
+          "price": "36",
+          "tags": [],
+          "en": {
+            "name": "Bufalina",
+            "desc": "San Marzano tomatoes, fresh buffalo mozzarella, prosciutto crudo, cherry tomatoes, basil, EVOO"
+          },
+          "zh": {
+            "name": "布法利娜披萨",
+            "desc": "圣马扎诺番茄、水牛马苏里拉、生火腿、樱桃番茄、罗勒、特级初榨橄榄油"
+          },
+          "ja": {
+            "name": "ブッファリーナ",
+            "desc": "イタリアントマト、チェリートマト、フレッシュモッツァレラ、生ハム"
+          }
+        },
+        {
+          "id": "capricciosa",
+          "price": "30.5",
+          "tags": [],
+          "en": {
+            "name": "Capricciosa",
+            "desc": "San Marzano tomatoes, mozzarella, ham, mushrooms, artichokes, olives"
+          },
+          "zh": {
+            "name": "卡布里乔萨披萨",
+            "desc": "圣马扎诺番茄、马苏里拉、火腿、蘑菇、朝鲜蓟、橄榄"
+          },
+          "ja": {
+            "name": "カプリチョーザ",
+            "desc": "イタリアントマト、モッツァレラ、ハム、マッシュルーム、アーティチョーク、オリーブ"
+          }
+        },
+        {
+          "id": "vegetariana",
+          "price": "31.5",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Vegetariana 2.0",
+            "desc": "Zucchini cream base, mozzarella, fried eggplant, roasted capsicum"
+          },
+          "zh": {
+            "name": "素食 2.0 披萨",
+            "desc": "西葫芦奶油底、马苏里拉、炸茄子、烤甜椒"
+          },
+          "ja": {
+            "name": "ベジタリアーナ 2.0",
+            "desc": "ズッキーニクリーム、モッツァレラ、揚げナス、ローストパプリカ"
+          }
+        },
+        {
+          "id": "sardegna",
+          "price": "29.5",
+          "tags": [
+            "VG"
+          ],
+          "en": {
+            "name": "Sardegna",
+            "desc": "San Marzano tomatoes, vegan mozzarella, cherry tomatoes, artichokes, garlic, oregano, basil"
+          },
+          "zh": {
+            "name": "撒丁岛披萨",
+            "desc": "圣马扎诺番茄、纯素马苏里拉、樱桃番茄、朝鲜蓟、大蒜、牛至、罗勒"
+          },
+          "ja": {
+            "name": "サルデーニャ",
+            "desc": "トマトソース、ヴィーガンモッツァレラ、チェリートマト、アーティチョーク、ガーリック、オレガノ、バジル"
+          }
+        },
+        {
+          "id": "umbria",
+          "price": "29.5",
+          "tags": [
+            "VG"
+          ],
+          "en": {
+            "name": "Umbria",
+            "desc": "Vegan mozzarella, pumpkin purée, mushrooms, walnuts, truffle cream"
+          },
+          "zh": {
+            "name": "翁布里亚披萨",
+            "desc": "纯素马苏里拉、南瓜泥、蘑菇、核桃、松露酱"
+          },
+          "ja": {
+            "name": "ウンブリア",
+            "desc": "ヴィーガンモッツァレラ、パンプキンクリーム、マッシュルーム、クルミ、トリュフクリーム"
+          }
+        },
+        {
+          "id": "napule",
+          "price": "34.5",
+          "tags": [],
+          "en": {
+            "name": "Napule'",
+            "desc": "Mozzarella, smoked scamorza, Italian sausage, broccoli rabe (friarielli)"
+          },
+          "zh": {
+            "name": "那不勒披萨",
+            "desc": "马苏里拉、烟熏斯卡莫扎、意大利香肠、西兰花苗"
+          },
+          "ja": {
+            "name": "ナポリ",
+            "desc": "モッツァレラ、スモークスカモルツァ（チーズ）、イタリアンソーセージ、ブロッコリーニ"
+          }
+        },
+        {
+          "id": "diavola",
+          "price": "31.5",
+          "tags": [],
+          "en": {
+            "name": "Diavola",
+            "desc": "San Marzano tomatoes, mozzarella, Calabrese salami, caramelized onion, 'nduja"
+          },
+          "zh": {
+            "name": "迪亚沃拉披萨",
+            "desc": "圣马扎诺番茄、马苏里拉、卡拉布里亚辣萨拉米、焦糖洋葱、nduja"
+          },
+          "ja": {
+            "name": "ディアボラ",
+            "desc": "イタリアントマト、モッツァレラ、サラミ、キャラメリゼオニオン、ンドゥイヤ（辛口ソース）"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pizza-2",
+      "name": {
+        "en": "Pizza",
+        "zh": "披萨",
+        "ja": "ピッツァ"
+      },
+      "foot": {
+        "en": "Gluten Free Pizza +$8",
+        "zh": "无麸质披萨 +$8",
+        "ja": "グルテンフリーピザ +$8"
+      },
+      "items": [
+        {
+          "id": "leonardo",
+          "price": "34.5",
+          "tags": [],
+          "en": {
+            "name": "Leonardo da Vinci",
+            "desc": "San Marzano tomatoes, mozzarella, prosciutto crudo, rocket, shaved parmesan, EVOO"
+          },
+          "zh": {
+            "name": "达芬奇披萨",
+            "desc": "圣马扎诺番茄、马苏里拉、生火腿、芝麻菜、帕玛森芝士、特级初榨橄榄油"
+          },
+          "ja": {
+            "name": "レオナルド・ダ・ヴィンチ",
+            "desc": "モッツァレラ、プロシュート、ルッコラ、パルメザンチーズ"
+          }
+        },
+        {
+          "id": "mortazza",
+          "price": "35",
+          "tags": [],
+          "en": {
+            "name": "Mortazza",
+            "desc": "Mozzarella, mortadella, sun-dried tomatoes, pistachio burrata"
+          },
+          "zh": {
+            "name": "莫塔扎披萨",
+            "desc": "马苏里拉、莫塔德拉香肠、风干番茄、开心果布拉塔"
+          },
+          "ja": {
+            "name": "モルタッツァ",
+            "desc": "モッツァレラ、モルタデッラ（ボロニアソーセージ）、ドライトマト、ピスタチオ、ブッラータ"
+          }
+        },
+        {
+          "id": "il-padrino",
+          "price": "36.5",
+          "tags": [],
+          "en": {
+            "name": "Il Padrino (The Godfather)",
+            "desc": "San Marzano tomatoes, mozzarella, soppressa salami, rocket, cherry tomatoes, burrata"
+          },
+          "zh": {
+            "name": "教父披萨",
+            "desc": "圣马扎诺番茄、马苏里拉、索普雷萨萨拉米、芝麻菜、樱桃番茄、布拉塔"
+          },
+          "ja": {
+            "name": "イル・パドリーノ",
+            "desc": "イタリアントマト、モッツァレラ、サラミ、ルッコラ、チェリートマト、ブッラータ"
+          }
+        },
+        {
+          "id": "quattro-formaggi",
+          "price": "31.5",
+          "tags": [
+            "V"
+          ],
+          "en": {
+            "name": "Quattro Formaggi e Tartufo",
+            "desc": "Mozzarella, gorgonzola, smoked scamorza, parmesan, truffle cream"
+          },
+          "zh": {
+            "name": "四种芝士松露披萨",
+            "desc": "马苏里拉、戈贡佐拉、烟熏斯卡莫扎、帕玛森芝士、松露酱"
+          },
+          "ja": {
+            "name": "クアトロフォルマッジ・トリュフ",
+            "desc": "モッツァレラ、ゴルゴンゾーラ、スモークスカモルツァ（チーズ）、パルメザン、トリュフクリーム"
+          }
+        },
+        {
+          "id": "zuccotta",
+          "price": "34",
+          "tags": [],
+          "en": {
+            "name": "Zuccotta",
+            "desc": "Pumpkin cream base, mozzarella, guanciale, grated pecorino"
+          },
+          "zh": {
+            "name": "南瓜猪颊肉披萨",
+            "desc": "南瓜奶油底、马苏里拉、猪颊肉、佩科里诺芝士"
+          },
+          "ja": {
+            "name": "ズッコッタ",
+            "desc": "パンプキンクリーム、モッツァレラ、グアンチャーレ、ペコリーノチーズ"
+          }
+        },
+        {
+          "id": "frutti-di-mare",
+          "price": "39.5",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Frutti di Mare",
+            "desc": "San Marzano garlic tomatoes, prawns, calamari, mussels, clams, parsley"
+          },
+          "zh": {
+            "name": "海鲜披萨",
+            "desc": "圣马扎诺蒜香番茄酱、虾、鱿鱼、青口贝、蛤蜊、欧芹"
+          },
+          "ja": {
+            "name": "フルッティ・ディ・マーレ",
+            "desc": "エビ、イカ、ムール貝、アサリ、にんにく、パセリ"
+          }
+        },
+        {
+          "id": "calzone",
+          "price": "30.5",
+          "tags": [],
+          "en": {
+            "name": "Calzone (Folded Pizza)",
+            "desc": "San Marzano tomatoes, mozzarella, mild salami, ricotta, black pepper"
+          },
+          "zh": {
+            "name": "包馅披萨",
+            "desc": "圣马扎诺番茄、马苏里拉、温和萨拉米、里科塔、黑胡椒"
+          },
+          "ja": {
+            "name": "カルツォーネ",
+            "desc": "モッツァレラ、ハム、サラミ、リコッタ、ブラックペッパー"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mains",
+      "name": {
+        "en": "Mains",
+        "zh": "主菜",
+        "ja": "メイン"
+      },
+      "foot": {
+        "en": "Prepared to order with the finest ingredients",
+        "zh": "现点现做，选用优质食材",
+        "ja": "厳選した食材を使用し、ご注文後にお作りします"
+      },
+      "items": [
+        {
+          "id": "beef-cheek",
+          "price": "38",
+          "tags": [
+            "GF"
+          ],
+          "en": {
+            "name": "Beef Cheek",
+            "desc": "Slow-cooked beef cheek with fried polenta, glazed carrots and its own rich, velvety jus"
+          },
+          "zh": {
+            "name": "牛颊肉",
+            "desc": "慢炖牛颊肉配香煎波伦塔、胡萝卜及浓郁肉汁"
+          },
+          "ja": {
+            "name": "ビーフチーク",
+            "desc": "じっくり煮込んだ牛ほほ肉＋ポレンタ"
+          }
+        },
+        {
+          "id": "fish-of-the-day",
+          "price": "MP",
+          "tags": [],
+          "en": {
+            "name": "Fish of the Day",
+            "desc": "Prepared daily with the freshest seasonal catch. Crafted by our Chef and presented at your table"
+          },
+          "zh": {
+            "name": "今日鲜鱼",
+            "desc": "每日选用最新鲜渔获，由主厨精心呈现"
+          },
+          "ja": {
+            "name": "本日の魚",
+            "desc": "シェフおすすめの魚料理（仕入れ状況によって値段が異なるため、スタッフにお尋ねください）"
+          }
+        },
+        {
+          "id": "gamberoni",
+          "price": "38",
+          "tags": [],
+          "en": {
+            "name": "Gamberoni Al Vino Bianco",
+            "desc": "Pan-fried local tiger prawns with white wine, garlic, and parsley"
+          },
+          "zh": {
+            "name": "白葡萄酒大虾",
+            "desc": "本地虎虾配白葡萄酒、大蒜和欧芹"
+          },
+          "ja": {
+            "name": "エビの白ワインソテー",
+            "desc": "ガーリックと白ワインをたっぷり使用したエビ料理"
+          },
+          "options": [
+            {
+              "en": "Add Salad $6",
+              "zh": "加沙拉 $6",
+              "ja": "サラダ +$6"
+            },
+            {
+              "en": "Add Chips $6",
+              "zh": "加薯条 $6",
+              "ja": "ポテト +$6"
+            }
+          ]
+        },
+        {
+          "id": "zuppa-di-pesce",
+          "price": "69",
+          "tags": [
+            "DF"
+          ],
+          "en": {
+            "name": "Zuppa di Pesce Positano",
+            "desc": "Seafood hotpot with Moreton Bay bugs, prawns, fish fillet, clams, squid and mussels in rich Napoli sauce"
+          },
+          "zh": {
+            "name": "波西塔诺海鲜锅",
+            "desc": "包含琵琶虾、大虾、鱼片、蛤蜊、青口贝和鱿鱼，配浓郁那不勒斯酱"
+          },
+          "ja": {
+            "name": "ズッパディペッシェ（ポジターノ風）",
+            "desc": "イタリア郷土料理のエビ・魚・ムール貝のトマト煮込み"
+          },
+          "options": [
+            {
+              "en": "Add Extra Moreton Bay Bug $10",
+              "zh": "加额外琵琶虾 $10",
+              "ja": "モートンベイバグ追加 $10"
+            },
+            {
+              "en": "Add GF Bread $2",
+              "zh": "加无麸质面包 $2",
+              "ja": "グルテンフリーパン +$2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sides",
+      "name": {
+        "en": "Sides",
+        "zh": "配菜",
+        "ja": "サイド"
+      },
+      "foot": {
+        "en": "Perfect to complement your main course",
+        "zh": "完美搭配您的主菜",
+        "ja": "メインにぴったりの一品"
+      },
+      "items": [
+        {
+          "id": "chips",
+          "price": "11.5",
+          "tags": [
+            "VG",
+            "DF"
+          ],
+          "en": {
+            "name": "Chips",
+            "desc": "Crispy golden chips"
+          },
+          "zh": {
+            "name": "薯条",
+            "desc": "金黄酥脆"
+          },
+          "ja": {
+            "name": "フライドポテト",
+            "desc": "カリッと揚げた黄金色のフライドポテト",
+            "descSource": "translated"
+          }
+        },
+        {
+          "id": "rocket-salad",
+          "price": "13.5",
+          "tags": [
+            "V",
+            "GF"
+          ],
+          "en": {
+            "name": "Rocket, Fennel, Pear, and Parmesan Salad",
+            "desc": "Rocket leaves with fennel, pear, house made pickled onion, and shaved Parmesan cheese"
+          },
+          "zh": {
+            "name": "芝麻菜茴香梨沙拉",
+            "desc": "配自制腌洋葱和帕玛森芝士"
+          },
+          "ja": {
+            "name": "ルッコラ・洋梨・パルメザンサラダ",
+            "desc": "ルッコラ、フェンネル、洋梨、自家製ピクルスオニオン、削りたてパルメザンチーズ",
+            "descSource": "translated"
+          }
+        },
+        {
+          "id": "mixed-leaves",
+          "price": "12.5",
+          "tags": [
+            "VG",
+            "GF"
+          ],
+          "en": {
+            "name": "Mixed Leaves Salad",
+            "desc": "Simple mix of seasonal greens with light vinaigrette"
+          },
+          "zh": {
+            "name": "混合生菜沙拉",
+            "desc": "时令生菜配清爽油醋汁"
+          },
+          "ja": {
+            "name": "ミックスサラダ",
+            "desc": "季節の葉野菜を軽やかなビネグレットで和えたシンプルなサラダ",
+            "descSource": "translated"
+          }
+        },
+        {
+          "id": "broccolini",
+          "price": "15.5",
+          "tags": [
+            "V",
+            "GF"
+          ],
+          "en": {
+            "name": "Broccolini al Parmigiano",
+            "desc": "Tender broccolini sautéed with grated parmesan and toasted almond flakes"
+          },
+          "zh": {
+            "name": "帕玛森西兰花苗",
+            "desc": "配帕玛森芝士和烤杏仁片"
+          },
+          "ja": {
+            "name": "ブロッコリーニ・パルメザン",
+            "desc": "柔らかなブロッコリーニのソテー、パルメザンチーズとローストアーモンドスライス",
+            "descSource": "translated"
+          }
+        },
+        {
+          "id": "polenta-chips",
+          "price": "12",
+          "tags": [
+            "VG",
+            "GF"
+          ],
+          "en": {
+            "name": "Polenta Chips",
+            "desc": "Crispy polenta chips with rosemary salt, aioli"
+          },
+          "zh": {
+            "name": "波伦塔条",
+            "desc": "配迷迭香盐和蒜味蛋黄酱"
+          },
+          "ja": {
+            "name": "ポレンタチップス",
+            "desc": "カリッと揚げたポレンタチップス、ローズマリーソルトとアイオリソース添え",
+            "descSource": "translated"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dolce",
+      "name": {
+        "en": "Dolce",
+        "zh": "甜点",
+        "ja": "ドルチェ"
+      },
+      "foot": {
+        "en": "surcharge",
+        "zh": "surcharge",
+        "ja": "surcharge"
+      },
+      "items": [
+        {
+          "id": "tiramisu",
+          "price": "16.5",
+          "tags": [],
+          "en": {
+            "name": "Tiramisù",
+            "desc": "Classic espresso, mascarpone dessert, dusted with cocoa powder"
+          },
+          "zh": {
+            "name": "提拉米苏",
+            "desc": "经典意式浓缩咖啡与马斯卡彭奶酪甜点，撒上可可粉"
+          },
+          "ja": {
+            "name": "自家製ティラミス",
+            "desc": "エスプレッソとマスカルポーネの定番ドルチェ、ココアパウダー仕上げ",
+            "descSource": "translated"
+          }
+        },
+        {
+          "id": "panna-cotta",
+          "price": "16.5",
+          "tags": [],
+          "en": {
+            "name": "Amaretto Cherry Panna Cotta",
+            "desc": "Milky panna cotta with amaretto cherry compote"
+          },
+          "zh": {
+            "name": "阿玛雷托樱桃意式奶冻",
+            "desc": "香滑意式奶冻，搭配阿玛雷托樱桃果酱"
+          },
+          "ja": {
+            "name": "パンナコッタ（アマレットチェリー）",
+            "desc": "ミルキーなパンナコッタ、アマレットチェリーのコンポート添え",
+            "descSource": "translated"
+          }
+        },
+        {
+          "id": "cannolo",
+          "price": "12.5",
+          "tags": [],
+          "en": {
+            "name": "Cannolo Siciliano",
+            "desc": "Crispy cannoli shells filled with silky ricotta cream, chocolate bits, orange zest and crunchy pistachios"
+          },
+          "zh": {
+            "name": "西西里卡诺里卷",
+            "desc": "酥脆外壳填满里科塔奶酪、巧克力碎、橙皮屑和开心果"
+          },
+          "ja": {
+            "name": "カンノーロ",
+            "desc": "イタリア・シチリア島発祥の伝統的な揚げ菓子"
+          }
+        },
+        {
+          "id": "gelato-nutella",
+          "price": "15.5",
+          "tags": [
+            "GF"
+          ],
+          "en": {
+            "name": "Gelato alla Nutella",
+            "desc": "House-made Nutella gelato with whipped cream and crunchy hazelnuts"
+          },
+          "zh": {
+            "name": "榛果酱冰淇淋",
+            "desc": "自制冰淇淋，配鲜奶油和榛果"
+          },
+          "ja": {
+            "name": "ヌテラジェラート",
+            "desc": "ヌテラをたっぷり使用した自家製ジェラート"
+          }
+        },
+        {
+          "id": "sorbet",
+          "price": "15.5",
+          "tags": [
+            "VG",
+            "GF"
+          ],
+          "en": {
+            "name": "Lemon and Mango Sorbet",
+            "desc": "Refreshing vegan sorbet paired with tangy red berries coulis"
+          },
+          "zh": {
+            "name": "柠檬芒果雪芭",
+            "desc": "清爽雪芭配红莓酱"
+          },
+          "ja": {
+            "name": "レモン＆マンゴーソルベ",
+            "desc": "爽やかなヴィーガンソルベ、甘酸っぱいベリーのクーリ添え",
+            "descSource": "translated"
+          }
+        },
+        {
+          "id": "cheese-board",
+          "price": "26",
+          "tags": [],
+          "en": {
+            "name": "“Formaggi & Delizie” Cheese Board",
+            "desc": "A curated selection of three Italian cheeses paired with pear jam, apricot, truffle honey and crackers"
+          },
+          "zh": {
+            "name": "奶酪拼盘",
+            "desc": "精选三种意大利奶酪，配果酱、松露蜂蜜和饼干"
+          },
+          "ja": {
+            "name": "チーズボード",
+            "desc": "3つのイタリアチーズとクラッカー、梨ジャム・アプリコット・トリュフハニーソース添え"
+          }
+        },
+        {
+          "id": "maritozzo",
+          "price": "",
+          "tags": [],
+          "en": {
+            "name": "Maritozzo",
+            "desc": "Cream filled bun with your choice of topping:"
+          },
+          "zh": {
+            "name": "意式奶油夹心面包",
+            "desc": "可选："
+          },
+          "ja": {
+            "name": "マリトッツォ",
+            "desc": "イタリア・ローマ発祥の伝統的な菓子パン"
+          },
+          "options": [
+            {
+              "en": "Classic cream $10",
+              "zh": "经典 $10",
+              "ja": "プレーン $10"
+            },
+            {
+              "en": "Strawberries $13",
+              "zh": "草莓 $13",
+              "ja": "いちご $13"
+            },
+            {
+              "en": "Chocolate $12",
+              "zh": "巧克力 $12",
+              "ja": "チョコレート $12"
+            },
+            {
+              "en": "Salted caramel $12",
+              "zh": "焦糖 $12",
+              "ja": "塩キャラメル $12"
+            },
+            {
+              "en": "Orange $12",
+              "zh": "橙子 $12",
+              "ja": "オレンジ $12"
+            },
+            {
+              "en": "Pistachio $13",
+              "zh": "开心果 $13",
+              "ja": "ピスタチオ $13"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "style": "serif"
+}

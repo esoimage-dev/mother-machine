@@ -1,0 +1,267 @@
+{
+  "id": "focacce",
+  "style": "cards",
+  "title": {
+    "en": "Focacce & Maritozzi",
+    "zh": "佛卡夏与玛丽托佐",
+    "ja": "フォカッチャ & マリトッツォ"
+  },
+  "pages": [
+    {
+      "panels": [
+        [
+          "focacce"
+        ],
+        [
+          "maritozzi"
+        ]
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "focacce",
+      "logo": "assets/opt/fm/logo-focacce.webp",
+      "name": {
+        "en": "Focacce",
+        "zh": "佛卡夏",
+        "ja": "フォカッチャ"
+      },
+      "aside": {
+        "en": "Every day, made with love",
+        "zh": "每一天，用心制作",
+        "ja": "毎日、愛を込めて"
+      },
+      "items": [
+        {
+          "id": "italian-stallion",
+          "price": "19",
+          "img": "assets/opt/fm/italian-stallion.webp",
+          "en": {
+            "name": "Italian Stallion",
+            "desc": "Mortadella, creamy burrata, basil pesto, fresh tomatoes"
+          },
+          "zh": {
+            "desc": "意式大香肠、奶油布拉塔、罗勒青酱、新鲜番茄"
+          },
+          "ja": {
+            "desc": "モルタデッラ、クリーミーなブッラータ、バジルペスト、フレッシュトマト"
+          }
+        },
+        {
+          "id": "calabrian-fire",
+          "price": "19",
+          "img": "assets/opt/fm/calabrian-fire.webp",
+          "en": {
+            "name": "Calabrian Fire",
+            "desc": "Spicy salami, olive pâté, ’nduja, caramelised red onions"
+          },
+          "zh": {
+            "desc": "辣味萨拉米、橄榄酱、卡拉布里亚辣香肠酱、焦糖红洋葱"
+          },
+          "ja": {
+            "desc": "スパイシーサラミ、オリーブパテ、ンドゥイヤ、赤玉ねぎのキャラメリゼ"
+          }
+        },
+        {
+          "id": "roman-gladiator",
+          "price": "19.5",
+          "img": "assets/opt/fm/roman-gladiator.webp",
+          "en": {
+            "name": "Roman Gladiator",
+            "desc": "Porchetta with creamy potato and rich parmesan"
+          },
+          "zh": {
+            "desc": "意式烤猪肉配奶油土豆与浓郁帕玛森芝士"
+          },
+          "ja": {
+            "desc": "ポルケッタ、クリーミーポテト、濃厚なパルメザン"
+          }
+        },
+        {
+          "id": "vitalias-parma",
+          "price": "20",
+          "img": "assets/opt/fm/vitalias-parma.webp",
+          "en": {
+            "name": "Vitalia’s Parma",
+            "desc": "Prosciutto di Parma, buffalo mozzarella, tomatoes, basil"
+          },
+          "zh": {
+            "desc": "帕尔马火腿、水牛马苏里拉、番茄、罗勒"
+          },
+          "ja": {
+            "desc": "パルマ産生ハム、水牛モッツァレラ、トマト、バジル"
+          }
+        },
+        {
+          "id": "pane-e-amore",
+          "price": "19",
+          "tags": [
+            "VG"
+          ],
+          "img": "assets/opt/fm/pane-and-amore.webp",
+          "en": {
+            "name": "Pane & Amore",
+            "desc": "Vegan pesto, eggplant, roasted peppers, dairy-free mozzarella"
+          },
+          "zh": {
+            "desc": "纯素青酱、茄子、烤甜椒、无奶马苏里拉"
+          },
+          "ja": {
+            "desc": "ヴィーガンペスト、なす、ローストパプリカ、乳不使用モッツァレラ"
+          }
+        },
+        {
+          "id": "capri-breeze",
+          "price": "19.5",
+          "tags": [
+            "V"
+          ],
+          "img": "assets/opt/fm/capri-breeze.webp",
+          "en": {
+            "name": "Capri Breeze",
+            "desc": "Tomatoes, buffalo mozzarella, sun-dried tomatoes, basil"
+          },
+          "zh": {
+            "desc": "番茄、水牛马苏里拉、油渍番茄干、罗勒"
+          },
+          "ja": {
+            "desc": "トマト、水牛モッツァレラ、ドライトマト、バジル"
+          }
+        }
+      ]
+    },
+    {
+      "id": "maritozzi",
+      "logo": "assets/opt/fm/logo-maritozzi.webp",
+      "name": {
+        "en": "Maritozzi",
+        "zh": "玛丽托佐",
+        "ja": "マリトッツォ"
+      },
+      "aside": {
+        "en": "Every day, made with love",
+        "zh": "每一天，用心制作",
+        "ja": "毎日、愛を込めて"
+      },
+      "items": [
+        {
+          "id": "classic-cream",
+          "price": "10",
+          "img": "assets/opt/fm/classic-cream.webp",
+          "en": {
+            "name": "Classic Cream",
+            "desc": "Whipped cream"
+          },
+          "zh": {
+            "name": "经典奶油",
+            "desc": "鲜奶油"
+          },
+          "ja": {
+            "name": "クラシック クリーム",
+            "desc": "ホイップクリーム"
+          }
+        },
+        {
+          "id": "strawberries",
+          "price": "13",
+          "img": "assets/opt/fm/strawberries.webp",
+          "en": {
+            "name": "Strawberries",
+            "desc": "Whipped cream and strawberries"
+          },
+          "zh": {
+            "name": "草莓",
+            "desc": "鲜奶油与草莓"
+          },
+          "ja": {
+            "name": "ストロベリー",
+            "desc": "ホイップクリームとイチゴ"
+          }
+        },
+        {
+          "id": "chocolate",
+          "price": "12",
+          "img": "assets/opt/fm/chocolate.webp",
+          "en": {
+            "name": "Chocolate",
+            "desc": "Whipped cream and chocolate shavings"
+          },
+          "zh": {
+            "name": "巧克力",
+            "desc": "鲜奶油与巧克力碎"
+          },
+          "ja": {
+            "name": "チョコレート",
+            "desc": "ホイップクリームとチョコレートシェービング"
+          }
+        },
+        {
+          "id": "salted-caramel",
+          "price": "12",
+          "img": "assets/opt/fm/salted-caramel.webp",
+          "en": {
+            "name": "Salted Caramel",
+            "desc": "Whipped cream and salted caramel drizzle"
+          },
+          "zh": {
+            "name": "海盐焦糖",
+            "desc": "鲜奶油与海盐焦糖酱"
+          },
+          "ja": {
+            "name": "塩キャラメル",
+            "desc": "ホイップクリームと塩キャラメルソース"
+          }
+        },
+        {
+          "id": "orange",
+          "price": "12",
+          "img": "assets/opt/fm/orange.webp",
+          "en": {
+            "name": "Orange",
+            "desc": "Whipped cream and candied orange zest"
+          },
+          "zh": {
+            "name": "香橙",
+            "desc": "鲜奶油与糖渍橙皮"
+          },
+          "ja": {
+            "name": "オレンジ",
+            "desc": "ホイップクリームとオレンジピールの砂糖漬け"
+          }
+        },
+        {
+          "id": "pistachio",
+          "price": "13",
+          "img": "assets/opt/fm/pistachio.webp",
+          "en": {
+            "name": "Pistachio",
+            "desc": "Whipped cream and chopped pistachios"
+          },
+          "zh": {
+            "name": "开心果",
+            "desc": "鲜奶油与开心果碎"
+          },
+          "ja": {
+            "name": "ピスタチオ",
+            "desc": "ホイップクリームと刻みピスタチオ"
+          }
+        }
+      ]
+    }
+  ],
+  "legend": [
+    {
+      "code": "V",
+      "en": "Vegan",
+      "zh": "纯素",
+      "ja": "ヴィーガン"
+    },
+    {
+      "code": "VG",
+      "en": "Vegetarian",
+      "zh": "素食",
+      "ja": "ベジタリアン"
+    }
+  ]
+}
