@@ -336,3 +336,42 @@ html .mmc.wdr:not(.hit) i::after{width:0;height:0}
   .mxq2,.mxr .mxn{display:none}
   .mxtb .mxt1{background:#3C6A4B;color:#F6F3EC}
 }
+
+/* telefono (23 ottobre): schede piu' basse, la scheda intera sta fra la testata e il selettore.
+   Titolo su una riga, il risultato col numero a sinistra, il link come riga piena. Il selettore senza frecce: si scorre col dito */
+@media (max-width:860px){
+  .wkc{width:84vw}
+  .wst{aspect-ratio:16/11}
+  .wif{gap:10px;padding:16px 18px 0}
+  .wif>.mo{font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .wif h3{margin:2px 0 0;font-size:clamp(19px,5.6vw,24px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .wif p{font-size:14.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .wio{grid-template-columns:auto 1fr;align-items:center;gap:14px;padding-top:12px}
+  .wio b{font-size:46px}
+  .wio span{font-size:13px}
+  .wgo{margin:0 -18px;padding:0 6px 0 18px;height:56px;font-size:14.5px}
+  .wgo .arq{width:44px;height:44px}
+  .wgo .arq svg{left:10px;top:10px}
+  .wsoon{margin-bottom:18px}
+  .wkn{min-height:0}
+  .wkni{padding:24px 20px;gap:14px}
+  .wkni h3{font-size:44px}
+  .wsel{width:max-content;margin:14px auto 0;padding:4px;gap:2px}
+  .wsel .wsb{display:none}
+  .wsx{flex:none}
+  .wsx button{max-width:36px;padding:0 6px}
+  .wsx button i{width:24px;height:24px}
+  .wsx button i svg{width:14px;height:14px}
+  .wsx button[aria-selected="true"]{padding:0 12px 0 6px}
+  .mxr{width:80%;bottom:6%;padding:10px 11px}
+  .mxr .mxq .mxe:nth-child(3){display:none}
+  .mxe{padding:6px 0;gap:8px}
+  .mxi{width:28px;height:28px;border-radius:6px}
+  .mxi svg{width:16px;height:16px}
+  .mxtb b{padding:3px 6px}
+  .mxn{top:-20px;right:-4%;padding:8px 10px;gap:2px}
+  .mxn b{font-size:11.5px}
+  .mxn span{font-size:10px}
+  .mxn em{margin-top:2px}
+  .mxt .mxn{top:-24px}
+}

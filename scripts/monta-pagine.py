@@ -328,6 +328,8 @@ def lavori_home(t):
                  ('data-f="05.5" data-n="How we work" id="s4"', 'data-f="05.4" data-n="How we work" id="s4"'),
                  ('data-f="05.4" data-n="In motion" id="s5"', 'data-f="05.5" data-n="In motion" id="s5"')):
         t = una(t, a, b, b)
+    t = una(t, '<i class="run"></i>05.2 · What we build</span>', '<i class="run"></i>05.3 · What we build</span>', 'etichetta 05.3')
+    t = una(t, '<i class="run"></i>05.4 · In motion</span>', '<i class="run"></i>05.5 · In motion</span>', 'etichetta 05.5')
     return t
 
 def ritocchi(nome, t):
