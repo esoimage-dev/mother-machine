@@ -1,0 +1,301 @@
+/* Mother Machine · 03 Brand (24 ottobre): apertura compatta, i tre stili dei controlli, il carattere, il sistema */
+@font-face{font-family:'MMFredoka';src:url(/brand/fonts/fredoka-wght.woff2) format('woff2');font-weight:300 700;font-display:swap}
+@font-face{font-family:'MMFraunces';src:url(/brand/fonts/fraunces-wght.woff2) format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'MMUnbounded';src:url(/brand/fonts/unbounded-wght.woff2) format('woff2');font-weight:200 900;font-display:swap}
+
+/* ---- apertura: titolo e leva a sinistra, la macchina a destra, tutto nella prima schermata ---- */
+@media (min-width:1000px){
+  .brhero{padding-block:clamp(96px,10vh,130px) clamp(56px,7vh,90px)}
+  .brhero .in{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);grid-template-areas:"t s" "c s";column-gap:clamp(40px,5vw,80px);row-gap:clamp(28px,3.4vh,44px);align-items:start}
+  .brhero .xg{display:contents}
+  .brhero .brh2{grid-area:t;align-self:end}
+  .brhero .brh2 h1{font-size:clamp(44px,4.4vw,72px)}
+  .brhero .brlede{margin:0}
+  .brhero .xstage{grid-area:s;align-self:center;height:clamp(440px,calc(100vh - 220px),620px)}
+  .brhero .xside{grid-area:c;align-self:start;gap:22px}
+  .brhero .xlist li{padding:11px 0}
+  .brhero .xlist p{font-size:14px}
+}
+
+/* ---- il selettore degli stili, sopra il pannello ---- */
+.sty{display:flex;align-items:center;justify-content:flex-end;gap:14px;margin-top:clamp(28px,3.4vw,48px)}
+.sty>.mo{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#4A4843}
+.styb{display:flex;padding:3px;border:1.5px solid #121211}
+.styb button{all:unset;box-sizing:border-box;position:relative;overflow:hidden;isolation:isolate;cursor:pointer;padding:9px 16px;font:600 14px var(--f-body);color:#121211;transition:color .3s}
+.styb button .fl{position:absolute;inset:0;background:var(--sig,#FF5B3A);transform:translateY(101%);transition:transform .4s cubic-bezier(.7,0,.2,1);z-index:-1}
+.styb button:hover .fl{transform:none}
+.styb button[aria-checked="true"]{background:#121211;color:#FBFAF7;cursor:default}
+.styb button[aria-checked="true"] .fl{display:none}
+.styb button:focus-visible{outline:2px solid #121211;outline-offset:2px}
+.sty+.ctlg{margin-top:16px}
+
+/* passaggio fra gli stili: colori e forme scorrono veloci */
+.ctlg .cel,.ctlg .cel>.mo,.ctlg .spec,.ctlg .sws,.ctlg .sws i,.ctlg .stb,.ctlg .wgw,.ctlg .seg2,.ctlg .seg2 .ind,.ctlg .seg2 button,.ctlg .hold,.ctlg .hold .fill,.ctlg .chk button,.ctlg .chk i,.ctlg .chk i::after,.ctlg .sws::before,.ctlg .sws::after{
+  transition:background-color .2s ease,color .2s ease,border-color .2s ease,border-radius .2s ease,box-shadow .2s ease,transform .26s cubic-bezier(.7,0,.2,1)}
+
+/* gli elementi aggiunti da brand.js per gli altri stili: nascosti nello stile Minimal */
+.ctlg .x-ic,.ctlg .x-ring,.ctlg .x-bar{display:none}
+
+/* ===== Friendly: tondo, colorato, a molla. Stessi comandi, si usano in un altro modo ===== */
+.ctlg[data-sty="friendly"]{--fv:#6E4BFF;--fl:#EEE8FF;--fp:#FF6F9C;--fg:#1FB57A}
+.ctlg[data-sty="friendly"] .cel{background:rgba(255,250,244,.66)}
+.ctlg[data-sty="friendly"] .x-ic{display:block}
+/* switch: la manopola ha la campanella; accesa suona */
+.ctlg[data-sty="friendly"] .sws{width:72px;height:40px;border-radius:999px;background:var(--fl)}
+.ctlg[data-sty="friendly"] .sws i{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:#B3A6E8;box-shadow:0 3px 10px rgba(110,75,255,.28);transition:transform .45s cubic-bezier(.3,1.6,.5,1),background-color .3s,color .3s}
+.ctlg[data-sty="friendly"] .sws i::after{display:none}
+.ctlg[data-sty="friendly"] .sws i .x-ic{width:17px;height:17px}
+.ctlg[data-sty="friendly"] .sws[aria-checked="true"]{background:var(--fv)}
+.ctlg[data-sty="friendly"] .sws[aria-checked="true"] i{transform:translateX(32px);background:#FFD24A;color:#7A5300}
+.ctlg[data-sty="friendly"] .sws[aria-checked="true"] i .x-ic{animation:fring .9s ease-in-out}
+@keyframes fring{0%,100%{rotate:0deg}15%{rotate:22deg}35%{rotate:-18deg}55%{rotate:12deg}75%{rotate:-6deg}}
+/* bottone: mentre salva si riempie come una barra, poi la spunta */
+.ctlg[data-sty="friendly"] .stb{overflow:hidden;border-radius:999px;background:var(--fv);box-shadow:0 12px 26px -12px rgba(110,75,255,.9)}
+.ctlg[data-sty="friendly"] .stb .ld{display:none}
+.ctlg[data-sty="friendly"] .stb .x-bar{display:block;position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(255,255,255,.28)}
+.ctlg[data-sty="friendly"] .stb.busy .x-bar{animation:fbar 1.3s cubic-bezier(.3,0,.2,1) forwards}
+@keyframes fbar{to{width:100%}}
+.ctlg[data-sty="friendly"] .stb.busy .lb{opacity:1}
+.ctlg[data-sty="friendly"] .stb.done{background:var(--fg);transform:scale(1.04)}
+.ctlg[data-sty="friendly"] .stb .ok{display:flex;align-items:center;gap:8px}
+.ctlg[data-sty="friendly"] .stb .ok .x-ic{width:18px;height:18px}
+/* peso: binario spesso che si colora fin dove arrivi */
+.ctlg[data-sty="friendly"] .wgw{color:var(--fv)}
+.ctlg[data-sty="friendly"] .wgr::-webkit-slider-runnable-track{height:10px;border-radius:10px;background:linear-gradient(90deg,var(--fp) 0 var(--wp,41%),var(--fl) var(--wp,41%))}
+.ctlg[data-sty="friendly"] .wgr::-webkit-slider-thumb{width:24px;height:24px;margin-top:-7px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px var(--fp),0 4px 12px rgba(255,111,156,.5)}
+.ctlg[data-sty="friendly"] .wgr::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:4px solid var(--fp)}
+.ctlg[data-sty="friendly"] .wgr::-moz-range-track{height:10px;border-radius:10px;background:var(--fl)}
+/* segmentato: tre bolle staccate, quella scelta salta */
+.ctlg[data-sty="friendly"] .seg2{background:transparent;gap:8px;padding:0}
+.ctlg[data-sty="friendly"] .seg2 .ind{display:none}
+.ctlg[data-sty="friendly"] .seg2 button{border-radius:999px;background:var(--fl);color:var(--fv);font-weight:600;transition:background-color .3s,color .3s,transform .45s cubic-bezier(.3,1.6,.5,1)}
+.ctlg[data-sty="friendly"] .seg2 button[aria-checked="true"]{background:var(--fv);color:#fff;transform:scale(1.08)}
+/* tieni premuto: un bottone tondo col cestino, l'anello si chiude intorno */
+.ctlg[data-sty="friendly"] .hold{overflow:visible;min-width:0;width:64px;height:64px;border:0;border-radius:50%;background:#FFE1EA;color:#C5285A;place-items:center}
+.ctlg[data-sty="friendly"] .hold .fill{display:none}
+.ctlg[data-sty="friendly"] .hold .hl{position:absolute;top:calc(100% + 12px);left:50%;transform:translateX(-50%);white-space:nowrap;mix-blend-mode:normal;color:#C5285A;font-size:14px}
+.ctlg[data-sty="friendly"] .hold>.x-ic{display:block;width:24px;height:24px}
+.ctlg[data-sty="friendly"] .hold .x-ring{display:block;position:absolute;inset:-7px;width:calc(100% + 14px);height:calc(100% + 14px);rotate:-90deg;overflow:visible}
+.ctlg[data-sty="friendly"] .x-ring circle{fill:none;stroke-width:4;stroke-linecap:round}
+.ctlg[data-sty="friendly"] .x-ring .bg{stroke:#FFD0DE}
+.ctlg[data-sty="friendly"] .x-ring .fg{stroke:var(--fp);stroke-dasharray:226;stroke-dashoffset:226}
+.ctlg[data-sty="friendly"] .hold.done{background:#D6F5E7;color:var(--fg)}
+.ctlg[data-sty="friendly"] .hold.done .hl{color:var(--fg)}
+.ctlg[data-sty="friendly"] .hold.done .x-ring .fg{stroke:var(--fg)}
+.ctlg[data-sty="friendly"] .cel:nth-child(6){padding-bottom:22px}
+/* checklist: pastiglie che si colorano, con la spunta */
+.ctlg[data-sty="friendly"] .chk{gap:8px}
+.ctlg[data-sty="friendly"] .chk button{padding:9px 14px 9px 10px;border-radius:999px;background:var(--fl);color:#4B3F86;font-weight:600;transition:background-color .3s,color .3s,transform .4s cubic-bezier(.3,1.6,.5,1)}
+.ctlg[data-sty="friendly"] .chk i{width:22px;height:22px;border-radius:50%;border:0;background:#fff;display:grid;place-items:center;color:#fff}
+.ctlg[data-sty="friendly"] .chk i::after{display:none}
+.ctlg[data-sty="friendly"] .chk i .x-ic{width:14px;height:14px;transform:scale(0);transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.ctlg[data-sty="friendly"] .chk [aria-checked="true"]{background:#D6F5E7;color:#11734C;text-decoration:none}
+.ctlg[data-sty="friendly"] .chk [aria-checked="true"] i{background:var(--fg)}
+.ctlg[data-sty="friendly"] .chk [aria-checked="true"] i .x-ic{transform:none}
+
+/* ===== Editorial: carattere graziato, solo parole e linee, niente scatole ===== */
+.ctlg[data-sty="editorial"]{--ei:#1F1A15;--em:#8F8576}
+.ctlg[data-sty="editorial"] .cel{background:rgba(246,241,232,.82);color:var(--ei)}
+/* switch: due parole, la linea scivola sotto quella scelta */
+.ctlg[data-sty="editorial"] .sws{width:auto;height:auto;background:transparent;display:flex;gap:22px;padding-bottom:8px;font:400 30px/1 'Gloock',serif;color:var(--em)}
+.ctlg[data-sty="editorial"] .sws::before{content:"Off";color:var(--ei);transition:color .35s}
+.ctlg[data-sty="editorial"] .sws::after{content:"On";transition:color .35s}
+.ctlg[data-sty="editorial"] .sws[aria-checked="true"]::before{color:var(--em)}
+.ctlg[data-sty="editorial"] .sws[aria-checked="true"]::after{color:var(--ei)}
+.ctlg[data-sty="editorial"] .sws i{left:0;top:auto;bottom:0;width:38px;height:2px;background:var(--ei);box-shadow:none;transition:transform .45s cubic-bezier(.7,0,.2,1),width .45s cubic-bezier(.7,0,.2,1)}
+.ctlg[data-sty="editorial"] .sws i::after{display:none}
+.ctlg[data-sty="editorial"] .sws[aria-checked="true"] i{transform:translateX(61px);width:31px}
+/* bottone: una frase con la freccia; salvando la linea si disegna, poi "Saved." */
+.ctlg[data-sty="editorial"] .stb{min-width:0;height:auto;padding:0 0 8px;background:transparent;color:var(--ei);font:400 28px/1.1 'Gloock',serif;box-shadow:none}
+.ctlg[data-sty="editorial"] .stb .lb::after{content:" \2192";display:inline-block;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.ctlg[data-sty="editorial"] .stb:hover .lb::after{transform:translateX(6px)}
+.ctlg[data-sty="editorial"] .stb::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;background:rgba(31,26,21,.2)}
+.ctlg[data-sty="editorial"] .stb .ld{display:none}
+.ctlg[data-sty="editorial"] .stb .x-bar{display:block;position:absolute;left:0;bottom:0;height:1.5px;width:0;background:var(--ei);z-index:1}
+.ctlg[data-sty="editorial"] .stb.busy .x-bar{animation:fbar 1.3s cubic-bezier(.6,0,.2,1) forwards}
+.ctlg[data-sty="editorial"] .stb.busy .lb{opacity:.35}
+.ctlg[data-sty="editorial"] .stb.done{background:transparent}
+.ctlg[data-sty="editorial"] .stb .ok{font-style:italic}
+/* peso: una linea sottile, la tacca verticale */
+.ctlg[data-sty="editorial"] .wgw{color:var(--ei)}
+.ctlg[data-sty="editorial"] .wgr::-webkit-slider-runnable-track{height:1px;background:var(--ei)}
+.ctlg[data-sty="editorial"] .wgr::-webkit-slider-thumb{width:2px;height:22px;margin-top:-10px;background:var(--ei)}
+.ctlg[data-sty="editorial"] .wgr::-moz-range-thumb{width:2px;height:22px;background:var(--ei)}
+/* segmentato: tre parole, la linea sotto scivola */
+.ctlg[data-sty="editorial"] .seg2{background:transparent;padding:0 0 6px;min-width:240px}
+.ctlg[data-sty="editorial"] .seg2 button{font:400 24px 'Gloock',serif;color:var(--em);padding:4px 0}
+.ctlg[data-sty="editorial"] .seg2 button[aria-checked="true"]{color:var(--ei)}
+.ctlg[data-sty="editorial"] .seg2 .ind{top:auto;bottom:0;left:0;height:2px;width:33.33%;background:var(--ei)}
+/* tieni premuto: la frase, e sotto la linea che si allunga fino in fondo */
+.ctlg[data-sty="editorial"] .hold{overflow:visible;border:0;min-width:0;height:auto;padding:0 0 10px;font:400 28px/1.1 'Gloock',serif}
+.ctlg[data-sty="editorial"] .hold::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;background:rgba(31,26,21,.2)}
+.ctlg[data-sty="editorial"] .hold .fill{top:auto;height:3px;background:#A3352B;z-index:1}
+.ctlg[data-sty="editorial"] .hold .hl{mix-blend-mode:normal;color:var(--ei)}
+.ctlg[data-sty="editorial"] .hold.done .fill{background:var(--ei)}
+.ctlg[data-sty="editorial"] .hold.done .hl{font-style:italic}
+/* checklist: un indice numerato; fatto si barra e si spegne */
+.ctlg[data-sty="editorial"] .chk{counter-reset:ec;gap:4px}
+.ctlg[data-sty="editorial"] .chk button{font:400 24px/1.3 'Gloock',serif;color:var(--ei);gap:14px}
+.ctlg[data-sty="editorial"] .chk i{border:0;width:auto;height:auto;font:italic 400 15px 'Gloock',serif;color:var(--em)}
+.ctlg[data-sty="editorial"] .chk i::before{counter-increment:ec;content:counter(ec,lower-roman) "."}
+.ctlg[data-sty="editorial"] .chk i::after{display:none}
+.ctlg[data-sty="editorial"] .chk button{position:relative;justify-self:start;width:max-content}
+.ctlg[data-sty="editorial"] .chk [aria-checked="true"]{color:var(--em);text-decoration:none;font-style:italic}
+/* la riga barra solo la parola, non il numero */
+.ctlg[data-sty="editorial"] .chk button::after{content:"";position:absolute;left:var(--en,34px);right:-4px;top:55%;height:1.5px;background:var(--ei);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.7,0,.2,1)}
+.ctlg[data-sty="editorial"] .chk [aria-checked="true"]::after{transform:none}
+.ctlg[data-sty="editorial"] .chk i{min-width:20px}
+
+@media (max-width:700px){
+  .sty{justify-content:space-between}
+  .styb button{padding:9px 12px;font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){.ctlg .cel,.ctlg .cel *{transition:none!important}}
+
+
+/* ===== 25 ottobre: ritocchi chiesti da Eso ===== */
+
+/* il peso ha il suo carattere in ogni stile */
+.ctlg[data-sty="friendly"] .wgw{font-family:'MMFredoka',var(--f-body);letter-spacing:-.01em}
+.ctlg[data-sty="editorial"] .wgw{font-family:'MMFraunces',Georgia,serif;letter-spacing:-.03em;font-style:italic}
+
+/* Minimal: Saved resta nero con la spunta pomodoro; Deleted e' rosso pieno con la scritta bianca */
+.ctlg:not([data-sty]) .stb.done{background:#121211}
+.ctlg:not([data-sty]) .stb .ok{display:flex;align-items:center;gap:9px;color:#FBFAF7}
+.ctlg:not([data-sty]) .stb .ok .x-ic{display:block;width:17px;height:17px;color:var(--sig,#FF5B3A)}
+.ctlg:not([data-sty]) .hold.done{border-color:#D7372A}
+.ctlg:not([data-sty]) .hold.done .fill{background:#D7372A}
+.ctlg:not([data-sty]) .hold.done .hl{mix-blend-mode:normal;color:#fff}
+
+/* passando da uno stile all'altro i comandi si trasformano: escono sfocati, rientrano nel nuovo stile, uno dopo l'altro */
+.ctlg .cel>*:nth-child(2){transition:none}
+.ctlg.m-out .cel>*:nth-child(2){animation:mout .12s ease-in forwards}
+.ctlg.m-in .cel>*:nth-child(2){animation:min .24s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--k,0)*18ms)}
+@keyframes mout{to{opacity:0;transform:translateY(4px)}}
+@keyframes min{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* ---- il carattere: quattro voci ---- */
+.sp4{font-family:'MMUnbounded',var(--f-body)!important;font-weight:700!important;letter-spacing:-.04em;font-size:clamp(40px,6vw,104px)!important}
+
+/* ---- l'apertura: gli strati si staccano in vetro, i quattro passi si accendono in ordine ---- */
+.brhero .l2,.brhero .l3,.brhero .l4{isolation:isolate}
+.brhero .l2::before,.brhero .l3::before,.brhero .l4::before{content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;pointer-events:none;
+  background:linear-gradient(150deg,rgba(255,255,255,.2),rgba(255,255,255,.04) 55%,rgba(242,205,190,.08));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(255,255,255,.16),0 30px 60px -30px rgba(0,0,0,.6);
+  opacity:calc(var(--t)*1.6)}
+.brhero .xs.x-on .xl{box-shadow:none}
+.brhero .xstage::after{content:"";position:absolute;left:50%;top:55%;width:70%;height:30%;translate:-50% 0;border-radius:50%;background:radial-gradient(closest-side,rgba(242,205,190,.18),transparent);filter:blur(30px);z-index:-1;pointer-events:none}
+.brhero .xlist li{position:relative;opacity:1!important;transition:color .4s}
+.brhero .xlist li::before{content:"";position:absolute;left:-18px;top:16px;width:3px;height:0;background:var(--sig,#FF5B3A);transition:height .45s cubic-bezier(.2,.8,.2,1)}
+.brhero .xlist li b,.brhero .xlist li p{transition:color .4s,opacity .4s}
+.brhero .xlist li .mo{transition:color .4s}
+.brhero .xg.x-steps .xlist li b{color:rgba(244,242,236,.45)}
+.brhero .xg.x-steps .xlist li p{opacity:.45}
+.brhero .xg.x-steps .xlist li.on b{color:#F4F2EC}
+.brhero .xg.x-steps .xlist li.on p{opacity:1}
+.brhero .xg.x-steps .xlist li.on .mo{color:#F4F2EC}
+.brhero .xg.x-steps .xlist li.now::before{height:calc(100% - 32px)}
+
+/* ---- il sistema: bozza statica, in griglia ---- */
+.brs{padding-block:clamp(100px,11vw,170px)}
+.brs .brh2 h2 span{display:block;font-weight:300}
+.brs .brlede{max-width:44ch;color:rgba(244,242,236,.62)}
+.bsg{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-top:clamp(40px,5vw,72px)}
+.bst{margin:0;display:grid;grid-template-rows:auto 1fr auto;gap:18px;padding:clamp(18px,2vw,26px);background:#171715;border:1px solid rgba(244,242,236,.08);border-radius:4px;min-width:0}
+.bst figcaption{display:flex;justify-content:space-between;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,242,236,.5)}
+.bst p{margin:0;font-size:14.5px;line-height:1.45;color:rgba(244,242,236,.6);max-width:34ch}
+.bst-mark{grid-column:span 3;grid-row:span 2}
+.bst-ico{grid-column:span 3}
+.bst-type{grid-column:span 3}
+.bst-col{grid-column:span 4}
+.bst-space{grid-column:span 2}
+/* il segno sulla griglia di costruzione */
+.bsm{position:relative;align-self:center;justify-self:center;width:min(100%,440px);aspect-ratio:1}
+.bsm svg{position:absolute;inset:0;width:100%;height:100%}
+.bsk .gl1{stroke:rgba(244,242,236,.08);stroke-width:1;fill:none}
+.bsk .gl2{stroke:rgba(255,91,58,.55);stroke-width:1;fill:none;stroke-dasharray:3 5}
+.bsmk path{fill:none;stroke:#F4F2EC;stroke-width:34;stroke-linecap:butt;stroke-linejoin:miter}
+.bsx{position:absolute;translate:-50% -50%;padding:3px 6px;font-size:10px;letter-spacing:.06em;color:#121211;background:#F4F2EC}
+/* le icone sulla loro griglia */
+.bsi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-content:center}
+.bsi i{display:grid;place-items:center;aspect-ratio:1;border-radius:3px;color:#F4F2EC;
+  background:linear-gradient(rgba(244,242,236,.06) 1px,transparent 1px) 0 0/12.5% 12.5%,linear-gradient(90deg,rgba(244,242,236,.06) 1px,transparent 1px) 0 0/12.5% 12.5%,#1D1D1B}
+.bsi svg{width:48%;height:48%}
+.bsi .l{fill:none;stroke:currentColor;stroke-width:22;stroke-linecap:round;stroke-linejoin:round}
+.bsi .d{fill:currentColor;opacity:.3}
+/* il carattere in scala */
+.bsty{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,3vw,40px);align-items:center}
+.bsaa{font:640 clamp(90px,9vw,150px)/.8 var(--f-body);letter-spacing:-.06em;color:#F4F2EC}
+.bsty ol{list-style:none;margin:0;padding:0;display:grid}
+.bsty li{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid rgba(244,242,236,.1);color:#F4F2EC}
+.bsty li:nth-child(1) span{font:600 26px/1 var(--f-body);letter-spacing:-.04em;text-transform:none}
+.bsty li:nth-child(2) span{font:600 20px/1 var(--f-body);letter-spacing:-.03em;text-transform:none}
+.bsty li:nth-child(3) span{font:600 16px/1 var(--f-body);letter-spacing:-.02em;text-transform:none}
+.bsty li:nth-child(4) span{font:400 14px/1 var(--f-body);text-transform:none}
+.bsty li:nth-child(5) span{font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.bsty em{font-style:normal;font-size:11px;color:rgba(244,242,236,.45)}
+/* i colori come gettoni */
+.bsc{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.bsc li{display:grid;align-content:end;gap:3px;aspect-ratio:3/4;padding:12px;border-radius:3px;background:var(--c);color:var(--t,#F4F2EC);box-shadow:inset 0 0 0 1px rgba(244,242,236,.1)}
+.bsc b{font:600 14px var(--f-body)}
+.bsc span{font-size:10px;letter-spacing:.06em;opacity:.75}
+/* lo spazio come righello */
+.bss{list-style:none;margin:0;padding:0;display:grid;gap:9px;align-content:center}
+.bss li{display:flex;align-items:center;gap:12px}
+.bss i{display:block;width:calc(var(--s)*2px);height:12px;background:#F4F2EC;opacity:calc(.35 + var(--s)/100)}
+.bss span{font-size:10.5px;color:rgba(244,242,236,.5)}
+@media (max-width:1000px){
+  .bsg{grid-template-columns:1fr 1fr}
+  .bst-mark,.bst-ico,.bst-type,.bst-col,.bst-space{grid-column:span 2;grid-row:auto}
+  .bsc{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .bsc li{aspect-ratio:auto;min-height:110px;padding:9px}
+  .bsc span{display:none}
+}
+@media (prefers-reduced-motion:reduce){.ctlg.m-out .cel>*:nth-child(2),.ctlg.m-in .cel>*:nth-child(2){animation:none}}
+
+/* ===== apertura, 25 ottobre sera: niente tagli in nessuna fase, e lo schermo d'esempio e' una vera scheda prodotto ===== */
+.brhero .xstage{overflow:visible}
+.brhero .xs{transform:translateY(calc(var(--t)*4%)) rotateX(calc(var(--t)*52deg)) rotateZ(calc(var(--t)*-32deg)) scale(calc(1 - var(--t)*.2))}
+.brhero .xlab{display:none!important}
+/* la scheda: carta calda, foto della pagnotta, testo, prezzo, quantita' e bottone */
+.brhero .l1{background:linear-gradient(170deg,#FBF4EA,#F1E4D2);box-shadow:0 30px 60px -28px rgba(0,0,0,.7);justify-content:flex-end;padding:0 18px 16px}
+.brhero .l1 .sw{width:18px;height:18px}
+.brhero .l2{background:repeating-linear-gradient(90deg,rgba(200,85,61,.28) 0 1px,transparent 1px calc(100%/6)),repeating-linear-gradient(0deg,rgba(200,85,61,.16) 0 1px,transparent 1px 20px)}
+.brhero .l3{display:block;padding:0}
+.brhero .xt0{position:absolute;left:22px;top:196px;font:500 10px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:#A0663A}
+.brhero .xt1{position:absolute;left:22px;right:22px;top:214px;font-size:clamp(24px,2.1vw,30px);line-height:1}
+.brhero .xt2{position:absolute;left:22px;top:250px;font-size:13px}
+.brhero .xt3{position:absolute;right:22px;top:196px;font:600 15px/1 var(--f-body);color:#3B2A1E}
+.brhero .xc3{position:absolute;left:14px;right:14px;top:14px;height:168px;border-radius:12px;overflow:hidden;
+  background:radial-gradient(120% 90% at 30% 20%,#F6DDB8,#E9B983 55%,#D08F57);box-shadow:inset 0 0 0 1px rgba(59,42,30,.08)}
+.brhero .xc3 svg{position:absolute;left:8%;right:8%;bottom:4%;width:84%;height:auto}
+.brhero .xc2{left:24px;top:24px;padding:5px 10px;font-size:10.5px;letter-spacing:.04em;background:#3B2A1E}
+.brhero .xc4{position:absolute;left:22px;bottom:22px;display:flex;align-items:center;gap:14px;height:44px;padding:0 14px;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1px rgba(59,42,30,.14);font:600 14px var(--f-body);color:#3B2A1E}
+.brhero .xc4 i{font-style:normal;opacity:.55}
+.brhero .xc1{left:auto;right:22px;bottom:22px;width:auto;padding:0 18px;height:44px;line-height:44px;border-radius:10px;font-size:14px}
+/* schermi bassi: l'elenco dei passi si stringe, si vedono solo i nomi */
+@media (min-width:1000px) and (max-height:860px){
+  .brhero .brh2 h1{font-size:clamp(40px,3.9vw,60px)}
+  .brhero .xlist p{display:none}
+  .brhero .xlist li{padding:9px 0}
+  .brhero .xlist li::before{top:10px}
+  .brhero .xg.x-steps .xlist li.now::before{height:calc(100% - 20px)}
+  .brhero .xside{gap:16px}
+}
+@media (max-width:999px){
+  .brhero .xstage{height:min(118vw,520px);margin-block:10px 0}
+}
+/* telefono: la scheda e' piu' piccola, tutto in proporzione */
+@media (max-width:999px){
+  .brhero .xs{width:min(68%,300px)}
+  .brhero .xc3{left:10px;right:10px;top:10px;height:42%;border-radius:10px}
+  .brhero .xc2{left:18px;top:18px;padding:4px 8px;font-size:9px}
+  .brhero .xt0{left:16px;top:49%;font-size:8.5px}
+  .brhero .xt3{right:16px;top:48.5%;font-size:13px}
+  .brhero .xt1{left:16px;right:16px;top:54%;font-size:20px}
+  .brhero .xt2{left:16px;top:62%;font-size:11px}
+  .brhero .xc4{left:16px;bottom:16px;height:36px;gap:10px;padding:0 10px;font-size:12px}
+  .brhero .xc1{right:16px;bottom:16px;height:36px;line-height:36px;padding:0 13px;font-size:12px}
+  .brhero .l1{padding:0 14px 12px}
+  .brhero .l1 .sw{width:14px;height:14px}
+}

@@ -365,6 +365,39 @@ def sistemi(t):
             '<b>Safe</b><p>Your data stays on your server. Access by role, every change logged, backups every day.</p>', 'sicurezza')
     return t
 
+
+def marchio(t):
+    """03 Brand (24 ottobre, con Eso): apertura compatta (lo stile sta in brand.css), i controlli in tre stili,
+    il carattere a quattro voci, la sezione del sistema (bozza statica, da animare piu' avanti)."""
+    t = una(t, '<div class="ctlg gl gl-c">',
+            '<div class="sty"><span class="mo">Same controls, three brands</span><div class="styb" role="radiogroup" aria-label="Style of the controls">'
+            '<button type="button" role="radio" aria-checked="true" data-s="minimal"><span class="fl" aria-hidden="true"></span>Minimal</button>'
+            '<button type="button" role="radio" aria-checked="false" tabindex="-1" data-s="friendly"><span class="fl" aria-hidden="true"></span>Friendly</button>'
+            '<button type="button" role="radio" aria-checked="false" tabindex="-1" data-s="editorial"><span class="fl" aria-hidden="true"></span>Editorial</button>'
+            '</div></div>\n    <div class="ctlg gl gl-c">', 'stili dei controlli')
+    # l'apertura: lo schermo d'esempio diventa una vera scheda prodotto (25 ottobre)
+    t = una(t, '<div class="xl l3" style="--i:2"><span class="xlab mo">03 · Type</span><b class="xt1">Rye and honey loaf</b><span class="xt2">Baked at five, gone by ten.</span></div>',
+            '<div class="xl l3" style="--i:2"><span class="xt0">Bakery · today</span><b class="xt1">Rye and honey loaf</b><span class="xt2">Baked at five, gone by ten.</span><span class="xt3">$9.50</span></div>', 'scheda: testo')
+    t = una(t, '<div class="xl l4" style="--i:3"><span class="xlab mo">04 · Components</span><span class="xc1">Order for pickup</span><span class="xc2">New</span><span class="xc3"></span></div>',
+            '<div class="xl l4" style="--i:3"><span class="xc3"><svg viewBox="0 0 280 140" aria-hidden="true"><ellipse cx="140" cy="118" rx="96" ry="12" fill="#3B2A1E" opacity=".18"/>'
+            '<path d="M52 104c-6-40 34-70 88-70s94 30 88 70c-2 10-12 14-24 14H76c-12 0-22-4-24-14Z" fill="#B9773F"/>'
+            '<path d="M60 96c4-30 38-50 80-50s76 20 80 50" fill="none" stroke="#D99A5B" stroke-width="6" stroke-linecap="round" opacity=".7"/>'
+            '<path d="M100 58l16 26M134 50l14 28M168 56l12 24" stroke="#F3D3A6" stroke-width="5" stroke-linecap="round"/></svg></span>'
+            '<span class="xc2">New</span><span class="xc4"><i>-</i><b>1</b><i>+</i></span><span class="xc1">Add to order</span></div>', 'scheda: componenti')
+    # il carattere: quattro caratteri, il quarto largo e forte; la parola d'esempio e' Mother (Machine c'e' gia' nel peso)
+    t = una(t, '<input value="Machine" maxlength="18" class="tw"', '<input value="Mother" maxlength="18" class="tw"', 'parola di prova')
+    for k in ('sp1', 'sp2', 'sp3'):
+        t = una(t, '<b class="' + k + '">Machine</b>', '<b class="' + k + '">Mother</b>', 'parola ' + k)
+    t = una(t, '<h2>Same word, three voices.</h2>', '<h2>One word, <span>four typefaces.</span></h2>', 'quattro caratteri')
+    t = una(t, '<div class="sp"><span class="mo">Mono · technical, exact</span><b class="sp3">Mother</b></div>',
+            '<div class="sp"><span class="mo">Mono · technical, exact</span><b class="sp3">Mother</b></div>\n'
+            '      <div class="sp"><span class="mo">Wide · loud, confident</span><b class="sp4">Mother</b></div>', 'quarta voce')
+    # l'ordine (deciso da Eso il 25 ottobre): apertura, i controlli, il carattere, il sistema, cosa facciamo
+    i = t.find('<section class="hs brw"'); assert i > 0, 'cosa facciamo'
+    t = t[:i] + (ROOT / 'src/sezioni/brand-sistema.html').read_text(encoding='utf8').strip() + '\n\n  ' + t[i:]
+    t = una(t, 'data-f="03.4" data-n="What we make" id="b5"', 'data-f="03.5" data-n="What we make" id="b5"', '03.5')
+    return t
+
 def ritocchi(nome, t):
     """Modifiche decise con Eso sopra le pagine approvate (19 ottobre 2026)."""
     # footer: l'elenco del palazzo (ridisegnato il 19 ottobre), generato qui per ogni pagina
@@ -713,6 +746,9 @@ def monta(nome, src):
 
     if nome == 'home':
         t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/home.css">', 'stile home')
+    if nome == 'brand':
+        t = marchio(t)
+        t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/brand.css">', 'stile brand')
     if nome == 'systems':
         t = sistemi(t)
         t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/systems.css">', 'stile systems')
@@ -721,7 +757,7 @@ def monta(nome, src):
 
     # 6. coda
     i = t.rfind('</body>')
-    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>', 'systems': '<script src="/js/systems.js"></script>', 'progetto': '<script src="/js/progetto.js"></script>', 'ristorante': '<script src="/js/progetto.js"></script>'}.get(nome, '')
+    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>', 'systems': '<script src="/js/systems.js"></script>', 'brand': '<script src="/js/brand.js"></script>', 'progetto': '<script src="/js/progetto.js"></script>', 'ristorante': '<script src="/js/progetto.js"></script>'}.get(nome, '')
     t = t[:i] + coda + t[i:] if i > 0 else t + coda
     (OUT / f'{nome}.html').write_text(t, encoding='utf8')
     return luce

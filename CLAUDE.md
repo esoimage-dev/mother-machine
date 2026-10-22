@@ -3,9 +3,28 @@
 Chi lavora su questo progetto (una persona o un Claude, anche su un altro account) legge **solo questo file** e sa
 come muoversi: cosa è il sito, come è fatto, le regole, cosa è fatto, cosa manca e in che ordine. Si aggiorna qui e
 basta: si spunta quello che è fatto, si scrive quello che si decide diversamente, si aggiunge quello che nasce.
-Ultimo aggiornamento: 23 ottobre 2026.
+Ultimo aggiornamento: 25 ottobre 2026 (passaggio a un altro account Claude: leggi prima la sezione 0).
 
 ---
+
+## 0 · Dove siamo (per chi riprende da qui)
+- **Pull request aperta:** #6 (Brand, LG senza "Staff only"), branch `claude/keen-franklin-rxhwha`. Se Eso l'ha già unita,
+  riparti da `main` aggiornato con lo stesso nome di branch. Anteprima: `https://claude-keen-franklin-rxhwha.mother-machine.pages.dev`.
+- **Prossimi passi, in ordine** (lavorare con pochi token, niente stravolgimenti, proporre in chat prima di toccare):
+  1. **Studio (01):** testi più corti, tre parti (Survey, Build, Run), via i doppioni. Proporre i testi in chat, poi una modifica sola.
+  2. **Contact (G):** il modulo vero (vedi sezione 8, punto 1). Eso sta creando gli account **Resend** e **Daily**
+     (gratis: Resend 3.000 mail al mese, 100 al giorno; Daily circa 10.000 minuti-partecipante al mese, da verificare
+     sulle loro pagine prezzi). Le chiavi API **non** vanno in chat né nella repository: Eso le mette su Cloudflare come
+     segreti (Workers & Pages → mother-machine → Settings → Variables and Secrets). Per Resend serve verificare il dominio
+     con i record DNS su Cloudflare.
+  3. **LG (Lower Ground):** oggi c'è solo la sezione del palazzo animata. Va riempita con qualcosa di buffo e grafico,
+     un laboratorio segreto. Idee proposte (Eso deve scegliere): **(a) il gioco dell'ascensore**, consigliato: porti la
+     cabina ai piani giusti per consegnare gli "ordini" prima che scadano, ogni piano è un servizio vero; (b) una parete
+     di leve e spie con easter egg ("You found it."); (c) una macchina che da una parola sputa un mini-marchio finto.
+     Il palazzo attuale diventa il campo da gioco del gioco (a), o si toglie. Leggero, in codice, fermo fuori schermo.
+  4. Poi: Legale e Google, Lancio (sezione 8). Dopo il lancio: back office vero (Machine Room), fatture automatiche,
+     risponditore di mail (sezione 8, punto 6).
+- **Brand (03):** fatto, salvo "The system" che è una bozza statica da animare più avanti.
 
 ## 1 · Regole di lavoro (sempre)
 - Rispondere a Eso **in italiano**, corto e schematico: un passo alla volta, percorsi esatti, niente spiegoni.
@@ -44,9 +63,9 @@ Ultimo aggiornamento: 23 ottobre 2026.
      verrebbe sovrascritta. Il file usa `una(t, vecchio, nuovo, nome)`, che si ferma se il pezzo non c'è una volta sola.
   3. `src/pages/[...slug].html.ts` serve le pagine (qui si aggiungono gli indirizzi nuovi).
   4. `npm run build` costruisce in `dist/`; `npx astro preview --port 4321` per vederlo in locale.
-- **Pezzi in `src/sezioni/`:** `lavori-home.html` (la striscia dei lavori in home), `work.html` (pagina 04), `systems-notte.html`, `lg.html`.
+- **Pezzi in `src/sezioni/`:** `lavori-home.html` (la striscia dei lavori in home), `work.html` (pagina 04), `systems-notte.html`, `brand-sistema.html`, `lg.html`.
 - **CSS e JS per pagina** in `public/css` e `public/js`: `home.css/js` (striscia lavori, selettore, cursore di trascinamento),
-  `progetto.css/js` (pagine progetto, demo, fasce), `systems.css/js` (turno di notte, registro di bordo), `work.css/js`, `mr.css/js` (LG). `mm-sito.*` comuni.
+  `progetto.css/js` (pagine progetto, demo, fasce), `systems.css/js` (turno di notte, registro di bordo), `brand.css/js` (apertura, tre stili dei controlli, sistema; caratteri in `public/brand/fonts`, non in `public/fonts` che lo script rifà da zero), `work.css/js`, `mr.css/js` (LG). `mm-sito.*` comuni.
 - **Pagine progetto:** in `monta-pagine.py` il dizionario `CASI` (una voce per lavoro) e la funzione `caso()` montano
   copertina, demo, cosa abbiamo fatto, numeri, prima e dopo, fasce tipografiche, marchio, galleria, Next.
   Per un lavoro nuovo: una voce in `CASI`, una in `PAGINE`, `META`, `CORRENTE`, l'indirizzo in `[...slug].html.ts` e `public/sitemap.xml`.
@@ -72,7 +91,7 @@ Ogni pagina è un piano. Si naviga con la pulsantiera (il menu) e si scende come
 | 02 | `/systems` | grigio macchina | il dentro: software, gestionali, app, CMS, automazioni, AI privata |
 | 01 | `/studio` | rosa | chi siamo, metodo Survey, Build, Run |
 | G | `/contact` | rosa | "Tell us what slows you down." Il modulo (ordine di lavoro). Primo incontro gratis |
-| LG | `/lg` → `/lg/room` | notte | la porta dello staff (codice sulla pulsantiera) e il nostro back office, la Machine Room |
+| LG | `/lg` → `/lg/room` | notte | il laboratorio segreto (oggi solo il palazzo, da riempire) e, con il codice sulla pulsantiera, il nostro back office |
 
 Systems è al 02 e Brand al 03: scendere vuol dire entrare, e i sistemi sono il lavoro che vogliamo vendere di più.
 Fuori dal palazzo: `/privacy`.
@@ -103,7 +122,7 @@ Fuori dal palazzo: `/privacy`.
 - **Pagine progetto:** demo vera (Guest/Owner, computer e telefono), poi le fasce tipografiche problema → soluzione,
   poi cosa abbiamo fatto, numeri, marchio, galleria, Next.
 - Ristorante: niente premi; numeri +180% (function), +35% (spesa per ospite), 60% (richieste fuori orario) decisi da Eso.
-- **LG** non è più un elenco di servizi: turno di notte e registro di bordo sono in Systems, il resto tolto. LG è la porta dello staff.
+- **LG** non è più un elenco di servizi: turno di notte e registro di bordo sono in Systems, il resto tolto. LG diventa un posto buffo e grafico (sezione 0).
 - Lingue del sito: EN, IT, ES, FR (targhetta in fondo alla pulsantiera).
 - Contatti: niente mail diretta né WhatsApp come canale, tutto passa dal modulo.
 - Privacy: niente cookie di tracciamento, nessun banner.
@@ -113,7 +132,8 @@ Fuori dal palazzo: `/privacy`.
 - [x] Dominio, posta in entrata su hello@.
 - [x] Home con la striscia dei lavori, icone, vetro, notifiche, selettore, cursore di trascinamento.
 - [x] Pagine Vitalia's Pizza on Wheels e Vitalia's Restaurant con demo vere, numeri, fasce.
-- [x] Pagina Work (04) senza numeri di serie, solo elenco (pull request #5, da unire).
+- [x] Pagina Work (04) senza numeri di serie, solo elenco.
+- [x] Brand rifatta (apertura, tre stili dei controlli, quattro caratteri, The system in bozza).
 - [x] Porta di LG con il codice sul server.
 - [x] Systems con il turno di notte e il registro di bordo; LG snella.
 
@@ -123,9 +143,18 @@ Fuori dal palazzo: `/privacy`.
    Dettaglio del percorso (numeri d'ordine, quattro mail, orari): `docs/archivio/percorso-contatto.md`.
 2. [x] **Systems assorbe LG** (23 ottobre). In Systems: la sezione "Night shift" (il turno di notte) e il registro di
    bordo dentro "Built properly", con il controllo di sicurezza; "Safe" dice che i dati stanno sul server del cliente.
-   LG ora è solo la sezione del palazzo e la porta dello staff: le altre sue macchine erano doppioni e sono state tolte.
-3. [ ] **Brand e Studio.** Testi più corti, una demo protagonista per piano, Studio in tre parti (Survey, Build, Run),
-   un solo "free" in tutto il sito, via i doppioni. Io propongo, Eso approva.
+   LG ora è solo la sezione del palazzo (25 ottobre: tolta anche "Staff only"); da riempire, vedi sezione 0.
+3. [~] **Brand** (24 ottobre): apertura compatta (titolo e leva a sinistra, la macchina a destra) e i controlli in tre
+   stili (Minimal, Friendly, Editorial) che cambiano anche il modo d'uso, non solo il colore: mostra che facciamo design
+   system di pezzi funzionali. 25 ottobre: il peso ha un carattere per stile (Hanken, Fredoka, Fraunces), il cambio di
+   stile trasforma i comandi; Minimal: Saved nero con spunta, Deleted rosso; l'apertura parte da sola a ciclo, strati in
+   vetro, i quattro passi si accendono; il carattere a quattro voci (la quarta: Unbounded) con la parola "Mother";
+   sezione nuova "The system" (segno su griglia, icone, scala del carattere, colori, spazio): **bozza statica, da
+   animare più avanti**. Ordine deciso da Eso (25 ottobre): apertura, controlli, carattere ("One word, four typefaces."),
+   sistema, cosa facciamo. L'apertura ha una scheda prodotto vera (pagnotta, prezzo, quantità, bottone) e non si taglia mai.
+   Cambiando stile cambiano solo i comandi: etichette e righe sotto restano uguali (deciso da Eso).
+   **Studio, resto:** testi più corti, Studio in tre parti (Survey, Build, Run), un solo "free" in tutto il sito,
+   via i doppioni. Si propone in chat, Eso approva.
 4. [ ] **Legale e Google.** Privacy con chi raccoglie i dati e hello@; titoli e descrizioni; anteprime social (Open Graph).
 5. [ ] **Lancio.** `PRIMA_DEL_LANCIO = false`, repository privata, Rate Limiting su `/api/porta`, controllo su tutti i dispositivi.
 6. [ ] **Dopo il lancio:**
@@ -144,7 +173,15 @@ Fuori dal palazzo: `/privacy`.
 - [ ] Parlare insieme della **parte aziendale e fiscale**: ABN australiano o struttura in più paesi, come fatturare oggi
   (prima del back office), GST, nome legale. L'ABN serve comunque sulle fatture; sul sito basta dire chi raccoglie i dati e hello@.
 
-## 10 · Testi e decisioni aperte (da approvare con Eso)
+## 10 · Messe da parte (da rivedere con Eso quando rifacciamo Systems)
+Grafiche tolte da LG il 23 ottobre, salvate nella storia di git (commit prima di `0e61a94`, file `src/sezioni/lg.html`,
+`public/js/mr.js`, `public/css/mr.css`) e in `prototipo/`:
+- Switchboard: i pacchetti che viaggiano dagli strumenti (pagamenti, shop, mail, calendario) al back office.
+- AI privata: il chip con le celle che si accendono a onde.
+- Work orders: il nastro Survey, Build, Run con le scatole.
+- Register: la lista dei lavori (aveva i numeri di serie).
+
+## 11 · Testi e decisioni aperte (da approvare con Eso)
 - Testi di LG e Systems dopo la fusione.
 - Riga privacy sotto il bottone d'invio di Contact.
 - Brand apre al buio, il manuale lo vuole bianco.
