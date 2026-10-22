@@ -9,8 +9,9 @@ Ultimo aggiornamento: 26 ottobre 2026 (Studio ritoccato, "free" in due posti sol
 
 ## 0 · Dove siamo (per chi riprende da qui)
 - **Tutto il lavoro è su `main`** (ultima pull request unita: #8). Ogni sessione di Claude ha il suo branch (oggi `claude/trusting-johnson-wybhvj`),
-  ripartendo dal `main` aggiornato: con il push si apre la pull request e Eso la unisce. Anteprima: `https://<branch con i trattini>.mother-machine.pages.dev`
-  (oggi `https://claude-trusting-johnson-wybhvj.mother-machine.pages.dev`), pronta qualche minuto dopo il push.
+  ripartendo dal `main` aggiornato: con il push si apre la pull request e Eso la unisce. Anteprima: `https://<branch con i trattini>.mother-machine.pages.dev`,
+  ma **Cloudflare taglia il nome a 28 caratteri** (oggi `https://claude-trusting-johnson-wybh.mother-machine.pages.dev`).
+  Il link giusto sta sempre nel commento del bot di Cloudflare nella pull request ("Branch Preview URL").
 - **Prossimi passi, in ordine** (lavorare con pochi token, niente stravolgimenti, proporre in chat prima di toccare):
   1. **Studio (01):** ritoccato (26 ottobre), da approvare sull'anteprima. Aperto: la regola 03 "One number to move."
      ripete il titolo della home ("Three steps. One number to move."): Eso decide se cambiarla.
