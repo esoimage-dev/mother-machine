@@ -37,7 +37,7 @@
     hd.addEventListener('keyup', up);
   }
 
-  /* cambio di stile: i comandi escono sfocati uno dopo l'altro, lo stile cambia, rientrano trasformati */
+  /* cambio di stile: un passaggio rapido, i comandi svaniscono e rientrano nel nuovo stile (circa 0,35 secondi) */
   [].forEach.call(g.querySelectorAll('.cel'), function (c, i) { c.style.setProperty('--k', i) });
   var tm = 0;
   var apply = function (v) { if (v === 'minimal') g.removeAttribute('data-sty'); else g.setAttribute('data-sty', v) };
@@ -48,8 +48,8 @@
     g.classList.remove('m-in'); g.classList.add('m-out');
     tm = setTimeout(function () {
       apply(b.dataset.s); g.classList.remove('m-out'); void g.offsetWidth; g.classList.add('m-in');
-      tm = setTimeout(function () { g.classList.remove('m-in') }, 900);
-    }, 380);
+      tm = setTimeout(function () { g.classList.remove('m-in') }, 400);
+    }, 120);
   };
   tabs.forEach(function (b, i) {
     b.addEventListener('click', function () { pick(b) });

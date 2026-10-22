@@ -29,9 +29,9 @@
 .styb button:focus-visible{outline:2px solid #121211;outline-offset:2px}
 .sty+.ctlg{margin-top:16px}
 
-/* passaggio morbido fra gli stili */
+/* passaggio fra gli stili: colori e forme scorrono veloci */
 .ctlg .cel,.ctlg .cel>.mo,.ctlg .spec,.ctlg .sws,.ctlg .sws i,.ctlg .stb,.ctlg .wgw,.ctlg .seg2,.ctlg .seg2 .ind,.ctlg .seg2 button,.ctlg .hold,.ctlg .hold .fill,.ctlg .chk button,.ctlg .chk i,.ctlg .chk i::after,.ctlg .sws::before,.ctlg .sws::after{
-  transition:background-color .45s cubic-bezier(.2,.8,.2,1),color .45s,border-color .45s,border-radius .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s,transform .26s cubic-bezier(.7,0,.2,1)}
+  transition:background-color .2s ease,color .2s ease,border-color .2s ease,border-radius .2s ease,box-shadow .2s ease,transform .26s cubic-bezier(.7,0,.2,1)}
 
 /* gli elementi aggiunti da brand.js per gli altri stili: nascosti nello stile Minimal */
 .ctlg .x-ic,.ctlg .x-ring,.ctlg .x-bar{display:none}
@@ -175,10 +175,10 @@
 
 /* passando da uno stile all'altro i comandi si trasformano: escono sfocati, rientrano nel nuovo stile, uno dopo l'altro */
 .ctlg .cel>*:nth-child(2){transition:none}
-.ctlg.m-out .cel>*:nth-child(2){animation:mout .2s cubic-bezier(.5,0,.75,0) forwards;animation-delay:calc(var(--k,0)*35ms)}
-.ctlg.m-in .cel>*:nth-child(2){animation:min .55s cubic-bezier(.2,.9,.3,1.15) both;animation-delay:calc(var(--k,0)*55ms)}
-@keyframes mout{to{opacity:0;transform:scale(.9);filter:blur(6px)}}
-@keyframes min{from{opacity:0;transform:scale(.88);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+.ctlg.m-out .cel>*:nth-child(2){animation:mout .12s ease-in forwards}
+.ctlg.m-in .cel>*:nth-child(2){animation:min .24s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--k,0)*18ms)}
+@keyframes mout{to{opacity:0;transform:translateY(4px)}}
+@keyframes min{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 
 /* ---- il carattere: quattro voci ---- */
 .sp4{font-family:'MMUnbounded',var(--f-body)!important;font-weight:700!important;letter-spacing:-.04em;font-size:clamp(40px,6vw,104px)!important}
