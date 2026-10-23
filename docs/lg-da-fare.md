@@ -62,5 +62,26 @@ Da fare a piccoli blocchi, pochi token. File: `public/js/stanza.js` (motore e st
   File e dati su Cloudflare (R2 e D1, gratis a questi volumi).
 - **Dove si clicca:** non durante la partita. Nella citta' della schermata d'attesa e nella classifica: passando sopra,
   la targhetta con nome e riga; cliccando, il loro link.
+- **Comandi:** computer = frecce o WASD in quattro direzioni, spazio spara (tenuto: raffica). Telefono = la nave segue il dito
+  (un po' sopra), spara da sola. La nave si muove solo nella meta' bassa dello schermo.
+- **La nave:** una nave vera (muso a punta, ali), con tre motori pomodoro ad arco dietro (le tre gambe della m) e il segno
+  piccolo su un'ala. Chi conosce il logo lo vede, gli altri vedono solo una bella nave.
+- **Livelli = la settimana:** Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday (calmo), poi MONDAY. Ogni giorno va
+  dalle 9 alle 17 con l'orologio in alto; alle 17:00 "Clocked out". Il cielo cambia colore giorno per giorno.
+- **Nemici:** Missed call (telefono che squilla, zig-zag), Paper invoice (si sdoppia se colpita), No-show (sparisce e
+  riappare), Spam (sciami piccoli e veloci).
+- **MONDAY in tre fasi:** raffiche di email, blocchi delle riunioni che scendono come muri, sveglia delle 9:00 impazzita.
+  E' un grande calendario con la faccia; ferito, strappa le sue pagine.
+- **Potenziamenti** (cadono da nemici speciali): Automation (raffica), AI (mira da sola), Booking (scudo), Night shift
+  (per qualche secondo lavora da solo).
+- **La citta' sotto:** finestre accese; un nemico che tocca terra spegne una finestra; tutte spente = "The business closed."
+- **Punteggio = HOURS SAVED.** Vite = tre tazze di caffe' ("Out of coffee"). Combo = "FLOW STATE" (punti doppi).
+  Pausa = "Out of office". Morte = "Burnout". Fine = "Burnout. 412 hours saved."
+- **Moneta d'oro** rara: bonus, e lo stesso segno del premio finale (fa capire che c'e' qualcosa da scoprire).
+- **Easter egg:** codice Konami = "Weekend mode", caffe' infinito, niente classifica.
+- **Musica:** la nostra chiptune, accelera quando restano pochi nemici. Tasto M = muto. "Riduci movimento" = niente lampi.
+- **Fine partita:** iniziali in classifica e un bottone discreto "Want this for real? Tell us what slows you down." -> Contact.
+- **Difficolta':** partita intera 5-6 minuti; MONDAY lo batte circa 1 su 20.
+- **Anti imbrogli:** il server controlla che il punteggio sia possibile nel tempo giocato e limita i tentativi.
 - **Un gioco solo, fatto bene.** Idee per dopo, forse: Night Shift (scorrimento), Night Drive (stile OutRun, mai il truck
   di Vitalia's: e' un lavoro per un cliente).
