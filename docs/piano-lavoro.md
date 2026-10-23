@@ -310,6 +310,10 @@ un pizzico piu' cattivo. Nave da rifare molto piu' figa; nemici, colpi, potenzia
 personaggi con piu' dettaglio dello sfondo. Livelli diversi tra loro (meccanica o sorpresa per giorno). Piu' giri di
 verifica e miglioramento con gli agenti.
 
+**Ordine di lavoro deciso da Eso (notte del 23 ottobre):** DEADLINE con piu' giri di revisione completa (vedi le
+liste in scratch DESIGN-V2.md, riportate qui a fine lavoro) -> poi LG (A5 e aggiunte) con piu' giri -> poi l'audit
+completo del sito (A3).
+
 ## B6 · Altre cose belle (quando c'e' tempo)
 - [ ] Animazioni allo scroll, film nuovo, footer ripensato (se non fatto in A3).
 - [ ] LG: idee in piu' (inquadratura d'angolo, altri giochi).
