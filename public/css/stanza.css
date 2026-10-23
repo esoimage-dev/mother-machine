@@ -196,3 +196,35 @@
   .lgW .ln.mtom,.lgW .ln.abulb,.lgW .ln.dpx{animation:none}
 }
 .lgW .ln.inkst{stroke:#0F0F0E;stroke-width:calc(var(--w) * .7)}
+
+/* oggetti, giro 3 */
+/* il menu nei colori di Vitalia's: carta, verde, laguna, oro */
+.lgW .fc.mpap{fill:#F6F3EC}
+.lgW .ln.mgo{stroke:#C6982F;stroke-width:calc(var(--w) * .4)}
+.lgW .ln.mgo2{stroke:#C6982F;stroke-width:calc(var(--w) * .22)}
+.lgW .ln.mgr{fill:#3C6A4B;stroke:#3C6A4B;stroke-width:.3}
+.lgW .ln.mlg{stroke:#17301F;stroke-width:calc(var(--w) * .3)}
+.lgW .tx.mlag{fill:#17301F;font-family:Georgia,'Times New Roman',serif;font-style:italic;letter-spacing:0}
+.lgW .tx.mlag.mmo{font-family:var(--f-mono);font-style:normal}
+.lgW .tx.mgol{fill:#C6982F;font-family:Georgia,'Times New Roman',serif;font-style:italic;letter-spacing:0}
+.lgW .tx.mgot{fill:#C6982F;letter-spacing:.04em}
+.lgW .tx.mgrn{fill:#3C6A4B}
+.lgW .tx.mpat{fill:#F6F3EC}
+.lgW .tx.mpat.mser{font-family:Georgia,'Times New Roman',serif;font-style:italic;letter-spacing:.02em}
+/* il disegno tecnico: le costruzioni sottili, la m piena */
+.lgW .ln.ink2{stroke:#0F0F0E;stroke-width:calc(var(--w) * .22);stroke-opacity:.75}
+.lgW .ln.inkb{stroke:#0F0F0E;stroke-width:calc(var(--w) * .8)}
+/* il calendario vero: i giorni, il fine settimana piu' chiaro, oggi cerchiato; il foglio che gira */
+.lgW .tx.cday{letter-spacing:0;fill-opacity:.92}
+.lgW .tx.cwk{letter-spacing:0;fill-opacity:.55}
+.lgW .tx.cday.we{fill-opacity:.5}
+.lgW .ln.ctd{stroke:#FF5B3A;stroke-width:calc(var(--w) * .75);animation:lgled 2.2s steps(1) infinite}
+.lgW .cal.flip .tx{animation:lgflip .45s steps(3)}
+@keyframes lgflip{0%{opacity:0}60%{opacity:.4}100%{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  .lgW .ln.ctd,.lgW .cal.flip .tx{animation:none}
+}
+.lgW .fc.pap.full{fill-opacity:1}
+/* la carta non sbiadisce: dietro non deve trasparire niente */
+.lgW .lgP.sheet,.lgW .lgP.cal{opacity:1}
+.lgW .ln.pencil{stroke:#0F0F0E;stroke-width:calc(var(--w) * 1.3);stroke-linecap:butt}
