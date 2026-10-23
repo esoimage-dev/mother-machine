@@ -427,6 +427,14 @@
     '.musrow{gap:10px}',
     '.mussn{font-size:12.5px}.mussu{display:none}',
     '}',
+    /* vetro: e' piccolo, quindi il blur dal vivo qui si puo' (la regola vieta solo le aree grandi). Mother = tondo e vetro */
+    '.musm{border-radius:14px;background:rgba(18,18,17,.7);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border-color:rgba(244,242,236,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 18px 40px -16px rgba(0,0,0,.55)}',
+    '.musmb{border-radius:9px}',
+    /* telefono: il lettore si nasconde sul lato destro, piu' in alto, e resta fuori solo la linguetta col disco */
+    '.musm.side{right:0;bottom:calc(34vh + env(safe-area-inset-bottom,0px));border-right:0;border-radius:14px 0 0 14px;transform:translateX(calc(100% - 48px));transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .3s}',
+    '.musm.side.in{transform:translateX(calc(100% - 48px))}',
+    '.musm.side.open{right:12px;border-right:1px solid rgba(244,242,236,.2);border-radius:14px;transform:none}',
+    '.musm.side .musmd{cursor:pointer}',
     '@media (max-width:420px){.musmt{width:96px}.musmb{width:34px;height:34px}.musm{gap:4px;padding:0 4px 0 8px;height:52px}}',
     '@media (prefers-reduced-motion:reduce){.musbg,.musobj,.musc,.mustx>*,.musm,.musarm,.musvin{transition:none!important}.musrec,.musmd .r,.museq b,.musdisc.sw,.musk::before,.musm.wait .musmt i::before{animation:none!important}}'
   ].join('\n');
@@ -537,6 +545,9 @@
 
   /* ---------- il mini lettore ---------- */
   var mn = null;
+  var mt = 0;
+  function apri() { if (!mn || !mn.classList.contains('side')) return; mn.classList.add('open'); clearTimeout(mt); mt = setTimeout(chiudi, 5000) }
+  function chiudi() { clearTimeout(mt); if (mn) mn.classList.remove('open') }
   function mini() {
     var serve = S.st !== 'off' && !(box && box.classList.contains('on'));
     if (!serve) { if (mn && !mn.hidden) { mn.classList.remove('in'); var m = mn; setTimeout(function () { if (!m.classList.contains('in')) m.hidden = true }, RM ? 0 : 320) } return }
@@ -549,7 +560,15 @@
         '<button class="musmb pp" type="button" data-a="toggle"></button>' +
         '<button class="musmb" type="button" data-a="next" aria-label="Next">' + IC.next + '</button>' +
         '<button class="musmb" type="button" data-a="stop" aria-label="Stop">' + IC.stop + '</button>';
-      mn.addEventListener('click', function (e) { var b = e.target.closest('[data-a]'); if (b) comando(b.dataset.a) });
+      mn.addEventListener('click', function (e) {
+        /* sul telefono il primo tocco tira fuori il lettore; poi i tasti */
+        if (mn.classList.contains('side') && !mn.classList.contains('open')) { apri(); return }
+        var b = e.target.closest('[data-a]'); if (b) { comando(b.dataset.a); apri() }
+      });
+      addEventListener('pointerdown', function (e) { if (mn && mn.classList.contains('open') && !mn.contains(e.target)) chiudi() }, true);
+      var lato = matchMedia('(max-width:860px)');
+      var metti = function () { mn.classList.toggle('side', lato.matches); if (!lato.matches) mn.classList.remove('open') };
+      if (lato.addEventListener) lato.addEventListener('change', metti); metti();
       document.body.appendChild(mn);
     }
     var D = DISCHI[S.t], pp = mn.querySelector('.pp');

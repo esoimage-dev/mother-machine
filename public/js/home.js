@@ -102,7 +102,20 @@
   var raf = 0;
   tr.addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(function () { raf = 0; show(nearest(tr.scrollLeft)) }) }, { passive: true });
   tr.addEventListener('touchstart', function () { touched = true; cancelAnimationFrame(anim); tr.classList.remove('free') }, { passive: true });
-  tr.addEventListener('wheel', function () { if (auto) { cancelAnimationFrame(anim); auto = false; tr.classList.remove('free') } }, { passive: true });
+  /* trackpad e rotella: lo scorrimento e' libero e liscio (un gesto forte puo' saltare schede), e quando il gesto
+     finisce, coda d'inerzia compresa, la striscia si aggiusta da sola sulla scheda piu' vicina */
+  var wt = 0, w0 = -1;
+  tr.addEventListener('wheel', function (e) {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+    if (auto) { cancelAnimationFrame(anim); auto = false }
+    if (w0 < 0) w0 = tr.scrollLeft;
+    touched = true; tr.classList.add('free');
+    clearTimeout(wt); wt = setTimeout(function () {
+      var from = nearest(w0), d = tr.scrollLeft - w0, i = nearest(tr.scrollLeft); w0 = -1;
+      if (i === from && Math.abs(d) > 90) i += d > 0 ? 1 : -1;   /* un gesto voluto porta almeno alla scheda dopo */
+      go(i);
+    }, 160);
+  }, { passive: true });
   [prev, next].forEach(function (b) {
     b.addEventListener('click', function () { touched = true; b.classList.remove('call'); go(cur + +b.dataset.d) });
   });
@@ -117,42 +130,50 @@
   var cursor = function () { return mmc || (mmc = document.querySelector('.mmc')) };
   tr.addEventListener('pointerdown', function (e) {
     if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('.wkcta')) return;
+    e.preventDefault();   /* niente selezione del testo ne' trascinamento delle immagini */
     cancelAnimationFrame(anim); auto = false;
     down = { x: e.clientX, l: tr.scrollLeft }; start = tr.scrollLeft; moved = false; hist = [[tr.scrollLeft, performance.now()]];
   });
+  /* la striscia si sposta una volta per fotogramma, non a ogni movimento del mouse: niente scatti */
+  var px = 0, pr = 0;
+  var muovi = function () { pr = 0; if (down) tr.scrollLeft = px };
   addEventListener('pointermove', function (e) {
     if (!down) return;
     var dx = e.clientX - down.x;
-    if (!moved && Math.abs(dx) > 5) { moved = true; tr.classList.add('drag', 'free'); if (cursor()) mmc.classList.add('wmv') }
+    if (!moved && Math.abs(dx) > 5) { moved = true; tr.classList.add('drag', 'free'); if (cursor()) mmc.classList.add('wmv'); var s = getSelection && getSelection(); if (s) s.removeAllRanges() }
     if (!moved) return;
-    tr.scrollLeft = down.l - dx;
-    hist.push([tr.scrollLeft, performance.now()]); if (hist.length > 6) hist.shift();
+    px = Math.max(0, Math.min(max(), down.l - dx));
+    if (!pr) pr = requestAnimationFrame(muovi);
+    hist.push([px, performance.now()]); if (hist.length > 6) hist.shift();
   });
   addEventListener('pointerup', function () {
     if (!down) return; down = null;
     if (cursor()) mmc.classList.remove('wmv');
     if (!moved) return;
+    if (pr) { cancelAnimationFrame(pr); pr = 0; tr.scrollLeft = px }
     tr.classList.remove('drag');
     release();
   });
   /* al rilascio la striscia prosegue con la sua spinta. Una spinta decisa, o un pezzo di scheda, porta sempre alla scheda dopo */
   var release = function (one) {
     var a = hist[0], b = hist[hist.length - 1], v = (b[1] - a[1]) > 0 ? (b[0] - a[0]) / (b[1] - a[1]) : 0;   /* px al ms */
-    var i = nearest(tr.scrollLeft + v * 260), dist = tr.scrollLeft - start, here = nearest(tr.scrollLeft);
+    var dist = tr.scrollLeft - start, here = nearest(tr.scrollLeft), from = nearest(start), i = here;
     if (one) {   /* dal selettore conta dove porti il dito, senza spinta: un quarto di passo basta per cambiare lavoro */
       var step = cards.length > 1 ? at(1) - at(0) : 1;
-      i = here;
-      if (i === nearest(start) && Math.abs(dist) > step * .25) i += dist > 0 ? 1 : -1;
+      if (i === from && Math.abs(dist) > step * .25) i += dist > 0 ? 1 : -1;
       go(i); return;
     }
-    if (i === cur && (Math.abs(v) > .35 || Math.abs(dist) > Math.min(140, cards[cur].offsetWidth * .15))) i = cur + ((Math.abs(v) > .35 ? v : dist) > 0 ? 1 : -1);
+    /* l'inerzia porta avanti in proporzione alla spinta (una spinta estrema salta schede), poi si sceglie la scheda
+       piu' vicina a dove si fermerebbe. Un gesto piccolo ma deciso basta per passare alla scheda dopo */
+    i = nearest(tr.scrollLeft + v * 300);
+    if (i === from && (Math.abs(v) > .35 || Math.abs(dist) > Math.min(140, cards[from].offsetWidth * .15))) i = from + ((Math.abs(v) > .35 ? v : dist) > 0 ? 1 : -1);
     go(i);
   };
 
   /* anche il selettore si trascina: tieni premuto il lavoro acceso e spostalo verso il prossimo, la striscia lo segue */
   var sw = null;
   tabs.addEventListener('pointerdown', function (e) {
-    if (e.button) return;
+    if (e.button || e.pointerType === 'mouse') return;   /* col mouse il selettore si usa a clic */
     cancelAnimationFrame(anim); auto = false; swiped = false;
     sw = { x: e.clientX, id: e.pointerId }; start = tr.scrollLeft; hist = [[tr.scrollLeft, performance.now()]];
   });

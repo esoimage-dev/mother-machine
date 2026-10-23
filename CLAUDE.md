@@ -12,6 +12,7 @@ Ultimo aggiornamento: 26 ottobre 2026 (Studio ritoccato, "free" in due posti sol
   ripartendo dal `main` aggiornato: con il push si apre la pull request e Eso la unisce. Anteprima: `https://<branch con i trattini>.mother-machine.pages.dev`,
   ma **Cloudflare taglia il nome a 28 caratteri** (oggi `https://claude-trusting-johnson-wybh.mother-machine.pages.dev`).
   Il link giusto sta sempre nel commento del bot di Cloudflare nella pull request ("Branch Preview URL").
+- **Il piano completo, a fasi: `docs/piano-lavoro.md`** (Contact, prima del lancio, lancio, lingue, back office, crescita).
 - **Prossimi passi, in ordine** (lavorare con pochi token, niente stravolgimenti, proporre in chat prima di toccare):
   1. **Studio (01):** rifatto (26 ottobre), da approvare sull'anteprima. Aperto: la regola 03 "One number to move."
      ripete il titolo della home ("Three steps. One number to move."): Eso decide se cambiarla.
@@ -20,7 +21,7 @@ Ultimo aggiornamento: 26 ottobre 2026 (Studio ritoccato, "free" in due posti sol
      sulle loro pagine prezzi). Le chiavi API **non** vanno in chat né nella repository: Eso le mette su Cloudflare come
      segreti (Workers & Pages → mother-machine → Settings → Variables and Secrets). Per Resend serve verificare il dominio
      con i record DNS su Cloudflare.
-  3. **LG (Lower Ground):** FATTA (sezione 7). **Lista dei ritocchi decisi da Eso: `docs/lg-da-fare.md`** (si parte da li'). Aperti: il gioco (Eso lo vuole cambiare), la frase
+  3. **LG (Lower Ground):** FATTA (sezione 7). **Ritocchi e gioco: `docs/piano-lavoro.md` (A5 e B5)**. Aperti: il gioco (Eso lo vuole cambiare), la frase
      sotto la stanza ("You can watch. Only we touch." contro "Click what glows"). Prima c'era solo la sezione del palazzo animata. Va riempita con qualcosa di buffo e grafico,
      un laboratorio segreto. Idee proposte (Eso deve scegliere): **(a) il gioco dell'ascensore**, consigliato: porti la
      cabina ai piani giusti per consegnare gli "ordini" prima che scadano, ogni piano è un servizio vero; (b) una parete
