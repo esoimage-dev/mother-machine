@@ -8,7 +8,7 @@ Ultimo aggiornamento: 26 ottobre 2026 (Studio ritoccato, "free" in due posti sol
 ---
 
 ## 0 · Dove siamo (per chi riprende da qui)
-- **Tutto il lavoro è su `main`** (ultima pull request unita: #8). Ogni sessione di Claude ha il suo branch (oggi `claude/trusting-johnson-wybhvj`),
+- **Tutto il lavoro è su `main`** (ultima pull request unita: #10). Ogni sessione di Claude ha il suo branch (oggi `claude/trusting-johnson-wybhvj`),
   ripartendo dal `main` aggiornato: con il push si apre la pull request e Eso la unisce. Anteprima: `https://<branch con i trattini>.mother-machine.pages.dev`,
   ma **Cloudflare taglia il nome a 28 caratteri** (oggi `https://claude-trusting-johnson-wybh.mother-machine.pages.dev`).
   Il link giusto sta sempre nel commento del bot di Cloudflare nella pull request ("Branch Preview URL").
@@ -187,7 +187,14 @@ Fuori dal palazzo: `/privacy`.
   destra il grande disegno tecnico del cabinato (coperto in parte dal cabinato); calendario del robot frontale sul fianco del
   rack R01 (tutto a sinistra, si vede spostando il mouse; mese vero, oggi cerchiato, cliccando gira il mese), poster
   "Dead Pixels", Staff only al neon accanto all'ascensore, neon che spegnendosi lascia il tubo grigio visibile.
-  **Da ridisegnare meglio (lista di Eso):** telefono, tazzina e tazza, divano nel complesso, altri dettagli che non convincono.
+  Giro 5: porte dell'ascensore lisce, all'arrivo aperte poi si chiudono; cabina minimal (solo un corrimano staccato dal muro);
+  telefono a disco nuovo, estintore neutro, calendario non cliccabile (mese vero), cavi della console dietro lo scatolone fino
+  alla TV, parete destra = tavola di progetto "LOOP · Brand + App", oscilloscopio sul carrello in basso a sinistra.
+  **Musica** (`public/js/musica.js`, su tutte le pagine): il giradischi apre il lettore con quattro dischi chiptune fatti in
+  codice; chiudendo resta il mini player in basso a destra (stop lo nasconde). Si avvia solo da LG; cambiando pagina il sito
+  si ricarica, quindi riparte al primo tocco ("Tap to resume"). Musica continua senza tocco = sito a pagina unica (Astro
+  ClientRouter), lavoro grosso, solo se Eso lo vuole.
+  **Da ridisegnare meglio (lista di Eso):** tazzina e tazza, divano nel complesso, altri dettagli che non convincono.
   **Primo piano stile inventario** (`stanza-vista.js`): truck, menu e telefono volano dal punto premuto dentro un mirino e
   girano (trascinandoli si ruotano), con una frase, il bottone per andare al progetto o a Contact e la X a tasto (Esc).
   I modelli si preparano in anticipo e la stanza dietro si ferma: niente scatti. I modelli stanno in

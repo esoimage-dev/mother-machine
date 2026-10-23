@@ -40,6 +40,18 @@
     if (o.top !== false) out.t = fc(p, top, ins, { fill: o.fill, cls: o.cls });
     if (o.bot) out.b = fc(p, bot, ins, { fill: o.fill, cls: o.cls });
     return out }
+  /* un tubo lungo una linea (locale), sezione ellittica: ra fuori dal piano xy della linea, rb lungo z */
+  function tubo(p, T, pts, ra, rb, k, o) { o = o || {}; var R = [], n = pts.length;
+    pts.forEach(function (q, i) { var a = pts[Math.max(0, i - 1)], b = pts[Math.min(n - 1, i + 1)], t = unit(sub(b, a)), n1 = unit(cross(t, [0, 0, 1])), n2 = cross(n1, t), ring = [];
+      for (var j = 0; j < k; j++) { var an = j / k * 2 * PI, c = Math.cos(an) * ra, s = Math.sin(an) * rb; ring.push(T([q[0] + n1[0] * c + n2[0] * s, q[1] + n1[1] * c + n2[1] * s, q[2] + n1[2] * c + n2[2] * s])) }
+      R.push(ring) });
+    var F = [];
+    for (var i = 0; i < n - 1; i++) { var ins = T(lerp3(pts[i], pts[i + 1], .5));
+      for (var j = 0; j < k; j++) { var j1 = (j + 1) % k, q4 = [R[i][j], R[i][j1], R[i + 1][j1], R[i + 1][j]]; F.push(fc(p, q4, ins, { cls: o.cls }));
+        if (o.pelle) rovescia([fc(p, q4, ins, { cls: 'hull' })]) } }
+    return F }
+  /* la pelle rovesciata: le normali girate, si vede solo il bordo che sporge dietro l'oggetto (il contorno) */
+  function rovescia(fs) { fs.forEach(function (f) { f.n = [-f.n[0], -f.n[1], -f.n[2]] }); return fs }
   /* una gamba rastremata qualunque (anche inclinata): quattro facce da a (r0) a b (r1) */
   function gamba(p, a, b, r0, r1, o) { o = o || {}; var ins = lerp3(a, b, .5), A = [], B = [];
     [[1, 1], [-1, 1], [-1, -1], [1, -1]].forEach(function (s) { A.push([a[0] + s[0] * r0, a[1], a[2] + s[1] * r0]); B.push([b[0] + s[0] * r1, b[1], b[2] + s[1] * r1]) });
@@ -195,48 +207,57 @@
     return [p];
   };
 
-  /* il telefono a disco, anni '60: il corpo a cupola (sezioni arrotondate una sopra l'altra), il davanti inclinato con il
-     disco e i dieci buchi, la forcella, la cornetta con le due coppe, il filo a spirale, la spia arancione.
-     Largo .23, profondo .24, alto .15 con la cornetta */
+  /* il telefono a disco classico: il corpo largo e basso sul suo zoccolo, il davanti inclinato con il disco e i dieci
+     buchi, sopra la forcella a due corna con la cornetta di traverso (manico arcuato, due coppe), il filo a spirale.
+     Largo .23, profondo .23, alto .15 con la cornetta */
   MOD.phone = function (L, T, o) {
     var p = L.part(opz(o, 'phone'));
-    /* le sezioni: altezza, davanti, dietro, mezza larghezza, raggio degli angoli */
-    var SZ = [[0, -.118, .118, .114, .03], [.014, -.112, .116, .112, .032], [.058, -.08, .102, .1, .045], [.09, -.04, .066, .07, .035]];
-    var R = SZ.map(function (s) { var zc = (s[1] + s[2]) / 2, hd = (s[2] - s[1]) / 2; return rr(0, zc, s[3], hd, s[4], 1).map(function (q) { return T([q[0], s[0], q[1]]) }) });
+    /* le sezioni: altezza, davanti, dietro, mezza larghezza, raggio degli angoli. Lo zoccolo, il gradino, poi il corpo
+       che si stringe; il davanti sta su un piano solo (ci va il disco) */
+    var SZ = [[0, -.118, .112, .114, .03], [.011, -.118, .112, .114, .03], [.013, -.111, .106, .107, .03], [.06, -.0715, .1, .1, .04], [.098, -.04, .07, .078, .034]];
+    var R = SZ.map(function (s) { var zc = (s[1] + s[2]) / 2, hd = (s[2] - s[1]) / 2; return rr(0, zc, s[3], hd, s[4], 3).map(function (q) { return T([q[0], s[0], q[1]]) }) });
+    /* le facce curve hanno il segno leggero; le righe forti sono le sezioni (zoccolo, gradino, spalla) e il contorno,
+       che viene da una seconda pelle girata al contrario: si vede solo dove sporge, cioe' sul bordo */
     for (var i = 0; i < SZ.length - 1; i++) { var a = SZ[i], b = SZ[i + 1], ins = T([0, (a[0] + b[0]) / 2, (a[1] + a[2] + b[1] + b[2]) / 4]), n = R[i].length;
-      for (var j = 0; j < n; j++) { var k = (j + 1) % n; fc(p, [R[i][j], R[i][k], R[i + 1][k], R[i + 1][j]], ins, { hatch: i === 1 && j === 1 ? 3 : 0 }) } }
-    var cap = fc(p, R[3], T([0, .07, .014]), {});
-    /* la spia: chi chiama (pomodoro, lampeggia), davanti tra le forcelle */
-    p.line([T([-.011, .0904, -.022]), T([.011, .0904, -.022]), T([.011, .0904, -.012]), T([-.011, .0904, -.012])], { closed: true, cls: 'led o', on: cap });
-    /* la forcella: due corna che tengono la cornetta */
-    var hp = [[-.018, .084], [.036, .084], [.03, .126], [-.008, .126]];
-    [-1, 1].forEach(function (sx) { p.prism(hp, sx > 0 ? .05 : -.074, sx > 0 ? .074 : -.05, T, {}) });
-    /* la cornetta: il manico e le due coppe, quella per l'orecchio e quella per la bocca */
-    var zc = .012;
+      for (var j = 0; j < n; j++) { var k = (j + 1) % n, q4 = [R[i][j], R[i][k], R[i + 1][k], R[i + 1][j]];
+        var f = fc(p, q4, ins, { cls: 'sf', hatch: i >= 3 && j === n - 1 ? 2 : 0 });
+        p.line([R[i][j], R[i][k]], { on: f });
+        var hl = fc(p, q4, ins, { cls: 'hull' }); hl.n = [-hl.n[0], -hl.n[1], -hl.n[2]] } }
+    var cap = fc(p, R[4], T([0, .07, .015]), {});
+    /* la spia: chi chiama (pomodoro, lampeggia), sul davanti del tetto */
+    p.line([T([-.011, .0984, -.03]), T([.011, .0984, -.03]), T([.011, .0984, -.022]), T([-.011, .0984, -.022])], { closed: true, cls: 'led o', on: cap });
+    /* la forcella: due colonnine, ognuna con le due corna che abbracciano il manico */
+    var zh = .015, xh = .06;
+    [-1, 1].forEach(function (sx) { var x = sx * xh;
+      p.box([x - .009, .09, zh - .016, x + .009, .117, zh + .016], T, {});
+      [-1, 1].forEach(function (sz) { p.box([x - .008, .117, zh + sz * .011 - .003, x + .008, .135, zh + sz * .011 + .003], T, {}) }) });
+    /* la cornetta: le due coppe (orecchio e bocca) e il manico arcuato, schiacciato, appoggiato nella forcella */
     [-1, 1].forEach(function (sx) {
-      var cup = fusto(p, T, [sx * .102, zc], .031, .02, .098, .138, 8, { rot: .39 });
-      p.line(anello(T, [sx * .102, .1385, zc], .011, 'y', 10), { closed: true, cls: 'dt', on: cup.t }) });
-    var hc = p.prism(rr(zc, .132, .014, .0085, .007, 2), -.1, .1, T, {});
-    p.line([T([-.075, .1405, zc - .004]), T([.075, .1405, zc - .004])], { cls: 'dt', on: hc.sides[0] });
+      var cup = fusto(p, T, [sx * .1, zh], .029, .019, .1, .128, 12, { bot: true, top: false, cls: 'sf' });
+      rovescia(fusto(p, T, [sx * .1, zh], .029, .019, .1, .128, 12, { top: false, cls: 'hull' }).s);
+      cup.b.cls = ''; p.line(anello(T, [sx * .1, .0995, zh], .02, 'y', 12), { closed: true, cls: 'dt', on: cup.b }) });
+    var hp = [[-.1, .124], [-.091, .134], [-.07, .1395], [-.035, .1415], [0, .142], [.035, .1415], [.07, .1395], [.091, .134], [.1, .124]].map(function (q) { return [q[0], q[1], zh] });
+    tubo(p, T, hp, .0085, .013, 8, { cls: 'sf', pelle: true });
+    p.line(hp.slice(2, 7).map(function (q) { return T([q[0], q[1] + .0087, q[2]]) }), { cls: 'dt' });
     /* il disco, a parte: sta sul davanti inclinato */
     var d = L.part(opz(o, 'phone'));
-    var sl = .73, vv = unit([0, 1, sl]), nn = [0, vv[2], -vv[1]], C0 = [0, .036, -.112 + sl * (.036 - .014)];
+    var vv = unit([0, .085, .0715]), nn = [0, vv[2], -vv[1]], C0 = [0, .055, -.111 + .0715 * (.042 / .085)];
     function P(a, b, off) { return T([C0[0] + a, C0[1] + b * vv[1] + off * nn[1], C0[2] + b * vv[2] + off * nn[2]]) }
-    var fr = [], bk = [], rd = .04, kd = 22;
-    for (var m = 0; m < kd; m++) { var an = m / kd * 2 * PI; fr.push(P(rd * Math.cos(an), rd * Math.sin(an), .009)); bk.push(P(rd * Math.cos(an), rd * Math.sin(an), -.002)) }
-    var di = P(0, 0, .003);
-    for (var q = 0; q < kd; q++) { var q1 = (q + 1) % kd; fc(d, [bk[q], bk[q1], fr[q1], fr[q]], di, {}) }
+    var fr = [], bk = [], rd = .04, kd = 24;
+    for (var m = 0; m < kd; m++) { var an = m / kd * 2 * PI; fr.push(P(rd * Math.cos(an), rd * Math.sin(an), .008)); bk.push(P(rd * Math.cos(an), rd * Math.sin(an), -.003)) }
+    var di = P(0, 0, .002);
+    for (var q = 0; q < kd; q++) { var q1 = (q + 1) % kd, q4 = [bk[q], bk[q1], fr[q1], fr[q]]; fc(d, q4, di, { cls: 'sf' }); rovescia([fc(d, q4, di, { cls: 'hull' })]) }
     var ff = fc(d, fr, di, {});
-    function D(pts, oo) { oo.on = ff; return d.line(pts.map(function (r) { return P(r[0], r[1], .0095) }), oo) }
+    function D(pts, oo) { oo.on = ff; return d.line(pts.map(function (r) { return P(r[0], r[1], .0085) }), oo) }
     D(cer(0, 0, .036, 24), { closed: true, cls: 'dt' });
     /* i dieci buchi, dall'1 in alto a destra fino allo 0; il cartellino al centro; il fermo */
-    for (var h = 0; h < 10; h++) { var ah = PI / 3 + h * .5; D(cer(.0262 * Math.cos(ah), .0262 * Math.sin(ah), .0066, 10), { closed: true, fill: 'kf' }) }
+    for (var h = 0; h < 10; h++) { var ah = PI / 3 + h * .5; D(cer(.0262 * Math.cos(ah), .0262 * Math.sin(ah), .0068, 10), { closed: true, fill: 'kf' }) }
     D(cer(0, 0, .0125, 16), { closed: true, fill: 'wf' });
     D([[-.007, .003], [.007, .003]], { cls: 'ink' }); D([[-.005, -.003], [.005, -.003]], { cls: 'ink' });
     var fa = -.42; D([[.03 * Math.cos(fa), .03 * Math.sin(fa)], [.046 * Math.cos(fa - .12), .046 * Math.sin(fa - .12)]], { cls: 'stick' });
     /* il filo a spirale: dalla coppa di sinistra giu' sul tavolo e dentro il fianco (una parte a se') */
     var cd = L.part(opz(o, 'phone'));
-    var P0 = [-.12, .1, zc], Cc = [-.27, -.07, -.04], P1 = [-.112, .03, .07], pts = [], nc = 150, turns = 26;
+    var zc = zh, P0 = [-.112, .1, .03], Cc = [-.27, -.06, .01], P1 = [-.106, .025, .075], pts = [], nc = 150, turns = 24;
     for (var c = 0; c <= nc; c++) { var t = c / nc, w = lerp3(lerp3(P0, Cc, t), lerp3(Cc, P1, t), t), tg = unit(sub(lerp3(Cc, P1, t), lerp3(P0, Cc, t)));
       var n1 = unit(cross(tg, Math.abs(tg[2]) < .9 ? [0, 0, 1] : [1, 0, 0])), n2 = cross(tg, n1), r = .0065 * Math.min(1, t * 12, (1 - t) * 12 + .2), ang = t * turns * 2 * PI;
       pts.push(T([w[0] + r * (Math.cos(ang) * n1[0] + Math.sin(ang) * n2[0]), Math.max(.002, w[1] + r * (Math.cos(ang) * n1[1] + Math.sin(ang) * n2[1])), w[2] + r * (Math.cos(ang) * n1[2] + Math.sin(ang) * n2[2])])) }
@@ -337,10 +358,13 @@
       var d = p.box([4.26, .5, 9.2, 5.56, .84, 10.07], ID, {});
       p.line([[4.259, .67, 9.22], [4.259, .67, 10.05]], { cls: 'dt', on: d.l });
       p.line([[4.259, .585, 9.5], [4.259, .585, 9.75]], { on: d.l });
+      /* il cassetto tirato fuori: il frontale con la maniglia e, sopra, il bordo del cassetto aperto con dentro un
+         cacciavite e due viti (tutto dentro il cassetto, niente che sporge sul piano) */
       var dr = p.box([4.12, .68, 9.26, 4.26, .83, 10.01], ID, {});
       p.line([[4.119, .755, 9.5], [4.119, .755, 9.78]], { on: dr.l });
-      p.line([[4.15, .83, 9.35], [4.06, .95, 9.47]], { cls: 'stick' });
-      p.line([[4.18, .83, 9.7], [4.1, .9, 9.92]], { cls: 'dt' });
+      p.line([[4.135, .831, 9.28], [4.26, .831, 9.28], [4.26, .831, 9.99], [4.135, .831, 9.99]], { closed: true, cls: 'dt', on: dr.t });
+      p.line([[4.17, .832, 9.4], [4.2, .832, 9.66]], { cls: 'dt', on: dr.t });
+      p.line([[4.2, .832, 9.66], [4.215, .832, 9.8]], { on: dr.t });
       /* la croce sul fianco corto */
       p.line([[4.335, .23, 7.7], [5.45, .82, 7.7]], { cls: 'brace' }); p.line([[4.335, .82, 7.7], [5.45, .23, 7.7]], { cls: 'brace' });
     }
@@ -565,6 +589,7 @@
         if (i === 2) for (var v = 0; v < 4; v++) { var tv0 = .25 + v * .15; t.line([lerp3(lerp3(a0[2], a1[2], tv0), lerp3(a0[3], a1[3], tv0), .2), lerp3(lerp3(a0[2], a1[2], tv0), lerp3(a0[3], a1[3], tv0), .8)], { cls: 'dt', on: f }) } }
       var bf = fc(t, a1, ins, {});
       t.line([T([.04, .64, .321]), T([.1, .64, .321]), T([.1, .69, .321]), T([.04, .69, .321])], { closed: true, cls: 'dt', on: bf });
+      t.line([T([-.11, .62, .321]), T([-.01, .62, .321]), T([-.01, .66, .321]), T([-.11, .66, .321])], { closed: true, cls: 'dt', on: bf });
       /* il vetro bombato, la cornice, il riflesso, il play */
       var zs = -.2415; function Fz(x, y) { return T([x, y, zs]) }
       t.line(rr(-.06, .73, .215, .195, .065, 4).map(function (q) { return Fz(q[0], q[1]) }), { closed: true, cls: 'dt', on: b.f });
@@ -618,10 +643,18 @@
         for (var i = 0; i <= 6; i++) { var a = PI - i / 6 * PI; pts.push(T([cx + .012 * Math.cos(a), .118 + .012 * Math.sin(a), .027])) }
         pts.push(T([cx + .012, .098, .027])); k.line(pts, { cls: 'ink', on: cr.f }) });
       for (var r = 0; r < 3; r++) k.line([T([-.06, .144 - r * .0025, .0274]), T([.06, .144 - r * .0025, .0274])], { cls: 'dt', on: cr.f });
-      /* i due cavi dell'antenna, dal dorso fino alla TV, sotto la cassa */
-      var cv = part({ cls: 'cons' }); zz(cv, 4.85);
-      cv.curve(T([-.06, .03, .13]), T([-.1, .01, .5]), TTV([.3, .02, .1]), { cls: 'cable' });
-      cv.curve(T([-.12, .03, .13]), T([-.25, .01, .42]), TTV([.3, .02, .18]), { cls: 'cable' });
+      /* i due cavi della TV: dal dorso giu' per terra, lungo il fianco dello scatolone che si vede, attorno all'angolo,
+         poi su dietro la TV fino alla presa sul retro. Il tratto per terra sta davanti alla cassa, la salita dietro */
+      var cv = part({ cls: 'cons' }), cu = part({ cls: 'cons' }); zz(cv, 4.5); zz(cu, 4.95);
+      [[-.06, 0], [-.12, .045]].forEach(function (q) { var e = q[1], y = .006;
+        var a = T([q[0], .03, .13]), f0 = T([q[0] - .02, y, .2]);
+        var c1 = TTV([-.47 - e, y, -.36 - e]), c2 = TTV([-.47 - e, y, .37 + e]);
+        var pts = [a].concat(qb(a, T([q[0] - .03, .01, .16]), f0, 4).slice(1), qb(f0, lerp3(f0, c1, .5), c1, 8).slice(1),
+          qb(c1, lerp3(c1, c2, .5), c2, 6).slice(1));
+        cv.line(pts, { cls: 'cable' });
+        /* dietro l'angolo sale dritto lungo il retro della cassa; sopra la cassa spunta accanto al tubo e ci entra */
+        var r0 = TTV([-.37 + e, y, .33 + e]), r1 = TTV([-.37 + e, .52, .33 + e]), s2 = TTV([-.07 + e, .64, .33]);
+        cu.line(qb(c2, TTV([-.48 - e, y, .4 + e]), r0, 6).concat(qb(r0, TTV([-.37 + e, .25, .33 + e]), r1, 4).slice(1), qb(r1, TTV([-.37 + e, .65, .36]), s2, 8).slice(1)), { cls: 'cable' }) });
       return T;
     }
     /* il joystick: la base, il pulsante, la leva con la pallina arancione piena; il filo lungo fino alla presa della
@@ -773,10 +806,11 @@
       scritta(p, 'COFFEE', function (gx, gy) { return F(x0 + gx * u, 1.63 + gy * u) }, { cls: 'px', on: f });
       /* la vetrina con la tazza disegnata e il vapore */
       rq(-.36, .78, .14, 1.48, {});
-      p.line(su(F, rr(-.11, 1.0, .1, .08, .03, 3).filter(function (q) { return q[1] > .97 }).concat([[-.21, 1.0], [-.01, 1.0]])), { cls: 'dt', on: f });
-      p.line([F(-.2, 1.0), F(-.19, .9), F(-.03, .9), F(-.02, 1.0)], { on: f });
-      p.line(su(F, [[-.02, .98], [.03, .975], [.035, .94], [-.025, .925]]), { on: f });
-      p.line([F(-.24, .88), F(.02, .88)], { on: f });
+      /* la tazza: la bocca ovale, il corpo che si stringe, il manico ad anello, il piattino */
+      p.line(su(F, cer(-.11, 1.0, .09, 20, .014)), { closed: true, cls: 'dt', on: f });
+      p.line(su(F, [[-.2, 1.0]].concat(bz([-.195, .93], [-.18, .9], [-.13, .9], 6), bz([-.09, .9], [-.04, .9], [-.025, .93], 6), [[-.02, 1.0]])), { on: f });
+      p.line(su(F, bz([-.024, .985], [.04, .99], [-.03, .935], 10)), { on: f });
+      p.line(su(F, cer(-.11, .9, .13, 20, .012).filter(function (q) { return q[1] < .9 })), { on: f });
       [-.15, -.11, -.07].forEach(function (x, i) { p.line(su(F, bz([x, 1.05], [x + .04, 1.15 + i * .02], [x - .01, 1.28 + i * .03], 8)), { cls: 'dt', on: f }) });
       p.line([F(.06, 1.44), F(.12, 1.32)], { cls: 'dt', on: f }); p.line([F(.08, 1.44), F(.13, 1.36)], { cls: 'dt', on: f });
       /* la colonna dei bottoni, il display, la gettoniera con la spia */
@@ -801,29 +835,37 @@
       fusto(p, frame(T([.25, 1.92, 0]), 0), [0, 0], .035, .042, 0, .16, 10, {});
       /* il cavo nel muro */
       p.curve(T([.3, .1, .35]), T([.5, .02, .4]), T([.6, .25, .42]), { cls: 'cable' });
+      p.line([T([.55, .2, .415]), T([.65, .2, .415]), T([.65, .32, .415]), T([.55, .32, .415])], { closed: true, cls: 'dt' });
     }
 
     /* ---------- il giradischi, in mezzo alla stanza: un mobile basso per i dischi sulle gambe a matita, il giradischi
        acceso sopra, la copertina del disco che suona appoggiata accanto (il fulmine dei Dead Pixels) ---------- */
     function giradischi() {
-      var T = frame([-.62, 0, 6.75], -.37);
+      var T = frame([-1.12, 0, 6.75], -.37);
       var p = part({ cls: 'vinyl' }); zz(p, 6.33);
       var b = p.box([-.62, .16, -.21, .62, .56, .21], T, { hatch: { l: 3 } });
       p.box([-.64, .56, -.23, .64, .59, .23], T, {});
       [[-.56, -.16], [.56, -.16], [-.56, .16], [.56, .16]].forEach(function (q) { gamba(p, T([q[0], .16, q[1]]), T([q[0] * 1.05, 0, q[1] * 1.2]), .018, .01) });
       var zf = -.212; function F(x, y) { return T([x, y, zf]) }
       function rq(x0, y0, x1, y1, o) { o.on = b.f; o.closed = true; return p.line([F(x0, y0), F(x1, y0), F(x1, y1), F(x0, y1)], o) }
-      /* a sinistra il vano dei dischi: le coste, fitte, le ultime inclinate */
+      /* a sinistra il vano dei dischi: le coste delle copertine, ognuna un poco diversa (altezza, spessore, qualcuna
+         piu' scura, qualcuna un filo storta); in fondo due dischi appoggiati di sbieco, l'ultimo davanti all'altro */
       rq(-.58, .19, -.02, .53, {});
-      var x = -.565, k = 0;
-      while (x < -.15) { var tp = .44 + ((k * 7) % 5) * .018; p.line([F(x, .195), F(x, tp)], { cls: k % 4 ? 'dt' : '', on: b.f }); x += .012 + ((k * 3) % 4) * .004; k++ }
-      [[-.14, .1], [-.11, .2], [-.075, .3]].forEach(function (q) { p.line([F(q[0], .195), F(q[0] + .3 * Math.sin(q[1]), .195 + .3 * Math.cos(q[1]))], { on: b.f }) });
+      var x = -.566, k = 0, yb = .195;
+      while (x < -.2) { var ht = .25 + ((k * 7) % 5) * .012 + (k % 9 === 4 ? -.035 : 0), ln = ((k * 11) % 7 - 3) * .002;
+        /* ogni tanto una copertina spessa (doppio filo, piena), le altre un filo solo */
+        if (k % 5 === 2) { p.line([F(x, yb), F(x + ln, yb + ht), F(x + ln + .009, yb + ht), F(x + .009, yb)], { closed: true, fill: 'kf', on: b.f }); x += .012 }
+        else p.line([F(x, yb), F(x + ln, yb + ht)], { cls: k % 3 ? 'dt' : '', on: b.f });
+        x += .008 + ((k * 3) % 4) * .003; k++ }
+      [[-.19, .2], [-.15, .36]].forEach(function (q) { var a = q[1], h = .3, t = .012, ca = Math.cos(a), sa = Math.sin(a);
+        p.line([F(q[0], yb), F(q[0] + h * sa, yb + h * ca), F(q[0] + h * sa + t * ca, yb + h * ca - t * sa), F(q[0] + t * ca, yb)], { closed: true, fill: 'kf', on: b.f });
+        p.line([F(q[0] + .004 * ca + .08 * sa, yb + .08 * ca), F(q[0] + .004 * ca + .2 * sa, yb + .2 * ca)], { cls: 'dt', on: b.f }) });
       /* a destra le due ante scorrevoli con il buco per il dito */
       rq(.02, .19, .58, .53, {});
       p.line([F(.3, .195), F(.3, .525)], { on: b.f });
       [.24, .36].forEach(function (xc) { p.line(su(F, cer(xc, .36, .016, 10)), { closed: true, fill: 'kf', on: b.f }) });
       /* il giradischi: la base, il piatto, il disco con i solchi, il braccio, la spia */
-      var g = part({ cls: 'vinyl' }); zz(g, 6.32);
+      var g = part({ cls: 'vinyl', hot: 'music', label: 'Record player. Pick a record' }); zz(g, 6.32);
       var pl = g.box([-.56, .59, -.19, -.04, .66, .19], T, { hatch: { l: 2 } });
       g.line([T([-.52, .62, -.1915]), T([-.44, .62, -.1915])], { cls: 'dt', on: pl.f });
       g.line([T([-.13, .615, -.1915]), T([-.1, .615, -.1915]), T([-.1, .63, -.1915]), T([-.13, .63, -.1915])], { closed: true, cls: 'led o', on: pl.f });
@@ -846,8 +888,10 @@
       var la = .26, cl = Math.cos(la), sl = Math.sin(la), sz = .31;
       var C = function (a, bb, d) { return T([.06 + a, .59 + bb * cl - (d || 0) * sl, .03 + bb * sl + (d || 0) * cl]) };
       var ck = part({ cls: 'vinyl' }); zz(ck, 6.315);
-      var pk = ck.face([C(.05, .27 + .01, .004), C(.33, .27 + .01, .004), C(.33, .27 + .17, .004), C(.05, .27 + .17, .004)], T.dir([0, sl, -cl]), {});
-      ck.line([C(.19 - .13, .3, .003), C(.19 + .13, .3, .003)], { cls: 'dt', on: pk });
+      /* il disco che spunta dalla copertina: solo la calotta sopra il bordo, con un solco */
+      var dk = [], dg = []; for (var i = 0; i <= 16; i++) { var an = .5 + i / 16 * (PI - 1); dk.push(C(.185 + .14 * Math.cos(an), .2 + .14 * Math.sin(an), .004)); if (i > 1 && i < 15) dg.push(C(.185 + .115 * Math.cos(an), .2 + .115 * Math.sin(an), .003)) }
+      var pk = ck.face(dk, T.dir([0, sl, -cl]), {});
+      ck.line(dg, { cls: 'dt', on: pk });
       var cv = c.face([C(.03, 0), C(.03 + sz, 0), C(.03 + sz, sz), C(.03, sz)], T.dir([0, sl, -cl]), { cls: 'pap full' });
       c.line([C(.045, .015, -.002), C(.325, .015, -.002), C(.325, .295, -.002), C(.045, .295, -.002)], { closed: true, cls: 'dt', on: cv });
       c.line(su(function (a, bb) { return C(.185 + a, .15 + bb, -.002) }, [[.03, .12], [-.04, .0], [.01, -.005], [-.035, -.12], [.05, .02], [0, .025], [.04, .12]]), { closed: true, fill: 'wf', on: cv });
@@ -858,60 +902,117 @@
       w.curve(T([-.45, .3, .21]), T([-.55, .0, .45]), [-1.9, .01, 7.4], { cls: 'cable' });
     }
 
-    /* ---------- il disegno grande sulla parete di destra, dietro il cabinato: il progetto del cabinato stesso, in blu
-       da cianografia (la griglia, la vista di fianco con le quote, la vista davanti, il dettaglio della leva, il cartiglio) */
+    /* ---------- la tavola grande sulla parete di destra, dietro il cabinato: un progetto di marchio e app per un
+       cliente qualunque (LOOP). La costruzione del segno sulla griglia, il carattere, i colori, i pezzi del sistema
+       (bottoni, interruttori, icone), due schermate del telefono, il cartiglio. Carta scura, linee crema ---------- */
     function progetto() {
       var p = part({ cls: 'bprint' }); zz(p, 6.0);
       var xw = L.X - .02, zc = 5.65, Y0 = .88;
       var M = function (a, b) { return [xw, Y0 + b, zc - a] }, N = function (a, b) { return [xw - .002, Y0 + b, zc - a] };
       var f = p.face(su(M, [[-1.12, 0], [1.12, 0], [1.12, 1.74], [-1.12, 1.74]]), [-1, 0, 0], { cls: 'bpp' });
       var U = [0, 0, -1], V = [0, 1, 0];
-      function ln(pts, cls, cl) { return p.line(su(N, pts), { cls: cls || '', closed: !!cl, on: f }) }
-      function tx(a, b, t, sz, an) { return p.text(N(a, b), t, sz, { u: U, v: V, cls: 'bpt', anchor: an || 'start', on: f }) }
-      /* la cornice e la griglia */
-      ln([[-1.06, .06], [1.06, .06], [1.06, 1.68], [-1.06, 1.68]], '', 1);
-      var g = []; for (var a = -1.0; a < 1.06; a += .1) g.push(N(a, .06), N(a, 1.68), null);
-      for (var b = .16; b < 1.68; b += .1) g.push(N(-1.06, b), N(1.06, b), null);
+      function ln(pts, cls, cl, fill) { return p.line(su(N, pts), { cls: cls || '', closed: !!cl, fill: fill || '', on: f }) }
+      function tx(a, b, t, sz, an, cls) { return p.text(N(a, b), t, sz, { u: U, v: V, cls: 'bpt' + (cls ? ' ' + cls : ''), anchor: an || 'start', on: f }) }
+      function rect(a0, b0, a1, b1, cls, fill) { return ln([[a0, b0], [a1, b0], [a1, b1], [a0, b1]], cls, 1, fill) }
+      /* la cornice, il titolo, la griglia leggera */
+      rect(-1.06, .06, 1.06, 1.68);
+      var g = []; for (var a = -1.0; a < 1.06; a += .1) g.push(N(a, .06), N(a, 1.52), null);
+      for (var b = .16; b < 1.52; b += .1) g.push(N(-1.06, b), N(1.06, b), null);
       p.line(g, { cls: 'bpg', on: f });
-      /* la vista di fianco: il profilo vero del cabinato, in scala */
-      var pr = [[.04, 0], [.8, 0], [.8, 1.25], [.62, 1.86], [-.02, 1.86], [-.02, 1.56], [.3, 1.5], [.12, 1.02], [-.16, .94], [-.16, .84], [.04, .8]];
-      var k = .66, a0 = -.86, b0 = .24;
-      function sv(q) { return [a0 + (q[0] + .16) * k, b0 + q[1] * k] }
-      ln(pr.map(sv), '', 1);
-      ln([sv([.775, .18]), sv([.07, .56])], 'dt'); ln([sv([.775, .38]), sv([.07, .76])], 'dt');
-      /* le quote: l'altezza a sinistra, la profondita' sotto */
-      var xa = a0 - .08, t0 = b0, t1 = b0 + 1.86 * k;
-      ln([[xa, t0], [xa, t1]]); ln([[xa - .025, t0], [xa + .025, t0]]); ln([[xa - .025, t1], [xa + .025, t1]]);
-      tx(xa - .015, (t0 + t1) / 2, '1860', .045, 'end');
-      var yb = b0 - .08, s0 = sv([-.16, 0])[0], s1 = sv([.8, 0])[0];
-      ln([[s0, yb], [s1, yb]]); ln([[s0, yb - .025], [s0, yb + .025]]); ln([[s1, yb - .025], [s1, yb + .025]]);
-      tx((s0 + s1) / 2, yb - .06, '960', .045, 'middle');
-      tx(a0, 1.58, 'SIDE', .05);
-      /* la vista davanti: il mobile, l'insegna, lo schermo, la pulsantiera, lo sportello */
-      var fa = .07, fw = .68 * k / 2;
-      function fv(x, y) { return [fa + x * k, b0 + y * k] }
-      ln([fv(-.34, 0), fv(.34, 0), fv(.34, 1.86), fv(-.34, 1.86)], '', 1);
-      ln([fv(-.31, 1.6), fv(.31, 1.6), fv(.31, 1.82), fv(-.31, 1.82)], 'dt', 1);
-      ln([fv(-.25, 1.08), fv(.25, 1.08), fv(.25, 1.46), fv(-.25, 1.46)], '', 1);
-      ln([fv(-.34, .92), fv(.34, .92)]); ln([fv(-.34, .82), fv(.34, .82)], 'dt');
-      ln([fv(-.12, .2), fv(.12, .2), fv(.12, .48), fv(-.12, .48)], 'dt', 1);
-      p.line(su(N, cer(fv(-.17, .95)[0], fv(0, .95)[1], .02, 10)), { closed: true, on: f });
-      ln([fv(0, -.03), fv(0, 1.92)], 'cn');
-      tx(fa - fw, 1.58, 'FRONT', .05);
-      /* il dettaglio A: la leva, grande, in un cerchio */
-      var dc = [.62, 1.12], dr = .3;
-      p.line(su(N, cer(dc[0], dc[1], dr, 36)), { closed: true, on: f });
-      ln([[dc[0] - .16, dc[1] - .2], [dc[0] + .16, dc[1] - .2], [dc[0] + .16, dc[1] - .14], [dc[0] - .16, dc[1] - .14]], '', 1);
-      ln([[dc[0], dc[1] - .14], [dc[0] + .03, dc[1] + .1]]);
-      p.line(su(N, cer(dc[0] + .035, dc[1] + .15, .06, 20)), { closed: true, on: f });
-      ln([[dc[0] - .25, dc[1] + .05], [dc[0] - .05, dc[1] + .05]], 'dt');
-      tx(dc[0] - .25, dc[1] + .07, 'R 30', .035);
-      tx(dc[0] - dr, dc[1] + dr + .04, 'DETAIL A  2:1', .045);
-      /* il cartiglio */
-      ln([[.3, .1], [1.02, .1], [1.02, .5], [.3, .5]], '', 1); ln([[.3, .36], [1.02, .36]]); ln([[.3, .23], [1.02, .23]]); ln([[.7, .1], [.7, .23]]);
-      tx(.33, .4, 'RUSH HOUR CABINET', .06);
-      tx(.33, .275, 'MOTHER MACHINE  LG', .04);
-      tx(.33, .145, 'SCALE 1:10', .035); tx(.73, .145, 'DWG 04  REV B', .035);
+      ln([[-1.06, 1.53], [1.06, 1.53]]);
+      tx(-1.01, 1.575, 'LOOP', .075, 'start', 'big');
+      tx(-.7, 1.585, 'BRAND + APP  ·  BOARD 02', .036);
+      tx(1.01, 1.585, 'REV A', .036, 'end');
+      /* 01 il segno: la griglia, i cerchi di costruzione, le diagonali; il segno pieno (un anello e un punto) */
+      var mc = [-.73, 1.2], ms = .26;
+      tx(-1.01, 1.46, '01  MARK', .03);
+      rect(mc[0] - ms, mc[1] - ms, mc[0] + ms, mc[1] + ms, 'dt');
+      for (var i = 1; i < 8; i++) { var t = -ms + i * ms / 4; ln([[mc[0] + t, mc[1] - ms], [mc[0] + t, mc[1] + ms]], 'bpg'); ln([[mc[0] - ms, mc[1] + t], [mc[0] + ms, mc[1] + t]], 'bpg') }
+      ln([[mc[0] - ms, mc[1] - ms], [mc[0] + ms, mc[1] + ms]], 'cn'); ln([[mc[0] - ms, mc[1] + ms], [mc[0] + ms, mc[1] - ms]], 'cn');
+      ln(cer(mc[0], mc[1], .195, 36), 'dt', 1); ln(cer(mc[0], mc[1], .065, 20), 'dt', 1);
+      ln(cer(mc[0] - .015, mc[1] - .015, .15, 32), '', 1, 'wf'); ln(cer(mc[0] - .015, mc[1] - .015, .085, 24), '', 1, 'kf');
+      ln(cer(mc[0] + .13, mc[1] + .13, .065, 20), 'dt', 1); ln(cer(mc[0] + .13, mc[1] + .13, .045, 18), '', 1, 'wf');
+      ln([[mc[0] - .015, mc[1] - .015], [mc[0] + .13, mc[1] + .13]], 'dt');
+      ln([[mc[0] - ms - .03, mc[1] - .165], [mc[0] - ms - .03, mc[1] + .135]]); tx(mc[0] - ms - .04, mc[1] - .03, '2x', .026, 'end');
+      ln([[mc[0] + .085, mc[1] + ms + .025], [mc[0] + .175, mc[1] + ms + .025]]); tx(mc[0] + .13, mc[1] + ms + .035, 'x', .026, 'middle');
+      /* 02 il carattere: Aa grande, il nome, l'alfabeto */
+      tx(-1.01, .86, '02  TYPE', .03);
+      ln([[-1.01, .83], [-.43, .83]], 'dt');
+      tx(-1.01, .5, 'Aa', .28, 'start', 'big');
+      tx(-.6, .72, 'Loop Sans', .04, 'start', 'big');
+      tx(-.6, .66, 'Bold  ·  Regular', .026);
+      tx(-.6, .56, '48 / 32 / 16', .026);
+      tx(-1.01, .38, 'ABCDEFGHIJKLM', .036, 'start', 'big');
+      tx(-1.01, .32, 'NOPQRSTUVWXYZ', .036, 'start', 'big');
+      tx(-1.01, .25, 'abcdefghijklm', .036, 'start', 'big');
+      tx(-1.01, .18, '0123456789  &?!', .036, 'start', 'big');
+      ln([[-1.01, .12], [-.43, .12]], 'dt');
+      /* 03 i colori: cinque campioni, il pieno, i retini, il vuoto */
+      tx(-.33, 1.46, '03  COLOUR', .03);
+      var sw = ['#F2EADF', '#2F5D50', '#E9B44C', '#1C1C1C', '#FFFFFF'];
+      sw.forEach(function (h, n) { var a0 = -.33 + n * .128, a1 = a0 + .11, b0 = 1.23, b1 = 1.41;
+        rect(a0, b0, a1, b1, '', n === 0 || n === 4 ? 'wf' : '');
+        if (n === 1) for (var k = 1; k < 9; k++) ln([[a0 + k * .0122, b0], [a0, b0 + k * .02]], 'dt');
+        if (n === 1) for (var k2 = 1; k2 < 9; k2++) ln([[a1, b0 + k2 * .02], [a0 + k2 * .0122, b1]], 'dt');
+        if (n === 2) for (var k3 = 1; k3 < 6; k3++) ln([[a0, b0 + k3 * .03], [a1, b0 + k3 * .03]], 'dt');
+        tx(a0, 1.195, h, .017) });
+      /* 04 i pezzi del sistema: due bottoni, gli interruttori, la casella, le icone */
+      tx(-.33, 1.1, '04  COMPONENTS', .03);
+      ln(rr(-.2, 1.0, .13, .035, .035, 4), '', 1, 'wf'); tx(-.2, .988, 'Book now', .03, 'middle', 'dk');
+      ln(rr(.11, 1.0, .11, .035, .035, 4), '', 1); tx(.11, .988, 'Later', .03, 'middle');
+      ln(rr(-.28, .88, .045, .022, .022, 4), '', 1, 'wf'); ln(cer(-.258, .88, .016, 12), '', 1, 'kf');
+      ln(rr(-.16, .88, .045, .022, .022, 4), '', 1); ln(cer(-.182, .88, .016, 12), '', 1);
+      rect(-.07, .858, -.026, .902); ln([[-.062, .88], [-.05, .866], [-.03, .898]]);
+      rect(.01, .858, .054, .902);
+      ln(cer(.11, .88, .022, 14), '', 1); ln(cer(.11, .88, .011, 10), '', 1, 'wf');
+      ln(cer(.2, .88, .022, 14), '', 1);
+      /* le icone, a filo: casa, lente, cuore, persona, campanella */
+      var ic = function (a, b) { return function (x, y) { return [a + x, b + y] } }, i0;
+      i0 = ic(-.3, .74); ln([i0(-.03, -.025), i0(-.03, .01), i0(0, .035), i0(.03, .01), i0(.03, -.025)], '', 1); ln([i0(-.008, -.025), i0(-.008, -.002), i0(.008, -.002), i0(.008, -.025)]);
+      i0 = ic(-.18, .74); ln(cer(-.18, .748, .022, 14), '', 1); ln([i0(.015, -.01), i0(.034, -.03)]);
+      i0 = ic(-.06, .74); ln([i0(0, -.03), i0(-.03, 0), i0(-.03, .015), i0(-.018, .028), i0(0, .016), i0(.018, .028), i0(.03, .015), i0(.03, 0)], '', 1);
+      ln(cer(.06, .755, .012, 10), '', 1); ln(bz([.03, .715], [.06, .755], [.09, .715], 8));
+      i0 = ic(.18, .74); ln([i0(-.025, -.018), i0(-.02, .01), i0(-.01, .026), i0(.01, .026), i0(.02, .01), i0(.025, -.018)], '', 1); ln([i0(-.006, -.026), i0(.006, -.026)]);
+      ln([[-.33, .68], [.3, .68]], 'dt');
+      /* la scala dello spazio: quadrati che crescono */
+      tx(-.33, .6, 'SPACE', .026);
+      [.02, .035, .05, .07, .095, .125].forEach(function (s, n) { var a0 = -.33 + [0, .04, .095, .165, .255, .37][n]; rect(a0, .43, a0 + s, .43 + s, 'dt'); tx(a0, .4, String([4, 8, 12, 16, 24, 32][n]), .018) });
+      ln([[-.33, .34], [.3, .34]], 'dt');
+      tx(-.33, .26, 'GRID 4 · RADIUS 12 · LINE 1.5', .022);
+      tx(-.33, .2, 'TONE: SHORT, WARM, SURE', .022);
+      /* 05 l'app: due schermate del telefono */
+      tx(.38, 1.46, '05  APP', .03);
+      function tel(a0, b0, fn) { var w = .25, h = .5;
+        ln(rr(a0 + w / 2, b0 + h / 2, w / 2, h / 2, .035, 4), '', 1, 'kf');
+        ln(rr(a0 + w / 2, b0 + h / 2, w / 2 - .012, h / 2 - .012, .026, 4), 'dt', 1);
+        ln(rr(a0 + w / 2, b0 + h - .03, .03, .008, .008, 3), '', 1, 'wf');
+        fn(function (x, y) { return [a0 + .025 + x, b0 + .03 + y] }, w - .05, h - .06) }
+      /* la prima: la home con l'anello, la carta, la lista, il bottone, la barra in basso */
+      tel(.38, .9, function (S, w, h) {
+        tx(S(0, .385)[0], S(0, .385)[1], 'Loop', .024, 'start', 'big');
+        ln(cer(S(w - .015, .392)[0], S(w - .015, .392)[1], .01, 10), '', 1);
+        ln([S(0, .2), S(w, .2), S(w, .36), S(0, .36)], 'dt', 1);
+        ln(cer(S(.05, .28)[0], S(.05, .28)[1], .026, 16), '', 1); ln(cer(S(.05, .28)[0], S(.05, .28)[1], .013, 10), '', 1, 'kf');
+        ln([S(.095, .3), S(w - .02, .3)]); ln([S(.095, .27), S(w - .05, .27)], 'dt');
+        [.15, .115, .08].forEach(function (y) { ln(cer(S(.012, y)[0], S(.012, y)[1], .008, 8), '', 1); ln([S(.03, y), S(w - .03, y)], 'dt') });
+        ln(rr(S(w / 2, .035)[0], S(w / 2, .035)[1], w / 2, .016, .016, 3), '', 1, 'wf');
+        ln([S(0, -.005), S(w, -.005)], 'dt') });
+      /* la seconda: prenotare, il mese, gli orari, conferma */
+      tel(.72, .9, function (S, w, h) {
+        tx(S(0, .385)[0], S(0, .385)[1], 'Book', .024, 'start', 'big');
+        for (var r = 0; r < 4; r++) for (var c = 0; c < 6; c++) { var q = S(.012 + c * .032, .33 - r * .03); ln(cer(q[0], q[1], .006, 6), r === 2 && c === 3 ? '' : 'dt', 1, r === 2 && c === 3 ? 'wf' : '') }
+        [[0, .17], [.068, .17], [.136, .17], [0, .135], [.068, .135]].forEach(function (q, n) { var c0 = S(q[0] + .031, q[1]); ln(rr(c0[0], c0[1], .03, .012, .012, 3), n === 2 ? '' : 'dt', 1, n === 2 ? 'wf' : '') });
+        ln(rr(S(w / 2, .035)[0], S(w / 2, .035)[1], w / 2, .016, .016, 3), '', 1, 'wf');
+        ln([S(0, -.005), S(w, -.005)], 'dt') });
+      /* il percorso tra le due, e sotto il cartiglio */
+      ln(bz([.64, 1.32], [.68, 1.36], [.72, 1.32], 8)); ln([[.705, 1.335], [.72, 1.32], [.7, 1.316]]);
+      ln([[.38, .82], [1.02, .82]], 'dt');
+      tx(.38, .74, 'OPEN  >  PICK  >  PAID', .03);
+      tx(.38, .67, '3 TAPS · 40 SECONDS', .024);
+      rect(.3, .1, 1.02, .5); ln([[.3, .36], [1.02, .36]]); ln([[.3, .23], [1.02, .23]]); ln([[.7, .1], [.7, .23]]);
+      tx(.33, .4, 'LOOP · BRAND + APP', .055);
+      tx(.33, .275, 'IDENTITY, SYSTEM, IOS + ANDROID', .03);
+      tx(.33, .145, 'SHEET 02 / 06', .032); tx(.73, .145, 'REV A  ·  WIP', .032);
       /* le puntine */
       [[-1.08, 1.7], [1.08, 1.7], [-1.08, .04], [1.08, .04]].forEach(function (q) { p.circle(N(q[0], q[1]), .018, 'x', { fill: 'wf', on: f, k: 10 }) });
     }
@@ -950,9 +1051,9 @@
     /* ---------- i manifesti ---------- */
     /* il calendario: la macchina del mese, una robot pin-up anni '50. Attaccato con lo scotch sul fianco davanti del
        primo armadio (R01), di fronte a chi guarda: lo taglia il bordo dello schermo, si scopre muovendosi a sinistra.
-       Il mese e' vero, oggi e' cerchiato; premuto, il foglio gira al mese dopo (dopo dodici torna a oggi) */
+       Il mese e' vero, oggi e' cerchiato. Non si preme: e' solo un manifesto */
     function calendario() {
-      var p = part({ cls: 'poster cal', hot: 'cal', label: 'Machine of the month. Turn the page' }); zz(p, 4.38);
+      var p = part({ cls: 'poster cal' }); zz(p, 4.38);
       var ks = .9, zc = 4.39, X0 = -5.495, Y0 = .92;
       var M = function (a, b) { return [X0 + a * ks, Y0 + b * ks, zc] }, N = function (a, b) { return [X0 + a * ks, Y0 + b * ks, zc - .002] };
       /* il foglio: l'angolo in basso strappato, quello in alto piegato */
@@ -1024,29 +1125,15 @@
       N = N0;
       /* il mese vero e la griglia dei giorni (sei righe), oggi cerchiato */
       var MESI = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
-      var oggi = new Date(), off = 0;
-      function mese(o) { var d = new Date(oggi.getFullYear(), oggi.getMonth() + o, 1);
-        return { m: d.getMonth(), p: (d.getDay() + 6) % 7, n: new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate() } }
-      var m0 = mese(0), cw = .0857, rh = .03;
-      var tit = p.text(N(.49, .33), MESI[m0.m], .06 * ks, { cls: 'ptx', anchor: 'middle', on: f });
+      var oggi = new Date(), d1 = new Date(oggi.getFullYear(), oggi.getMonth(), 1);
+      var m0 = { m: d1.getMonth(), p: (d1.getDay() + 6) % 7, n: new Date(d1.getFullYear(), d1.getMonth() + 1, 0).getDate() }, cw = .0857, rh = .03;
+      p.text(N(.49, .33), MESI[m0.m], .06 * ks, { cls: 'ptx', anchor: 'middle', on: f });
       for (var r = 0; r <= 6; r++) p.line([N(.1, .08 + r * rh), N(.7, .08 + r * rh)], { cls: 'dt', on: f });
       for (var cc = 0; cc <= 7; cc++) p.line([N(.1 + cc * cw, .08), N(.1 + cc * cw, .26)], { cls: 'dt', on: f });
-      var celle = [];
       for (var r2 = 0; r2 < 6; r2++) for (var c2 = 0; c2 < 7; c2++) { var g = r2 * 7 + c2 - m0.p + 1;
-        celle.push(p.text(N(.1 + c2 * cw + .01, .26 - (r2 + 1) * rh + .008), g >= 1 && g <= m0.n ? String(g) : '', .016 * ks, { cls: 'cday' + (c2 > 4 ? ' we' : ''), on: f })) }
+        if (g >= 1 && g <= m0.n) p.text(N(.1 + c2 * cw + .01, .26 - (r2 + 1) * rh + .008), String(g), .016 * ks, { cls: 'cday' + (c2 > 4 ? ' we' : ''), on: f }) }
       var gi = m0.p + oggi.getDate() - 1;
-      var cerchio = p.line(su(N, cer(.1 + (gi % 7 + .5) * cw, .26 - ((gi / 7 | 0) + .5) * rh, .05, 16, .022)), { closed: true, cls: 'ctd', on: f });
-      /* girare il foglio: il mese dopo; tornati a oggi, il cerchio torna */
-      function gira() {
-        off = (off + 1) % 12; var mm = mese(off);
-        tit.e.textContent = MESI[mm.m];
-        celle.forEach(function (t, i) { var d = i - mm.p + 1; t.e.textContent = d >= 1 && d <= mm.n ? d : '' });
-        cerchio.e.style.display = off ? 'none' : '';
-        var g2 = p.P.g; g2.classList.remove('flip'); void g2.getBBox(); g2.classList.add('flip');
-      }
-      setTimeout(function () { var g2 = p.P.g; if (!g2) return;
-        g2.addEventListener('click', gira);
-        g2.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') gira() }) }, 0);
+      p.line(su(N, cer(.1 + (gi % 7 + .5) * cw, .26 - ((gi / 7 | 0) + .5) * rh, .05, 16, .022)), { closed: true, cls: 'ctd', on: f });
     }
 
     /* il manifesto del concerto sulla parete di destra, dopo il banco: DEAD PIXELS, dal vivo in cantina */
@@ -1073,24 +1160,90 @@
     }
 
     /* ---------- le piccole cose ---------- */
-    /* l'estintore, sul muro di fondo accanto all'ultimo server */
+    /* l'estintore, sul muro di fondo accanto all'ultimo server: grigio, noioso, non si preme */
     function estintore() {
       var p = part({ cls: 'ext' });
       var xc = -4.15, zc = 11.4, T = frame([xc, 0, zc], 0);
-      fusto(p, T, [0, 0], .085, .085, .32, .82, 14, { fill: 'red', cls: 'ns', top: false });
-      fusto(p, T, [0, 0], .085, .04, .82, .89, 14, { fill: 'red', cls: 'ns', top: false });
+      fusto(p, T, [0, 0], .085, .085, .32, .82, 14, { cls: 'ns', top: false });
+      fusto(p, T, [0, 0], .085, .04, .82, .89, 14, { cls: 'ns', top: false });
       fusto(p, T, [0, 0], .022, .022, .89, .95, 8, { top: true });
       var a = Math.atan2(-zc, -xc), h = PI / 2;
       function sg(s1) { var c = Math.cos(a + s1 * h), sn = Math.sin(a + s1 * h); return [T([.085 * c, .32, .085 * sn]), T([.085 * c, .82, .085 * sn]), T([.04 * c, .89, .04 * sn])] }
       p.line(sg(-1), {}); p.line(sg(1), {});
       p.line(arco(T, [0, .32, 0], .085, 'y', a - h, a + h, 10), {});
       p.line(arco(T, [0, .89, 0], .04, 'y', a - h, a + h, 6), { cls: 'dt' });
-      var band = arco(T, [0, .62, 0], .087, 'y', a - .55, a + .55, 6).concat(arco(T, [0, .5, 0], .087, 'y', a + .55, a - .55, 6));
-      p.line(band, { closed: true, fill: 'wf', cls: 'dt' });
+      /* l'etichetta scura con due righe di istruzioni, la staffa al muro */
+      var band = arco(T, [0, .64, 0], .087, 'y', a - .55, a + .55, 6).concat(arco(T, [0, .48, 0], .087, 'y', a + .55, a - .55, 6));
+      p.line(band, { closed: true, fill: 'kf', cls: 'dt' });
+      [.6, .57, .54, .51].forEach(function (y, i) { p.line(arco(T, [0, y, 0], .088, 'y', a - .4, a + (i % 2 ? .1 : .3), 4), { cls: 'dt' }) });
+      p.line(arco(T, [0, .36, 0], .088, 'y', a - h, a + h, 10), { cls: 'dt' });
       p.line(arco(T, [0, .72, 0], .088, 'y', a - h, a + h, 10), { cls: 'dt' });
       p.line([T([0, .95, 0]), T([.02, 1.0, -.02]), T([.1, .99, -.07])], { cls: 'stick' });
       p.curve(T([.03, .92, -.02]), T([.16, .85, -.1]), T([.09, .5, -.06]), {});
-      p.circle(T([.05, .915, -.06]), .018, 'z', { fill: 'wf', k: 10 });
+      p.circle(T([.05, .915, -.06]), .018, 'z', { fill: 'kf', k: 10 });
+    }
+
+    /* ---------- per terra a sinistra, davanti agli armadi: il carrello dell'oscilloscopio. Sopra l'oscilloscopio con
+       la sinusoide sullo schermo, sotto il generatore di funzioni, le sonde che pendono. Non si preme: si guarda ---------- */
+    function oscilloscopio() {
+      var T = frame([-2.85, 0, 3.3], -.5);
+      /* il manico dietro, disegnato per primo */
+      var hm = part({ cls: 'scope' }); zz(hm, 3.42);
+      [-.2, .2].forEach(function (x) { hm.box([x - .011, .73, .168, x + .011, 1.07, .19], T, {}) });
+      hm.box([-.215, 1.05, .165, .215, 1.075, .193], T, {});
+      /* le ruote dietro, prima di tutto; quelle davanti dopo il carrello */
+      function ruota(pp, q) { pp.line([T([q[0], .07, q[1]]), T([q[0] + .02, .045, q[1]])], {});
+        pp.circle(T([q[0] + .025, .035, q[1]]), .033, 'z', { fill: 'kf', k: 12 });
+        pp.circle(T([q[0] + .025, .035, q[1]]), .008, 'z', { cls: 'dt', k: 6 }) }
+      [[-.23, .17], [.23, .17]].forEach(function (q) { ruota(hm, q) });
+      /* il carrello: quattro montanti, due ripiani col bordo, le ruote */
+      var p = part({ cls: 'scope' }); zz(p, 3.36);
+      [[-.23, -.17], [.23, -.17], [-.23, .17], [.23, .17]].forEach(function (q) { p.box([q[0] - .012, .07, q[1] - .012, q[0] + .012, .73, q[1] + .012], T, { hatch: { r: q[0] > 0 ? 0 : 0 } }) });
+      var s1 = p.box([-.25, .1, -.19, .25, .125, .19], T, { hatch: { r: 1 } });
+      var s2 = p.box([-.25, .705, -.19, .25, .73, .19], T, { hatch: { r: 1 } });
+      p.line([T([-.24, .113, -.1905]), T([.24, .113, -.1905])], { cls: 'dt', on: s1.f });
+      p.line([T([-.24, .718, -.1905]), T([.24, .718, -.1905])], { cls: 'dt', on: s2.f });
+      var w = part({ cls: 'scope' }); zz(w, 3.3);
+      [[-.23, -.17], [.23, -.17]].forEach(function (q) { ruota(w, q) });
+      /* l'oscilloscopio: la scatola, la maniglia sopra, lo schermo a sinistra con la griglia e l'onda, le manopole */
+      var o = part({ cls: 'scope' }); zz(o, 3.28);
+      var b = o.box([-.215, .73, -.16, .215, .965, .15], T, { hatch: { r: 3 } });
+      o.box([-.17, .965, -.06, -.15, .995, .05], T, {}); o.box([.15, .965, -.06, .17, .995, .05], T, {});
+      o.box([-.17, .985, -.06, .17, 1.0, -.04], T, {});
+      for (var g = 0; g < 4; g++) o.line([T([.216, .79 + g * .04, -.1]), T([.216, .79 + g * .04, .1])], { cls: 'dt', on: b.r });
+      var zf = -.1605; function F(x, y) { return T([x, y, zf]) }
+      o.line(su(F, rr(-.075, .855, .13, .095, .015, 2)), { closed: true, cls: 'dt', on: b.f });
+      o.line(su(F, rr(-.075, .855, .112, .078, .012, 2)), { closed: true, fill: 'kf', on: b.f });
+      var gx0 = -.175, gx1 = .025, gy0 = .79, gy1 = .92;
+      for (var i = 1; i < 6; i++) { var xg = gx0 + (gx1 - gx0) * i / 6; o.line([F(xg, gy0), F(xg, gy1)], { cls: 'osg' + (i === 3 ? ' c' : ''), on: b.f }) }
+      for (var j = 1; j < 4; j++) { var yg = gy0 + (gy1 - gy0) * j / 4; o.line([F(gx0, yg), F(gx1, yg)], { cls: 'osg' + (j === 2 ? ' c' : ''), on: b.f }) }
+      var wv = []; for (var k = 0; k <= 40; k++) { var t = k / 40; wv.push([gx0 + .006 + (gx1 - gx0 - .012) * t, .855 + .042 * Math.sin(t * 3 * PI + .4)]) }
+      o.line(su(F, wv), { cls: 'osw', on: b.f });
+      /* le manopole: due grandi, quattro piccole, gli attacchi delle sonde, l'interruttore */
+      [[.07, .9, .022], [.155, .9, .022]].forEach(function (q, n) { o.line(su(F, cer(q[0], q[1], q[2], 14)), { closed: true, fill: 'kf', on: b.f });
+        var a = n ? 2.4 : .7; o.line([F(q[0], q[1]), F(q[0] + q[2] * Math.cos(a), q[1] + q[2] * Math.sin(a))], { on: b.f }) });
+      [[.06, .84], [.1, .84], [.14, .84], [.18, .84]].forEach(function (q) { o.line(su(F, cer(q[0], q[1], .011, 10)), { closed: true, cls: 'dt', on: b.f }) });
+      [.08, .15].forEach(function (x) { o.line(su(F, cer(x, .78, .013, 10)), { closed: true, fill: 'wf', on: b.f }); o.line(su(F, cer(x, .78, .005, 6)), { closed: true, fill: 'kf', on: b.f }) });
+      o.text(F(.115, .803), 'CH1   CH2', .011, { u: T.dir([1, 0, 0]), v: [0, 1, 0], cls: 'lab', anchor: 'middle', on: b.f });
+      o.line([F(-.19, .755), F(-.16, .755), F(-.16, .772), F(-.19, .772)], { closed: true, cls: 'dt', on: b.f });
+      /* sotto: il generatore di funzioni, col display e le sue manopole */
+      var q = part({ cls: 'scope' }); zz(q, 3.32);
+      var gb = q.box([-.2, .125, -.15, .16, .26, .13], T, { hatch: { r: 2 } });
+      var zg = -.1505; function G(x, y) { return T([x, y, zg]) }
+      q.line([G(-.18, .19), G(-.04, .19), G(-.04, .24), G(-.18, .24)], { closed: true, fill: 'kf', on: gb.f });
+      q.text(G(-.11, .205), '1.000 kHz', .022, { u: T.dir([1, 0, 0]), v: [0, 1, 0], cls: 'lab', anchor: 'middle', on: gb.f });
+      [-.15, -.11, -.07].forEach(function (x) { q.line([G(x, .145), G(x + .025, .145), G(x + .025, .165), G(x, .165)], { closed: true, cls: 'dt', on: gb.f }) });
+      [.0, .06, .12].forEach(function (x, n) { q.line(su(G, cer(x, .195, .018, 12)), { closed: true, fill: 'kf', on: gb.f }); q.line([G(x, .195), G(x + .016 * Math.cos(1 + n), .195 + .016 * Math.sin(1 + n))], { on: gb.f }) });
+      /* le sonde: dagli attacchi giu' davanti al ripiano, un'ansa, e la punta appoggiata sul generatore */
+      var pr = part({ cls: 'scope' }); zz(pr, 3.2);
+      pr.line(qb(F(.08, .78), T([.1, .5, -.3]), T([-.02, .27, -.2]), 12).concat(qb(T([-.02, .27, -.2]), T([-.08, .265, -.17]), T([-.12, .262, -.08]), 6).slice(1)), { cls: 'cable' });
+      pr.line([T([-.12, .262, -.08]), T([-.17, .262, -.03])], { cls: 'stick' });
+      pr.line(qb(F(.15, .78), T([.2, .36, -.3]), T([.235, .6, -.185]), 12), { cls: 'cable' });
+      pr.line([T([.235, .6, -.185]), T([.25, .66, -.19])], { cls: 'stick' });
+      /* la corrente: dal retro giu' per terra fino al primo armadio */
+      var cw = part({ cls: 'scope' }); cw.P.zf = 1e3;
+      cw.line(qb(T([.12, .06, .19]), T([.1, .006, .5]), [-4.0, .006, 4.2], 14).concat(qb([-4.0, .006, 4.2], [-4.4, .006, 4.35], [-4.52, .02, 4.5], 6).slice(1)), { cls: 'cable' });
+      var pg = part({ cls: 'scope' }); zz(pg, 4.5); pg.box([-4.58, .02, 4.46, -4.5, .07, 4.54], ID, {});
     }
 
     /* il biglietto sul secondo armadio: DON'T TOUCH - E. */
@@ -1116,6 +1269,6 @@
     /* l'altro per terra, sul tappeto vicino al divano: il filo lungo, a S */
     var pk = TC([.14, .025, -.131]);
     joystick([.42, 0, 3.08], -2.3, 3.2, [-.02, .035], [[[.2, .004, 2.85], [-.25, .004, 2.95]], [[-.7, .004, 3.05], pk]]);
-    calendario(); concerto(); estintore(); biglietto();
+    calendario(); concerto(); estintore(); biglietto(); oscilloscopio();
   };
 })();
