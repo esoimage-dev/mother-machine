@@ -57,17 +57,19 @@
 .lgW .ln.tube{animation:lgfluo 1.3s steps(1) 2.6s both}
 .lgW .lamp:nth-of-type(odd) .ln.tube{animation-delay:3s}
 @keyframes lgfluo{0%{stroke-opacity:.12}12%{stroke-opacity:.9}18%{stroke-opacity:.12}34%{stroke-opacity:.9}40%{stroke-opacity:.3}55%,100%{stroke-opacity:.9}}
-.lgW .pool{animation:lgpool 1s ease-out 3.6s both}
+.lgW .pool{animation:lgpool 1s ease-out 2.2s both}
 @keyframes lgpool{from{opacity:0}}
-.lgW .nspill{animation:lgpool 1.2s ease-out 2.4s both}
+.lgW .nspill{animation:lgpool 1.2s ease-out 1.6s both}
 
 /* l'arrivo: le linee si disegnano dal fondo verso chi guarda, poi le facce si riempiono */
-.lgst .lgW .dw{stroke-dasharray:1;stroke-dashoffset:0;transition:stroke-dashoffset 1.5s cubic-bezier(.6,0,.2,1) calc(var(--i) * 32ms),fill-opacity .7s calc(var(--i) * 32ms + 1s)}
+.lgst .lgW .dw{stroke-dasharray:1;stroke-dashoffset:0;transition:stroke-dashoffset 1.3s cubic-bezier(.6,0,.2,1) calc(var(--i) * 11ms),fill-opacity .6s calc(var(--i) * 11ms + .9s)}
+/* i dettagli (spie, testi, immagini, puntini) arrivano con il loro oggetto, non prima */
+.lgst.pre :where(.lgW .lgP :not(g):not(.dw)){opacity:0}
+.lgst.drawn:not(.done) :where(.lgW .lgP :not(g):not(.dw)){transition:opacity .6s calc(var(--i) * 11ms + .8s)}
 .lgst.pre .lgW .dw{stroke-dashoffset:1;fill-opacity:0;transition:none}
 /* finito l'arrivo, via le transizioni: muovendo la camera il browser non deve ricontrollarle su ogni linea */
 .lgst.done .lgW .dw{transition:none;stroke-dasharray:none}
 .lgst.pre .lgW .tx{opacity:0}
-.lgW .tx{transition:opacity .8s 2.2s}
 .lgst.lg-off .lgW *{animation-play-state:paused!important}
 
 /* sotto la stanza: il titolo e la frase */

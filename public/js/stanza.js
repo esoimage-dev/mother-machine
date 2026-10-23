@@ -223,11 +223,9 @@
       /* a destra un binario di luce: una scatola chiusa con la striscia accesa sotto, come le plafoniere */
       var t1 = part({ cls: 'ceil rail' }), rb = t1.box([3.3, 2.82, za + .05, 3.8, 2.98, zb - .05], ID, { hatch: { l: 2 } });
       t1.line([[3.42, 2.819, za + .12], [3.42, 2.819, zb - .12]], { cls: 'tube', on: rb.b }); t1.line([[3.68, 2.819, za + .12], [3.68, 2.819, zb - .12]], { cls: 'tube', on: rb.b });
-      var t2 = part({ cls: 'ceil' }); t2.tubeZ(4.25, 2.95, za, zb, .045, { k: 6 });
-      /* le staffe: un tirante dal soffitto e il collare attorno a ogni tubo, a meta' tratto */
+      /* il tirante dal soffitto, a meta' tratto */
       var zm = (za + zb) / 2;
       t1.line([[3.55, 2.98, zm], [3.55, Y, zm]], { cls: 'dt' });
-      t2.line([[4.25, 2.995, zm + .3], [4.25, Y, zm + .3]], { cls: 'dt' }); t2.circle([4.25, 2.95, zm + .3], .06, 'z', { k: 10, cls: 'clamp' });
       /* la plafoniera: un pannello piatto sotto il soffitto, la luce che cade come una pozza sul pavimento */
       if (i + 1 < ZB.length) {
         var l = part({ cls: 'lamp' });
@@ -433,7 +431,7 @@
           style: 'animation-duration:' + (7 + Math.random() * 7).toFixed(1) + 's;animation-delay:-' + (Math.random() * 9).toFixed(1) + 's' }) }) }
     /* l'arrivo: le linee si disegnano, dal fondo verso chi guarda; poi le facce si riempiono */
     var wrap = st.querySelector('.lgsv');
-    if (!RM) { st.classList.add('pre'); requestAnimationFrame(function () { requestAnimationFrame(function () { st.classList.remove('pre'); st.classList.add('drawn'); setTimeout(function () { st.classList.add('done') }, 4800) }) }) } else st.classList.add('drawn', 'done');
+    if (!RM) { st.classList.add('pre'); requestAnimationFrame(function () { requestAnimationFrame(function () { st.classList.remove('pre'); st.classList.add('drawn'); setTimeout(function () { st.classList.add('done') }, 3400) }) }) } else st.classList.add('drawn', 'done');
     /* la camera segue il mouse, piano */
     var fine = matchMedia('(hover:hover) and (pointer:fine)').matches, raf = 0, on = true;
     function tick() { raf = 0; if (!on) return; var dx = to.x - cam.x, dy = to.y - cam.y; cam.x += dx * .08; cam.y += dy * .08; render(); if (Math.abs(dx) + Math.abs(dy) > .0008) raf = requestAnimationFrame(tick) }
