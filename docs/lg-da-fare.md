@@ -33,9 +33,34 @@ Da fare a piccoli blocchi, pochi token. File: `public/js/stanza.js` (motore e st
 
 ## Funzioni
 - [ ] **TV:** il video non parte. Poi forse un video diverso.
-- [ ] **Rush hour:** da ripensare e rifare.
+- [ ] **Il gioco del cabinato:** al posto di Rush hour arriva DEADLINE (vedi la sezione sotto).
 - [ ] **Musica:** cambiando pagina il player si ferma. Vorrebbe che ripartisse da solo (su telefono a volte lo fa).
   Nota: il browser blocca l'audio senza un tocco; vero play continuo = sito a pagina unica (Astro ClientRouter), da decidere.
 - [ ] **Mini player:** in vetro (glassmorfismo fatto bene, con la tecnica del sito: niente backdrop-filter dal vivo
   su aree grandi), su computer e telefono. Su telefono oggi copre il selettore dei progetti in home: deve **sparire di
   lato**, piu' in alto, lasciando solo una linguetta da cui volendo lo tiri fuori.
+
+## Il gioco: DEADLINE (deciso da Eso)
+- **Tipo:** Space Invaders cyberpunk. Il nome: lettere squadrate in pixel, con glitch e neon che sfarfalla.
+- **Il nostro tocco:** dal cielo della citta' di notte scendono le seccature di un'azienda (chiamate perse, fatture di carta,
+  clienti che non si presentano, spam). I potenziamenti sono i nostri servizi (Automation = raffica, AI = mira da sola,
+  Booking = scudo). Il gioco spiega cosa facciamo senza dirlo.
+- **Boss finale: MONDAY.**
+- **Cornice:** accensione "MOTHER MACHINE PRESENTS" con la m in pixel, poi INSERT COIN. Si tiene lo schermo cyberpunk di oggi.
+  **Classifica** con le iniziali a tre lettere, che gira sullo schermo tra una partita e l'altra.
+- **Premio segreto (mai annunciato):** chi batte MONDAY vede "Your sign goes up in the city." e mette la sua insegna in
+  un palazzo della citta' del gioco. Niente sconti (sembrano un prezzo gonfiato), niente consulenza (e' gia' gratis).
+- **Il modulo del vincitore:** logo (PNG, JPG, WebP o SVG), nome dell'attivita', link (sito o Instagram), cosa fanno
+  (una riga, massimo 60 caratteri), tipo di attivita'.
+- **Sei tipi di palazzo**, sagome semplici: Food & drink (basso, tenda, insegna sporgente); Fashion & retail (vetrine
+  alte, manichino); Online shop (magazzino, serranda, pacchi, antenna); Beauty & wellness (stretto e alto, insegna
+  verticale); Hotels & stays (torre con finestre a scacchi, insegna sul tetto); Services & trades (uffici, jolly).
+- **Il motore dell'insegna, tutto nel browser, senza AI:** carica il file (l'SVG si trasforma in immagine, niente
+  codice dentro), toglie lo sfondo leggendo il colore degli angoli, ritaglia e centra, trasforma il logo in una
+  sagoma al neon a un colore (cosi' ogni logo viene bene), anteprima sul palazzo con un cursore "piu'/meno pulito".
+- **Approvazione di Eso, obbligatoria:** l'insegna e il link restano in attesa finche' Eso non li approva con un tocco.
+  File e dati su Cloudflare (R2 e D1, gratis a questi volumi).
+- **Dove si clicca:** non durante la partita. Nella citta' della schermata d'attesa e nella classifica: passando sopra,
+  la targhetta con nome e riga; cliccando, il loro link.
+- **Un gioco solo, fatto bene.** Idee per dopo, forse: Night Shift (scorrimento), Night Drive (stile OutRun, mai il truck
+  di Vitalia's: e' un lavoro per un cliente).
