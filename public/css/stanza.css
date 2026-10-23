@@ -44,6 +44,7 @@
 /* il neon del marchio: tubo doppio, alone a strati (niente filtri), ombra sul muro */
 .lgW .ln.nshadow{stroke:#F4F2EC;stroke-opacity:.14;stroke-width:1}
 .lgW .ln.nglow{stroke:#FF5B3A;stroke-opacity:.13;stroke-width:24}
+.lgW .ln.ndead{stroke:#3a3532;stroke-width:6.5}
 .lgW .ln.ntube{stroke:#FF5B3A;stroke-width:6.5}
 .lgW .ln.ncore{stroke:#FFD9CC;stroke-width:1.4}
 /* lo sfarfallio del neon lo decide stanza.js (capricci): mai uguale */
@@ -231,3 +232,7 @@
 /* la carta non sbiadisce: dietro non deve trasparire niente */
 .lgW .lgP.sheet,.lgW .lgP.cal{opacity:1}
 .lgW .ln.pencil{stroke:#0F0F0E;stroke-width:calc(var(--w) * 1.3);stroke-linecap:butt}
+
+/* oggetti, giro 4 */
+/* la pallina dei joystick: piena, pomodoro */
+.lgW .ln.jball{stroke-width:calc(var(--w) * .4)}
