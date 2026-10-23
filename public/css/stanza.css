@@ -259,3 +259,9 @@
 .lgW .tx.bpt.dk{fill:#1b1a18;fill-opacity:1}
 /* il telefono nella stanza, piccolo: il contorno piu' sottile */
 .lgsv .lgW .fc.hull{stroke-width:calc(var(--w) * 2)}
+
+/* oggetti, giro 6 */
+/* le cose di piu' parti si accendono insieme (classe hov da stanza-oggetti.js); telefono e giradischi tutti interi */
+.lgW .hot.hov .fc{stroke:#FF5B3A}
+.lgW .hot.hov .ln.dt{stroke:#FFB4A1}
+.lgW .hot.acc:hover .ln,.lgW .hot.acc.hov .ln,.lgW .hot.acc:focus-visible .ln{stroke:#FF5B3A}

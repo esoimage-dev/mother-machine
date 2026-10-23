@@ -188,7 +188,7 @@
   var X = 5.6, Y = 3.3, Z0 = 1.2, Z1 = 11.5;
   function stanza() {
     /* il guscio: pavimento a piastrelle, pareti a pannelli, soffitto. Solo linee: si vede attraverso */
-    var s = part({ cls: 'room' });
+    var s = part({ cls: 'room' }); s.P.zf = 1e3;
     var ov = 10;
     [[-X, 0], [X, 0], [-X, Y], [X, Y]].forEach(function (c) { s.line([[c[0], c[1], Z0], [c[0], c[1], Z1]], { over: ov, cls: 'edge' }) });
     s.line([[-X, 0, Z1], [X, 0, Z1], [X, Y, Z1], [-X, Y, Z1]], { closed: true, cls: 'edge' });
