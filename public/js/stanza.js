@@ -315,8 +315,9 @@
     c.face([[xb, 0, zb], [xb, 0, zc], [xb, yt, zc], [xb, yt, zb]], [-1, 0, 0], { fill: 'cab', hatch: 6 });
     var cf = c.face([[xa, 0, zc], [xb, 0, zc], [xb, 0, zb], [xa, 0, zb]], [0, 1, 0], { fill: 'cab' });
     var cc = c.face([[xa, yt, zb], [xb, yt, zb], [xb, yt, zc], [xa, yt, zc]], [0, -1, 0], { fill: 'cabw' });
-    c.line([[xa + .1, .95, zb - .001], [xb - .1, .95, zb - .001]], { cls: 'rail', on: cw });
-    c.line([[1.15, 1.05, zb - .001], [2.05, 1.05, zb - .001], [2.05, 2.0, zb - .001], [1.15, 2.0, zb - .001]], { closed: true, cls: 'dt', on: cw });
+    /* dentro, una cosa sola: il corrimano staccato dal muro con i suoi due supporti, che da' la profondita' */
+    c.line([[xa + .25, .95, zb - .07], [xb - .25, .95, zb - .07]], { cls: 'rail' });
+    [xa + .4, xb - .4].forEach(function (x) { c.line([[x, .95, zb - .07], [x, .95, zb - .001]], { cls: 'dt' }) });
     c.line([[1.25, yt - .001, zc + .3], [1.95, yt - .001, zc + .3], [1.95, yt - .001, zb - .3], [1.25, yt - .001, zb - .3]], { closed: true, cls: 'cabl', on: cc });
     for (var g = xa + .25; g < xb; g += .25) c.line([[g, .001, zc], [g, .001, zb]], { cls: 'dt', on: cf });
     /* la luce che esce sul pavimento quando le porte sono aperte */
