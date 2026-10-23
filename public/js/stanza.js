@@ -462,6 +462,7 @@
         (function f(n) { var u = Math.min(1, (n - t0) / (RM ? 1 : 220)); LEVA.s = s0 + ((giu ? 1 : 0) - s0) * u * u; render();
           if (u < 1) requestAnimationFrame(f); else { clack(); st.classList.toggle('dark', giu); h.classList.toggle('on', giu) } })(t0) }
       /* il resto viene in primo piano: l'oggetto che gira, o la sua finestra */
+      else if (k === 'music' && window.MUSICA) window.MUSICA.open(x, y);
       else if (window.LGVISTA) window.LGVISTA.open(k, x, y);
     }
     /* le porte dell'ascensore: il ding, poi scorrono in 0,9 secondi */
