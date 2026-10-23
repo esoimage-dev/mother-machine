@@ -532,7 +532,8 @@
   /* ---------- punti, combo, FLOW STATE ---------- */
   function addScore(p, x, y) {
     var m = Gm.flow ? 2 : 1, v = p * m; Gm.score += v;
-    if (x != null && p >= 3) ftext('+' + v, x, y - 6, Gm.flow ? C.tomL : C.cream);
+    if (x != null) flyHours(v, x, y);
+    if (!tipSeen.hours && x != null) tip('hours', 'Every chore you stop saves hours', 240, HUD_H + 4, 3);
   }
   function comboKill() {
     Gm.combo++; Gm.comboT = 2.2; if (Gm.combo > Gm.best) Gm.best = Gm.combo; if (Gm.combo > Gm.ds.best) Gm.ds.best = Gm.combo;
@@ -588,11 +589,11 @@
     sfx('power', p.x);
     if (k === 'auto' || k === 'ai') { Gm.power = k; Gm.powerT = 10; ftext(k === 'auto' ? 'AUTOMATION' : 'AI', p.x, p.y - 12, C.goldL) }
     else if (k === 'booking') { Gm.shield = 3; sfx('shield'); ftext('BOOKING', p.x, p.y - 12, C.pink) }
-    else if (k === 'night') { Gm.night = true; ftext(touchMode ? 'NIGHT SHIFT: 2 FINGERS' : 'NIGHT SHIFT: PRESS X', p.x, p.y - 12, '#8FB4FF') }
+    else if (k === 'night') { Gm.night = true; ftext(touchMode ? 'NIGHT SHIFT: PRESS A' : 'NIGHT SHIFT: PRESS X', p.x, p.y, '#8FB4FF'); tip('night', touchMode ? 'Night shift ready: A' : 'Night shift ready: X', W - 10, H - 12, 3.5) }
   }
   function useNight() {
     if (st !== 'play' || paused || !Gm || !Gm.night || Gm.nightT > 0) return;
-    if (Gm.phase !== 'fight' && Gm.phase !== 'boss') return;
+    if (Gm.phase !== 'fight' && Gm.phase !== 'boss' && Gm.phase !== 'virus') return;
     Gm.night = false; Gm.nightT = 3; sfx('night'); music('night');
     for (var i = 0; i < EB.length; i++) if (EB[i].on) { spark(EB[i].x, EB[i].y, 2, '#8FB4FF', C.cream, 30); EB[i].on = false }
   }
@@ -616,7 +617,7 @@
     if (Gm.shield > 0) { Gm.shield--; s.inv = .8; sfx(Gm.shield ? 'shield' : 'shieldBreak', s.x); spark(s.x, s.y, 8, C.pink, C.cream, 60); clearNear(s.x, s.y, 40); return }
     Gm.log.hits++; if (DBG) { Gm.dbgHurt = Gm.dbgHurt || {}; Gm.dbgHurt[hurtBy] = (Gm.dbgHurt[hurtBy] || 0) + 1 } endFlow(); shake(5); Gm.flash = .25; Gm.glitch = .08; sfx('hurt', s.x);
     spark(s.x, s.y, 14, C.tom, C.cream, 90);
-    if (!weekend) { Gm.coffee--; Gm.cupT = 1 }
+    if (!weekend) { Gm.coffee--; Gm.cupT = 1; tip('energy', 'Your energy: three coffees', W - 24, HUD_H + 4, 3) }
     else ftext('WEEKEND MODE', s.x, s.y - 16, C.cream);
     s.inv = 2.2; Gm.power = null; Gm.powerT = 0;
     clearNear(s.x, s.y, 70);
@@ -648,7 +649,7 @@
     formationUpdate(wdt);
     enemiesUpdate(wdt);
     if (Gm.boss) bossUpdate(Gm.boss, wdt);
-    dlgUpdate(dt); quipUpdate(dt); tipsUpdate(dt); sysUpdate(dt);
+    dlgUpdate(dt); quipUpdate(dt); tipsUpdate(dt); sysUpdate(dt); flyUpdate(dt);
     Gm.scroll += dt * (Gm.def.virus && Gm.phase !== 'boss' ? 6 : 42); if (Gm.bizT > 0) Gm.bizT -= dt;
     hazUpdate(wdt);
     blocksUpdate(wdt);
@@ -703,7 +704,7 @@
     s.x = clamp(s.x, LAT_MIN, LAT_MAX); s.y = clamp(s.y, SHIP_MIN, SHIP_MAX);
     s.bank += (clamp(s.vx / 150, -1, 1) - s.bank) * Math.min(1, dt * 10);
     var firing = keys.f || touchMode || PAD.f || Gm.nightT > 0 || botOn;
-    if (firing && s.cool <= 0 && (Gm.phase === 'fight' || Gm.phase === 'boss' || Gm.phase === 'cameo' || Gm.phase === 'intro')) shoot();
+    if (firing && s.cool <= 0 && (Gm.phase === 'fight' || Gm.phase === 'boss' || Gm.phase === 'cameo' || Gm.phase === 'intro' || Gm.phase === 'virus')) shoot();
     if (PAD.n) useNight();
   }
   /* il pilota automatico: Night shift e il bot di prova (con ?dldebug) */
@@ -712,11 +713,16 @@
     for (i = 0; i < EN.length; i++) { e = EN[i]; if (!e.on || e.y < 0 || e.st === 'out' || e.st === 'mark') continue; var d = Math.abs(e.x - s.x) + (EXIT - e.y) * .4; if (d < bd) { bd = d; best = e } }
     if (best) tx = best.x + (best.vxe || 0) * clamp((s.y - best.y) / 330, 0, 1); else if (Gm.boss) tx = Gm.boss.x;
     var ty = 390;
+    if (VX.on && !VX.dead) tx = vcx(VX.cc);
+    if (Gm.def.delivery && Gm.phase === 'fight') { /* il bot fa il fattorino */
+      var car = null, near = null; for (i = 0; i < PK.length; i++) { if (!PK[i].on) continue; if (PK[i].carried) car = PK[i]; else if (!near || PK[i].x > near.x) near = PK[i] }
+      if (car) { tx = STREET - 10; ty = clamp(LH - shopX(car.shop), SHIP_MIN, SHIP_MAX) } else if (near) { tx = clamp(near.x + 20, LAT_MIN, LAT_MAX); ty = clamp(near.y, SHIP_MIN, SHIP_MAX) }
+    }
     if (botOn && Gm.nightT <= 0) {
       /* il bot schiva: prova posizioni vicine e sceglie quella con meno pericolo */
       var bx = s.x, by = s.y, bscore = 1e9;
       for (var ox = -40; ox <= 40; ox += 8) for (var oy = -30; oy <= 30; oy += 15) {
-        var cx = clamp(s.x + ox, LAT_MIN, LAT_MAX), cy = clamp(s.y + oy, SHIP_MIN + 120, SHIP_MAX), sc = Math.abs(cx - tx) * .8 + Math.abs(ox) * .05 + Math.abs(cy - ty) * .1;
+        var cx = clamp(s.x + ox, LAT_MIN, LAT_MAX), cy = clamp(s.y + oy, SHIP_MIN + 60, SHIP_MAX), sc = Math.abs(cx - tx) * .8 + Math.abs(ox) * .05 + Math.abs(cy - ty) * (Gm.def.delivery ? .8 : .1);
         if (HZ.st !== 'off' && cx + 6 > HZ.x && cx - 6 < HZ.x + HZ.w) sc += HZ.st === 'on' ? 5000 : 900;
         for (var j = 0; j < EB.length; j++) { var b = EB[j]; if (!b.on) continue;
           for (var k = 0; k <= 4; k++) { var tt = k * .1, px = b.x + b.vx * tt, py = b.y + b.vy * tt, ddx = px - cx, ddy = py - cy, dd = ddx * ddx + ddy * ddy; if (dd < 220) sc += (220 - dd) * (1.5 - tt * 2) } }
@@ -915,6 +921,7 @@
       var n = a.mapNode ? a.mapNode(i) : { x: MAPN[i][0], y: MAPN[i][1] }, nm = DAYNAME[DAYS[i]], w = tw(nm, 1), x = clamp(n.x - w / 2, 2, W - w - 2), y = n.y + 8;
       var col = i === 6 ? C.crim : i <= from ? C.cream : i === to ? C.tom : C.g2;
       R(x - 2, y - 1, w + 4, lh(1) + 2, C.night); txt(nm, x, y, col, 1);
+      var sk = SYS[DEF[DAYS[i]].boss]; if (sk && Gm.sys[sk] && i <= from) { R(n.x - 6, n.y - 24, 13, 13, C.tom); R(n.x - 5, n.y - 23, 11, 11, C.night); dIcon(SYSICON[sk], n.x - 3, n.y - 21) }
     }
   }
   function drawMap() {
@@ -942,8 +949,9 @@
       var y0 = 12, X0 = 14, X1 = 214, XC = 114; panel(X0, y0, 200, 62);
       txt('CLOCKED OUT 17:00', XC, y0 + 6, C.cream, 1, 'c');
       txt(DAYNAME[DAYS[from]] + ' DONE', XC, y0 + 17, accent(DAYS[from]), 1, 'c');
-      txt('Hours +' + Math.round(Gm.score - Gm.ds.h0), X0 + 8, y0 + 31, C.p2, 1); txt('Jobs ' + Gm.ds.kills, X1 - 8, y0 + 31, C.p2, 1, 'r');
-      txt('Streak ' + Gm.ds.best, X0 + 8, y0 + 43, C.p2, 1); txt('Lit ' + countLit() + '/' + Gm.wins.length, X1 - 8, y0 + 43, C.p2, 1, 'r');
+      txt('Hours +' + Math.round(Gm.score - Gm.ds.h0), X0 + 8, y0 + 31, C.p2, 1); txt('Business ' + Math.round(100 - Gm.cityHits / Gm.cityMax * 100) + '%', X1 - 8, y0 + 31, C.p2, 1, 'r');
+      var sl = DEF[DAYS[from]].silly, sv = sl[1] === '*' ? Gm.ds.kills : (Gm.ds.k[sl[1]] || 0) + (sl[2] ? Gm.ds.k[sl[2]] || 0 : 0);
+      txt(sl[0] + ' ' + sv, XC, y0 + 43, C.p2, 1, 'c');
       if (Gm.ds.bonus && !Gm.ds.rest) txt('+' + Gm.ds.bonus + ' on time', XC, y0 + 52, C.p3, 1, 'c');
       if (Gm.ds.rest) txt((from === 1 ? 'Coffee break' : 'Rested') + ': +1 coffee', XC, y0 + 52, C.pink, 1, 'c');
     }
@@ -1249,7 +1257,7 @@
   var SYSORD = ['booking', 'auto', 'ai', 'night'];
   function install(kind) {
     var k = SYS[kind]; if (!k || Gm.sys[k]) return;
-    Gm.sys[k] = true; Gm.installed = k; sfx('power');
+    Gm.sys[k] = true; Gm.installed = k; sfx('power'); tip('sys', 'Installed for the rest of the week', W - 30, H - 12, 3.5);
     if (k === 'booking') Gm.shield = Math.max(Gm.shield, 1);
     if (k === 'night') Gm.night = true;
   }
@@ -1262,7 +1270,7 @@
   /* ---------- THURSDAY: il virus dentro il server ----------
      Una griglia di celle a destra: il virus si allarga ogni mezzo secondo, tu spari alle celle per contenerlo e
      colpisci il nucleo che si sposta. Se copre quasi tutto: sovraccarico, perdi un caffe' e il nucleo torna a meta' */
-  var VX = { cols: 11, rows: 7, cw: 20, ch: 20, x0: 25, y0: 18, cells: new Uint8Array(77), cr: 0, cc: 0, hp: 0, max: 16, spread: 0, move: 0, fire: 0, dead: 0, on: false };
+  var VX = { cols: 11, rows: 7, cw: 20, ch: 20, x0: 25, y0: 18, cells: new Uint8Array(77), cr: 0, cc: 0, hp: 0, max: 34, spread: 0, move: 0, fire: 0, dead: 0, on: false };
   function vcx(c) { return VX.x0 + c * VX.cw + VX.cw / 2 }
   function vcy(r) { return VX.y0 + r * VX.ch + VX.ch / 2 }
   function vInfect(c, r) { if (c < 0 || r < 0 || c >= VX.cols || r >= VX.rows) return; VX.cells[r * VX.cols + c] = 1 }
@@ -1454,7 +1462,15 @@
     music('over');
   }
   function winGame() { st = 'win'; stT = 0; LAST = { score: Math.floor(Gm.score), day: 'MON', di: 6, cause: '', win: true }; sfx('win') }
+  var OVERLINE = ['Rough start to the week.', 'Hump day: 1. You: 0.', 'The printer always wins on Thursday.', 'So close to the weekend.', 'Working Saturdays? Really?', 'Even Sunday was too much.', 'MONDAY wins. For now.'];
+  /* riprova dal giorno raggiunto: i sistemi di prima restano, niente classifica e niente premio */
+  function retryDay() {
+    var d = Gm.day, sys = Gm.sys; weekendUI(); newGame(); Gm.cont0 = true; Gm.log.weekend = true;
+    for (var i = 0; i < d; i++) { var k = SYS[DEF[DAYS[i]].boss]; if (k) sys[k] = true }
+    Gm.sys = sys; if (sys.booking) Gm.shield = 1; startDay(d); paused = false; syncUI();
+  }
   function toInit() {
+    if (Gm && Gm.cont0) { toTitle(); return }
     if (weekend || !LAST || LAST.score <= 0) { if (LAST && LAST.win && !weekend) { st = 'init'; stT = 0; return } toTitle(); return }
     st = 'init'; stT = 0; iniPos = 0; iniMsg = '';
   }
@@ -1670,6 +1686,7 @@
     gox = goy = 0; g.setTransform(AS, 0, 0, AS, 0, 0);
     drawQuips(); drawTips(t);
     drawHUD(t);
+    drawInstalled(t);
     if (st === 'play') drawDialog(t);
     drawBanners(t);
     if (st === 'over' || st === 'win') drawEnd(t);
@@ -1742,33 +1759,72 @@
     }
     g.restore();
   }
+  /* ---------- la plancia della Control Room: la giornata, le ore, l'energia, l'azienda, i sistemi ---------- */
+  var SYSICON = { booking: 'booking', auto: 'auto', ai: 'ai', night: 'night' };
   function drawHUD(t) {
-    var d = DAYS[Gm.day], ac = accent(d);
-    R(0, 0, W, HUD_H, 'rgba(15,15,14,.72)'); R(0, HUD_H, W, 1, 'rgba(244,242,236,.18)');
-    var dn = DAYNAME[d];
-    txt(dn, 4, 1, C.cream, 1);
-    var late = (Gm.phase === 'boss' || Gm.phase === 'cameo') && Gm.day < 6, ct = late ? '16:59' : clockStr(Gm.clockShow), blink = (Gm.overtime || late) && ((RT * 3) | 0) % 2;
-    var cw = dig(ct, 4 + tw(dn + ' ', 1), 1, blink ? C.crim : C.cream);
-    var bx = 4 + tw(dn + ' ', 1) + cw + 5; R(bx, 4, 50, 1, C.g3); R(bx, 4, Math.round(50 * clamp(Gm.clockShow, 0, 1)), 1, C.tom);
-    if (Gm.overtime && Gm.phase === 'fight') txt('OVERTIME', 4, HUD_H + 3, C.crim, 1, 'l', C.night);
-    var lbl = 'HOURS SAVED ', lw = tw(lbl, 1), dw = digW() * 4, x0 = 240 - (lw + dw) / 2;
-    txt(lbl, x0, 1, C.p3, 1); rollNum(Gm.shown, x0 + lw, 1, 4, C.cream);
-    if (Gm.flow && ((RT * 4) | 0) % 2) txt('FLOW x2', x0 + lw + dw + 6, 1, C.tom, 1);
-    if (weekend) txt('WEEKEND', W - 4, 1, C.pink, 1, 'r');
-    else for (var i = 0; i < 3; i++) {
-      var cx = W - 11 - i * 9, full = 3 - i <= Gm.coffee;
-      if (full && art('icon')) { try { AR.icon(g, 'coffee', cx, 1, ((RT * 4 + i) | 0) % 3) } catch (e) { fail('icon', e) } } else dIcon(full ? 'coffee' : 'coffeeEmpty', cx, 1);
-      if (!full && 3 - i === Gm.coffee + 1 && Gm.cupT > 0) { if (art('icon')) { try { AR.icon(g, 'coffeeSpill', cx, 1, Math.min(2, ((1 - Gm.cupT) * 6) | 0)) } catch (e) {} } else { var sp = 1 - Gm.cupT; R(cx + 7, 4 + sp * 6, 1, 1, C.p3); R(cx + 5, 5 + sp * 8, 1, 1, C.p3) } }
+    var d = DAYS[Gm.day], ac = accent(d), i;
+    R(0, 0, W, HUD_H + 2, 'rgba(15,15,14,.78)'); R(0, HUD_H + 2, W, 1, 'rgba(244,242,236,.16)');
+    /* LA GIORNATA: nome intero, barra-orologio 09:00 -> 17:00 con la lancetta; al boss diventa OVERTIME */
+    var dn = DAYNAME[d], late = (Gm.phase === 'boss' || Gm.phase === 'cameo') && Gm.day < 6, bl = ((RT * 3) | 0) % 2;
+    txt(dn, 4, 2, ac, 1);
+    var bx = 6 + tw(dn, 1) + 4, bw = 56, k = clamp(Gm.clockShow, 0, 1);
+    if (late) { R(bx, 4, bw, 3, bl ? C.crim : '#5A1A20'); txt('OVERTIME', bx + bw + 4, 2, C.crim, 1) }
+    else {
+      R(bx, 5, bw, 1, C.g3); R(bx, 4, Math.round(bw * k), 3, C.tom); R(bx + Math.round(bw * k), 2, 1, 7, C.cream);
+      dig(clockStr(Gm.clockShow), bx + bw + 4, 2, C.cream);
     }
-    /* in basso: potenziamento attivo, scudo, slot Night shift */
-    var y = H - 9;
-    if (Gm.power || Gm.shield > 0 || Gm.night || Gm.nightT > 0) { R(0, y - 1, 92, 10, 'rgba(15,15,14,.6)'); R(W - 70, y - 1, 70, 10, 'rgba(15,15,14,.6)') }
-    if (Gm.power) { dIcon(Gm.power, 3, y); R(13, y + 3, 40, 1, C.g3); R(13, y + 3, Math.round(40 * Gm.powerT / 10), 1, C.tom); txt(Gm.power === 'auto' ? 'AUTO' : 'AI', 57, y + 1, C.p2, 1) }
-    else if (Gm.shield > 0) { dIcon('booking', 3, y); for (i = 0; i < 3; i++) R(13 + i * 5, y + 2, 3, 3, i < Gm.shield ? C.pink : C.g3) }
-    R(W - 12, y - 1, 10, 9, Gm.night ? '#8FB4FF' : C.g4); R(W - 11, y, 8, 7, C.night);
-    if (Gm.night) dIcon('night', W - 11, y);
-    txt(touchMode ? '2F' : 'X', W - 15, y + 1, Gm.night ? C.cream : C.g3, 1, 'r');
-    if (Gm.nightT > 0) txt('NIGHT SHIFT', W - 30, y + 1, '#8FB4FF', 1, 'r');
+    /* HOURS SAVED: il contatore a rulli */
+    var lbl = 'HOURS SAVED', lw = tw(lbl, 1), dw = digW() * 4, x0 = 240 - (lw + 4 + dw) / 2;
+    txt(lbl, x0, 2, C.p3, 1); rollNum(Gm.shown, x0 + lw + 4, 2, 4, C.cream);
+    if (Gm.flow) { var fx0 = x0 + lw + dw + 10; R(fx0 - 2, 1, tw('FLOW x2', 1) + 4, 9, bl ? C.tom : C.tomD); txt('FLOW x2', fx0, 2, C.night, 1) }
+    /* YOUR ENERGY: tre tazze */
+    if (weekend) txt('WEEKEND', W - 4, 2, C.pink, 1, 'r');
+    else {
+      txt('ENERGY', W - 34, 2, C.p3, 1, 'r');
+      for (i = 0; i < 3; i++) {
+        var cx = W - 11 - i * 9, full = 3 - i <= Gm.coffee;
+        if (full && art('icon')) { hd0(); try { AR.icon(g, 'coffee', cx, 2, ((RT * 4 + i) | 0) % 3) } catch (e) { fail('icon', e) } hd1() } else dIcon(full ? 'coffee' : 'coffeeEmpty', cx, 2);
+        if (!full && 3 - i === Gm.coffee + 1 && Gm.cupT > 0 && art('icon')) { hd0(); try { AR.icon(g, 'coffeeSpill', cx, 2, Math.min(2, ((1 - Gm.cupT) * 6) | 0)) } catch (e) {} hd1() }
+      }
+    }
+    /* in basso: THE BUSINESS (l'insegna OPEN e la sua salute) e i SYSTEMS */
+    var y = H - 11; R(0, y - 1, W, 12, 'rgba(15,15,14,.7)'); R(0, y - 1, W, 1, 'rgba(244,242,236,.12)');
+    var health = 1 - Gm.cityHits / Gm.cityMax, sick = Gm.bizT > 0 || health < .35, closed = health <= 0;
+    var sign = closed ? 'CLOSED' : Gm.bizT > 0 && bl ? 'BRB' : 'OPEN', sw = tw('CLOSED', 1) + 6;
+    R(4, y, sw, 9, C.night); R(4, y, sw, 1, closed ? C.crim : sick && bl ? '#3A3A38' : ac);
+    txt(sign, 4 + sw / 2, y + 1, closed ? C.crim : sick && bl ? '#3A3A38' : C.cream, 1, 'c');
+    txt('THE BUSINESS', 8 + sw, y + 1, C.p3, 1);
+    var hx = 12 + sw + tw('THE BUSINESS', 1);
+    for (i = 0; i < 12; i++) R(hx + i * 5, y + 3, 4, 3, i < Math.ceil(health * 12) ? (health < .35 ? C.crim : C.cream) : C.g4);
+    /* SYSTEMS: i quattro sistemi, accesi se installati; la capsula attiva ha la sua barra */
+    var sx = W - 4 - 4 * 13 - tw('SYSTEMS', 1) - 4;
+    txt('SYSTEMS', sx, y + 1, C.p3, 1);
+    for (i = 0; i < 4; i++) {
+      var key = SYSORD[i], ix = W - 4 - (4 - i) * 13, on = Gm.sys[key] || Gm.power === key || (key === 'booking' && Gm.shield > 0) || (key === 'night' && (Gm.night || Gm.nightT > 0));
+      R(ix - 1, y - 1, 11, 11, on ? (key === 'night' && Gm.night && bl ? '#8FB4FF' : C.g3) : C.g4); R(ix, y, 9, 9, C.night);
+      if (on) dIcon(SYSICON[key], ix + 1, y + 1); else { g.globalAlpha = .25; dIcon(SYSICON[key], ix + 1, y + 1); g.globalAlpha = 1 }
+      if (Gm.power === key && Gm.powerT > 0) { R(ix, y + 9, Math.round(9 * Gm.powerT / 10), 1, C.tom) }
+      if (key === 'booking' && Gm.shield > 1) txt('' + Gm.shield, ix + 10, y - 2, C.pink, 1);
+    }
+    if (Gm.night && !Gm.nightT) txt(touchMode ? 'A' : 'X', W - 4 - 13 + 4, y - 9, C.cream, 1, 'c', C.night);
+    if (Gm.nightT > 0) txt('NIGHT SHIFT', sx - 6, y + 1, '#8FB4FF', 1, 'r');
+    /* le ore che volano verso il contatore */
+    for (i = 0; i < FLY.length; i++) { var f = FLY[i]; if (!f.on) continue; var q = easeIO(f.t / .7), fxp = f.x + (240 - f.x) * q, fyp = f.y + (5 - f.y) * q; g.globalAlpha = 1 - q * .6; txt(f.s, fxp, fyp, Gm.flow ? C.tomL : C.cream, 1, 'c', C.night); g.globalAlpha = 1 }
+  }
+  /* "+3h": vola dal nemico al contatore (pochi alla volta) */
+  var FLY = pool(6, function () { return { s: '', x: 0, y: 0, t: 0 } });
+  function flyHours(v, lx, ly) { var f = take(FLY); if (!f) return; f.s = '+' + v + 'h'; f.x = clamp(SX(ly), 20, W - 20); f.y = clamp(lx - 8, 16, H - 20); f.t = 0 }
+  function flyUpdate(dt) { for (var i = 0; i < FLY.length; i++) { var f = FLY[i]; if (!f.on) continue; f.t += dt; if (f.t > .7) f.on = false } }
+  /* la card del sistema installato, a fine giornata */
+  function drawInstalled(t) {
+    if (Gm.phase !== 'out' || !Gm.installed) return;
+    var k = clamp((Gm.phaseT - .4) * 3, 0, 1); if (k <= 0) return;
+    var info = SYSINFO[Gm.installed], w = 236, h = 60, x = 240 - w / 2, y = 150;
+    g.globalAlpha = k; R(x, y, w, h, 'rgba(15,15,14,.92)'); panel(x, y, w, h);
+    txt('SYSTEM INSTALLED', 240, y + 6, C.tom, 1, 'c');
+    R(x + 14, y + 22, 26, 26, C.g3); R(x + 15, y + 23, 24, 24, C.night); dIcon(SYSICON[Gm.installed], x + 23, y + 31);
+    txt(info[0], x + 50, y + 22, C.cream, 2); txt(info[1], x + 50, y + 42, C.p2, 1);
+    g.globalAlpha = 1;
   }
   function drawBanners(t) {
     var p = Gm.phase, k = Gm.phaseT;
@@ -1805,16 +1861,20 @@
       txt('17:00', 240, 58, C.p3, 1, 'c');
       txt('MONDAY IS OVER.', 240, 74, C.cream, 2, 'c');
       if (stT > 1.2) txt('Your sign goes up in the city.', 240, 104, C.gold, 1, 'c');
-      if (stT > 1.8) txt(Math.round(Gm.score) + ' hours saved.', 240, 124, C.cream, 1, 'c');
+      if (stT > 1.8) txt(Math.round(Gm.score) + ' hours saved. The business runs itself now.', 240, 124, C.cream, 1, 'c');
+      if (stT > 2.4) txt('Meetings that could have been an email: ' + (Gm.ds.k.meet || 0), 240, 138, C.p3, 1, 'c');
     } else {
-      txt(Gm.cause === 'closed' ? 'The business closed.' : 'Out of coffee.', 240, 70, C.p3, 1, 'c');
-      txt('BURNOUT.', 240, 86, C.tom, 3, 'c');
-      if (stT > .9) txt('Burnout. ' + Math.round(Gm.score) + ' hours saved.', 240, 120, C.cream, 1, 'c');
-      if (stT > 1.3) txt('You made it to ' + DAYNAME[DAYS[Gm.day]] + '.', 240, 134, C.p3, 1, 'c');
+      txt(Gm.cause === 'closed' ? 'The business closed early.' : 'Out of coffee.', 240, 62, C.p3, 1, 'c');
+      txt('BURNOUT.', 240, 78, C.tom, 3, 'c');
+      if (stT > .9) txt('Burnout. ' + Math.round(Gm.score) + ' hours saved.', 240, 110, C.cream, 1, 'c');
+      if (stT > 1.3) txt(OVERLINE[Gm.day], 240, 124, C.p3, 1, 'c');
     }
-    if (stT > 2.2) txt(touchMode ? 'Tap to go on' : 'Press Enter', 240, 170, ((RT * 2) | 0) % 2 ? C.cream : C.p3, 1, 'c');
+    if (stT > 1.6) {
+      var a2 = ((RT * 2) | 0) % 2 ? C.cream : C.p3;
+      if (st === 'over' && Gm.day > 0 && !Gm.cont0) { R(130, 150, 100, 16, C.tom); txt('TRY ' + DAYNAME[DAYS[Gm.day]], 180, 155, C.night, 1, 'c'); hot.push({ x: 130, y: 150, w: 100, h: 16, id: 'retry' }); R(250, 150, 100, 16, C.g4); txt('SAVE SCORE', 300, 155, C.cream, 1, 'c'); hot.push({ x: 250, y: 150, w: 100, h: 16, id: 'cont' }); txt(touchMode ? '' : 'C: try again from that day (no prize).  Enter: save score.', 240, 176, C.p3, 1, 'c') }
+      else { txt(touchMode ? 'Tap to go on' : 'Press Enter', 240, 170, a2, 1, 'c'); hot.push({ x: 0, y: 0, w: W, h: H, id: 'cont' }) }
+    }
     g.globalAlpha = 1;
-    if (stT > 1) hot.push({ x: 0, y: 0, w: W, h: H, id: 'cont' });
   }
   function drawInit(t) {
     R(0, 0, W, H, 'rgba(15,15,14,.82)');
@@ -1835,9 +1895,9 @@
   function drawPause() {
     R(0, 0, W, H, 'rgba(15,15,14,.78)');
     txt('OUT OF OFFICE', 240, 92, C.cream, 3, 'c');
-    txt('Back soon.', 240, 120, C.p3, 1, 'c');
+    txt('Back in five. The chores will wait. They always do.', 240, 120, C.p3, 1, 'c');
     R(190, 140, 100, 15, C.tom); txt('RESUME', 240, 144, C.night, 1, 'c'); hot.push({ x: 190, y: 140, w: 100, h: 15, id: 'resume' });
-    R(190, 162, 100, 15, C.g4); txt('QUIT', 240, 166, C.cream, 1, 'c'); hot.push({ x: 190, y: 162, w: 100, h: 15, id: 'quit' });
+    R(190, 162, 100, 15, C.g4); txt('GO HOME', 240, 166, C.cream, 1, 'c'); hot.push({ x: 190, y: 162, w: 100, h: 15, id: 'quit' });
     txt(touchMode ? '' : 'P to resume.  Q to quit.', 240, 188, C.p3, 1, 'c');
   }
 
@@ -1995,6 +2055,7 @@
       if (h.id === 'cont') { cont(); return }
       if (h.id === 'resume') { resume(); return }
       if (h.id === 'quit') { quit(); return }
+      if (h.id === 'retry') { retryDay(); return }
       if (h.id === 'up' || h.id === 'dn') { iniPos = h.i; stepLetter(h.id === 'up' ? 1 : -1); return }
       if (h.id === 'sel') { iniPos = h.i; sfx('type'); return }
       if (h.id === 'ok') { confirmIni(); return }
@@ -2039,6 +2100,7 @@
       if (k === 'Enter') { confirmIni(); e.preventDefault(); return }
       return;
     }
+    if (st === 'over' && (low === 'c') && stT > 1.6 && Gm && Gm.day > 0 && !Gm.cont0) { retryDay(); return }
     if (k === 'Enter' || k === ' ') {
       if (e.target && e.target.closest && e.target.closest('button,a')) return; /* il bottone fa da solo */
       e.preventDefault();
@@ -2243,7 +2305,7 @@
         return { st: st, paused: paused, phase: Gm && Gm.phase, day: Gm ? DAYS[Gm.day] : null, wave: Gm && Gm.wave, score: Gm ? Math.round(Gm.score) : 0, coffee: Gm && Gm.coffee,
           lit: Gm ? countLit() : 0, cityHits: Gm && Gm.cityHits, enemies: Gm ? aliveCount() : 0, ebullets: Gm ? ebCount() : 0, boss: Gm && Gm.boss ? { kind: Gm.boss.kind, hp: Gm.boss.hp, ph: Gm.boss.ph } : null,
           clock: Gm ? clockStr(Gm.clock) : '', playT: Gm ? Math.round(Gm.playT * 10) / 10 : 0, frameMs: Math.round(s / 120 * 10000) / 10, maxFrameMs: Math.round(mx * 10000) / 10, fpsN: fpsN,
-          scale: cssScale, weekend: weekend, hurtBy: Gm && Gm.dbgHurt, kills: Gm ? Gm.log.kills.reduce(function (a, b) { return a + b }, 0) : 0, cityHits2: Gm && Gm.cityHits, touch: touchMode, power: Gm && Gm.power, shield: Gm && Gm.shield, night: Gm && Gm.night, log: Gm && Gm.log, last: LAST, top: TOP, art: !!window.DEADLINE_ART, broken: Object.keys(broken) };
+          scale: cssScale, virus: VX.on ? [VX.hp, vCount(), VX.cc, VX.cr] : null, deliv: Gm && Gm.deliv, sys: Gm && Gm.sys, weekend: weekend, hurtBy: Gm && Gm.dbgHurt, kills: Gm ? Gm.log.kills.reduce(function (a, b) { return a + b }, 0) : 0, cityHits2: Gm && Gm.cityHits, touch: touchMode, power: Gm && Gm.power, shield: Gm && Gm.shield, night: Gm && Gm.night, log: Gm && Gm.log, last: LAST, top: TOP, art: !!window.DEADLINE_ART, broken: Object.keys(broken) };
       },
       day: function (n) { if (!Gm) newGame(); startDay(n | 0); paused = false; syncUI() },
       god: function (on) { god = on !== false }, scale: function (v) { timeScale = +v || 1 }, bot: function (on) { botOn = on !== false },

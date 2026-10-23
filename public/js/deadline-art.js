@@ -6,6 +6,48 @@
    - centro in x,y: ship, enemy, boss, bullet, powerup, explosion, mark, logo (x = centro, y = alto), page, reticle.
    - angolo in alto a sinistra: text (con align), firewall, meeting, icon, building, digits, tiny.
 
+   GIRO 3 / V3 (scorrimento laterale, attori HD). Tutto il resto sotto resta valido.
+   - ATTORI HD: ship, enemy, boss, bullet, powerup, explosion, page, cable, reticle, icon, portrait, dialog, parcel,
+     virusCell, virusCore, firewall, logo, map, hud*: coordinate di GIOCO (480x270). Se il canvas e' largo >= 720
+     (canvas attori 960x540) disegnano a densita' doppia; su un canvas 480 disegnano dimezzato. ART.actorScale (1|2)
+     forza la scala. Il canvas attori deve avere imageSmoothingEnabled = false.
+   - ART.bgCanvas = il canvas di sfondo (480x270): lo scudo Booking ne fa la copia sfocata (se manca usa il canvas attori).
+   - ART.side = true: la nave e' vista di lato e guarda a destra (la m coricata: tre propulsori dietro, fiamme a
+     sinistra). s.bank = beccheggio -1..1. s.view = 'top' per la vecchia nave vista dall'alto (ART.shipVariant 'a'..'e').
+     ART.hitbox = {dx, dy}: il sensore (1px bianco caldo) rispetto al centro: usarlo al posto di y - 3.
+   - Il colpo 'player' e' orizzontale (testa a destra). I nemici guardano a sinistra; 'ring' si apre verso sinistra.
+   - ART.street(ctx, day, scroll, t): la strada vicina che scorre (parallasse 0.6), striscia di 960 senza giunture,
+     con i pezzi del giorno (ombrelli e pozzanghere, lampioni nella nebbia, vapore e insegne acide, laser, ombre lunghe,
+     alberi, lampeggianti). skyline (0.05) e towers (0.2) sono gia' strisce senza giunture: passare lo stesso scroll.
+     ART.streetShops(day, scroll) -> [{i, kind, x, w, top, cx}] i palazzi visibili (per la consegna del venerdi').
+   - BOSS nuovi: ART.boss(ctx, 'voicemail'|'replyall'|'paperjam'|'onestar'|'scaries', x, y, t, s), s.state =
+     'idle'|'attack'|'hurt' (oppure s.hit / s.mouth come prima), s.hp 0..1 = barra. ART.prepareBosses().
+     MONDAY e URGENT invariati (MONDAY guarda a sinistra).
+   - ART.portrait(ctx, name, x, y, t, mood): ritratto 56x48 (x,y = angolo). name: i 5 boss + 'urgent' + 'monday'.
+     mood: 'idle' | 'smug' | 'angry' | 'rage' | 'hurt' (MONDAY 'smug' = il ghigno del cameo).
+   - ART.dialog(ctx, x, y, w, h, t, o) -> true a testo finito. o = {name, portrait, mood, text, chars | t0, color}.
+   - ART.logo(ctx, x, y, t, glitch, o): insegna al neon d'epoca (pannello, staffe, DEAD crema LINE pomodoro, seconda D
+     che sfarfalla, A MOTHER MACHINE GAME, targhetta OPEN 24/7). x = centro, y = alto. ART.logoSize() ~ 244x101 (targhetta compresa).
+     ART.glow('logo') ha .ox .oy (offset dal punto x,y) oltre a .gw .gh.
+   - CITY del titolo: ART.building(ctx, kind, x, y, w, h, t, sign) con kind 'restaurant' | 'streetfood' | 'clothing' |
+     'hairdresser' | 'supermarket' | 'hotel' | 'cafe' | 'gym' (food/fashion/shop/beauty/services ci finiscono dentro).
+     Ogni tipo ha la sua insegna (arco, cerchio, lama verticale, ovale, fascia, lettere sul tetto, esagono); senza
+     vincitore neon spento FOR RENT / YOUR SIGN HERE. ART.signSlot(kind, w, h) = dove va il logo. ART.buildingKinds.
+   - HUD Control Room: ART.hudClock(ctx, x, y, w, k, day, t, {overtime}), ART.hudCounter(ctx, xCentro, y, valore, t)
+     (valore decimale = il rullo gira), ART.hudCups(ctx, xDestra, y, n, max, t, spillK), ART.hudSign(ctx, x, y,
+     'OPEN'|'CLOSED'|'BRB', t, hurt), ART.hudSystems(ctx, xDestra, y, {booking, auto, ai, night, nightCharge, key}, t),
+     ART.systemCard(ctx, kind, t, {name, line}), ART.hint(ctx, x, y, testo, 'up'|'down'|'left'|'right', t),
+     ART.plus(ctx, x, y, '+3h', k), ART.techFrame(ctx, x, y, w, h, col), ART.powerLabel(ctx, kind, x, y, dt),
+     ART.powerInfo[kind] = {col, name, line}. ART.dayName(day) -> 'TUESDAY'...
+   - UI (pixel del canvas, non di gioco): ART.uiButton(ctx, 'primary'|'secondary'|'icon', x, y, w, h,
+     ''|'hover'|'down', {label | icon: 'pause'|'play'|'sound'|'mute'|'close'|'map', u}); ART.pad(ctx, x, y, w, h,
+     {up, down, left, right, a, b, start, select}, {labels: {a, b}}); ART.padLayout(w, h) = rettangoli per il tocco.
+   - GIOVEDI' virus: ART.serverBg(ctx, t), ART.virusCell(ctx, x, y, t, k) (cella 12x12, k 0..1 crescita),
+     ART.virusCore(ctx, x, y, t, {hit}). VENERDI' consegna: ART.parcel(ctx, kind, x, y, t, {carried, glow}),
+     ART.shopIcon(ctx, kind, x, y, col), ART.targetShop(ctx, shop, t) (shop da ART.streetShops).
+   - MAPPA v3: diorama isometrico HD; s.installed = {indice: 'booking'|'auto'|'ai'|'night'} (default martedi'-venerdi')
+     mostra il sistema installato sui quartieri battuti. Nomi interi dei giorni. Va disegnata sul canvas attori.
+
    GIRO 2 (richieste di Eso): nave nuova 27x23 (5 inclinazioni, motori vivi, luci di via), nemici con la faccia e piu'
    grandi, MONDAY piu' cattivo (pupille rosse, ghigno, zanne, corna, crepe, inchiostro che cola), capsule a pillola,
    moneta che gira, colpi nemici animati, pezzi di scena diversi per ogni giorno, mappa del mondo, intro.
@@ -2005,7 +2047,7 @@
   }
   // la torre di MONDAY: grattacielo nero e cremisi, la faccia del calendario in cima, il faro rosso
   function monTower3() {
-    var cx = MONW[0], cy = MONW[1], w = 20, d = 20, h = 104, bx = Math.floor(P3(cx - w / 2, cy + d / 2, 0)[0]) - 30, by = Math.floor(P3(cx - w / 2, cy - d / 2, h + 40)[1]), bw = w * 4 + 60, bh = Math.ceil(P3(cx + w / 2, cy + d / 2, -4)[1]) - by + 4;
+    var cx = MONW[0], cy = MONW[1], w = 20, d = 20, h = 90, bx = Math.floor(P3(cx - w / 2, cy + d / 2, 0)[0]) - 30, by = Math.floor(P3(cx - w / 2, cy - d / 2, h + 40)[1]), bw = w * 4 + 60, bh = Math.ceil(P3(cx + w / 2, cy + d / 2, -4)[1]) - by + 4;
     var B = Buf(bw, bh, bx, by), R = rnd(66), x0 = cx - w / 2, y0 = cy - d / 2;
     // basamento rosso a terra
     bpoly(B, quad(x0 - 6, y0 - 6, w + 12, d + 12, 0), u32('#26090D'));
@@ -2033,6 +2075,7 @@
   };
   var FULLN = { tue: 'TUESDAY', wed: 'WEDNESDAY', thu: 'THURSDAY', fri: 'FRIDAY', sat: 'SATURDAY', sun: 'SUNDAY', mon: 'MONDAY', night: 'NIGHT SHIFT' };
   ART.dayName = function (d) { return FULLN[d] || String(d).toUpperCase() };
+  var CHK = [[3, 7], [4, 8], [5, 9], [6, 10], [7, 9], [8, 8], [9, 7], [10, 6], [11, 5]], CORN = [[-1, -1], [1, -1], [-1, 1], [1, 1]];
   ART.map = function (ctx, t, s) {
     if (!MAP3) buildMap3(); s = s || {}; t = t || 0;
     var S = SC(ctx), cur = s.current == null ? 0 : Math.min(6, s.current), done = s.done || [], unl = s.unlocked == null ? cur + 1 : s.unlocked;
@@ -2059,12 +2102,13 @@
       var nx = Math.round(nd[0]), ny = Math.round(nd[1]);
       var rx0 = Math.round(rn[0]), ry0 = Math.round(rn[1]);
       ctx.fillStyle = isDone ? C.cream : isOpen ? C.cream : '#4A5266'; ctx.fillRect(rx0 - 2, ry0 - 2, 5, 5); ctx.fillStyle = C.night; ctx.fillRect(rx0 - 1, ry0 - 1, 3, 3); if (isDone || isCur) { ctx.fillStyle = isCur ? C.tomato : C.cream; ctx.fillRect(rx0, ry0, 1, 1) }
-      if (isCur) { var pz = s.pulse != null ? s.pulse : (Math.sin(t * 6) * .5 + .5), rr = 9 + Math.round(pz * 4); ctx.fillStyle = C.tomato; [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(function (v) { var x1 = rx0 + v[0] * rr, y1 = ry0 + v[1] * rr; ctx.fillRect(v[0] > 0 ? x1 - 4 : x1, y1, 5, 1); ctx.fillRect(x1, v[1] > 0 ? y1 - 4 : y1, 1, 5) }) }
+      if (isCur) { var pz = s.pulse != null ? s.pulse : (Math.sin(t * 6) * .5 + .5), rr = 9 + Math.round(pz * 4); ctx.fillStyle = C.tomato; for (var cv = 0; cv < 4; cv++) { var v = CORN[cv], x1 = rx0 + v[0] * rr, y1 = ry0 + v[1] * rr; ctx.fillRect(v[0] > 0 ? x1 - 4 : x1, y1, 5, 1); ctx.fillRect(x1, v[1] > 0 ? y1 - 4 : y1, 1, 5) } }
       if (s.labels !== false) {
         var tw = textWidth(name, 1) * 2 + 10, lx = nx - (tw >> 1), ly = ny + 10;
         ctx.fillStyle = 'rgba(10,12,18,0.88)'; ctx.fillRect(lx, ly, tw, 20); ctx.fillStyle = n === 6 ? C.crim3 : isOpen ? C.cream : C.g3; ctx.fillRect(lx, ly, tw, 1); ctx.fillRect(lx, ly + 19, 4, 1); ctx.fillRect(lx + tw - 4, ly + 19, 4, 1);
         text(ctx, name, nx - (textWidth(name, 1)), ly + 4, { size: 2, color: n === 6 ? C.crim3 : isOpen ? C.cream : C.g3 });
-        if (isDone) { ctx.fillStyle = C.cream; ctx.fillRect(lx + tw + 3, ly + 3, 14, 14); ctx.fillStyle = C.ink; [[3, 7], [4, 8], [5, 9], [6, 10], [7, 9], [8, 8], [9, 7], [10, 6], [11, 5]].forEach(function (q2) { ctx.fillRect(lx + tw + 3 + q2[0], ly + 3 + q2[1], 2, 2) }) }
+        var sys = (s.installed || { 0: 'booking', 1: 'auto', 2: 'ai', 3: 'night' })[n]; if (isDone && sys && IC2[sys]) { ctx.fillStyle = 'rgba(10,12,18,0.88)'; ctx.fillRect(lx - 22, ly, 20, 20); ctx.fillStyle = C.tomato; ctx.fillRect(lx - 22, ly, 20, 1); ctx.drawImage(IC2[sys][0], lx - 19, ly + 3) }
+        if (isDone) { ctx.fillStyle = C.cream; ctx.fillRect(lx + tw + 3, ly + 3, 14, 14); ctx.fillStyle = C.ink; for (var q2 = 0; q2 < CHK.length; q2++) ctx.fillRect(lx + tw + 3 + CHK[q2][0], ly + 3 + CHK[q2][1], 2, 2) }
         else if (!isOpen) { ctx.fillStyle = C.g3; ctx.fillRect(lx + tw + 6, ly + 9, 9, 7); ctx.fillRect(lx + tw + 7, ly + 4, 1, 5); ctx.fillRect(lx + tw + 13, ly + 4, 1, 5); ctx.fillRect(lx + tw + 7, ly + 4, 7, 1) }
       }
     }
@@ -2199,7 +2243,9 @@
     for (var mx = cx - 9; mx <= cx + 9; mx++) { var my = Math.round(46 + Math.sin((mx + f * 3) / 2.2) * 1.5); gs(g, mx, my, 'k'); gs(g, mx, my + 1, 'k'); if (att) gs(g, mx, my + 2, 'k') }
     var c = can(g, BPAL); if (hurt) c = dissolve(c, .35); return c;
   }
-  ART.size.voicemail = { w: 66, h: 45 }; ART.size.replyall = { w: 55, h: 42 }; ART.size.paperjam = { w: 66, h: 52 }; ART.size.onestar = { w: 56, h: 54 }; ART.size.scaries = { w: 50, h: 62 };
+  // misure visibili in pixel di gioco (giro 3, HD): replyall con le buste che girano, onestar con il fumetto
+  ART.size.call = { w: 21, h: 17 }; ART.size.invoice = { w: 16, h: 21 }; ART.size.receipt = { w: 10, h: 14 }; ART.size.noshow = { w: 14, h: 21 }; ART.size.spam = { w: 19, h: 11 }; ART.size.double = { w: 15, h: 15 }; ART.size.powerup = { w: 16, h: 18 }; ART.size.urgent = { w: 65, h: 38 }; ART.size.monday = { w: 157, h: 120 };
+  ART.size.voicemail = { w: 63, h: 39 }; ART.size.replyall = { w: 55, h: 37, orbit: 80 }; ART.size.paperjam = { w: 62, h: 44 }; ART.size.onestar = { w: 56, h: 54, bubble: 79 }; ART.size.scaries = { w: 39, h: 58 };
   var BDEF = { voicemail: { fn: bVoicemail, day: 'tue', n: 4, fps: 6, face: [66, 46] }, replyall: { fn: bReplyAll, day: 'wed', n: 2, fps: 4, face: [55, 48] }, paperjam: { fn: bPaperJam, day: 'thu', n: 2, fps: 5, face: [66, 52] }, onestar: { fn: bOneStar, day: 'sat', n: 2, fps: 3, face: [56, 58] }, scaries: { fn: bScaries, day: 'sun', n: 3, fps: 5, face: [50, 40] } };
   var BC = {};
   function bossFrames(name, state) {
@@ -2348,7 +2394,7 @@
     ctx.restore();
   };
   ART.logoSize = function () { var L = LG2 || buildLogo2(); return { w: Math.round(L.w / 2), h: Math.round(L.h / 2) } };
-  (function () { try { var z = ART.logoSize; ART.size.logo = { w: 260, h: 80 } } catch (e) {} })();
+  ART.size.logo = { w: 244, h: 101 };
   var GLOW_OLD = ART.glow;
   ART.glow = function (name, size) {
     if (name === 'logo') { if (!GLOWS.logo2) { var L = LG2 || buildLogo2(), c = mk(L.full.width, L.full.height); c.g.drawImage(L.full, 0, 0); var st = blurStamp(c.c, 12, 1, 10); st.gw = st.width / 2; st.gh = st.height / 2; st.ox = (L.lx - 12 - L.w / 2) / 2; st.oy = (L.ly - 12) / 2; GLOWS.logo2 = st } return GLOWS.logo2 }
@@ -2544,6 +2590,8 @@
   ART.parcel = function (ctx, kind, x, y, t, s) { s = s || {}; var S = SC(ctx), bob = s.carried ? 0 : Math.round(Math.sin(t * 3) * 1.5), sw = s.carried ? 0 : Math.sin(t * 2) * 1; putC(ctx, parcel(kind || 'shop'), x + sw, y + bob, S); if (s.glow) { var hd = Math.round(Math.sin(t * 8) * .5 + .5); if (hd) { ctx.fillStyle = C.cream; var r = 11 * S; ctx.fillRect(Math.round(x * S) - r, Math.round(y * S) - r, 3 * S, S); ctx.fillRect(Math.round(x * S) + r - 3 * S, Math.round(y * S) - r, 3 * S, S) } } };
   ART.size.parcel = { w: 18, h: 17 };
   // i palazzi della citta' vicina con il loro tipo (per scegliere il negozio di destinazione)
+  // i negozi della strada che scorre (V3): stessa striscia di ART.street, stesso scroll
+  ART.streetShops = function (day, scroll) { day = DAYS[day] ? day : ART.day; var S0 = buildStreet(day), off = (((scroll || 0) * .6) % STR_W + STR_W) % STR_W, out = []; for (var i = 0; i < S0.B.length; i++) { var b = S0.B[i], x = ((b.x - off) % STR_W + STR_W) % STR_W; if (x > W) x -= STR_W; if (x + b.w > 4 && x < W - 4) out.push({ i: i, kind: b.kind, x: x, w: b.w, top: STREET - b.h, cx: x + b.w / 2 }) } return out };
   ART.nearShops = function (shift) { var B = nearLayout(), out = []; for (var i = 0; i < B.length; i++) { var b = B[i], x = b.x - 8 + (shift || 0); if (x + b.w > 4 && x < W - 4) out.push({ i: i, kind: b.kind, x: x, w: b.w, top: STREET - b.h, cx: x + b.w / 2 }) } return out };
   // il negozio di destinazione: freccia che pulsa, insegna OPEN al neon, icona del negozio
   ART.targetShop = function (ctx, shop, t, o) {
@@ -2579,17 +2627,17 @@
   };
   // pulsantiera: corpo notte arrotondato (mother), croce squadrata (machine), A pomodoro, B crema, START e SELECT
   ART.padLayout = function (w, h) {
-    var s = Math.min(w / 160, h / 96), cx = w * .27, cy = h * .46, ax = w * .8, ay = h * .38, bx = w * .66, by = h * .52, d = 14 * s;
-    return { up: [cx - d / 2, cy - d * 1.5, d, d], down: [cx - d / 2, cy + d * .5, d, d], left: [cx - d * 1.5, cy - d / 2, d, d], right: [cx + d * .5, cy - d / 2, d, d], a: [ax - 12 * s, ay - 12 * s, 24 * s, 24 * s], b: [bx - 12 * s, by - 12 * s, 24 * s, 24 * s], select: [w * .36, h * .8, 22 * s, 8 * s], start: [w * .52, h * .8, 22 * s, 8 * s], s: s };
+    var s = Math.min(w / 160, h / 96), cx = w * .27, cy = h * .46, ax = w * .83, ay = h * .36, bx = w * .64, by = h * .56, d = 14 * s;
+    return { up: [cx - d / 2, cy - d * 1.5, d, d], down: [cx - d / 2, cy + d * .5, d, d], left: [cx - d * 1.5, cy - d / 2, d, d], right: [cx + d * .5, cy - d / 2, d, d], a: [ax - 12 * s, ay - 12 * s, 24 * s, 24 * s], b: [bx - 12 * s, by - 12 * s, 24 * s, 24 * s], select: [w * .3, h * .8, 22 * s, 7 * s], start: [w * .5, h * .8, 22 * s, 7 * s], s: s };
   };
   ART.pad = function (ctx, x, y, w, h, st, o) {
-    st = st || {}; o = o || {}; var L = ART.padLayout(w, h), s = L.s, u = Math.max(1, Math.round(s * 1.5));
+    st = st || {}; o = o || {}; var L = ART.padLayout(w, h), s = L.s, u = Math.max(1, Math.round(s)), tu = Math.max(1, Math.round(s * .7));
     ctx.save(); ctx.translate(Math.round(x), Math.round(y));
     // corpo
     var r = Math.round(14 * s); ctx.fillStyle = '#121214'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(w, 0); ctx.lineTo(w, h - r * 2); ctx.quadraticCurveTo(w, h, w - r * 2, h); ctx.lineTo(r, h); ctx.quadraticCurveTo(0, h, 0, h - r); ctx.closePath(); ctx.fill();
     ctx.fillStyle = 'rgba(244,242,236,0.12)'; ctx.fillRect(0, 0, w, u);
     // marchio
-    var mm = markCanvas(Math.max(8, Math.round(10 * s)), C.g2); ctx.drawImage(mm, Math.round(8 * s), Math.round(6 * s)); ART.tinyScaled(ctx, 'MOTHER MACHINE', Math.round(8 * s + mm.width + 4 * s), Math.round(8 * s), u, C.g2);
+    var mm = markCanvas(Math.max(8, Math.round(9 * s)), C.g2); ctx.drawImage(mm, Math.round(8 * s), Math.round(6 * s)); ART.tinyScaled(ctx, 'MOTHER MACHINE', Math.round(8 * s + mm.width + 4 * s), Math.round(6 * s + (mm.height - 5 * tu) / 2), tu, C.g2);
     // croce
     var cx = L.up[0] + L.up[2] / 2, cyy = L.left[1] + L.left[3] / 2, d = L.up[2];
     ctx.fillStyle = '#050505'; ctx.fillRect(Math.round(cx - d / 2 - u), Math.round(cyy - d * 1.5 - u + 2 * u), Math.round(d + 2 * u), Math.round(d * 3 + 2 * u)); ctx.fillRect(Math.round(cx - d * 1.5 - u), Math.round(cyy - d / 2 - u + 2 * u), Math.round(d * 3 + 2 * u), Math.round(d + 2 * u));
@@ -2597,11 +2645,11 @@
     ['up', 'down', 'left', 'right'].forEach(function (k) { var R = L[k]; if (st[k]) { ctx.fillStyle = '#4A4E4C'; ctx.fillRect(Math.round(R[0]), Math.round(R[1]), Math.round(R[2]), Math.round(R[3])) } ctx.fillStyle = C.g2; var ax2 = R[0] + R[2] / 2, ay2 = R[1] + R[3] / 2, q = Math.max(1, Math.round(u)); for (var i = 0; i < 3; i++) { if (k === 'up') ctx.fillRect(Math.round(ax2 - i * q), Math.round(ay2 - q + i * q), (i * 2 + 1) * q, q); if (k === 'down') ctx.fillRect(Math.round(ax2 - i * q), Math.round(ay2 + q - i * q), (i * 2 + 1) * q, q); if (k === 'left') ctx.fillRect(Math.round(ax2 - q + i * q), Math.round(ay2 - i * q), q, (i * 2 + 1) * q); if (k === 'right') ctx.fillRect(Math.round(ax2 + q - i * q), Math.round(ay2 - i * q), q, (i * 2 + 1) * q) } });
     ctx.fillStyle = '#1A1C1B'; ctx.fillRect(Math.round(cx - d / 4), Math.round(cyy - d / 4), Math.round(d / 2), Math.round(d / 2));
     // A e B tondi (mother)
-    [['a', C.tomato, C.t1, 'A'], ['b', C.cream, C.p2, 'B']].forEach(function (b) { var R = L[b[0]], ccx = R[0] + R[2] / 2, ccy = R[1] + R[3] / 2 + (st[b[0]] ? u * 2 : 0), rr = R[2] / 2; ctx.fillStyle = '#050505'; ctx.beginPath(); ctx.arc(ccx, R[1] + R[3] / 2 + u * 2, rr, 0, 7); ctx.fill(); ctx.fillStyle = b[2]; ctx.beginPath(); ctx.arc(ccx, ccy, rr, 0, 7); ctx.fill(); ctx.fillStyle = b[1]; ctx.beginPath(); ctx.arc(ccx, ccy - u, rr - u, 0, 7); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(Math.round(ccx - rr * .5), Math.round(ccy - rr * .6), Math.round(rr * .5), u); ART.tinyScaled(ctx, b[3], Math.round(ccx - u * 1.5), Math.round(R[1] + R[3] + 4 * u), u, C.cream); if (o.labels) ART.tinyScaled(ctx, o.labels[b[0]] || '', Math.round(ccx - u * 10), Math.round(R[1] + R[3] + 11 * u), u, C.g2) });
+    [['a', C.tomato, C.t1, 'A'], ['b', C.cream, C.p2, 'B']].forEach(function (b) { var R = L[b[0]], ccx = R[0] + R[2] / 2, ccy = R[1] + R[3] / 2 + (st[b[0]] ? u * 2 : 0), rr = R[2] / 2; ctx.fillStyle = '#050505'; ctx.beginPath(); ctx.arc(ccx, R[1] + R[3] / 2 + u * 2, rr, 0, 7); ctx.fill(); ctx.fillStyle = b[2]; ctx.beginPath(); ctx.arc(ccx, ccy, rr, 0, 7); ctx.fill(); ctx.fillStyle = b[1]; ctx.beginPath(); ctx.arc(ccx, ccy - u, rr - u, 0, 7); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(Math.round(ccx - rr * .5), Math.round(ccy - rr * .6), Math.round(rr * .5), u); var lb = b[3] + (o.labels && o.labels[b[0]] ? ' ' + o.labels[b[0]] : ''); ART.tinyScaled(ctx, lb, Math.round(ccx - tinyWidth(lb) * tu / 2), Math.round(R[1] + R[3] + 4 * tu), tu, b[0] === 'a' ? C.cream : C.g1) });
     // SELECT e START: pillole inclinate
-    [['select', 'SELECT'], ['start', 'START']].forEach(function (b) { var R = L[b[0]], yy = R[1] + (st[b[0]] ? u : 0), hh = R[3]; ctx.fillStyle = '#050505'; ctx.fillRect(Math.round(R[0]), Math.round(R[1] + u), Math.round(R[2]), Math.round(hh)); ctx.fillStyle = st[b[0]] ? '#4A4E4C' : '#3A3D3C'; ctx.beginPath(); ctx.moveTo(R[0] + hh / 2, yy); ctx.lineTo(R[0] + R[2] - hh / 2, yy); ctx.arc(R[0] + R[2] - hh / 2, yy + hh / 2, hh / 2, -1.57, 1.57); ctx.lineTo(R[0] + hh / 2, yy + hh); ctx.arc(R[0] + hh / 2, yy + hh / 2, hh / 2, 1.57, 4.71); ctx.fill(); ART.tinyScaled(ctx, b[1], Math.round(R[0] + R[2] / 2 - tinyWidth(b[1]) * u / 2), Math.round(R[1] + hh + 4 * u), u, C.g2) });
+    [['select', 'SELECT'], ['start', 'START']].forEach(function (b) { var R = L[b[0]], yy = R[1] + (st[b[0]] ? u : 0), hh = R[3]; ctx.fillStyle = '#050505'; ctx.fillRect(Math.round(R[0]), Math.round(R[1] + u), Math.round(R[2]), Math.round(hh)); ctx.fillStyle = st[b[0]] ? '#4A4E4C' : '#3A3D3C'; ctx.beginPath(); ctx.moveTo(R[0] + hh / 2, yy); ctx.lineTo(R[0] + R[2] - hh / 2, yy); ctx.arc(R[0] + R[2] - hh / 2, yy + hh / 2, hh / 2, -1.57, 1.57); ctx.lineTo(R[0] + hh / 2, yy + hh); ctx.arc(R[0] + hh / 2, yy + hh / 2, hh / 2, 1.57, 4.71); ctx.fill(); ART.tinyScaled(ctx, b[1], Math.round(R[0] + R[2] / 2 - tinyWidth(b[1]) * tu / 2), Math.round(R[1] + hh + 3 * tu), tu, C.g2) });
     // griglia dell'altoparlante
-    for (var k2 = 0; k2 < 5; k2++) { ctx.fillStyle = '#050505'; ctx.save(); ctx.translate(w - 34 * s + k2 * 5 * s, h - 22 * s); ctx.rotate(-.5); ctx.fillRect(0, 0, 2 * u, 16 * s); ctx.restore() }
+    for (var k2 = 0; k2 < 5; k2++) { ctx.fillStyle = '#050505'; ctx.save(); ctx.translate(w - 40 * s + k2 * 5 * s, h - 24 * s); ctx.rotate(-.5); ctx.fillRect(0, 0, Math.max(1, Math.round(1.5 * s)), 14 * s); ctx.restore() }
     ctx.restore();
   };
   ART.tinyScaled = function (ctx, str, x, y, u, col) { ctx.save(); ctx.translate(x, y); ctx.scale(u, u); tiny(ctx, str, 0, 0, col); ctx.restore() };
@@ -2683,7 +2731,7 @@
     for (var i = 0; i < I.eng.length; i++) { var e = I.eng[i], ex = (e[0] - SSW / 2) / 2, ey = ((e[1] + e[2]) / 2 - SSH / 2) / 2, fl = .8 + .2 * Math.sin(t * 40 + i * 2.1), ww = f.gh * len * fl, hh = f.gw * .8; ctx.globalAlpha = .9; ctx.drawImage(f, 0, 0, f.width, f.height, x + ex - ww, y + ey - hh / 2, ww, hh) }
     ctx.restore();
   };
-  ART.size.ship = { w: 44, h: 28 };
+  ART.size.ship = { w: 40, h: 24 };
 
   // ======================================================================================
   // V3: LA STRADA VICINA che scorre (striscia di 960 px per giorno, si ripete senza giunture) con i pezzi del giorno.
@@ -2754,7 +2802,7 @@
   function signFrame(kind, sh, col, lit, label) {
     var key = kind + sh.w + 'x' + sh.h + col + lit + (label || ''); if (SIGNC[key]) return SIGNC[key];
     var g = grid(sh.w, sh.h), w = sh.w, h = sh.h;
-    if (sh.t === 'arch') { for (var x = 0; x < w; x++) { var top = Math.round(h * .45 - Math.sqrt(Math.max(0, 1 - Math.pow((x - w / 2 + .5) / (w / 2), 2))) * h * .45); gs(g, x, top + h * .45 | 0, 'x'); } gr(g, 0, h - 1, w, 1, 'x'); gr(g, 0, Math.round(h * .45), 1, h - Math.round(h * .45), 'x'); gr(g, w - 1, Math.round(h * .45), 1, h - Math.round(h * .45), 'x'); for (var a = 0; a <= 64; a++) { var th = Math.PI * a / 64; gs(g, Math.round(w / 2 - .5 - Math.cos(th) * (w / 2 - .5)), Math.round(h * .45 - Math.sin(th) * (h * .45 - 1)), 'x') } }
+    if (sh.t === 'arch') { var ry = Math.round(h * .5), rx = w / 2 - .5; for (var a = 0; a <= 96; a++) { var th = Math.PI * a / 96; gs(g, Math.round(rx - Math.cos(th) * rx), Math.round(ry - Math.sin(th) * ry), 'x') } gr(g, 0, ry, 1, h - ry, 'x'); gr(g, w - 1, ry, 1, h - ry, 'x'); gr(g, 0, h - 1, w, 1, 'x') }
     else if (sh.t === 'circle') { for (var a2 = 0; a2 < 128; a2++) { var t2 = a2 * Math.PI / 64; gs(g, Math.round(w / 2 - .5 + Math.cos(t2) * (w / 2 - .5)), Math.round(h / 2 - .5 + Math.sin(t2) * (h / 2 - .5)), 'x') } }
     else if (sh.t === 'oval') { for (var a3 = 0; a3 < 128; a3++) { var t3 = a3 * Math.PI / 64; gs(g, Math.round(w / 2 - .5 + Math.cos(t3) * (w / 2 - .5)), Math.round(h / 2 - .5 + Math.sin(t3) * (h / 2 - .5)), 'x') } }
     else if (sh.t === 'hex') { var P = [[4, 0], [w - 5, 0], [w - 1, h / 2], [w - 5, h - 1], [4, h - 1], [0, h / 2]]; for (var i = 0; i < 6; i++) gl(g, Math.round(P[i][0]), Math.round(P[i][1]), Math.round(P[(i + 1) % 6][0]), Math.round(P[(i + 1) % 6][1]), 'x') }
