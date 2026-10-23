@@ -102,17 +102,20 @@
   var raf = 0;
   tr.addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(function () { raf = 0; show(nearest(tr.scrollLeft)) }) }, { passive: true });
   tr.addEventListener('touchstart', function () { touched = true; cancelAnimationFrame(anim); tr.classList.remove('free') }, { passive: true });
-  /* trackpad e rotella in orizzontale: un gesto = una scheda. L'inerzia del trackpad non porta piu' avanti:
-     finche' il gesto continua (anche la sua coda) non si conta un'altra scheda. Lo scroll verticale resta libero */
-  var wacc = 0, wlock = 0, wt = 0;
+  /* trackpad e rotella: lo scorrimento e' libero e liscio (un gesto forte puo' saltare schede), e quando il gesto
+     finisce, coda d'inerzia compresa, la striscia si aggiusta da sola sulla scheda piu' vicina */
+  var wt = 0, w0 = -1;
   tr.addEventListener('wheel', function (e) {
     if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
-    e.preventDefault();
-    clearTimeout(wt); wt = setTimeout(function () { wlock = 0; wacc = 0 }, 220);
-    if (wlock) return;
-    wacc += e.deltaX;
-    if (Math.abs(wacc) > 30) { wlock = 1; touched = true; go(cur + (wacc > 0 ? 1 : -1)) }
-  }, { passive: false });
+    if (auto) { cancelAnimationFrame(anim); auto = false }
+    if (w0 < 0) w0 = tr.scrollLeft;
+    touched = true; tr.classList.add('free');
+    clearTimeout(wt); wt = setTimeout(function () {
+      var from = nearest(w0), d = tr.scrollLeft - w0, i = nearest(tr.scrollLeft); w0 = -1;
+      if (i === from && Math.abs(d) > 90) i += d > 0 ? 1 : -1;   /* un gesto voluto porta almeno alla scheda dopo */
+      go(i);
+    }, 160);
+  }, { passive: true });
   [prev, next].forEach(function (b) {
     b.addEventListener('click', function () { touched = true; b.classList.remove('call'); go(cur + +b.dataset.d) });
   });
@@ -157,12 +160,13 @@
     var dist = tr.scrollLeft - start, here = nearest(tr.scrollLeft), from = nearest(start), i = here;
     if (one) {   /* dal selettore conta dove porti il dito, senza spinta: un quarto di passo basta per cambiare lavoro */
       var step = cards.length > 1 ? at(1) - at(0) : 1;
-      i = here;
-      if (i === nearest(start) && Math.abs(dist) > step * .25) i += dist > 0 ? 1 : -1;
+      if (i === from && Math.abs(dist) > step * .25) i += dist > 0 ? 1 : -1;
       go(i); return;
     }
-    /* la spinta vale al massimo una scheda: si va alla scheda piu' vicina, o a quella dopo se il gesto e' deciso */
-    if (here === from && (Math.abs(v) > .35 || Math.abs(dist) > Math.min(140, cards[from].offsetWidth * .15))) i = from + ((Math.abs(v) > .35 ? v : dist) > 0 ? 1 : -1);
+    /* l'inerzia porta avanti in proporzione alla spinta (una spinta estrema salta schede), poi si sceglie la scheda
+       piu' vicina a dove si fermerebbe. Un gesto piccolo ma deciso basta per passare alla scheda dopo */
+    i = nearest(tr.scrollLeft + v * 300);
+    if (i === from && (Math.abs(v) > .35 || Math.abs(dist) > Math.min(140, cards[from].offsetWidth * .15))) i = from + ((Math.abs(v) > .35 ? v : dist) > 0 ? 1 : -1);
     go(i);
   };
 
