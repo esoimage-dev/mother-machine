@@ -175,6 +175,8 @@
 
   /* l'ascensore: quanto sono aperte le porte (0 chiuse, 1 aperte) e la cabina da ritagliare */
   var LIFT = { s: 0 };
+  /* la leva della luce: 0 su (accesa), 1 giu' (spenta) */
+  var LEVA = { s: 0 };
 
   /* ---------- la stanza ---------- */
   var X = 5.6, Y = 3.3, Z0 = 1.2, Z1 = 11.5;
@@ -267,8 +269,12 @@
     /* tre leve: la base disegnata sul quadro (sempre visibile), il braccio che esce verso chi guarda, il pomello pieno */
     for (var i = 0; i < 3; i++) { var x = x0 + .17 + i * .25;
       p.line([[x, 1.12, z], [x + .12, 1.12, z], [x + .12, 1.4, z], [x, 1.4, z]], { closed: true, cls: 'lbase', on: f });
-      p.line([[x + .06, 1.36, z], [x + .06, 1.58, z - .24]], { cls: 'lever' });
-      p.circle([x + .06, 1.58, z - .24], .04, 'z', { cls: 'knob', k: 12 }) }
+      var lv = p.line([[x + .06, 1.36, z], [x + .06, 1.58, z - .24]], { cls: 'lever' });
+      var kn = p.circle([x + .06, 1.58, z - .24], .04, 'z', { cls: 'knob', k: 12 });
+      /* la leva di destra e' quella della luce: spegnendo scende, riaccendendo risale */
+      if (i === 2) (function (lv, kn) { var su = lv.pts[1].slice(), giu = [su[0], 1.14, su[2]], kb = kn.pts.map(function (q) { return q.slice() });
+        hooks.push(function () { var e = [su[0], su[1] + (giu[1] - su[1]) * LEVA.s, su[2]]; lv.pts[1] = e;
+          kn.pts = kb.map(function (q) { return [q[0], q[1] + e[1] - su[1], q[2]] }) }) })(lv, kn) }
     /* il tubo che sale nel soffitto */
     p.line([[x0 + .3, 2.15, Z1 - .1], [x0 + .3, Y, Z1 - .1]], { cls: 'dt' });
     p.line([[x0 + .36, 2.15, Z1 - .1], [x0 + .36, Y, Z1 - .1]], { cls: 'dt' });
@@ -437,7 +443,10 @@
       if (k === 'arcade' && window.RUSH) window.RUSH.open(x, r.top + r.height / 3);
       /* l'ascensore apre la pulsantiera del sito */
       else if (k === 'lift') porte(true, function () { var d = document.getElementById('dispB'); if (d && d.getAttribute('aria-expanded') !== 'true') d.click() });
-      else if (k === 'luce') { clack(); st.classList.toggle('dark'); h.classList.toggle('on') }
+      else if (k === 'luce') { var giu = !st.classList.contains('dark'), s0 = LEVA.s, t0 = performance.now();
+        /* prima la leva scende (o risale), poi lo scatto e la luce */
+        (function f(n) { var u = Math.min(1, (n - t0) / (RM ? 1 : 220)); LEVA.s = s0 + ((giu ? 1 : 0) - s0) * u * u; render();
+          if (u < 1) requestAnimationFrame(f); else { clack(); st.classList.toggle('dark', giu); h.classList.toggle('on', giu) } })(t0) }
       /* il resto viene in primo piano: l'oggetto che gira, o la sua finestra */
       else if (window.LGVISTA) window.LGVISTA.open(k, x, y);
     }
