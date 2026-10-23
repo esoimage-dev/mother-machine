@@ -68,10 +68,10 @@ Regole che restano: testata, logo, pulsantiera, cursore, vetro non si toccano; p
   - Brand "The system": oggi bozza statica, animarla (anche dopo il lancio).
 
 ## A4 · Bug e ritocchi del sito (prima del lancio)
-- [ ] **Home, trascinamento della striscia dei lavori** (soprattutto su computer): scatta, glitcha, lento e macchinoso.
+- [x] **Home, trascinamento della striscia dei lavori** (soprattutto su computer): scatta, glitcha, lento e macchinoso.
   Mentre trascini **seleziona il testo delle schede** (tutto pomodoro): durante il trascinamento la selezione va
   bloccata. Rifarlo liscio. (Il selettore sotto funziona bene.)
-- [ ] **Mini player della musica:** in vetro fatto bene (tecnica del sito, niente backdrop-filter dal vivo su aree
+- [x] **Mini player della musica:** in vetro fatto bene (tecnica del sito, niente backdrop-filter dal vivo su aree
   grandi), computer e telefono. Su telefono oggi copre il selettore dei progetti in home: deve **sparire di lato**,
   piu' in alto, lasciando una linguetta da cui tirarlo fuori.
 - [ ] **Musica tra le pagine:** cambiando pagina si ferma; Eso vorrebbe che ripartisse da sola. Il browser blocca l'audio
