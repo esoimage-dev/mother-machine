@@ -83,5 +83,15 @@ Da fare a piccoli blocchi, pochi token. File: `public/js/stanza.js` (motore e st
 - **Fine partita:** iniziali in classifica e un bottone discreto "Want this for real? Tell us what slows you down." -> Contact.
 - **Difficolta':** partita intera 5-6 minuti; MONDAY lo batte circa 1 su 20.
 - **Anti imbrogli:** il server controlla che il punteggio sia possibile nel tempo giocato e limita i tentativi.
+- **Come si vede:** pixel art moderna, non a pixeloni: schermo di gioco 480x270 ingrandito (dettaglio alla Katana Zero /
+  Hyper Light Drifter, non Atari). Sopra, a piena risoluzione, le luci morbide: bagliore dei neon, scie, particelle,
+  linee del monitor e leggera curvatura. Pochi colori: notte, crema, pomodoro, piu' un colore per giorno (Monday rosso).
+- **Classifica:** iniziali di tre lettere con filtro parolacce. La mail si chiede solo al vincitore di MONDAY e si cancella
+  dopo l'insegna. Una riga nella privacy, niente banner.
+- **Regole del premio** (una riga sotto il modulo): "One sign per business. We review every sign before it goes up. No cash value."
+- **Il cabinato nella stanza:** lo schermo mostra il titolo DEADLINE che sfarfalla e la classifica che scorre (al posto di RUSH HOUR).
+- **Ordine di lavoro:** (1) gioco giocabile nel browser: nave, nemici, sette giorni, MONDAY, punteggio; (2) grafica, suoni,
+  scritte, accensione; (3) classifica sul server con anti imbrogli (Cloudflare D1); (4) premio: modulo, motore
+  dell'insegna, approvazione, palazzi (Cloudflare R2). Ogni passo si guarda sull'anteprima prima del successivo.
 - **Un gioco solo, fatto bene.** Idee per dopo, forse: Night Shift (scorrimento), Night Drive (stile OutRun, mai il truck
   di Vitalia's: e' un lavoro per un cliente).
