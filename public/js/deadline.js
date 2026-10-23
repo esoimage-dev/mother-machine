@@ -12,7 +12,7 @@
   var CITY_Y = 236, FW_Y = 206, HUD_H = 9;
   /* scorrimento laterale: la logica lavora su due assi, laterale (x, alto-basso dello schermo) e avanzamento
      (y, da destra verso sinistra). Lo schermo si ricava solo al disegno: sx = LH - y, sy = x */
-  var LW = 270, LH = 480, LC = 135, EXIT = 474, SHIP_MIN = 120, SHIP_MAX = 466, LAT_MIN = 18, LAT_MAX = 250;
+  var LW = 270, LH = 480, LC = 135, EXIT = 474, SHIP_MIN = 130, SHIP_MAX = 452, LAT_MIN = 30, LAT_MAX = 238;
   function SX(y) { return LH - y }
   var DBG = /[?&]dldebug/.test(location.search);
   var MQ = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
@@ -270,7 +270,7 @@
   function dCity(w, t, d) { var a = art('city'); if (a) { try { a.city(g, w, t, d, cityShift()); return } catch (e) { fail('city', e) } } fbCity(w, t, d) }
   function dWeather(d, t, i) { var a = art('weather'); if (a) { try { a.weather(g, d, t, i); return } catch (e) { fail('weather', e) } } }
   function dBuilding(k, x, y, w, h, t, s) { var a = art('building'); if (a) { try { a.building(g, k, Math.round(x), Math.round(y), w, h, t, s); return } catch (e) { fail('building', e) } } fbBuilding(k, Math.round(x), Math.round(y), w, h, t, s) }
-  function dLogo(x, y, t, gl) { var a = art('logo'); if (a) { try { a.logo(g, Math.round(x), Math.round(y), t, gl); return } catch (e) { fail('logo', e) } } fbLogo(x, y, t, gl) }
+  function dLogo(x, y, t, gl) { var a = art('logo'); if (a) { hd0(); try { a.logo(g, Math.round(x), Math.round(y), t, gl); hd1(); return } catch (e) { hd1(); fail('logo', e) } } fbLogo(x, y, t, gl) }
   function dMark(x, y, s, t) { var a = art('mark'); if (a) { try { a.mark(g, Math.round(x), Math.round(y), s, t); return } catch (e) { fail('mark', e) } } fbMark(x, y, s, t) }
   function dIcon(n, x, y) { var a = art('icon'); if (a) { hd0(); try { a.icon(g, n, Math.round(x), Math.round(y)); hd1(); return } catch (e) { hd1(); fail('icon', e) } } fbIcon(n, Math.round(x), Math.round(y)) }
   function dExplosion(x, y, t0, t, k) { var a = art('explosion'); if (a) { hd0(); try { var rv = a.explosion(g, Math.round(x), Math.round(y), t0, t, k); hd1(); return rv } catch (e) { hd1(); fail('explosion', e) } } return T - t0 < 1 }
@@ -315,13 +315,13 @@
      fire = ogni quanti secondi un colpo, cap = colpi nemici al massimo, ev = eventi a tempo dentro l'ondata */
   var DEF = {
     /* TUE: si impara. Solo chiamate, la prima ondata non spara. Boss: la segreteria */
-    tue: { hint: 'Missed calls. Stop them before they hit the city.', teaser: 'Rain. Missed calls. A voicemail.', speed: 1, boss: 'voicemail', silly: ['Calls sent to voicemail', 'call'], waves: [
+    tue: { hint: 'Missed calls. Stop them before they get past you.', teaser: 'Rain. Missed calls. A voicemail.', speed: 1, boss: 'voicemail', silly: ['Calls sent to voicemail', 'call'], waves: [
       { rows: ['call', 'call'], cols: 5, march: 13, creep: .4, dive: 6, fire: 0, cap: 0 },
-      { rows: ['call', 'call'], cols: 6, march: 15, creep: .5, dive: 4, fire: 2.3, cap: 3, ev: [{ at: 2.5, k: 'gold', p: 'auto' }] }] },
+      { rows: ['call', 'call'], cols: 5, march: 15, creep: .5, dive: 4, fire: 2.3, cap: 3, ev: [{ at: 2.5, k: 'gold', p: 'auto' }] }] },
     /* WED: nebbia, i nemici in alto non si vedono finche' non si avvicinano. Boss: REPLY ALL */
     wed: { hint: 'Fog. Paper invoices split in two.', teaser: 'Fog. Invoices. Reply all.', speed: 1.05, fog: true, boss: 'replyall', silly: ['Invoices shredded', 'invoice', 'receipt'], waves: [
-      { rows: ['invoice', 'call'], cols: 5, march: 14, creep: .5, dive: 5, fire: 2.2, cap: 3 },
-      { rows: ['call', 'invoice'], cols: 6, march: 16, creep: .55, dive: 4, fire: 1.9, cap: 4, ev: [{ at: 3, k: 'gold' }] }] },
+      { rows: ['invoice', 'call'], cols: 4, march: 14, creep: .5, dive: 5, fire: 2.2, cap: 3 },
+      { rows: ['call', 'invoice'], cols: 5, march: 16, creep: .55, dive: 4, fire: 1.9, cap: 4, ev: [{ at: 3, k: 'gold' }] }] },
     /* THU: smog acido, no-show che si teletrasportano, insegne in corto circuito. Boss: PAPER JAM, poi passa MONDAY */
     thu: { hint: 'Inside the server. Contain the virus.', teaser: 'A virus in the server. Then the printer.', speed: 1.1, virus: true, boss: 'paperjam', silly: ['Infected cells cleaned', 'virus'], waves: [] },
     /* FRI: festa, tutto piu' veloce, alle 16:59 URGENT */
@@ -339,13 +339,13 @@
   };
   /* i boss parlano: una frase all'arrivo, una a meta', una alla fine */
   var BOSS = {
-    voicemail: { name: 'THE VOICEMAIL', hp: 38, w: 74, h: 40, say: 'You have... 47 new messages.', half: 'Press 1 to... ow.', die: 'End of messages.' },
-    replyall: { name: 'REPLY ALL', hp: 44, w: 70, h: 46, say: 'Per my last email...', half: 'Looping in more people.', die: '...unsubscribe.' },
+    voicemail: { name: 'THE VOICEMAIL', hp: 32, w: 74, h: 40, say: 'You have... 47 new messages.', half: 'Press 1 to... ow.', die: 'End of messages.' },
+    replyall: { name: 'REPLY ALL', hp: 38, w: 70, h: 46, say: 'Per my last email...', half: 'Looping in more people.', die: '...unsubscribe.' },
     paperjam: { name: 'PAPER JAM', hp: 48, w: 80, h: 44, say: 'Paper jam. Again.', half: 'PC LOAD LETTER?', die: 'Out of toner.' },
-    urgent: { name: 'URGENT', hp: 42, w: 66, h: 38, say: 'Before you leave... one quick thing.', half: 'It is URGENT urgent.', die: 'Never mind. Monday.' },
-    onestar: { name: 'ONE STAR', hp: 48, w: 72, h: 46, say: 'Terrible service. Would not recommend.', half: 'I want the manager!', die: 'Fine. Two stars.' },
-    scaries: { name: 'SUNDAY SCARIES', hp: 44, w: 86, h: 52, say: 'Tomorrow is Monday...', half: 'Did you reply to that email?', die: '...it is only Sunday.' },
-    monday: { name: 'MONDAY', hp: 180, w: 156, h: 118, say: 'Good morning. I am MONDAY.', half: 'Let us circle back.', die: 'See you next week.' }
+    urgent: { name: 'URGENT', hp: 50, w: 66, h: 38, say: 'Before you leave... one quick thing.', half: 'It is URGENT urgent.', die: 'Never mind. Monday.' },
+    onestar: { name: 'ONE STAR', hp: 72, w: 72, h: 46, say: 'Terrible service. Would not recommend.', half: 'I want the manager!', die: 'Fine. Two stars.' },
+    scaries: { name: 'SUNDAY SCARIES', hp: 64, w: 86, h: 52, say: 'Tomorrow is Monday...', half: 'Did you reply to that email?', die: '...it is only Sunday.' },
+    monday: { name: 'MONDAY', hp: 300, w: 156, h: 118, say: 'Good morning. I am MONDAY.', half: 'Let us circle back.', die: 'See you next week.' }
   };
   var PTS = { call: 1, invoice: 2, receipt: 1, noshow: 3, spam: 1, double: 3, gold: 5 };
   /* hitbox (meta' larghezza, meta' altezza), piu' piccole degli sprite */
@@ -393,7 +393,7 @@
     var n = windowCount(), wins = []; for (var i = 0; i < n; i++) wins.push(true);
     Gm = {
       day: 0, score: 0, shown: 0, coffee: 3, wins: wins, winOffT: new Float32Array(n), cityHits: 0, cityMax: 24, perHit: Math.max(1, Math.round(n / 24)),
-      ship: { x: LC, y: 400, vx: 0, vy: 0, bank: 0, cool: 0, inv: 0, flash: 0, dead: false, tx: LC, ty: 400, hx: LC },
+      ship: { x: LC, y: 410, vx: 0, vy: 0, bank: 0, cool: 0, inv: 0, flash: 0, dead: false, tx: LC, ty: 400, hx: LC },
       sys: { booking: false, auto: false, ai: false, night: false }, installed: '', shRegen: 0, scroll: 0, deliv: 0, pkT: 1, swT: 6, bizT: 0,
       power: null, powerT: 0, shield: 0, night: false, nightT: 0, lastDrop: '', golds: 0,
       combo: 0, comboT: 0, flow: false, best: 0, cupT: 0,
@@ -491,7 +491,7 @@
     if (Gm.nightT > 0) { pbullet(s.x, s.y - 10, rnd(-30, 30), -340, 2); s.cool = .06; return }
     var home = pw === 'ai' ? 2 : Gm.sys.ai ? 1 : 0, sx0 = SX(s.y);
     if (pw === 'auto') { pbullet(s.x, s.y - 10, 0, -340, home); pbullet(s.x - 4, s.y - 6, -70, -325, home); pbullet(s.x + 4, s.y - 6, 70, -325, home); s.cool = .16; sfx('shootAuto', sx0) }
-    else if (Gm.sys.auto) { pbullet(s.x, s.y - 10, 0, -335, home); pbullet(s.x - 3, s.y - 7, -38, -330, home); pbullet(s.x + 3, s.y - 7, 38, -330, home); s.cool = .21; sfx('shoot', sx0) }
+    else if (Gm.sys.auto) { pbullet(s.x, s.y - 10, 0, -335, home); pbullet(s.x - 3, s.y - 7, -38, -330, home); pbullet(s.x + 3, s.y - 7, 38, -330, home); s.cool = .28; sfx('shoot', sx0) }
     else { pbullet(s.x, s.y - 10, 0, home ? -310 : -335, home); s.cool = home === 2 ? .17 : .2; sfx('shoot', sx0) }
     Gm.log.shots++;
   }
@@ -533,7 +533,7 @@
   function addScore(p, x, y) {
     var m = Gm.flow ? 2 : 1, v = p * m; Gm.score += v;
     if (x != null) flyHours(v, x, y);
-    if (!tipSeen.hours && x != null) tip('hours', 'Every chore you stop saves hours', 240, HUD_H + 4, 3);
+    if (!tipSeen.hours && x != null) tip('hours', 'Every chore you stop saves hours', 240, 21, 3);
   }
   function comboKill() {
     Gm.combo++; Gm.comboT = 2.2; if (Gm.combo > Gm.best) Gm.best = Gm.combo; if (Gm.combo > Gm.ds.best) Gm.ds.best = Gm.combo;
@@ -587,9 +587,10 @@
     var k = p.kind; p.on = false;
     if (k === 'coin') { addScore(25, p.x, p.y); ftext('BONUS', p.x, p.y - 16, C.gold); sfx('coin', p.x); return }
     sfx('power', p.x);
+    Gm.plab = { kind: k, x: SX(p.y), y: p.x, t0: T };
     if (k === 'auto' || k === 'ai') { Gm.power = k; Gm.powerT = 10; ftext(k === 'auto' ? 'AUTOMATION' : 'AI', p.x, p.y - 12, C.goldL) }
     else if (k === 'booking') { Gm.shield = 3; sfx('shield'); ftext('BOOKING', p.x, p.y - 12, C.pink) }
-    else if (k === 'night') { Gm.night = true; ftext(touchMode ? 'NIGHT SHIFT: PRESS A' : 'NIGHT SHIFT: PRESS X', p.x, p.y, '#8FB4FF'); tip('night', touchMode ? 'Night shift ready: A' : 'Night shift ready: X', W - 10, H - 12, 3.5) }
+    else if (k === 'night') { Gm.night = true; ftext(touchMode ? 'NIGHT SHIFT: PRESS A' : 'NIGHT SHIFT: PRESS X', p.x, p.y, '#8FB4FF'); tip('night', touchMode ? 'Night shift ready: A' : 'Night shift ready: X', W - 12, H - 22, 3.5) }
   }
   function useNight() {
     if (st !== 'play' || paused || !Gm || !Gm.night || Gm.nightT > 0) return;
@@ -607,7 +608,7 @@
       if (best < 0) break; w[best] = false; Gm.winOffT[best] = .35;
     }
     Gm.cityHits += n || 1; sfx('cityHit', 0); shake(2); Gm.bizT = 1.2;
-    if (Gm.cityHits === 1) tip('biz', 'A chore got past you! The business pays.', 60, H - 12, 3.5);
+    if (Gm.cityHits === 1) tip('biz', 'A chore got past you! The business pays.', 20, H - 14, 3.5);
     var any = false; for (i = 0; i < w.length; i++) if (w[i]) { any = true; break }
     if ((!any || Gm.cityHits >= Gm.cityMax) && !god) { for (i = 0; i < w.length; i++) w[i] = false; die('closed') }
   }
@@ -617,7 +618,7 @@
     if (Gm.shield > 0) { Gm.shield--; s.inv = .8; sfx(Gm.shield ? 'shield' : 'shieldBreak', s.x); spark(s.x, s.y, 8, C.pink, C.cream, 60); clearNear(s.x, s.y, 40); return }
     Gm.log.hits++; if (DBG) { Gm.dbgHurt = Gm.dbgHurt || {}; Gm.dbgHurt[hurtBy] = (Gm.dbgHurt[hurtBy] || 0) + 1 } endFlow(); shake(5); Gm.flash = .25; Gm.glitch = .08; sfx('hurt', s.x);
     spark(s.x, s.y, 14, C.tom, C.cream, 90);
-    if (!weekend) { Gm.coffee--; Gm.cupT = 1; tip('energy', 'Your energy: three coffees', W - 24, HUD_H + 4, 3) }
+    if (!weekend) { Gm.coffee--; Gm.cupT = 1; tip('energy', 'Your energy: three coffees', W - 18, 21, 3) }
     else ftext('WEEKEND MODE', s.x, s.y - 16, C.cream);
     s.inv = 2.2; Gm.power = null; Gm.powerT = 0;
     clearNear(s.x, s.y, 70);
@@ -688,7 +689,7 @@
 
   function shipUpdate(dt) {
     var s = Gm.ship; if (s.dead) return;
-    var ax = 0, ay = 0, sp = 150;
+    var ax = 0, ay = 0, sp = GB.b ? 80 : 150;
     if (Gm.nightT > 0 || botOn) { autoPilot(dt); }
     else if (touch.on) {
       s.tx = clamp(touch.tx, LAT_MIN, LAT_MAX); s.ty = clamp(touch.ty, SHIP_MIN, SHIP_MAX);
@@ -714,9 +715,10 @@
     if (best) tx = best.x + (best.vxe || 0) * clamp((s.y - best.y) / 330, 0, 1); else if (Gm.boss) tx = Gm.boss.x;
     var ty = 390;
     if (VX.on && !VX.dead) tx = vcx(VX.cc);
+    if (Gm.boss && Gm.boss.vuln && (!best || Math.random() < .7)) tx = Gm.boss.x;
     if (Gm.def.delivery && Gm.phase === 'fight') { /* il bot fa il fattorino */
       var car = null, near = null; for (i = 0; i < PK.length; i++) { if (!PK[i].on) continue; if (PK[i].carried) car = PK[i]; else if (!near || PK[i].x > near.x) near = PK[i] }
-      if (car) { tx = STREET - 10; ty = clamp(LH - shopX(car.shop), SHIP_MIN, SHIP_MAX) } else if (near) { tx = clamp(near.x + 20, LAT_MIN, LAT_MAX); ty = clamp(near.y, SHIP_MIN, SHIP_MAX) }
+      if (car) { var ts0 = targetShop(car); tx = ts0 ? ts0.top - 16 : STREET - 10; ty = clamp(LH - (ts0 ? ts0.cx : shopX(car.shop)), SHIP_MIN, SHIP_MAX) } else if (near) { tx = clamp(near.x + 20, LAT_MIN, LAT_MAX); ty = clamp(near.y, SHIP_MIN, SHIP_MAX) }
     }
     if (botOn && Gm.nightT <= 0) {
       /* il bot schiva: prova posizioni vicine e sceglie quella con meno pericolo */
@@ -807,7 +809,7 @@
     for (var i = 0; i < 3; i++) R(x + rnd(0, HZ.w), rnd(130, CITY_Y), 1, 2, C.cream);
   }
   /* il dialogo del boss: ritratto, macchina da scrivere, si salta con un tasto o un tocco */
-  function say(who, text) { Gm.dlg = { who: who, text: text, t: 0, hold: 1.1 }; sfx('blip') }
+  function say(who, text, mood) { Gm.dlg = { who: who, text: text, t: 0, hold: 1.1, mood: mood || '' }; sfx('blip') }
   function dlgLen(d) { return d.text.length / 30 }
   function dlgUpdate(dt) {
     var d = Gm.dlg; if (!d) return; d.t += dt;
@@ -817,7 +819,9 @@
   function dlgSkip() { var d = Gm && Gm.dlg; if (!d) return false; if (d.t < dlgLen(d)) d.t = dlgLen(d); else Gm.dlg = null; return true }
   function drawDialog(t) {
     var d = Gm.dlg; if (!d) return;
-    var x = 70, y = 112, w = 340, h = 38, n = Math.min(d.text.length, Math.floor(d.t * 30)), mon = d.who === 'monday';
+    var n0 = Math.min(d.text.length, Math.floor(d.t * 30)), ad = art('dialog');
+    if (ad) { hd0(); try { ad.dialog(g, 60, 108, 360, 60, t, { name: BOSS[d.who] ? BOSS[d.who].name : '', portrait: d.who, mood: d.mood || (n0 < d.text.length ? 'angry' : 'idle'), text: d.text, chars: n0 }); hd1(); return } catch (e) { hd1(); fail('dialog', e) } }
+    var x = 70, y = 112, w = 340, h = 38, n = n0, mon = d.who === 'monday';
     R(x, y, w, h, 'rgba(15,15,14,.9)'); panel(x, y, w, h);
     /* il ritratto */
     var px = x + 4, py = y + 4, done = false, a = art('portrait');
@@ -867,6 +871,7 @@
   function tip(id, text, x, y, dur) { if (tipSeen[id]) return; tipSeen[id] = true; TIPS.push({ text: text, x: x, y: y, t: 0, dur: dur || 3.5 }) }
   function tipsUpdate(dt) { for (var i = TIPS.length - 1; i >= 0; i--) { TIPS[i].t += dt; if (TIPS[i].t > TIPS[i].dur) TIPS.splice(i, 1) } }
   function drawTips(t) {
+    if (art('hint')) { hd0(); try { for (var j = 0; j < TIPS.length; j++) { var q = TIPS[j]; if (q.t < q.dur - .05 && ((q.t * 10) | 0) >= 0) AR.hint(g, q.x, q.y, q.text, q.y < H / 2 ? 'up' : 'down', t) } hd1(); return } catch (e) { hd1(); fail('hint', e) } }
     for (var i = 0; i < TIPS.length; i++) {
       var p = TIPS[i], a = clamp(Math.min(p.t * 4, (p.dur - p.t) * 3), 0, 1), w = tw(p.text, 1) + 8, hh = lh(1) + 5;
       var bx = Math.round(clamp(p.x - w / 2, 3, W - w - 3)), by = Math.round(p.y > H / 2 ? p.y - 24 - hh : p.y + 18), bob = RM() ? 0 : Math.round(Math.sin(t * 6) * 1.5);
@@ -927,7 +932,9 @@
   function drawMap() {
     var from = Gm.mapFrom, to = Math.min(6, from + 1), k = from < 0 ? 0 : easeIO((stT - .7) / 1.4), pos = from < 0 ? 0 : from + k;
     var pulse = (Math.sin(RT * 6) + 1) / 2, a = art('map'), drawn = false;
-    if (a) { for (var di = 0; di < 7; di++) MAPDONE[di] = di <= from; try { a.map(g, T, { current: k >= 1 || from < 0 ? to : from, done: MAPDONE, shipPos: pos, unlocked: k >= 1 || from < 0 ? to + 1 : to, pulse: pulse, labels: false, ship: true }); drawn = true; mapLabels(a, from, to) } catch (e) { fail('map', e) } }
+    if (a && AR.hd) { R(0, 0, W, H, '#060B1E'); g = ga; gox = goy = 0; g.setTransform(AS, 0, 0, AS, 0, 0); g.imageSmoothingEnabled = false }
+    if (a) { for (var di = 0; di < 7; di++) MAPDONE[di] = di <= from; var inst = {}; for (var di2 = 0; di2 < 6; di2++) { var sk2 = SYS[DEF[DAYS[di2]].boss]; if (sk2 && Gm.sys[sk2] && di2 <= from) inst[di2] = sk2 }
+      hd0(); try { a.map(g, T, { current: k >= 1 || from < 0 ? to : from, done: MAPDONE, shipPos: pos, unlocked: k >= 1 || from < 0 ? to + 1 : to, pulse: pulse, labels: !!AR.hd, ship: true, installed: inst }); hd1(); drawn = true; if (!AR.hd) mapLabels(a, from, to) } catch (e) { hd1(); fail('map', e) } }
     if (!drawn) {
       dSky('night', T); R(0, 96, W, H - 96, 'rgba(6,10,24,.75)');
       for (var i = 0; i < 6; i++) { var p0 = MAPN[i], p1 = MAPN[i + 1], n = 24, lit = i < from || (i === from && k >= 1);
@@ -1181,7 +1188,7 @@
     if (b.kind === 'monday') {
       var torn = Math.floor((1 - b.hp / b.max) * 12);
       while (b.torn < torn) { b.torn++; tearPage(b); }
-      var ph = b.hp > 120 ? 1 : b.hp > 60 ? 2 : 3;
+      var ph = b.hp > 200 ? 1 : b.hp > 100 ? 2 : 3;
       if (ph !== b.ph && b.hp > 0) { b.ph = ph; b.pt = 0; b.pi = 0; Gm.hitStop = .15; shake(6); Gm.glitch = .3; sfx('rip'); clearEB(); if (ph === 3) clearBlocks(); say('monday', ph === 2 ? 'Let us circle back. Meetings!' : 'It is 9:00. Forever.') }
     }
     if (!b.halfSaid && b.hp < b.max / 2 && b.kind !== 'monday') { b.halfSaid = true; quipAt(b.x + b.hw + 10, b.y, BOSS[b.kind].half) }
@@ -1225,7 +1232,7 @@
     b.vuln = true; b.pt += dt;
     var ph = b.ph; b.rage = ph === 3 ? 1 : ph === 2 ? .4 : 0; b.mouth = .3 + .7 * Math.abs(Math.sin(b.t * (ph === 3 ? 9 : 3)));
     if (ph === 1) {
-      b.x = LC + amp(b) * Math.sin(b.t * .5); b.y = b.home + Math.sin(b.t * 1.3) * 3;
+      b.x = (LAT_MIN + LAT_MAX) / 2 + amp(b) * Math.sin(b.t * .5); b.y = b.home + Math.sin(b.t * 1.3) * 3;
       /* raffiche di email: ventaglio mirato e "reply all" a spazzata */
       var cyc = b.pt % 5.2;
       if (cyc < dt) { for (i = -2; i <= 2; i++) { v = aimAt(b.x, b.y + 30, 86, i * .2); ebullet('mail', b.x, b.y + 30, v[0], v[1], 70) } }
@@ -1239,7 +1246,7 @@
       b.sp += dt; if (b.sp > 1.5) { b.sp = 0; v = aimAt(b.x, b.y + 30, 80, 0); ebullet('mail', b.x, b.y + 30, v[0], v[1], 40) }
     } else {
       /* la sveglia delle 9:00 impazzita: spirale doppia, poi raffiche */
-      b.x = LC + amp(b) * Math.sin(b.t * .9) + (RM() ? 0 : Math.sin(b.t * 40) * 1.2); b.y = b.home + Math.sin(b.t * 2.1) * 4;
+      b.x = (LAT_MIN + LAT_MAX) / 2 + amp(b) * Math.sin(b.t * .9) + (RM() ? 0 : Math.sin(b.t * 40) * 1.2); b.y = b.home + Math.sin(b.t * 2.1) * 4;
       var c3 = b.pt % 5;
       if (c3 < 3) { b.sp += dt; if (b.sp > .11) { b.sp = 0; var base = b.t * 1.9; for (i = 0; i < 2; i++) { a = base + i * Math.PI; var ca = Math.cos(a), sa = Math.sin(a); if (sa < -.2) sa = -sa * .5; ebullet('alarm', b.x + ca * 20, b.y + 20, ca * 66, Math.abs(sa) * 66 + 18, 95) } } }
       else if (c3 > 3.6 && c3 < 4.6) { b.sp += dt; if (b.sp > .32) { b.sp = 0; for (i = -1; i <= 1; i++) { v = aimAt(b.x, b.y + 30, 112, i * .16); ebullet('alarm', b.x, b.y + 30, v[0], v[1], 95) } } }
@@ -1257,7 +1264,7 @@
   var SYSORD = ['booking', 'auto', 'ai', 'night'];
   function install(kind) {
     var k = SYS[kind]; if (!k || Gm.sys[k]) return;
-    Gm.sys[k] = true; Gm.installed = k; sfx('power'); tip('sys', 'Installed for the rest of the week', W - 30, H - 12, 3.5);
+    Gm.sys[k] = true; Gm.installed = k; sfx('power'); tip('sys', 'Installed for the rest of the week', W - 30, H - 22, 3.5);
     if (k === 'booking') Gm.shield = Math.max(Gm.shield, 1);
     if (k === 'night') Gm.night = true;
   }
@@ -1270,37 +1277,40 @@
   /* ---------- THURSDAY: il virus dentro il server ----------
      Una griglia di celle a destra: il virus si allarga ogni mezzo secondo, tu spari alle celle per contenerlo e
      colpisci il nucleo che si sposta. Se copre quasi tutto: sovraccarico, perdi un caffe' e il nucleo torna a meta' */
-  var VX = { cols: 11, rows: 7, cw: 20, ch: 20, x0: 25, y0: 18, cells: new Uint8Array(77), cr: 0, cc: 0, hp: 0, max: 34, spread: 0, move: 0, fire: 0, dead: 0, on: false };
+  var VX = { cols: 16, rows: 11, cw: 12, ch: 12, x0: 39, y0: 16, age: new Float32Array(176), cells: new Uint8Array(176), cr: 0, cc: 0, hp: 0, max: 40, spread: 0, move: 0, fire: 0, dead: 0, on: false };
   function vcx(c) { return VX.x0 + c * VX.cw + VX.cw / 2 }
   function vcy(r) { return VX.y0 + r * VX.ch + VX.ch / 2 }
-  function vInfect(c, r) { if (c < 0 || r < 0 || c >= VX.cols || r >= VX.rows) return; VX.cells[r * VX.cols + c] = 1 }
+  function vInfect(c, r) { if (c < 0 || r < 0 || c >= VX.cols || r >= VX.rows) return; var i = r * VX.cols + c; if (!VX.cells[i]) VX.age[i] = 0; VX.cells[i] = 1 }
   function vCount() { var n = 0; for (var i = 0; i < VX.cells.length; i++) n += VX.cells[i]; return n }
   function virusStart() {
-    VX.on = true; VX.cells.fill(0); VX.cc = 5; VX.cr = 3; VX.hp = VX.max; VX.spread = .5; VX.move = 2.4; VX.fire = 2; VX.dead = 0;
+    VX.on = true; VX.cells.fill(0); VX.cc = 8; VX.cr = 5; VX.hp = VX.max; VX.spread = .5; VX.move = 2.4; VX.fire = 2; VX.dead = 0;
     for (var r = -1; r <= 1; r++) for (var c = -1; c <= 1; c++) vInfect(VX.cc + c, VX.cr + r);
     tip('virus', 'Clean the cells. Hit the core.', SX(vcy(VX.cr)), vcx(VX.cc) + 12, 4);
   }
   function virusUpdate(dt) {
     if (!VX.on) return;
+    if (VX.hitT > 0) VX.hitT -= dt * 6;
     if (VX.dead) { VX.dead += dt; if (VX.dead > 1.2) { VX.on = false; Gm.phase = 'boss'; Gm.phaseT = 0; Gm.clock = 479 / 480; spawnBoss('paperjam') } return }
     var k = 1 - VX.hp / VX.max, n = VX.cells.length, i;
     VX.spread -= dt;
     if (VX.spread <= 0) {
-      VX.spread = .5 - k * .18;
-      for (var tries = 0; tries < 12; tries++) { i = Math.random() * n | 0; if (!VX.cells[i]) continue; var c = i % VX.cols, r = i / VX.cols | 0, d = Math.random() * 4 | 0; vInfect(c + (d === 0 ? 1 : d === 1 ? -1 : 0), r + (d === 2 ? 1 : d === 3 ? -1 : 0)); break }
+      VX.spread = .26 - k * .08;
+      for (var rep = 0; rep < 2; rep++) for (var tries = 0; tries < 16; tries++) { i = Math.random() * n | 0; if (!VX.cells[i]) continue; var c = i % VX.cols, r = i / VX.cols | 0, d = Math.random() * 4 | 0; vInfect(c + (d === 0 ? 1 : d === 1 ? -1 : 0), r + (d === 2 ? 1 : d === 3 ? -1 : 0)); break }
       if (vCount() === 0) vInfect(VX.cc, VX.cr);
     }
     VX.move -= dt;
-    if (VX.move <= 0) { VX.move = 2.4 - k; var d2 = Math.random() * 4 | 0; VX.cc = clamp(VX.cc + (d2 === 0 ? 2 : d2 === 1 ? -2 : 0), 0, VX.cols - 1); VX.cr = clamp(VX.cr + (d2 === 2 ? 1 : d2 === 3 ? -1 : 0), 0, VX.rows - 1); vInfect(VX.cc, VX.cr) }
+    VX.guard = (VX.guard || 0) - dt; if (VX.guard <= 0) { VX.guard = 1.1; vInfect(VX.cc + 1, VX.cr); vInfect(VX.cc - 1, VX.cr); vInfect(VX.cc, VX.cr + 1); vInfect(VX.cc, VX.cr - 1) }
+    if (VX.move <= 0) { VX.move = 1.8 - k * .6; var d2 = Math.random() * 4 | 0; VX.cc = clamp(VX.cc + (d2 === 0 ? 2 : d2 === 1 ? -2 : 0), 0, VX.cols - 1); VX.cr = clamp(VX.cr + (d2 === 2 ? 1 : d2 === 3 ? -1 : 0), 0, VX.rows - 1); vInfect(VX.cc, VX.cr) }
     VX.fire -= dt;
     if (VX.fire <= 0) {
-      VX.fire = 1.5 - k * .5; var fc = clamp(VX.cc + (Math.random() * 5 | 0) - 2, 0, VX.cols - 1), fr = 0;
+      VX.fire = 1.7 - k * .5; var fc = clamp(VX.cc + (Math.random() * 5 | 0) - 2, 0, VX.cols - 1), fr = 0;
       for (var y = VX.rows - 1; y >= 0; y--) if (VX.cells[y * VX.cols + fc]) { fr = y; break }
       var v = aimAt(vcx(fc), vcy(fr), 72, 0); ebullet('dot', vcx(fc), vcy(fr) + 8, v[0], v[1], 5);
     }
     Gm.clock = Math.max(Gm.clock, Math.min(.99, k));
     /* il virus ha coperto quasi tutto: sovraccarico */
-    if (vCount() >= 66) {
+    for (i = 0; i < n; i++) if (VX.cells[i]) VX.age[i] += dt;
+    if (vCount() >= 150) {
       quipAt(LC, VX.y0 + 70, 'SYSTEM OVERLOAD'); Gm.ship.inv = 0; hurt('virus'); shake(6);
       VX.cells.fill(0); for (var rr = -1; rr <= 1; rr++) for (var cc = -1; cc <= 1; cc++) vInfect(VX.cc + cc, VX.cr + rr);
       VX.hp = Math.max(VX.hp, Math.ceil(VX.max / 2));
@@ -1311,7 +1321,7 @@
     if (!VX.on || VX.dead || b.y < VX.y0 || b.y >= VX.y0 + VX.rows * VX.ch || b.x < VX.x0 || b.x >= VX.x0 + VX.cols * VX.cw) return false;
     var c = ((b.x - VX.x0) / VX.cw) | 0, r = ((b.y - VX.y0) / VX.ch) | 0, i = r * VX.cols + c;
     if (c === VX.cc && r === VX.cr) {
-      VX.hp--; sfx('bossHit', SX(b.y)); spark(b.x, b.y, 5, accent('thu'), C.cream, 60); Gm.log.bossHits = (Gm.log.bossHits || 0) + 1;
+      VX.hp--; VX.hitT = 1; sfx('bossHit', SX(b.y)); spark(b.x, b.y, 5, accent('thu'), C.cream, 60); Gm.log.bossHits = (Gm.log.bossHits || 0) + 1;
       if (VX.hp === Math.floor(VX.max / 2)) quipAt(vcx(VX.cc) + 14, vcy(VX.cr), 'Have you tried turning me off?');
       if (VX.hp <= 0) { VX.dead = .01; addScore(20, b.x, b.y); sfx('bossDie'); for (var j = 0; j < VX.cells.length; j++) if (VX.cells[j]) { spark(vcx(j % VX.cols), vcy(j / VX.cols | 0), 3, accent('thu'), C.cream, 50); VX.cells[j] = 0 } quipAt(LC, VX.y0 + 60, 'Virus contained.') }
       return true;
@@ -1321,6 +1331,7 @@
   }
   function vRect(c, r) { return [SX(VX.y0 + (r + 1) * VX.ch), VX.x0 + c * VX.cw] }
   function drawServerBg(t) {
+    var a = art('serverBg'); if (a) { try { a.serverBg(g, t); return } catch (e) { fail('serverBg', e) } }
     /* dentro il server: il rack, la griglia, i led */
     var ac = accent('thu'), gx = SX(VX.y0 + VX.rows * VX.ch), gw = VX.rows * VX.ch, gy = VX.x0, gh = VX.cols * VX.cw;
     R(0, 0, W, CITY_Y, '#070A06');
@@ -1332,6 +1343,14 @@
   function drawVirus(t) {
     if (!VX.on) return;
     var ac = accent('thu'), i, p;
+    if (art('virusCell') && art('virusCore')) {
+      hd0();
+      for (i = 0; i < VX.cells.length; i++) if (VX.cells[i]) AR.virusCell(g, SX(vcy(i / VX.cols | 0)), vcx(i % VX.cols), t, Math.min(1, .25 + VX.age[i] * .6));
+      if (!VX.dead) AR.virusCore(g, SX(vcy(VX.cr)), vcx(VX.cc), t, { hit: VX.hitT || 0 });
+      hd1();
+      if (!VX.dead) { var gx2 = SX(VX.y0 + VX.rows * VX.ch), gw2 = VX.rows * VX.ch; R(gx2, VX.x0 - 9, gw2, 2, C.g4); R(gx2, VX.x0 - 9, Math.round(gw2 * VX.hp / VX.max), 2, ac); var cv2 = vCount() / VX.cells.length; if (cv2 > .6 && ((t * 4) | 0) % 2) txt('OVERLOAD ' + Math.round(cv2 * 100) + '%', gx2 + gw2 / 2, VX.x0 + VX.cols * VX.cw + 4, C.crim, 1, 'c', C.night) }
+      return;
+    }
     for (i = 0; i < VX.cells.length; i++) {
       if (!VX.cells[i]) continue;
       var c = i % VX.cols, r = i / VX.cols | 0; p = vRect(c, r); var x = p[0] + 1, y = p[1] + 1, w = VX.ch - 2, h = VX.cw - 2, f = ((t * 4 + c * .7 + r) | 0) % 2;
@@ -1350,33 +1369,42 @@
   /* ---------- FRIDAY: la consegna ----------
      Gli ordini cadono dal cielo: li prendi passandoci sopra e li porti al negozio acceso sulla strada, volando basso */
   var SHOPS = [{ name: 'CAFE', col: '#FFC56A' }, { name: 'FLOWERS', col: '#FF86CF' }, { name: 'BOOKS', col: '#5FD3FF' }];
-  var PK = pool(3, function () { return { x: 0, y: 0, shop: 0, t: 0, carried: false } }), DGOAL = 6, STREET = 222;
+  var PK = pool(3, function () { return { x: 0, y: 0, shop: 0, t: 0, carried: false, tgt: -1, kind: 'shop' } }), DGOAL = 5, STREET = 222;
   var THANKS = ['Thanks!', 'Finally!', 'Five stars.', 'Just in time.', 'Lovely.', 'Is it Friday?'];
+  function artShops() { var a = art('streetShops'); if (!a) return null; try { return a.streetShops('fri', Gm.scroll) } catch (e) { fail('streetShops', e); return null } }
+  function targetShop(p) { var L = artShops(); if (!L) return null; for (var i = 0; i < L.length; i++) if (L[i].i === p.tgt) return L[i]; return null }
   function shopX(i) { var span = 640; return ((i * span / 3 + 520 - Gm.scroll * .6) % span + span) % span - 80 }
   function deliveryUpdate(dt) {
     var s = Gm.ship, carrying = null, falling = 0, i, p;
     for (i = 0; i < PK.length; i++) { p = PK[i]; if (!p.on) continue; if (p.carried) carrying = p; else falling++ }
     Gm.pkT -= dt;
     if (Gm.pkT <= 0 && falling < 2 && Gm.deliv + falling + (carrying ? 1 : 0) < DGOAL + 1) {
-      Gm.pkT = 2.4; p = take(PK); if (p) { p.x = -8; p.y = rnd(80, 300); p.shop = Math.random() * 3 | 0; p.t = 0; p.carried = false; tip('grab', 'An order! Fly over it.', SX(p.y), 30, 3.5) }
+      Gm.pkT = 2.4; p = take(PK); if (p) { p.x = -8; p.y = rnd(80, 300); p.shop = Math.random() * 3 | 0; p.t = 0; p.carried = false; p.tgt = -1; p.kind = 'shop'; tip('grab', 'An order! Fly over it.', SX(p.y), 30, 3.5) }
     }
     for (i = 0; i < PK.length; i++) {
       p = PK[i]; if (!p.on) continue; p.t += dt;
       if (p.carried) {
         p.x = s.x + 10; p.y = s.y + 4;
-        var sx = shopX(p.shop);
-        if (s.x > STREET - 18 && Math.abs(SX(s.y) - sx) < 26) { p.on = false; Gm.deliv++; addScore(6, s.x, s.y); sfx('coin', sx); quipS(sx, STREET - 8, THANKS[Math.random() * THANKS.length | 0]); for (var q = 0; q < 10; q++) sparkS(sx, STREET + 4, SHOPS[p.shop].col); Gm.ds.k.deliv = Gm.deliv; Gm.clock = Math.max(Gm.clock, Math.min(.99, Gm.deliv / DGOAL)) }
+        var ts = targetShop(p), sx = ts ? ts.cx : shopX(p.shop), near = ts ? s.x > ts.top - 30 && SX(s.y) > ts.x - 10 && SX(s.y) < ts.x + ts.w + 10 : s.x > STREET - 18 && Math.abs(SX(s.y) - sx) < 26;
+        if (near) { p.on = false; Gm.deliv++; addScore(6, s.x, s.y); sfx('coin', sx); quipS(sx, ts ? ts.top - 34 : STREET - 8, THANKS[Math.random() * THANKS.length | 0]); for (var q = 0; q < 10; q++) sparkS(sx, STREET + 4, SHOPS[p.shop].col); Gm.ds.k.deliv = Gm.deliv; Gm.clock = Math.max(Gm.clock, Math.min(.99, Gm.deliv / DGOAL)) }
         continue;
       }
       p.x += 30 * dt; p.y += 8 * dt + Math.sin(p.t * 2) * 6 * dt;
-      if (!carrying && !s.dead && Math.abs(p.x - s.x) < 14 && Math.abs(p.y - s.y) < 16) { p.carried = true; carrying = p; sfx('power', SX(p.y)); tip('deliver', 'Take it to the lit shop. Fly low.', 240, STREET - 4, 3.5) }
+      if (!carrying && !s.dead && Math.abs(p.x - s.x) < 14 && Math.abs(p.y - s.y) < 18) { p.carried = true; carrying = p; sfx('power', SX(p.y));
+        var L2 = artShops(); if (L2 && L2.length) { var bestS = L2[0]; for (var j = 0; j < L2.length; j++) if (L2[j].cx > bestS.cx) bestS = L2[j]; p.tgt = bestS.i; p.kind = bestS.kind } tip('deliver', 'Take it to the lit shop. Fly low.', 240, STREET - 4, 3.5) }
       else if (p.x > STREET + 6) { p.on = false; quipS(SX(p.y), STREET - 8, 'Where is my order?') }
     }
     /* un po' di disturbo, ma poco */
     Gm.swT -= dt; if (Gm.swT <= 0) { Gm.swT = 8; runEvent({ k: 'swarm', n: 7, path: Math.random() < .5 ? 'sine' : 'swoop', side: Math.random() < .5 ? -1 : 1, y: rnd(40, 90) }) }
   }
   function drawShops(t) {
-    var target = -1, i; for (i = 0; i < PK.length; i++) if (PK[i].on && PK[i].carried) target = PK[i].shop;
+    var target = -1, i;
+    if (art('parcel') && art('targetShop') && artShops()) {
+      hd0();
+      for (i = 0; i < PK.length; i++) { var pp = PK[i]; if (!pp.on) continue; if (pp.carried) { var ts = targetShop(pp); if (ts) AR.targetShop(g, ts, t) } AR.parcel(g, pp.kind, SX(pp.y), pp.x, t, { carried: pp.carried, glow: !pp.carried }) }
+      hd1(); return;
+    }
+    for (i = 0; i < PK.length; i++) if (PK[i].on && PK[i].carried) target = PK[i].shop;
     for (i = 0; i < 3; i++) {
       var s = SHOPS[i], sx = Math.round(shopX(i)), w = tw(s.name, 1) + 6, x = sx - (w >> 1), y = STREET + 4, on = target === i, bl = on && ((t * 6) | 0) % 2;
       if (sx < -40 || sx > W + 40) continue;
@@ -1389,38 +1417,38 @@
     }
   }
   /* gli attacchi dei boss dei giorni: ognuno col suo tema */
-  function amp(b) { return Math.max(10, LC - b.hw - 16) }
+  function amp(b) { return Math.max(8, Math.min(72, (LAT_MAX - LAT_MIN) / 2 - b.hw)) }
   function every(b, per, dt, from) { var x = b.pt - (from || 0); return x >= 0 && (x % per) < dt }
   function bossPattern(b, dt, s) {
     var i, v, a, k = b.kind, sp = Gm.def.speed;
     if (k === 'voicemail') { /* il nastro che gira: un filo di squilli che ondeggia, poi una raffica a ventaglio */
-      b.x = LC + amp(b) * Math.sin(b.t * .5); b.y = b.home + Math.sin(b.t * 1.6) * 3;
+      b.x = (LAT_MIN + LAT_MAX) / 2 + amp(b) * Math.sin(b.t * .5); b.y = b.home + Math.sin(b.t * 1.6) * 3;
       var c = b.pt % 6;
       if (c < 3) { b.sp += dt; if (b.sp > .32) { b.sp = 0; b.pi++; ebullet('ring', b.x + (b.pi % 2 ? -18 : 18), b.y + 16, Math.sin(b.t * 2.2) * 45, 62, 40) } }
       if (c > 3.5 && c - dt <= 3.5) for (i = -3; i <= 3; i++) { a = Math.PI / 2 + i * .22; ebullet('ring', b.x, b.y + 16, Math.cos(a) * 70, Math.sin(a) * 70, 40) }
       if (c > 5 && c - dt <= 5) for (i = -1; i <= 1; i += 2) { v = aimAt(b.x, b.y, 85, i * .1); ebullet('ring', b.x, b.y + 16, v[0], v[1], 40) }
     } else if (k === 'replyall') { /* la nuvola di mail: colpita, si divide in nuvolette */
-      b.x = LC + amp(b) * Math.sin(b.t * .6); b.y = b.home + Math.sin(b.t * 2) * 4;
-      if (every(b, 1.6, dt)) for (i = -1; i <= 1; i++) { v = aimAt(b.x, b.y, 82, i * .18); ebullet('mail', b.x, b.y + 18, v[0], v[1], 40) }
-      if (every(b, 4.6, dt, 1)) for (i = 0; i < 10; i++) { a = Math.PI * (.08 + .84 * i / 9); ebullet('mail', b.x, b.y + 12, Math.cos(a) * 56, Math.sin(a) * 56, 40) }
-      var stage = b.hp < b.max / 3 ? 2 : b.hp < b.max * 2 / 3 ? 1 : 0;
-      if (stage > b.split) { b.split = stage; b.scale = 1 - stage * .18; runEvent({ k: 'swarm', n: 6, path: 'sine', side: stage === 1 ? -1 : 1, y: b.y + 30 }); quipAt(b.x + b.hw + 10, b.y, 'Reply all!') }
+      b.x = (LAT_MIN + LAT_MAX) / 2 + amp(b) * Math.sin(b.t * .6); b.y = b.home + Math.sin(b.t * 2) * 4;
+      if (every(b, 2, dt)) for (i = -1; i <= 1; i++) { v = aimAt(b.x, b.y, 82, i * .18); ebullet('mail', b.x, b.y + 18, v[0], v[1], 40) }
+      if (every(b, 5, dt, 1)) for (i = 0; i < 8; i++) { a = Math.PI * (.1 + .8 * i / 7); ebullet('mail', b.x, b.y + 12, Math.cos(a) * 56, Math.sin(a) * 56, 40) }
+      var stage = b.hp < b.max / 2 ? 1 : 0;
+      if (stage > b.split) { b.split = stage; b.scale = 1 - stage * .18; runEvent({ k: 'swarm', n: 5, path: 'sine', side: s.x < LC ? 1 : -1, y: s.x < LC ? 110 : 40 }); quipAt(b.x + b.hw + 10, b.y, 'Reply all!') }
     } else if (k === 'paperjam') { /* la stampante: due getti di carta che spazzano, e blocchi JAM */
-      b.x = LC + amp(b) * Math.sin(b.t * .35); b.y = b.home;
+      b.x = (LAT_MIN + LAT_MAX) / 2 + amp(b) * Math.sin(b.t * .35); b.y = b.home;
       b.sp += dt; if (b.sp > .16) { b.sp = 0; b.pi++; ebullet('shard', b.x + (b.pi % 2 ? -26 : 26), b.y + 18, Math.sin(b.t * 3 + b.pi) * 8, 92 * sp, 60) }
       if (every(b, 2.8, dt, .5)) { var l = take(BL); if (l) { l.x = clamp(s.x - 17, 2, LW - 36); l.y = -14; l.w = 34; l.h = 12; l.hp = 3; l.vy = 58; l.hit = 0; l.label = 'JAM' } }
     } else if (k === 'urgent') { /* tre buste mirate, poi un ventaglio di schegge */
-      b.x = LC + amp(b) * Math.sin(b.t * .7); b.y = b.home + Math.sin(b.t * 1.7) * 6;
+      b.x = (LAT_MIN + LAT_MAX) / 2 + amp(b) * Math.sin(b.t * .7); b.y = b.home + Math.sin(b.t * 1.7) * 6;
       if (b.pi % 3 < 2 && b.pt > 1.3) { b.pt = 0; b.pi++; for (i = -1; i <= 1; i++) { v = aimAt(b.x, b.y + 16, 88, i * .2); ebullet('mail', b.x, b.y + 16, v[0], v[1], 40) } }
       else if (b.pi % 3 === 2 && b.pt > 1.6) { b.pt = 0; b.pi++; for (i = 0; i < 11; i++) { a = Math.PI * (.12 + .76 * i / 10); ebullet('shard', b.x, b.y + 10, Math.cos(a) * 62, Math.sin(a) * 62, 40) } }
       if (!b.spawned && b.hp < b.max / 2) { b.spawned = true; runEvent({ k: 'swarm', n: 6, path: 'sine', side: s.x < LC ? 1 : -1, y: s.x < LC ? 110 : 40 }) }
     } else if (k === 'onestar') { /* la recensione: stelle che esplodono e nuvolette di recensioni che piovono */
-      b.x = LC + amp(b) * Math.sin(b.t * .55); b.y = b.home;
+      b.x = (LAT_MIN + LAT_MAX) / 2 + amp(b) * Math.sin(b.t * .55); b.y = b.home;
       var hard = b.hp < b.max / 2 ? .75 : 1;
       if (every(b, 2.2 * hard, dt)) for (i = 0; i < 10; i++) { a = b.t + i * Math.PI / 5; ebullet('diamondBig', b.x, b.y + 6, Math.cos(a) * 58, Math.abs(Math.sin(a)) * 58 + 12, 50) }
       if (every(b, 1.3 * hard, dt, .4)) ebullet('mail', rnd(20, LW - 20), -6, rnd(-10, 10), 52, 50);
     } else if (k === 'scaries') { /* il buio si stringe intorno alla nave; cadono le cose da fare */
-      b.x = LC + amp(b) * Math.sin(b.t * .4); b.y = b.home + Math.sin(b.t * 1.1) * 6;
+      b.x = (LAT_MIN + LAT_MAX) / 2 + amp(b) * Math.sin(b.t * .4); b.y = b.home + Math.sin(b.t * 1.1) * 6;
       Gm.darkT = Math.min(1, (Gm.darkT || 0) + dt / 14);
       if (every(b, 1.7, dt)) for (i = -1; i <= 1; i += 2) { v = aimAt(b.x, b.y, 80, i * .12); ebullet('dot', b.x, b.y + 20, v[0], v[1], 40) }
       if (every(b, 3.2, dt, .5)) for (i = 0; i < 3; i++) { var td = spawnEnemy('receipt', rnd(30, LW - 30), -10); if (td) { td.st = 'fall'; td.x0 = td.x; td.vx = 0; td.vy = 20; td.counts = false; td.todo = true; Gm.waveTotal-- } }
@@ -1430,7 +1458,7 @@
   /* MONDAY passa a meta' settimana: si affaccia, dice la sua, lascia quattro mail e se ne va */
   function cameoUpdate(dt) {
     var c = Gm.cam; c.t += dt;
-    if (c.st === 'in') { c.y = -90 + easeOut(c.t / 1.2) * 150; if (c.t > 1.2) { c.st = 'talk'; say('monday', 'See you on Monday.') } }
+    if (c.st === 'in') { c.y = -90 + easeOut(c.t / 1.2) * 150; if (c.t > 1.2) { c.st = 'talk'; say('monday', 'See you on Monday.', 'smug') } }
     else if (c.st === 'talk') { if (!Gm.dlg) { c.st = 'drop'; c.t = 0 } }
     else if (c.st === 'drop') { if (c.t > .3 * (c.shots + 1) && c.shots < 4) { c.shots++; var v = aimAt(LC, c.y + 40, 60, (c.shots - 2.5) * .25); ebullet('mail', LC, c.y + 40, v[0], v[1], 20) } if (c.t > 1.6) { c.st = 'out'; c.t = 0; sfx('blip') } }
     else if (c.st === 'out') { c.y -= dt * 200; if (c.y < -110) { Gm.cameoDone = true; clockOut() } }
@@ -1534,7 +1562,7 @@
     if (st === 'boot') drawBoot();
     else if (st === 'title' || st === 'board' || st === 'form') drawTitle();
     else if (st === 'crawl') drawCrawl();
-    else if (st === 'clock') drawMap();
+    else if (st === 'clock') { var gp = g; try { drawMap() } finally { g = gp } }
     else drawGame();
     fxEnd();
   }
@@ -1548,10 +1576,12 @@
     if (t > 2.6) { g.globalAlpha = clamp(1 - (t - 2.6) / .8, 0, 1) * 0 + 1 }
     if (t > 3) { g.globalAlpha = clamp((t - 3) / .4, 0, 1); R(0, 0, W, H, C.night); g.globalAlpha = 1 }
   }
-  function scene(day, t, scroll) {
+  function scene(day, t, scroll, street) {
     dSky(day, t);
-    dSkyline(day, scroll * .1, t);
-    dTowers(day, scroll * .4, t, billboards());
+    dSkyline(day, scroll, t);
+    dTowers(day, scroll, t, billboards());
+    if (street) { var a = art('street'); if (a) { try { a.street(g, day, scroll, t); return true } catch (e) { fail('street', e) } } }
+    return false;
   }
   var BB = [], bbDay = -1;
   function billboards() {
@@ -1559,9 +1589,10 @@
     if (d !== bbDay) { bbDay = d; BB = []; for (var i = 0; i < Math.min(3, SIGNS.length); i++) { var s = SIGNS[(d * 3 + i) % SIGNS.length]; BB.push({ img: s.img, name: s.name, kind: s.kind }) } }
     return BB;
   }
-  function drawTitle() {
+  function drawTitle() { var gp = g; try { drawTitle0() } finally { g = gp } }
+  function drawTitle0() {
     var t = T;
-    scene('night', t, cityX * .5);
+    scene('night', t, cityX * 2);
     /* la CITY in basso: si scorre, le insegne si cliccano */
     var base = H, ox = -(cityX % cityW);
     hover = null;
@@ -1570,25 +1601,26 @@
       dBuilding(b.kind, x, base - b.h, b.w, b.h, t, b.sign ? { img: b.sign.img, name: b.sign.name } : null);
       if (b.sign && b.sign.link) { var hs = { x: x, y: base - b.h, w: b.w, h: b.h, id: 'sign', sign: b.sign }; hot.push(hs); if (mouse.in && mouse.x >= x && mouse.x < x + b.w && mouse.y >= base - b.h) hover = hs }
     }
+    g = ga; gox = goy = 0; g.setTransform(AS, 0, 0, AS, 0, 0); g.imageSmoothingEnabled = false;
     if (st === 'form') { R(0, 0, W, H, 'rgba(15,15,14,.55)'); return }
-    dLogo(240, 18, t, (t % 5) < .2 && !RM());
-    if (st === 'board') { drawBoard(70); return }
+    dLogo(240, 4, t, (t % 5) < .2 && !RM());
+    if (st === 'board') { drawBoard(112); return }
     /* il pannello che gira: istruzioni, classifica, chi c'e', la citta' */
     var pg = titlePage, fade = clamp(Math.min(titlePageT, 6 - titlePageT) * 4, 0, 1);
-    R(96, 62, 288, 74, 'rgba(15,15,14,.6)'); panel(96, 62, 288, 74);
+    R(96, 108, 288, 52, 'rgba(15,15,14,.7)'); panel(96, 108, 288, 52);
     g.globalAlpha = fade;
     if (pg === 0) {
-      txt('SHOOT WHAT SLOWS YOU DOWN.', 240, 74, C.cream, 1, 'c');
-      txt('7 days. 3 coffees. 1 Monday.', 240, 88, C.p3, 1, 'c');
-      txt(touchMode ? 'Drag to fly. We shoot for you.' : 'Arrows or WASD to fly. Space to shoot.', 240, 106, C.p2, 1, 'c');
-      txt(touchMode ? 'Two fingers: Night shift.' : 'X: Night shift.  P: pause.  M: sound.', 240, 118, C.p3, 1, 'c');
-    } else if (pg === 1) drawBoardList(64, null);
-    else if (pg === 2) drawLegend(64, t);
-    else drawSignList(64);
+      txt('SHOOT WHAT SLOWS YOU DOWN.', 240, 114, C.cream, 1, 'c');
+      txt('6 days. 3 coffees. Then MONDAY.', 240, 126, C.p3, 1, 'c');
+      txt(touchMode ? 'Pad to fly. We shoot for you.' : 'Arrows or WASD to fly. Space to shoot.', 240, 138, C.p2, 1, 'c');
+      txt(touchMode ? 'A: Night shift. START: pause.' : 'X: Night shift.  P: pause.  M: sound.', 240, 148, C.p3, 1, 'c');
+    } else if (pg === 1) drawBoardList(112, null);
+    else if (pg === 2) drawLegend(112, t);
+    else drawSignList(112);
     g.globalAlpha = 1;
-    for (i = 0; i < (SIGNS.length ? 4 : 3); i++) R(240 - 14 + i * 8, 140, 4, 1, i === pg ? C.cream : C.g3);
-    if (((RT * 1.6) | 0) % 2 === 0) txt('INSERT COIN', 240, 148, C.tom, 2, 'c');
-    hot.push({ x: 0, y: 0, w: W, h: 168, id: 'start' });
+    for (i = 0; i < (SIGNS.length ? 4 : 3); i++) R(240 - 14 + i * 8, 162, 4, 1, i === pg ? C.cream : C.g3);
+    if (((RT * 1.6) | 0) % 2 === 0) txt('INSERT COIN', 240, 166, C.tom, 2, 'c');
+    hot.push({ x: 0, y: 0, w: W, h: 184, id: 'start' });
     if (weekend) txt('WEEKEND MODE', 240, 4, C.pink, 1, 'c');
     if (hover) plate(hover);
   }
@@ -1599,18 +1631,16 @@
   function drawBoardList(y, me) {
     txt('TOP HOURS SAVED', 240, y, C.cream, 1, 'c');
     if (!TOP.length) { txt('No scores yet. Be the first.', 240, y + 22, C.p3, 1, 'c'); return }
-    for (var i = 0; i < Math.min(10, TOP.length); i++) {
-      var e = TOP[i], col = i < 5 ? 0 : 1, x = col ? 256 : 112, yy = y + 14 + (i % 5) * 11, mine = me && e.initials === me.initials && e.score === me.score;
+    for (var i = 0; i < Math.min(6, TOP.length); i++) {
+      var e = TOP[i], col = i < 3 ? 0 : 1, x = col ? 256 : 112, yy = y + 12 + (i % 3) * 11, mine = me && e.initials === me.initials && e.score === me.score;
       var c = mine ? C.tom : i === 0 ? C.gold : C.p2;
       txt((i + 1) + '.', x, yy, C.p3, 1, 'r'); txt(String(e.initials || '???').slice(0, 3), x + 6, yy, c, 1); txt(String(e.score | 0), x + 60, yy, c, 1, 'r'); txt(dayFull(e.day), x + 68, yy, C.p3, 1);
     }
   }
   function drawLegend(y, t) {
     txt('WHAT FALLS FROM THE SKY', 240, y, C.cream, 1, 'c');
-    var L = [['call', 'Missed call'], ['invoice', 'Paper invoice'], ['noshow', 'No-show'], ['spam', 'Spam'], ['double', 'Double booking']];
-    for (var i = 0; i < L.length; i++) { var x = 60 + i * 90; SE.hit = 0; SE.fade = art('enemy') ? 0 : 1; SE.base = null; SE.marked = false; dEnemy(L[i][0], x, y + 22, t); txt(L[i][1], x, y + 36, C.p2, 1, 'c') }
-    var P = [['auto', 'Automation'], ['ai', 'AI'], ['booking', 'Booking'], ['night', 'Night shift']];
-    for (i = 0; i < P.length; i++) { x = 105 + i * 90; dPower(P[i][0], x - 22, y + 55, t); txt(P[i][1], x - 13, y + 52, C.goldL, 1) }
+    var L = [['call', 'Missed call'], ['invoice', 'Invoice'], ['noshow', 'No-show'], ['spam', 'Spam'], ['double', 'Double booking']];
+    for (var i = 0; i < L.length; i++) { var x = 128 + i * 56; SE.hit = 0; SE.fade = art('enemy') ? 0 : 1; SE.base = null; SE.marked = false; SE.dead = false; dEnemy(L[i][0], x, y + 20, t); txt(L[i][1], x, y + 34, C.p2, 1, 'c') }
   }
   function drawSignList(y) {
     txt('IN THE CITY', 240, y, C.cream, 1, 'c');
@@ -1621,9 +1651,9 @@
     }
   }
   function drawBoard(y) {
-    R(100, y - 8, 280, 86, 'rgba(15,15,14,.82)');
+    R(100, y - 6, 280, 62, 'rgba(15,15,14,.88)');
     drawBoardList(y, LAST);
-    if (LAST && LAST.rank) txt('You are #' + LAST.rank, 240, y + 70, C.tom, 1, 'c');
+    if (LAST && LAST.rank) txt('You are #' + LAST.rank, 240, y + 48, C.tom, 1, 'c');
     hot.push({ x: 0, y: 0, w: W, h: 170, id: 'cont' });
   }
 
@@ -1638,11 +1668,11 @@
     if (sh > 0 && !RM()) { ox = Math.round(rnd(-sh, sh) * .5); oy = Math.round(rnd(-sh, sh) * .5) }
     g.setTransform(1, 0, 0, 1, ox, oy);
     var scroll = Gm.scroll;
-    if (Gm.def.virus && Gm.phase !== 'out' && Gm.phase !== 'cameo') drawServerBg(t); else scene(day, t, scroll);
+    var streeted = false;
+    if (Gm.def.virus && Gm.phase !== 'out' && Gm.phase !== 'cameo') drawServerBg(t); else streeted = scene(day, t, scroll, true);
     /* FLOW STATE: lo sfondo pulsa a tempo */
     if (Gm.flow) { var beat = 60 / 128, pk = RM() ? .5 : Math.pow(1 - (T % beat) / beat, 3), A0 = au(); if (A0 && A0.beat && !RM()) { try { var bt = A0.beat(); if (bt && bt.on) pk = Math.pow(1 - bt.phase, 3) } catch (e) {} } g.globalAlpha = .05 + .07 * pk; R(-4, -4, W + 8, CITY_Y + 4, accent(day)); g.globalAlpha = 1 }
-    dCity(Gm.wins, t, day);
-    if (!art('city')) drawWinOff();
+    if (!streeted) { dCity(Gm.wins, t, day); if (!art('city')) drawWinOff() }
     for (i = 0; i < fws.length; i++) dFirewall(fws[i]);
     if (Gm.glitch > 0 && !RM()) { if (art('glitch')) { try { AR.glitch(g, T, 1) } catch (e) { fail('glitch', e) } } else glitchSlices() }
     g = ga; gox = ox * AS; goy = oy * AS; g.setTransform(AS, 0, 0, AS, gox, goy); g.imageSmoothingEnabled = false;
@@ -1725,7 +1755,7 @@
   function drawBoss(b, t) {
     SB.phase = b.ph; SB.hp = b.hp / b.max; SB.hit = RM() ? (b.hit > .5 ? 1 : 0) : clamp(b.hit, 0, 1); SB.rage = b.rage; SB.pagesTorn = b.torn; SB.mouth = b.mouth; if (!(b.kind === 'monday' && Gm.phase === 'boss')) SB.hp = null;
     if (b.dead && ((b.dieT * 12) | 0) % 2) SB.hit = 1;
-    SB.scale = b.scale || 1;
+    SB.scale = b.scale || 1; SB.state = b.hit > .3 ? 'hurt' : b.vuln && (b.pt % 2) < .5 ? 'attack' : 'idle'; if (b.kind !== 'monday' && b.vuln) SB.hp = b.hp / b.max;
     var bsx = SX(b.y), bsy = b.x;
     if (window.DEADLINE_ART && AR && AR.size && AR.size[b.kind]) dBoss(b.kind, bsx, bsy, t); else fbBoss2(b.kind, bsx, bsy, t, SB);
     if (b.kind === 'monday' && Gm.phase === 'monin') {
@@ -1762,6 +1792,7 @@
   /* ---------- la plancia della Control Room: la giornata, le ore, l'energia, l'azienda, i sistemi ---------- */
   var SYSICON = { booking: 'booking', auto: 'auto', ai: 'ai', night: 'night' };
   function drawHUD(t) {
+    if (art('hudClock') && art('hudCounter') && art('hudCups') && art('hudSystems') && art('hudSign')) { try { drawHUDart(t); return } catch (e) { hd1(); fail('hudClock', e) } }
     var d = DAYS[Gm.day], ac = accent(d), i;
     R(0, 0, W, HUD_H + 2, 'rgba(15,15,14,.78)'); R(0, HUD_H + 2, W, 1, 'rgba(244,242,236,.16)');
     /* LA GIORNATA: nome intero, barra-orologio 09:00 -> 17:00 con la lancetta; al boss diventa OVERTIME */
@@ -1811,6 +1842,25 @@
     /* le ore che volano verso il contatore */
     for (i = 0; i < FLY.length; i++) { var f = FLY[i]; if (!f.on) continue; var q = easeIO(f.t / .7), fxp = f.x + (240 - f.x) * q, fyp = f.y + (5 - f.y) * q; g.globalAlpha = 1 - q * .6; txt(f.s, fxp, fyp, Gm.flow ? C.tomL : C.cream, 1, 'c', C.night); g.globalAlpha = 1 }
   }
+  function drawHUDart(t) {
+    var late = (Gm.phase === 'boss' || Gm.phase === 'cameo') && Gm.day < 6, health = 1 - Gm.cityHits / Gm.cityMax, i;
+    var sign = health <= 0 ? 'CLOSED' : Gm.bizT > 0 ? 'BRB' : 'OPEN';
+    hd0();
+    AR.hudClock(g, 3, 2, 122, clamp(Gm.clockShow, 0, 1), DAYS[Gm.day], t, { overtime: late || Gm.overtime });
+    AR.hudCounter(g, 240, 1, Gm.shown, t);
+    if (!weekend) AR.hudCups(g, W - 3, 1, Gm.coffee, 3, t, Gm.cupT > 0 ? 1 - Gm.cupT : null);
+    AR.hudSign(g, 6, H - 13, sign, t, Gm.bizT > 0 || health < .35);
+    AR.hudSystems(g, W - 3, H - 21, { booking: Gm.sys.booking || Gm.shield > 0, auto: Gm.sys.auto || Gm.power === 'auto', ai: Gm.sys.ai || Gm.power === 'ai', night: Gm.night || Gm.nightT > 0, nightCharge: Gm.nightT > 0 ? Gm.nightT / 3 : Gm.night ? 1 : 0, key: touchMode ? 'A' : 'X' }, t);
+    for (i = 0; i < FLY.length; i++) { var f = FLY[i]; if (!f.on) continue; var q = easeIO(f.t / .7); AR.plus(g, f.x + (230 - f.x) * q, f.y + (12 - f.y) * q, f.s, f.t / .7) }
+    if (Gm.plab && art('powerLabel')) { if (!AR.powerLabel(g, Gm.plab.kind, Gm.plab.x, Gm.plab.y, T - Gm.plab.t0)) Gm.plab = null }
+    hd1();
+    /* THE BUSINESS: la salute dell'azienda accanto all'insegna */
+    var bx = 6 + (AR.tinyWidth ? AR.tinyWidth(sign) : tw(sign, 1)) + 10; txt('THE BUSINESS', bx, H - 12, C.p3, 1);
+    var hx = bx + tw('THE BUSINESS', 1) + 4;
+    for (i = 0; i < 12; i++) R(hx + i * 5, H - 10, 4, 3, i < Math.ceil(health * 12) ? (health < .35 ? C.crim : C.cream) : C.g4);
+    if (weekend) txt('WEEKEND', W - 6, 6, C.pink, 1, 'r');
+    if (Gm.def.delivery && Gm.phase !== 'boss') txt('ORDERS ' + Gm.deliv + '/' + DGOAL, 240, 24, C.cream, 1, 'c', C.night);
+  }
   /* "+3h": vola dal nemico al contatore (pochi alla volta) */
   var FLY = pool(6, function () { return { s: '', x: 0, y: 0, t: 0 } });
   function flyHours(v, lx, ly) { var f = take(FLY); if (!f) return; f.s = '+' + v + 'h'; f.x = clamp(SX(ly), 20, W - 20); f.y = clamp(lx - 8, 16, H - 20); f.t = 0 }
@@ -1819,6 +1869,7 @@
   function drawInstalled(t) {
     if (Gm.phase !== 'out' || !Gm.installed) return;
     var k = clamp((Gm.phaseT - .4) * 3, 0, 1); if (k <= 0) return;
+    if (art('systemCard')) { hd0(); try { AR.systemCard(g, Gm.installed, Gm.phaseT - .4, { name: SYSINFO[Gm.installed][0], line: SYSINFO[Gm.installed][1] }); hd1(); return } catch (e) { hd1(); fail('systemCard', e) } }
     var info = SYSINFO[Gm.installed], w = 236, h = 60, x = 240 - w / 2, y = 150;
     g.globalAlpha = k; R(x, y, w, h, 'rgba(15,15,14,.92)'); panel(x, y, w, h);
     txt('SYSTEM INSTALLED', 240, y + 6, C.tom, 1, 'c');
@@ -1839,7 +1890,7 @@
       g.restore();
       txt('9:00', 240, 116, C.tom, 1, 'c', C.night);
       var lines = wrap(Gm.def.hint, 300, 1); for (var i = 0; i < lines.length; i++) txt(lines[i], 240, 130 + i * 10, C.p2, 1, 'c', C.night);
-      if (Gm.day === 0) txt(touchMode ? 'Drag to fly. We shoot for you.' : 'Arrows to fly. Space to shoot.', 240, 154, C.p3, 1, 'c', C.night);
+      if (Gm.day === 0) txt(touchMode ? 'Pad or finger to fly. We shoot for you.' : 'Arrows to fly. Space to shoot.', 240, 154, C.p3, 1, 'c', C.night);
       g.globalAlpha = 1;
     }
     if (p === 'monin' && k > 3) {
@@ -1934,6 +1985,7 @@
   }
 
   /* ---------- il cabinato (DOM) ---------- */
+  var nbEl = null, gbCv = null, GB = { up: 0, down: 0, left: 0, right: 0, a: 0, b: 0, start: 0, select: 0 }, gbPtr = {};
   var box, cab, scr, pcv, fcv, goBtn, sndBtn, real, padEl, help, formEl, back = null, raf = 0, last = 0, acc = 0, opened = false, musicaWas = false;
   var mouse = { x: 0, y: 0, in: false };
   function dom() {
@@ -1946,9 +1998,9 @@
           '<canvas class="dlpx" width="' + W + '" height="' + H + '"></canvas><canvas class="dlpx dlac" width="' + W * 2 + '" height="' + H * 2 + '"></canvas><canvas class="dlfx"></canvas><i class="dlscan" aria-hidden="true"></i>' +
         '</div></div>' +
         '<div class="dldeck">' +
-          '<div class="dlpad" aria-hidden="true"><span>Drag here to fly</span><small>Two fingers: Night shift</small><em>Turn sideways for a bigger screen</em></div>' +
+          '<div class="dlpad"><canvas class="dlgb" aria-label="Game controls"></canvas><em>Turn sideways for a bigger screen</em></div>' +
           '<p class="dlhelp">Arrows or WASD fly &middot; Space shoot &middot; X night shift &middot; P pause &middot; M sound</p>' +
-          '<div class="dlbtns"><button class="dlb dlsnd" type="button" aria-pressed="false">Sound on</button><button class="dlb dlgo" type="button">Insert coin</button></div>' +
+          '<div class="dlbtns"><button class="dlb dlk dlsnd" type="button" aria-pressed="false"><i></i><span>Sound on</span></button><button class="dlb dlk dlnight" type="button"><i></i><span>Night shift</span></button><button class="dlb dlk dlgo" type="button"><i></i><span>Insert coin</span></button></div>' +
           '<a class="dlreal" href="/contact">Want this for real? Tell us what slows you down.</a>' +
         '</div>' +
       '</div>' +
@@ -1956,16 +2008,18 @@
     document.body.appendChild(box);
     cab = box.querySelector('.dlcab'); scr = box.querySelector('.dlscr'); pcv = box.querySelector('.dlpx'); fcv = box.querySelector('.dlfx');
     g = pcv.getContext('2d'); g.imageSmoothingEnabled = false; fx = fcv.getContext('2d'); ga = box.querySelector('.dlac').getContext('2d'); ga.imageSmoothingEnabled = false;
-    goBtn = box.querySelector('.dlgo'); sndBtn = box.querySelector('.dlsnd'); real = box.querySelector('.dlreal'); padEl = box.querySelector('.dlpad'); help = box.querySelector('.dlhelp'); formEl = box.querySelector('.dlform');
+    goBtn = box.querySelector('.dlgo'); sndBtn = box.querySelector('.dlsnd'); gbCv = box.querySelector('.dlgb'); nbEl = box.querySelector('.dlnight'); nbEl.addEventListener('click', function () { unlock(); useNight() }); real = box.querySelector('.dlreal'); padEl = box.querySelector('.dlpad'); help = box.querySelector('.dlhelp'); formEl = box.querySelector('.dlform');
     box.querySelector('.dlx').addEventListener('click', close);
     goBtn.addEventListener('click', function () { unlock(); mainAction() });
     sndBtn.addEventListener('click', function () { unlock(); toggleMute() });
+    gbCv.addEventListener('pointerdown', gbDown); gbCv.addEventListener('pointermove', gbMove); gbCv.addEventListener('pointerup', gbUp); gbCv.addEventListener('pointercancel', gbUp);
     box.addEventListener('pointerdown', pDown); box.addEventListener('pointermove', pMove); box.addEventListener('pointerup', pUp); box.addEventListener('pointercancel', pUp);
     pcv.addEventListener('pointerleave', function () { mouse.in = false });
     box.addEventListener('contextmenu', function (e) { if (e.target === pcv || e.target === padEl) e.preventDefault() });
     addEventListener('resize', layout);
   }
   function unlock() { aucall('unlock') }
+  function artBg() { var a = window.DEADLINE_ART; if (a && pcv) a.bgCanvas = pcv }
   function toggleMute() { muted = !muted; aucall('mute', muted); syncUI() }
   function mainAction() {
     if (st === 'title') startGame();
@@ -1993,14 +2047,59 @@
     if (!box) return;
     var lbl = { boot: 'Skip', crawl: 'Skip', title: 'Insert coin', clock: 'Go', over: 'Continue', win: 'Continue', init: 'Save', board: 'Continue', form: 'Insert coin' }[st] || 'Pause';
     if (st === 'play') lbl = paused ? 'Resume' : 'Pause';
-    goBtn.textContent = lbl; goBtn.classList.toggle('dlblink', st === 'title');
-    sndBtn.textContent = muted ? 'Sound off' : 'Sound on'; sndBtn.setAttribute('aria-pressed', muted ? 'true' : 'false');
+    goBtn.querySelector('span').textContent = lbl; goBtn.classList.toggle('dlblink', st === 'title');
+    sndBtn.querySelector('span').textContent = muted ? 'Sound off' : 'Sound on'; sndBtn.setAttribute('aria-pressed', muted ? 'true' : 'false');
     var end = st === 'over' || st === 'win' || st === 'init' || st === 'board';
     real.classList.toggle('on', end);
     document.documentElement.classList.toggle('dl-play', st === 'play' && !paused);
     box.classList.toggle('dlplaying', st === 'play');
   }
   var lastSt = '';
+
+  /* la pulsantiera: croce a 8 direzioni, A = Night shift, B = piano (precisione), START, SELECT */
+  function gbRects() { var w = gbCv.width, h = gbCv.height, a = art('padLayout'); if (a) try { return a.padLayout(w, h) } catch (e) { fail('padLayout', e) }
+    var s = Math.min(w / 160, h / 96), d = 14 * s, cx = w * .27, cy = h * .46;
+    return { up: [cx - d / 2, cy - d * 1.5, d, d], down: [cx - d / 2, cy + d * .5, d, d], left: [cx - d * 1.5, cy - d / 2, d, d], right: [cx + d * .5, cy - d / 2, d, d], a: [w * .83 - 12 * s, h * .36 - 12 * s, 24 * s, 24 * s], b: [w * .64 - 12 * s, h * .56 - 12 * s, 24 * s, 24 * s], select: [w * .3, h * .8, 22 * s, 7 * s], start: [w * .5, h * .8, 22 * s, 7 * s], s: s } }
+  function gbHit(e) {
+    var r = gbCv.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * gbCv.width, y = (e.clientY - r.top) / r.height * gbCv.height, L = gbRects(), d = L.up[2];
+    var cx = L.up[0] + d / 2, cy = L.left[1] + L.left[3] / 2, dx = x - cx, dy = y - cy;
+    if (dx * dx + dy * dy < d * d * 4.4) return { pad: true, dx: dx / d, dy: dy / d };
+    var ks = ['a', 'b', 'start', 'select'];
+    for (var i = 0; i < ks.length; i++) { var q = L[ks[i]], m = ks[i] === 'a' || ks[i] === 'b' ? q[2] * .35 : q[3]; if (x > q[0] - m && x < q[0] + q[2] + m && y > q[1] - m && y < q[1] + q[3] + m) return { btn: ks[i] } }
+    return null;
+  }
+  function gbApply() {
+    var u = 0, dn = 0, l = 0, rt = 0;
+    for (var id in gbPtr) { var h = gbPtr[id]; if (h && h.pad) { if (h.dy < -.35) u = 1; if (h.dy > .35) dn = 1; if (h.dx < -.35) l = 1; if (h.dx > .35) rt = 1 } }
+    GB.up = keys.u = u; GB.down = keys.d = dn; GB.left = keys.l = l; GB.right = keys.r = rt;
+  }
+  function gbDown(e) {
+    e.preventDefault(); unlock(); touchMode = true; box.classList.add('dltouch');
+    try { gbCv.setPointerCapture(e.pointerId) } catch (x) {}
+    var h = gbHit(e); gbPtr[e.pointerId] = h; if (!h) return;
+    if (h.btn) {
+      GB[h.btn] = 1;
+      if (h.btn === 'a') { if (st === 'play' && !paused) { if (Gm && Gm.dlg) dlgSkip(); else useNight() } else mainAction() }
+      else if (h.btn === 'b') { if (st === 'play' && Gm && Gm.dlg) dlgSkip(); else if (st !== 'play') cont() }
+      else if (h.btn === 'start') mainAction();
+      else if (h.btn === 'select') toggleMute();
+    }
+    gbApply();
+  }
+  function gbMove(e) { var h0 = gbPtr[e.pointerId]; if (!h0 || !h0.pad) return; e.preventDefault(); var h = gbHit(e); gbPtr[e.pointerId] = h && h.pad ? h : { pad: true, dx: 0, dy: 0 }; gbApply() }
+  function gbUp(e) { var h = gbPtr[e.pointerId]; if (h && h.btn) GB[h.btn] = 0; delete gbPtr[e.pointerId]; gbApply() }
+  function gbDraw() {
+    if (!gbCv || !touchMode || !gbCv.offsetWidth) return;
+    var w = Math.round(gbCv.offsetWidth * Math.min(2, devicePixelRatio || 1)), h = Math.round(gbCv.offsetHeight * Math.min(2, devicePixelRatio || 1));
+    if (gbCv.width !== w || gbCv.height !== h) { gbCv.width = w; gbCv.height = h }
+    var q = gbCv.getContext('2d'), a = art('pad');
+    q.setTransform(1, 0, 0, 1, 0, 0); q.clearRect(0, 0, w, h); q.imageSmoothingEnabled = false;
+    if (a) { try { a.pad(q, 0, 0, w, h, GB, { labels: { a: 'NIGHT', b: 'SLOW' } }); return } catch (e) { fail('pad', e) } }
+    var L = gbRects(); q.fillStyle = '#121214'; q.fillRect(0, 0, w, h);
+    ['up', 'down', 'left', 'right'].forEach(function (k) { var R0 = L[k]; q.fillStyle = GB[k] ? '#4A4E4C' : '#2A2D2C'; q.fillRect(R0[0], R0[1], R0[2], R0[3]) });
+    [['a', '#FF5B3A'], ['b', '#F4F2EC']].forEach(function (b) { var R0 = L[b[0]]; q.fillStyle = b[1]; q.beginPath(); q.arc(R0[0] + R0[2] / 2, R0[1] + R0[3] / 2 + (GB[b[0]] ? 2 : 0), R0[2] / 2, 0, 7); q.fill() });
+    ['select', 'start'].forEach(function (k) { var R0 = L[k]; q.fillStyle = '#3A3D3C'; q.fillRect(R0[0], R0[1], R0[2], R0[3]) });
+  }
 
   /* il puntatore: mouse sulle zone, dito sulla nave */
   function toGame(e) { var r = pcv.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * W, y: (e.clientY - r.top) / r.height * H, in: e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom } }
@@ -2011,7 +2110,8 @@
     var p = toGame(e), isT = e.pointerType === 'touch' || e.pointerType === 'pen';
     if (isT) { touchMode = true; box.classList.add('dltouch') } else if (e.pointerType === 'mouse') { touchMode = false; box.classList.remove('dltouch') }
     if (isT) { tps[e.pointerId] = { t: performance.now(), x: e.clientX, y: e.clientY }; tpN++; if (tpN === 2) twoT = performance.now() }
-    var onPad = e.target === padEl || padEl.contains(e.target);
+    var onPad = false;
+    if (gbCv && (e.target === gbCv)) return;
     if (st === 'play' && !paused && Gm && Gm.dlg && p.in) dlgSkip();
     if (st === 'play' && !paused && (isT || onPad)) {
       if (tpN >= 2) return;
@@ -2143,7 +2243,7 @@
     var landscape = vw > vh && vh < 520;
     box.classList.toggle('dlland', landscape);
     var mq = box.querySelector('.dlmq'), deck = box.querySelector('.dldeck');
-    var mqH = landscape ? 0 : mq.offsetHeight, deckH = landscape ? 0 : (coarse ? 170 : deck.offsetHeight || 90);
+    var mqH = landscape ? 0 : mq.offsetHeight, deckH = landscape ? 0 : (coarse ? Math.min(vw - 16, 520) * .6 + 44 : deck.offsetHeight || 110);
     var bez = landscape ? 4 : vw < 600 ? 8 : 22, side = landscape ? 120 : vw < 600 ? 8 : 32;
     var aw = Math.min(vw - side * 2, 1400) - bez * 2, ah = vh - mqH - deckH - bez * 2 - (landscape ? 8 : vw < 600 ? 24 : 56);
     var s = Math.max(.3, Math.min(aw / W, ah / H)), dpr = Math.min(window.devicePixelRatio || 1, 3);
@@ -2168,7 +2268,8 @@
     if (n >= 40) acc = 0;
     if (iniMsgT > 0) iniMsgT -= dt; if (ttT > 0) ttT -= dt;
     if (st !== lastSt) { lastSt = st; syncUI(); if (st === 'form') {} }
-    render();
+    render(); gbDraw();
+    if (nbEl) nbEl.classList.toggle('on', !!(st === 'play' && Gm && Gm.night && !Gm.nightT));
     if (ttT > 0) { g.globalAlpha = clamp(ttT, 0, 1); txt(ttS, 240, 60, C.pink, 2, 'c', C.night); g.globalAlpha = 1 }
     if (st === 'form') formPreview();
   }
@@ -2270,7 +2371,7 @@
     box.style.setProperty('--ox', (x == null ? innerWidth / 2 : x) + 'px'); box.style.setProperty('--oy', (y == null ? innerHeight / 2 : y) + 'px');
     box.classList.add('on'); document.documentElement.classList.add('dl-on');
     touchMode = matchMedia('(hover: none) and (pointer: coarse)').matches; box.classList.toggle('dltouch', touchMode);
-    layout(); requestAnimationFrame(function () { box.classList.add('in'); layout() });
+    artBg(); layout(); requestAnimationFrame(function () { box.classList.add('in'); layout() });
     /* la musica del sito si ferma e riparte alla chiusura */
     musicaWas = false; var au0 = au(); if (au0 && 'muted' in au0) muted = !!au0.muted;
     try { if (window.MUSICA && window.MUSICA.state && window.MUSICA.state().st === 'play') { window.MUSICA.pause(); musicaWas = true } } catch (e) {}

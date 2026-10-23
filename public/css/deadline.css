@@ -53,40 +53,43 @@ html.dl-play .mmc{opacity:0!important}
   background:linear-gradient(180deg,#1c1512,#100c0b);border:2px solid #2a201c;border-radius:0 0 16px 16px;box-shadow:inset 0 2px 0 rgba(255,91,58,.3)}
 .dlhelp{flex:1 1 320px;font:400 11px/1.5 var(--f-mono,monospace);letter-spacing:.08em;text-transform:uppercase;color:rgba(244,242,236,.5)}
 .dlbtns{display:flex;gap:10px;margin-left:auto}
-.dlb{all:unset;box-sizing:border-box;cursor:pointer;padding:10px 14px;border-radius:6px;border:1.5px solid rgba(244,242,236,.35);color:#F4F2EC;
-  font:500 12px/1 var(--f-mono,monospace);letter-spacing:.12em;text-transform:uppercase;text-align:center;
-  background:linear-gradient(#FF5B3A,#FF5B3A) no-repeat 0 100%/100% 0,#0b0b0a;transition:background-size .25s cubic-bezier(.2,.8,.2,1),color .2s,border-color .2s}
-.dlb:hover,.dlb:focus-visible{background-size:100% 100%;color:#0b0b0a;border-color:#FF5B3A;outline:none}
-.dlgo{border-color:#FF5B3A;color:#FF5B3A;min-width:120px}
-.dlgo.dlblink{animation:dlgo 1.2s steps(1) infinite}
-@keyframes dlgo{50%{border-color:rgba(255,91,58,.35)}}
+.dlb{all:unset;box-sizing:border-box;cursor:pointer;color:#F4F2EC;font:500 11px/1 var(--f-mono,monospace);letter-spacing:.12em;text-transform:uppercase;text-align:center;-webkit-tap-highlight-color:transparent}
+/* tastoni da sala giochi: cappello tondo con lo spessore, etichetta sotto */
+.dlk{display:grid;justify-items:center;gap:7px;min-width:74px}
+.dlk i{display:block;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 38% 30%,#3a3d3c,#1d1f1e 60%,#0d0e0e);box-shadow:0 6px 0 #050505,0 8px 14px rgba(0,0,0,.6),inset 0 2px 0 rgba(244,242,236,.18);transition:transform .07s,box-shadow .07s}
+.dlk span{color:rgba(244,242,236,.6);transition:color .2s}
+.dlk:hover span,.dlk:focus-visible span{color:#F4F2EC}
+.dlk:focus-visible i{outline:2px solid #FF5B3A;outline-offset:3px}
+.dlk:active i{transform:translateY(5px);box-shadow:0 1px 0 #050505,0 2px 4px rgba(0,0,0,.6),inset 0 2px 0 rgba(244,242,236,.12)}
+.dlgo i{width:56px;height:56px;background:radial-gradient(circle at 38% 30%,#ff9a82,#FF5B3A 50%,#b8341c);box-shadow:0 7px 0 #7A2416,0 10px 18px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,227,214,.6)}
+.dlgo:active i{box-shadow:0 1px 0 #7A2416,0 2px 6px rgba(0,0,0,.6)}
+.dlgo span{color:#FF5B3A}
+.dlgo.dlblink i{animation:dlgo 1.2s steps(1) infinite}
+@keyframes dlgo{50%{background:radial-gradient(circle at 38% 30%,#d9846f,#c2452c 50%,#7A2416)}}
+.dlsnd i{background:radial-gradient(circle at 38% 30%,#ffffff,#F4F2EC 50%,#bdb8ae);box-shadow:0 6px 0 #6d6860,0 8px 14px rgba(0,0,0,.6)}
+.dlnight.on i{background:radial-gradient(circle at 38% 30%,#c9d8ff,#8FB4FF 50%,#2F4C9A);box-shadow:0 6px 0 #16295E,0 8px 18px rgba(143,180,255,.35)}
+.dlnight.on span{color:#8FB4FF}
+.dlbtns{align-items:flex-end}
 .dlreal{display:none;flex:1 0 100%;text-align:center;font:400 12px/1.4 var(--f-mono,monospace);letter-spacing:.06em;color:rgba(244,242,236,.6);text-decoration:none;padding:4px 0}
 .dlreal.on{display:block}
 .dlreal:hover,.dlreal:focus-visible{color:#FF5B3A;outline:none}
 
-/* il tappetino per il dito (telefono) */
-.dlpad{display:none;flex:1 0 100%;min-height:120px;border-radius:12px;border:1.5px dashed rgba(244,242,236,.22);place-items:center;align-content:center;gap:4px;touch-action:none;user-select:none;
-  font:500 11px var(--f-mono,monospace);letter-spacing:.12em;text-transform:uppercase;color:rgba(244,242,236,.45);
-  background:repeating-linear-gradient(90deg,rgba(244,242,236,.03) 0 1px,transparent 1px 16px),repeating-linear-gradient(0deg,rgba(244,242,236,.03) 0 1px,transparent 1px 16px)}
-.dlpad small{font-size:10px;opacity:.7}
-.dltouch .dlpad{display:grid}
-.dltouch .dlhelp{display:none}
-.dltouch .dldeck{flex-direction:column;align-items:stretch}
-.dltouch .dlbtns{margin:0;order:-1;flex:0 0 auto}
-.dltouch .dlbtns .dlb{flex:1;padding:16px 14px}
-.dltouch.dlplaying .dlpad{border-color:rgba(255,91,58,.4)}
-.dl.dltouch:not(.dlland) .dlcab{min-height:calc(100dvh - 60px)}
-.dl.dltouch:not(.dlland) .dldeck{flex:1 1 auto}
-.dl.dltouch:not(.dlland) .dlpad{flex:1 1 auto}
-.dl.dltouch:not(.dlland) .dldeck{justify-content:flex-start;flex-wrap:nowrap}
-.dlpad em{font-style:normal;font-size:10px;opacity:.5;margin-top:10px}
-
+/* la pulsantiera Game Boy (telefono) */
+.dlpad{display:none;flex:1 0 100%;flex-direction:column;align-items:center;gap:6px;touch-action:none;user-select:none}
+.dlgb{display:block;width:100%!important;max-width:520px!important;aspect-ratio:160/96;height:auto!important;touch-action:none}
+.dlpad em{font:400 10px var(--f-mono,monospace);font-style:normal;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,242,236,.35)}
+.dltouch .dlpad{display:flex}
+.dltouch .dlhelp,.dltouch .dlbtns{display:none}
+.dltouch .dldeck{flex-direction:column;align-items:stretch;padding:10px 8px 12px}
+.dl.dltouch:not(.dlland) .dlcab{min-height:0}
 /* telefono in orizzontale: solo lo schermo */
 .dlland{padding:4px!important}
 .dlland .dlmq,.dlland .dlpad{display:none!important}
 .dlland .dldeck{position:fixed;left:8px;top:50%;transform:translateY(-50%);padding:0;background:none;border:0;box-shadow:none;width:104px}
-.dlland .dlbtns{flex-direction:column;margin:0}
-.dlland .dlb{min-width:0;width:104px;padding:10px 6px}
+.dlland .dlbtns{display:flex!important;flex-direction:column;margin:0;gap:12px}
+.dlland .dlk i{width:38px;height:38px}
+.dlland .dlgo i{width:44px;height:44px}
+.dlland .dlb{min-width:0;width:104px}
 .dlland .dlreal{display:none!important}
 .dlland .dlbez{border:0;background:none;box-shadow:none}
 .dlland .dlhelp{display:none}
