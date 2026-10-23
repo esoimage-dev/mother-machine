@@ -144,14 +144,15 @@
   /* al rilascio la striscia prosegue con la sua spinta. Una spinta decisa, o un pezzo di scheda, porta sempre alla scheda dopo */
   var release = function (one) {
     var a = hist[0], b = hist[hist.length - 1], v = (b[1] - a[1]) > 0 ? (b[0] - a[0]) / (b[1] - a[1]) : 0;   /* px al ms */
-    var i = nearest(tr.scrollLeft + v * 260), dist = tr.scrollLeft - start, here = nearest(tr.scrollLeft);
+    var dist = tr.scrollLeft - start, here = nearest(tr.scrollLeft), from = nearest(start), i = here;
     if (one) {   /* dal selettore conta dove porti il dito, senza spinta: un quarto di passo basta per cambiare lavoro */
       var step = cards.length > 1 ? at(1) - at(0) : 1;
       i = here;
       if (i === nearest(start) && Math.abs(dist) > step * .25) i += dist > 0 ? 1 : -1;
       go(i); return;
     }
-    if (i === cur && (Math.abs(v) > .35 || Math.abs(dist) > Math.min(140, cards[cur].offsetWidth * .15))) i = cur + ((Math.abs(v) > .35 ? v : dist) > 0 ? 1 : -1);
+    /* la spinta vale al massimo una scheda: si va alla scheda piu' vicina, o a quella dopo se il gesto e' deciso */
+    if (here === from && (Math.abs(v) > .35 || Math.abs(dist) > Math.min(140, cards[from].offsetWidth * .15))) i = from + ((Math.abs(v) > .35 ? v : dist) > 0 ? 1 : -1);
     go(i);
   };
 

@@ -297,6 +297,8 @@ html .mmc.wdr:not(.hit) i::after{width:0;height:0}
 .wsx button .sh{display:none}
 @media (max-width:860px){.wsx button .sh{display:inline}}
 .wst-cut .mx{width:min(370px,60%)}
+/* su computer la Control Room del truck piu' stretta e bassa: si vede di piu' il truck */
+@media (min-width:861px){.wst-cut .mx{width:min(310px,48%)}.wst-cut .mxc i{aspect-ratio:1.85}}
 .mxe{border-top-color:rgba(28,36,32,.12)}
 .wsx button i .l{fill:none;stroke:currentColor;stroke-width:22;stroke-linecap:round;stroke-linejoin:round}
 .wsx button i .d{fill:currentColor;opacity:.32}
