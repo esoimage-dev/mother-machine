@@ -102,7 +102,17 @@
   var raf = 0;
   tr.addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(function () { raf = 0; show(nearest(tr.scrollLeft)) }) }, { passive: true });
   tr.addEventListener('touchstart', function () { touched = true; cancelAnimationFrame(anim); tr.classList.remove('free') }, { passive: true });
-  tr.addEventListener('wheel', function () { if (auto) { cancelAnimationFrame(anim); auto = false; tr.classList.remove('free') } }, { passive: true });
+  /* trackpad e rotella in orizzontale: un gesto = una scheda. L'inerzia del trackpad non porta piu' avanti:
+     finche' il gesto continua (anche la sua coda) non si conta un'altra scheda. Lo scroll verticale resta libero */
+  var wacc = 0, wlock = 0, wt = 0;
+  tr.addEventListener('wheel', function (e) {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    clearTimeout(wt); wt = setTimeout(function () { wlock = 0; wacc = 0 }, 220);
+    if (wlock) return;
+    wacc += e.deltaX;
+    if (Math.abs(wacc) > 30) { wlock = 1; touched = true; go(cur + (wacc > 0 ? 1 : -1)) }
+  }, { passive: false });
   [prev, next].forEach(function (b) {
     b.addEventListener('click', function () { touched = true; b.classList.remove('call'); go(cur + +b.dataset.d) });
   });
@@ -159,7 +169,7 @@
   /* anche il selettore si trascina: tieni premuto il lavoro acceso e spostalo verso il prossimo, la striscia lo segue */
   var sw = null;
   tabs.addEventListener('pointerdown', function (e) {
-    if (e.button) return;
+    if (e.button || e.pointerType === 'mouse') return;   /* col mouse il selettore si usa a clic */
     cancelAnimationFrame(anim); auto = false; swiped = false;
     sw = { x: e.clientX, id: e.pointerId }; start = tr.scrollLeft; hist = [[tr.scrollLeft, performance.now()]];
   });
