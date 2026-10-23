@@ -179,11 +179,15 @@ Fuori dal palazzo: `/privacy`.
   tratteggio, testo in prospettiva su qualunque piano. Il mouse sposta la camera, sul telefono si trascina di lato. Niente
   footer e niente porta per G: la stanza e' tutta la pagina. Dentro: server (-> popup "machine room live", `sala-server.js`,
   poi Systems), neon della m che fa i capricci e illumina muro e pavimento, **ascensore** sul fondo con display LG e il solo
-  tasto su (apre la pulsantiera), quadro con le leve (spegne la stanza), cabinato a destra (-> Rush hour), banco con
-  attrezzi, disegno tecnico e mensola col pizza truck, divano con tavolino (menu del ristorante e telefono), TV sulla cassa
-  (-> il film, `public/film.html`), macchina del caffe', calendario del robot, poster "Dead Pixels", estintore, post-it.
-  **Primo piano stile inventario** (`stanza-vista.js`): truck, menu e telefono vengono avanti e girano (trascinandoli si
-  ruotano), con una frase e due bottoni (vai al progetto o a Contact, oppure "Put it back"). I modelli stanno in
+  tasto su (premuto: ding, le porte si aprono sulla cabina accesa, poi la pulsantiera), quadro con le leve (spegnendo scende
+  la leva di destra e la stanza va al buio), cabinato a destra (-> Rush hour), banco con attrezzi, disegno tecnico e mensola
+  col pizza truck; in primo piano il salotto di sbieco: divano, tavolino (menu del ristorante e telefono), TV sulla cassa
+  (-> il film, `public/film.html`) e la console "Mother 8" con due joystick a terra; macchina del caffe', calendario del robot
+  sullo sportello del rack R04 (mese vero, oggi cerchiato, cliccando gira il mese: la parete di sinistra non si vede da
+  nessuna posizione), poster "Dead Pixels", Staff only al neon accanto all'ascensore, estintore, post-it.
+  **Primo piano stile inventario** (`stanza-vista.js`): truck, menu e telefono volano dal punto premuto dentro un mirino e
+  girano (trascinandoli si ruotano), con una frase, il bottone per andare al progetto o a Contact e la X a tasto (Esc).
+  I modelli si preparano in anticipo e la stanza dietro si ferma: niente scatti. I modelli stanno in
   `stanza-oggetti.js` (`STANZA_MODELLI`). **Rush hour** (`rush.js`): da rivedere, Eso vuole cambiarlo.
 - [x] "Free" solo due volte: nella porta verso G ("The first one is free.") e in Contact ("The first conversation is free.").
 
