@@ -72,13 +72,13 @@ async function stanza(request, env) {
 const DL = {
   partitaOre: 2, // il gettone vale per mandare il punteggio entro 2 ore dall'inizio
   premioOre: 48, // e per chiedere l'insegna entro 48 ore
-  maxPunti: 30000, // tetto assoluto
+  maxPunti: 5000, // tetto assoluto (una partita intera fa 900-1300)
   maxRitmo: 40, // punti al secondo, in media, al massimo
-  maxPerKill: 60, // punti per nemico (con FLOW STATE) al massimo
-  bonus: 6000, // bonus fuori dai nemici (boss, moneta, fine giornata) al massimo
+  maxPerKill: 20, // punti per nemico (con FLOW STATE) al massimo
+  bonus: 1500, // bonus fuori dai nemici (boss, moneta, fine giornata) al massimo
   maxKillMin: 400, // nemici al minuto al massimo
-  giornoMin: 25, // secondi minimi per giorno (un giorno dura circa 45 s)
-  bossMin: 15, // secondi minimi per MONDAY dopo domenica
+  giornoMin: 8, // secondi minimi per giorno (i giorni veloci finiscono in 10-12 s)
+  bossMin: 10, // secondi minimi per MONDAY dopo domenica
   durataMax: 3600,
   corpo: 8 * 1024,
   corpoPremio: 120 * 1024,

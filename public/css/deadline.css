@@ -72,14 +72,22 @@ html.dl-play .mmc{opacity:0!important}
 .dltouch .dlpad{display:grid}
 .dltouch .dlhelp{display:none}
 .dltouch .dldeck{flex-direction:column;align-items:stretch}
-.dltouch .dlbtns{margin:0;order:-1}
-.dltouch .dlbtns .dlb{flex:1}
+.dltouch .dlbtns{margin:0;order:-1;flex:0 0 auto}
+.dltouch .dlbtns .dlb{flex:1;padding:16px 14px}
 .dltouch.dlplaying .dlpad{border-color:rgba(255,91,58,.4)}
+.dl.dltouch:not(.dlland) .dlcab{min-height:calc(100dvh - 60px)}
+.dl.dltouch:not(.dlland) .dldeck{flex:1 1 auto}
+.dl.dltouch:not(.dlland) .dlpad{flex:1 1 auto}
+.dl.dltouch:not(.dlland) .dldeck{justify-content:flex-start;flex-wrap:nowrap}
+.dlpad em{font-style:normal;font-size:10px;opacity:.5;margin-top:10px}
 
 /* telefono in orizzontale: solo lo schermo */
 .dlland{padding:4px!important}
 .dlland .dlmq,.dlland .dlpad{display:none!important}
-.dlland .dldeck{position:fixed;left:8px;bottom:8px;padding:0;background:none;border:0;box-shadow:none;width:auto}
+.dlland .dldeck{position:fixed;left:8px;top:50%;transform:translateY(-50%);padding:0;background:none;border:0;box-shadow:none;width:104px}
+.dlland .dlbtns{flex-direction:column;margin:0}
+.dlland .dlb{min-width:0;width:104px;padding:10px 6px}
+.dlland .dlreal{display:none!important}
 .dlland .dlbez{border:0;background:none;box-shadow:none}
 .dlland .dlhelp{display:none}
 .dlland .dlx{top:6px;right:6px;padding:6px 9px}
@@ -101,7 +109,7 @@ html.dl-play .mmc{opacity:0!important}
 .dlf h2{font:650 clamp(24px,4vw,34px)/1.05 var(--f-body,system-ui);letter-spacing:-.03em;color:#F4F2EC;padding:0}
 .dlfs{color:rgba(244,242,236,.7);font-size:14px}
 .dlfprev{border:1px solid rgba(244,242,236,.15);border-radius:4px;overflow:hidden;background:#060B1E}
-.dlfprev canvas{display:block;width:100%!important;height:auto!important;aspect-ratio:4/3;image-rendering:pixelated}
+.dlfprev canvas{display:block;width:auto!important;height:min(260px,56vw)!important;aspect-ratio:4/3;margin:0 auto!important;image-rendering:pixelated}
 .dlff{display:grid;gap:6px;border:0;padding:0;min-width:0}
 .dlff>span,.dlff legend{font:500 11px var(--f-mono,monospace);letter-spacing:.12em;text-transform:uppercase;color:rgba(244,242,236,.6);display:flex;justify-content:space-between;padding:0}
 .dlff em{font:400 12px var(--f-body,system-ui);font-style:normal;color:rgba(244,242,236,.45)}

@@ -38,7 +38,7 @@
   function easeIO(k) { k = clamp(k, 0, 1); return k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2 }
 
   /* ---------- i moduli degli altri: ART (disegni), AUDIO, NET, SIGN ---------- */
-  var g = null, fx = null; /* contesti: pixel e luci */
+  var g = null, fx = null, ga = null; /* contesti: sfondo a pixel, attori (2x), luci */
   var AR = null, broken = {};
   function art(name) {
     var a = window.DEADLINE_ART;
@@ -237,7 +237,7 @@
   }
 
   /* ---------- i ponti verso ART: ogni chiamata ha il suo segnaposto ---------- */
-  var SS = { bank: 0, thrust: 0, shield: 0, flash: false, power: null };
+  var SS = { bank: 0, thrust: 0, shield: 0, flash: false, power: null, bg: null };
   var SE = { hit: 0, phase: 0, fade: 1, base: null, marked: false, dead: false };
   var SB = { phase: 1, hp: 1, hit: 0, rage: 0, pagesTorn: 0, mouth: 0 };
   function dShip(x, y, t) { var a = art('ship'); if (a) { try { a.ship(g, Math.round(x), Math.round(y), t, SS); return } catch (e) { fail('ship', e) } } fbShip(x, y, t, SS) }
@@ -510,7 +510,7 @@
   /* ---------- punti, combo, FLOW STATE ---------- */
   function addScore(p, x, y) {
     var m = Gm.flow ? 2 : 1, v = p * m; Gm.score += v;
-    if (x != null) ftext('+' + v, x, y - 6, Gm.flow ? C.tomL : C.cream);
+    if (x != null && p >= 3) ftext('+' + v, x, y - 6, Gm.flow ? C.tomL : C.cream);
   }
   function comboKill() {
     Gm.combo++; Gm.comboT = 2.2; if (Gm.combo > Gm.best) Gm.best = Gm.combo; if (Gm.combo > Gm.ds.best) Gm.ds.best = Gm.combo;
@@ -613,7 +613,7 @@
     RT += dt;
     if (st === 'boot') { bootT += dt; if (bootT > 3.4) toTitle(); return }
     if (st === 'title' || st === 'form' || st === 'board') { T += dt; titleUpdate(dt); return }
-    if (st === 'crawl') { T += dt; stT += dt; if (stT > CRAWL_DUR) toMap(-1); return }
+    if (st === 'crawl') { T += dt; stT += dt; if (art('intro') ? crawlK >= 1 : stT > CRAWL_DUR) toMap(-1); return }
     if (st === 'over' || st === 'win' || st === 'init' || st === 'clock') { T += dt; stT += dt; ambient(dt); if (st === 'clock' && stT > mapDur()) nextDay(); if ((st === 'over' || st === 'win') && stT > 6) toInit(); return }
     if (st !== 'play' || paused) return;
     if (Gm.hitStop > 0) { Gm.hitStop -= dt; return }
@@ -734,7 +734,7 @@
       /* l'entrata di MONDAY: la musica si ferma, la sveglia, il calendario scende e strappa SUNDAY */
       if (!Gm.boss) spawnBoss('monday');
       var b = Gm.boss, k = Gm.phaseT;
-      b.y = -70 + easeOut(k / 2.2) * 142; b.x = 240;
+      b.y = -70 + easeOut(k / 2.2) * 148; b.x = 240;
       if (k > 1.2 && Gm.monIn === 0) { Gm.monIn = 1; sfx('alarm') }
       if (k > 2.6 && Gm.monIn === 1) { Gm.monIn = 2; sfx('rip'); Gm.glitch = .25; shake(4); Gm.ripT = T }
       if (k > 4.6) { Gm.phase = 'boss'; Gm.phaseT = 0; music('boss'); b.t = 0 }
@@ -772,7 +772,8 @@
     for (var i = 0; i < EB.length; i++) if (EB[i].on) { spark(EB[i].x, EB[i].y, 2, C.cream, C.cream, 20); EB[i].on = false }
     var bonus = Math.max(0, Math.round((55 - Gm.dayT) / 3)); Gm.ds.bonus = bonus; Gm.score += bonus;
     Gm.log.days.push([Math.round(Gm.playT * 10) / 10, Math.floor(Gm.score)]);
-    if (Gm.day === 5 && Gm.coffee < 3 && !weekend) { Gm.coffee++; Gm.ds.rest = true }
+    /* pausa caffe' dopo WED e riposo della domenica: una tazza in piu' (massimo tre) */
+    if ((Gm.day === 1 || Gm.day === 5) && Gm.coffee < 3 && !weekend) { Gm.coffee++; Gm.ds.rest = true }
   }
   /* la mappa del mondo tra un giorno e l'altro: pochi secondi, si salta */
   function toMap(from) {
@@ -786,12 +787,16 @@
   var CRAWL = ['Not long ago, in an office', 'not so far away...', '', 'Small businesses are under attack.', '', 'Missed calls. Paper invoices.', 'No-shows. Spam.', '',
     'Every week the chores multiply.', '', 'And at the end of every week', 'waits the worst of them all:', 'MONDAY.', '', 'One machine was built to fight back.', '',
     'Save the hours.', 'Protect the city.', '', 'Beat MONDAY before the deadline.'];
-  var CRAWL_SP = 26, CRAWL_DUR = (300 + CRAWL.length * 15 - 40) / CRAWL_SP;
+  var CRAWL_SP = 26, CRAWL_DUR = (236 + CRAWL.length * 15 - 30) / CRAWL_SP;
   function crawlSeen() { try { return sessionStorage.getItem('mm-deadline-crawl') === '1' } catch (e) { return false } }
+  var CRAWL_ART = ['Not long ago, in an office not so far away...', 'Small businesses are under attack.', 'Missed calls. Paper invoices. No-shows. Spam.', 'Every week the chores multiply.',
+    'And at the end of every week waits the worst of them all: MONDAY.', 'One machine was built to fight back.', 'Save the hours. Protect the city.', 'Beat MONDAY before the deadline.'];
+  var crawlK = 0;
   function drawCrawl() {
+    if (art('intro')) { try { crawlK = AR.intro(g, stT, CRAWL_ART, { speed: 15 }); txt(touchMode ? 'Tap to skip' : 'Any key to skip', W - 6, H - 10, C.p3, 1, 'r'); hot.push({ x: 0, y: 0, w: W, h: H, id: 'cont' }); return } catch (e) { fail('intro', e) } }
     dSky('night', T); R(0, 0, W, H, 'rgba(6,11,30,.45)');
     for (var i = 0; i < CRAWL.length; i++) {
-      var y = 290 + i * 15 - stT * CRAWL_SP; if (y < 20 || y > H) continue;
+      var y = 236 + i * 15 - stT * CRAWL_SP; if (y < 20 || y > H) continue;
       /* finta prospettiva: grande in basso, piccolo e spento in alto */
       var big = y > 150, a = clamp((y - 20) / 70, 0, 1), mon = CRAWL[i] === 'MONDAY.';
       g.globalAlpha = a; txt(CRAWL[i], 240, y, mon ? C.crim : C.goldL, big || mon ? 2 : 1, 'c', C.night);
@@ -800,11 +805,19 @@
     txt(touchMode ? 'Tap to skip' : 'Any key to skip', W - 6, H - 10, C.p3, 1, 'r');
     hot.push({ x: 0, y: 0, w: W, h: H, id: 'cont' });
   }
+  var MAPDONE = [false, false, false, false, false, false, false];
   var MAPN = [[48, 214], [108, 186], [168, 210], [228, 178], [288, 204], [348, 172], [424, 128]];
+  function mapLabels(a, from, to) {
+    for (var i = 0; i < 7; i++) {
+      var n = a.mapNode ? a.mapNode(i) : { x: MAPN[i][0], y: MAPN[i][1] }, nm = DAYNAME[DAYS[i]], w = tw(nm, 1), x = clamp(n.x - w / 2, 2, W - w - 2), y = n.y + 8;
+      var col = i === 6 ? C.crim : i <= from ? C.cream : i === to ? C.tom : C.g2;
+      R(x - 2, y - 1, w + 4, lh(1) + 2, C.night); txt(nm, x, y, col, 1);
+    }
+  }
   function drawMap() {
     var from = Gm.mapFrom, to = Math.min(6, from + 1), k = from < 0 ? 0 : easeIO((stT - .7) / 1.4), pos = from < 0 ? 0 : from + k;
     var pulse = (Math.sin(RT * 6) + 1) / 2, a = art('map'), drawn = false;
-    if (a) { try { a.map(g, T, { current: to, done: from + 1, shipPos: pos, unlocked: k >= 1 || from < 0 ? to : from, pulse: pulse, days: DAYS }); drawn = true } catch (e) { fail('map', e) } }
+    if (a) { for (var di = 0; di < 7; di++) MAPDONE[di] = di <= from; try { a.map(g, T, { current: k >= 1 || from < 0 ? to : from, done: MAPDONE, shipPos: pos, unlocked: k >= 1 || from < 0 ? to + 1 : to, pulse: pulse, labels: false, ship: true }); drawn = true; mapLabels(a, from, to) } catch (e) { fail('map', e) } }
     if (!drawn) {
       dSky('night', T); R(0, 96, W, H - 96, 'rgba(6,10,24,.75)');
       for (var i = 0; i < 6; i++) { var p0 = MAPN[i], p1 = MAPN[i + 1], n = 24, lit = i < from || (i === from && k >= 1);
@@ -814,7 +827,7 @@
         var nx = MAPN[i][0], ny = MAPN[i][1], done = i <= from, cur = i === to, d = DAYS[i];
         R(nx - 6, ny - 4, 13, 9, C.night); R(nx - 5, ny - 3, 11, 7, done ? accent(d) : cur ? (pulse > .5 ? C.tom : C.tomD) : C.g4);
         if (done) { R(nx - 2, ny, 1, 1, C.night); R(nx - 1, ny + 1, 1, 1, C.night); R(nx, ny, 1, 1, C.night); R(nx + 1, ny - 1, 1, 1, C.night); R(nx + 2, ny - 2, 1, 1, C.night) }
-        txt(d.toUpperCase(), nx, ny + 9, done ? C.cream : cur ? C.tom : C.p4, 1, 'c');
+        txt(DAYNAME[d], nx, ny + 9, done ? C.cream : cur ? C.tom : C.p4, 1, 'c');
       }
     }
     /* la nave lungo la strada */
@@ -823,18 +836,18 @@
     /* il riepilogo del giorno finito, compatto, in alto */
     var nd = DAYS[to];
     if (from >= 0) {
-      var y0 = 14; panel(130, y0, 220, 62);
-      txt('CLOCKED OUT 17:00', 240, y0 + 6, C.cream, 1, 'c');
-      txt(DAYNAME[DAYS[from]] + ' DONE', 240, y0 + 17, accent(DAYS[from]), 1, 'c');
-      txt('Hours +' + Math.round(Gm.score - Gm.ds.h0), 140, y0 + 31, C.p2, 1); txt('Jobs ' + Gm.ds.kills, 340, y0 + 31, C.p2, 1, 'r');
-      txt('Streak ' + Gm.ds.best, 140, y0 + 43, C.p2, 1); txt('Lit ' + countLit() + '/' + Gm.wins.length, 340, y0 + 43, C.p2, 1, 'r');
-      if (Gm.ds.bonus) txt('On time +' + Gm.ds.bonus, 240, y0 + 43, C.p2, 1, 'c');
-      if (Gm.ds.rest) txt('Rested: +1 coffee', 240, y0 + 54, C.pink, 1, 'c');
+      var y0 = 12, X0 = 14, X1 = 214, XC = 114; panel(X0, y0, 200, 62);
+      txt('CLOCKED OUT 17:00', XC, y0 + 6, C.cream, 1, 'c');
+      txt(DAYNAME[DAYS[from]] + ' DONE', XC, y0 + 17, accent(DAYS[from]), 1, 'c');
+      txt('Hours +' + Math.round(Gm.score - Gm.ds.h0), X0 + 8, y0 + 31, C.p2, 1); txt('Jobs ' + Gm.ds.kills, X1 - 8, y0 + 31, C.p2, 1, 'r');
+      txt('Streak ' + Gm.ds.best, X0 + 8, y0 + 43, C.p2, 1); txt('Lit ' + countLit() + '/' + Gm.wins.length, X1 - 8, y0 + 43, C.p2, 1, 'r');
+      if (Gm.ds.bonus && !Gm.ds.rest) txt('+' + Gm.ds.bonus + ' on time', XC, y0 + 52, C.p3, 1, 'c');
+      if (Gm.ds.rest) txt((from === 1 ? 'Coffee break' : 'Rested') + ': +1 coffee', XC, y0 + 52, C.pink, 1, 'c');
     }
-    var ky = from >= 0 ? 84 : 40, ka = clamp((stT - (from >= 0 ? 1.8 : .3)) * 3, 0, 1);
-    g.globalAlpha = ka; panel(150, ky, 180, 24);
-    txt(nd === 'mon' ? 'MONDAY' : DAYNAME[nd], 240, ky + 5, nd === 'mon' ? C.crim : C.cream, 1, 'c');
-    txt(DEF[nd].teaser, 240, ky + 14, C.p3, 1, 'c'); g.globalAlpha = 1;
+    var ky = from >= 0 ? 80 : 16, ka = clamp((stT - (from >= 0 ? 1.8 : .3)) * 3, 0, 1);
+    g.globalAlpha = ka; panel(14, ky, 200, 26);
+    txt(nd === 'mon' ? 'MONDAY' : DAYNAME[nd], 114, ky + 5, nd === 'mon' ? C.crim : C.cream, 1, 'c');
+    txt(DEF[nd].teaser, 114, ky + 15, C.p3, 1, 'c'); g.globalAlpha = 1;
     if (stT > .6) hot.push({ x: 0, y: 0, w: W, h: H, id: 'cont' });
   }
 
@@ -1019,10 +1032,10 @@
       if (b.y > CITY_Y + 2) { b.on = false; spark(b.x, CITY_Y + 2, 2, C.cream, C.cream, 20); continue }
       /* la hitbox della nave e' il pixel della cabina, poco piu' */
       if (!s.dead) {
-        var hx = 2, hy = 2.5, sy = s.y - (art('ship') ? 3 : 2);
+        var hx = 2, hy = 2.5, hbo = art('ship') && AR.hitbox ? AR.hitbox : null, sy = s.y + (hbo ? hbo.dy : -2); s.hx = s.x + (hbo ? hbo.dx || 0 : 0);
         var by0 = Math.min(b.y, b.py) - b.hh, by1 = Math.max(b.y, b.py) + b.hh, bx0 = Math.min(b.x, b.px) - b.hw, bx1 = Math.max(b.x, b.px) + b.hw;
         if (Gm.shield > 0) { hx = 9; hy = 9 }
-        if (bx1 > s.x - hx && bx0 < s.x + hx && by1 > sy - hy && by0 < sy + hy) {
+        if (bx1 > s.hx - hx && bx0 < s.hx + hx && by1 > sy - hy && by0 < sy + hy) {
           if (s.inv <= 0 && Gm.nightT <= 0 && !god && Gm.phase !== 'dying') { b.on = false; hurt('b-' + b.kind) }
         }
       }
@@ -1056,7 +1069,7 @@
       var torn = Math.floor((1 - b.hp / b.max) * 12);
       while (b.torn < torn) { b.torn++; tearPage(b); }
       var ph = b.hp > 140 ? 1 : b.hp > 70 ? 2 : 3;
-      if (ph !== b.ph && b.hp > 0) { b.ph = ph; b.pt = 0; b.pi = 0; Gm.hitStop = .15; shake(6); Gm.glitch = .3; sfx('rip'); clearEB(); ftext(ph === 2 ? 'MEETINGS' : '9:00 ALARM', 240, 120, C.cream) }
+      if (ph !== b.ph && b.hp > 0) { b.ph = ph; b.pt = 0; b.pi = 0; Gm.hitStop = .15; shake(6); Gm.glitch = .3; sfx('rip'); clearEB(); if (ph === 3) clearBlocks(); ftext(ph === 2 ? 'MEETINGS' : '9:00 ALARM', 240, 120, C.cream) }
     }
     if (b.hp <= 0) {
       b.hp = 0; b.dead = true; b.vuln = false; b.dieT = 0; Gm.hitStop = .25; shake(8); sfx('bossDie'); clearEB(); clearBlocks();
@@ -1096,7 +1109,7 @@
     b.vuln = true; b.pt += dt;
     var ph = b.ph; b.rage = ph === 3 ? 1 : ph === 2 ? .4 : 0; b.mouth = .3 + .7 * Math.abs(Math.sin(b.t * (ph === 3 ? 9 : 3)));
     if (ph === 1) {
-      b.x = 240 + Math.sin(b.t * .5) * 120; b.y = 72 + Math.sin(b.t * 1.3) * 4;
+      b.x = 240 + Math.sin(b.t * .5) * 120; b.y = 78 + Math.sin(b.t * 1.3) * 3;
       /* raffiche di email: ventaglio mirato e "reply all" a spazzata */
       var cyc = b.pt % 5.2;
       if (cyc < dt) { for (i = -2; i <= 2; i++) { v = aimAt(b.x, b.y + 30, 86, i * .2); ebullet('mail', b.x, b.y + 30, v[0], v[1], 70) } }
@@ -1104,13 +1117,13 @@
       if (cyc > 3.4 && cyc - dt <= 3.4) b.pi++;
       if (cyc > 4 && cyc - dt <= 4) { for (i = -1; i <= 1; i++) { v = aimAt(b.x, b.y + 30, 96, i * .12); ebullet('mail', b.x, b.y + 30, v[0], v[1], 70) } }
     } else if (ph === 2) {
-      b.x += (240 + Math.sin(b.t * .4) * 60 - b.x) * Math.min(1, dt * 2); b.y += (66 - b.y) * Math.min(1, dt * 2);
+      b.x += (240 + Math.sin(b.t * .4) * 60 - b.x) * Math.min(1, dt * 2); b.y += (72 - b.y) * Math.min(1, dt * 2);
       /* muri di riunioni con un varco */
       if (b.pt > 3.3) { b.pt = 0; wall() }
       b.sp += dt; if (b.sp > 1.5) { b.sp = 0; v = aimAt(b.x, b.y + 30, 80, 0); ebullet('mail', b.x, b.y + 30, v[0], v[1], 40) }
     } else {
       /* la sveglia delle 9:00 impazzita: spirale doppia, poi raffiche */
-      b.x = 240 + Math.sin(b.t * .9) * 130 + (RM() ? 0 : Math.sin(b.t * 40) * 1.2); b.y = 70 + Math.sin(b.t * 2.1) * 6;
+      b.x = 240 + Math.sin(b.t * .9) * 130 + (RM() ? 0 : Math.sin(b.t * 40) * 1.2); b.y = 80 + Math.sin(b.t * 2.1) * 4;
       var c3 = b.pt % 5;
       if (c3 < 3) { b.sp += dt; if (b.sp > .11) { b.sp = 0; var base = b.t * 1.9; for (i = 0; i < 2; i++) { a = base + i * Math.PI; var ca = Math.cos(a), sa = Math.sin(a); if (sa < -.2) sa = -sa * .5; ebullet('alarm', b.x + ca * 20, b.y + 20, ca * 66, Math.abs(sa) * 66 + 18, 95) } } }
       else if (c3 > 3.6 && c3 < 4.6) { b.sp += dt; if (b.sp > .32) { b.sp = 0; for (i = -1; i <= 1; i++) { v = aimAt(b.x, b.y + 30, 112, i * .16); ebullet('alarm', b.x, b.y + 30, v[0], v[1], 95) } } }
@@ -1204,6 +1217,7 @@
   function render() {
     hot.length = 0;
     g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.imageSmoothingEnabled = false;
+    ga.setTransform(1, 0, 0, 1, 0, 0); ga.globalAlpha = 1; ga.clearRect(0, 0, W * AS, H * AS);
     fxBegin();
     if (st === 'boot') drawBoot();
     else if (st === 'title' || st === 'board' || st === 'form') drawTitle();
@@ -1249,7 +1263,7 @@
     if (st === 'board') { drawBoard(70); return }
     /* il pannello che gira: istruzioni, classifica, chi c'e', la citta' */
     var pg = titlePage, fade = clamp(Math.min(titlePageT, 6 - titlePageT) * 4, 0, 1);
-    panel(96, 62, 288, 74);
+    R(96, 62, 288, 74, 'rgba(15,15,14,.6)'); panel(96, 62, 288, 74);
     g.globalAlpha = fade;
     if (pg === 0) {
       txt('SHOOT WHAT SLOWS YOU DOWN.', 240, 74, C.cream, 1, 'c');
@@ -1276,7 +1290,7 @@
     for (var i = 0; i < Math.min(10, TOP.length); i++) {
       var e = TOP[i], col = i < 5 ? 0 : 1, x = col ? 256 : 112, yy = y + 14 + (i % 5) * 11, mine = me && e.initials === me.initials && e.score === me.score;
       var c = mine ? C.tom : i === 0 ? C.gold : C.p2;
-      txt((i + 1) + '.', x, yy, C.p3, 1, 'r'); txt(String(e.initials || '???').slice(0, 3), x + 6, yy, c, 1); txt(String(e.score | 0), x + 60, yy, c, 1, 'r'); txt(String(e.day || '').slice(0, 3), x + 68, yy, C.p3, 1);
+      txt((i + 1) + '.', x, yy, C.p3, 1, 'r'); txt(String(e.initials || '???').slice(0, 3), x + 6, yy, c, 1); txt(String(e.score | 0), x + 60, yy, c, 1, 'r'); txt(dayFull(e.day), x + 68, yy, C.p3, 1);
     }
   }
   function drawLegend(y, t) {
@@ -1301,7 +1315,10 @@
     hot.push({ x: 0, y: 0, w: W, h: 170, id: 'cont' });
   }
 
-  function drawGame() {
+  /* gli attori (nave, nemici, colpi, testo) vanno sul canvas 960x540: stessa scala del gioco, doppia densita' */
+  var AS = 2;
+  function drawGame() { var gp = g; try { drawGame0() } finally { g = gp } }
+  function drawGame0() {
     var t = T, day = curDayKey(), sh = Gm.shake, ox = 0, oy = 0, i;
     if (sh > 0 && !RM()) { ox = Math.round(rnd(-sh, sh) * .5); oy = Math.round(rnd(-sh, sh) * .5) }
     g.setTransform(1, 0, 0, 1, ox, oy);
@@ -1312,6 +1329,8 @@
     dCity(Gm.wins, t, day);
     if (!art('city')) drawWinOff();
     for (i = 0; i < fws.length; i++) dFirewall(fws[i]);
+    if (Gm.glitch > 0 && !RM()) { if (art('glitch')) { try { AR.glitch(g, T, 1) } catch (e) { fail('glitch', e) } } else glitchSlices() }
+    g = ga; g.setTransform(AS, 0, 0, AS, ox * AS, oy * AS); g.imageSmoothingEnabled = false;
     /* capsule */
     for (i = 0; i < PU.length; i++) if (PU[i].on) dPower(PU[i].kind, PU[i].x, PU[i].y, t);
     /* muri di riunioni */
@@ -1322,7 +1341,7 @@
       if (e.st === 'mark') { if (e.t >= 0) drawMark(e, t); continue }
       if (e.type === 'double' && e.lead && e.partner && e.partner.on) { pairLine(e, e.partner, t) }
       SE.hit = RM() ? (e.hit > .5 ? 1 : 0) : clamp(e.hit, 0, 1); SE.phase = e.c; SE.fade = art('enemy') ? 1 - e.fade : e.fade; SE.base = e.type === 'gold' ? e.base : null; SE.marked = e.marked > 0;
-      if (Gm.def.fog && Gm.nightT <= 0) { var fa = clamp(1 - (Gm.ship.y - e.y - 64) / 56, .1, 1); if (e.hit > 0) fa = 1; g.globalAlpha = fa }
+      if (Gm.def.fog && Gm.nightT <= 0) { var fa = clamp(1 - (Gm.ship.y - e.y - 64) / 56, .28, 1); if (e.hit > 0) fa = 1; g.globalAlpha = fa }
       dEnemy(e.type, e.x, e.y, t + e.c * .13); g.globalAlpha = 1;
       if (e.marked > 0) { R(e.x - 2, e.y - 12, 5, 1, C.cream); R(e.x - 1, e.y - 11, 3, 1, C.cream) }
     }
@@ -1336,7 +1355,7 @@
     /* la nave */
     var s = Gm.ship;
     if (!s.dead && !(s.inv > 0 && Gm.phase !== 'out' && ((RT * 14) | 0) % 2 && Gm.nightT <= 0)) {
-      SS.bank = s.bank; SS.thrust = clamp(.4 + (-s.vy / 120) + Math.abs(s.vx) / 300, 0, 1); SS.shield = Gm.shield / 3; SS.flash = s.inv > 1.8; SS.power = Gm.power;
+      SS.bank = s.bank; SS.thrust = clamp(.4 + (-s.vy / 120) + Math.abs(s.vx) / 300, 0, 1); SS.shield = Gm.shield / 3; SS.flash = s.inv > 1.8; SS.power = Gm.power; SS.bg = pcv;
       dShip(s.x, s.y, t);
       if (!art('ship') && Gm.shield > 0) { g.globalAlpha = .35; ringPx(s.x, s.y - 1, 12, C.pink); g.globalAlpha = 1 }
     }
@@ -1346,8 +1365,7 @@
     dWeather(day, t, 1);
     if (Gm.nightT > 0) { g.globalAlpha = .12; R(-4, -4, W + 8, H + 8, '#2F4C9A'); g.globalAlpha = 1 }
     for (i = 0; i < FT.length; i++) { var ft = FT[i]; if (!ft.on) continue; g.globalAlpha = clamp(ft.life * 2, 0, 1); txt(ft.s, ft.x, ft.y, ft.col, 1, 'c', C.night); g.globalAlpha = 1 }
-    if (Gm.glitch > 0 && !RM()) { if (art('glitch')) { try { AR.glitch(g, T, 1) } catch (e) { fail('glitch', e) } } else glitchSlices() }
-    g.setTransform(1, 0, 0, 1, 0, 0);
+    g.setTransform(AS, 0, 0, AS, 0, 0);
     drawHUD(t);
     drawBanners(t);
     if (st === 'over' || st === 'win') drawEnd(t);
@@ -1401,6 +1419,7 @@
       R(161 + 158 / 3 | 0, 12, 1, 3, C.g3); R(161 + 316 / 3 | 0, 12, 1, 3, C.g3);
     }
   }
+  function dayFull(d) { if (typeof d === 'number') return DAYNAME[DAYS[d]] || ''; d = String(d || '').toLowerCase().slice(0, 3); return DAYNAME[d] || (d === 'win' ? 'MONDAY' : '') }
   function pad2(n) { return n < 10 ? '0' + n : '' + n }
   function clockStr(k) { var m = Math.round(clamp(k, 0, 1) * 480), h = 9 + (m / 60 | 0); return pad2(h) + ':' + pad2(m % 60) }
   /* le cifre che rotolano come il display dell'ascensore */
@@ -1419,19 +1438,19 @@
   function drawHUD(t) {
     var d = DAYS[Gm.day], ac = accent(d);
     R(0, 0, W, HUD_H, 'rgba(15,15,14,.72)'); R(0, HUD_H, W, 1, 'rgba(244,242,236,.18)');
-    var dn = d.toUpperCase();
+    var dn = DAYNAME[d];
     txt(dn, 4, 1, C.cream, 1);
     var ct = Gm.phase === 'urgent' ? '16:59' : clockStr(Gm.clockShow), blink = (Gm.overtime || Gm.phase === 'urgent') && ((RT * 3) | 0) % 2;
     var cw = dig(ct, 4 + tw(dn + ' ', 1), 1, blink ? C.crim : C.cream);
     var bx = 4 + tw(dn + ' ', 1) + cw + 5; R(bx, 4, 50, 1, C.g3); R(bx, 4, Math.round(50 * clamp(Gm.clockShow, 0, 1)), 1, C.tom);
-    if (Gm.overtime && Gm.phase === 'fight') txt('OVERTIME', bx + 54, 1, C.crim, 1);
+    if (Gm.overtime && Gm.phase === 'fight') txt('OVERTIME', 4, HUD_H + 3, C.crim, 1, 'l', C.night);
     var lbl = 'HOURS SAVED ', lw = tw(lbl, 1), dw = digW() * 4, x0 = 240 - (lw + dw) / 2;
     txt(lbl, x0, 1, C.p3, 1); rollNum(Gm.shown, x0 + lw, 1, 4, C.cream);
     if (Gm.flow && ((RT * 4) | 0) % 2) txt('FLOW x2', x0 + lw + dw + 6, 1, C.tom, 1);
     if (weekend) txt('WEEKEND', W - 4, 1, C.pink, 1, 'r');
     else for (var i = 0; i < 3; i++) {
       var cx = W - 11 - i * 9, full = 3 - i <= Gm.coffee;
-      dIcon(full ? 'coffee' : 'coffeeEmpty', cx, 1);
+      if (full && art('icon')) { try { AR.icon(g, 'coffee', cx, 1, ((RT * 4 + i) | 0) % 3) } catch (e) { fail('icon', e) } } else dIcon(full ? 'coffee' : 'coffeeEmpty', cx, 1);
       if (!full && 3 - i === Gm.coffee + 1 && Gm.cupT > 0) { if (art('icon')) { try { AR.icon(g, 'coffeeSpill', cx, 1, Math.min(2, ((1 - Gm.cupT) * 6) | 0)) } catch (e) {} } else { var sp = 1 - Gm.cupT; R(cx + 7, 4 + sp * 6, 1, 1, C.p3); R(cx + 5, 5 + sp * 8, 1, 1, C.p3) } }
     }
     /* in basso: potenziamento attivo, scudo, slot Night shift */
@@ -1448,7 +1467,7 @@
     var p = Gm.phase, k = Gm.phaseT;
     if (p === 'intro' && st === 'play') {
       var a = clamp(Math.min(k * 4, (2.4 - k) * 3), 0, 1), d = DAYS[Gm.day];
-      g.globalAlpha = a;
+      g.globalAlpha = a; var hl = wrap(Gm.def.hint, 300, 1).length; panel(80, 86, 320, 44 + hl * 10 + (Gm.day === 0 ? 14 : 0));
       /* il nome del giorno rotola come il piano dell'ascensore */
       var roll = RM() ? 0 : Math.round((1 - easeOut(k / .5)) * 14);
       g.save(); g.beginPath(); g.rect(0, 92, W, 22); g.clip();
@@ -1469,7 +1488,7 @@
       var a3 = clamp(k * 3, 0, 1); g.globalAlpha = a3; txt('17:00', 240, 110, C.cream, 2, 'c', C.night); g.globalAlpha = 1;
     }
   }
-  function panel(x, y, w, h) { R(x, y, w, h, 'rgba(15,15,14,.88)'); R(x, y, w, 1, 'rgba(244,242,236,.35)'); R(x, y + h - 1, w, 1, 'rgba(244,242,236,.35)');
+  function panel(x, y, w, h) { if (art('frame')) { try { AR.frame(g, x, y, w, h, {}); return } catch (e) { fail('frame', e) } } R(x, y, w, h, 'rgba(15,15,14,.88)'); R(x, y, w, 1, 'rgba(244,242,236,.35)'); R(x, y + h - 1, w, 1, 'rgba(244,242,236,.35)');
     R(x, y, 3, 1, C.cream); R(x, y, 1, 3, C.cream); R(x + w - 3, y, 3, 1, C.cream); R(x + w - 1, y, 1, 3, C.cream);
     R(x, y + h - 1, 3, 1, C.cream); R(x, y + h - 3, 1, 3, C.cream); R(x + w - 3, y + h - 1, 3, 1, C.cream); R(x + w - 1, y + h - 3, 1, 3, C.cream) }
   function countLit() { var n = 0; for (var i = 0; i < Gm.wins.length; i++) if (Gm.wins[i]) n++; return n }
@@ -1557,10 +1576,10 @@
       '<div class="dlcab">' +
         '<div class="dlmq" aria-hidden="true"><span class="dlmq1">DEAD</span><span class="dlmq2">LINE</span></div>' +
         '<div class="dlbez"><div class="dlscr" tabindex="-1">' +
-          '<canvas class="dlpx" width="' + W + '" height="' + H + '"></canvas><canvas class="dlfx"></canvas><i class="dlscan" aria-hidden="true"></i>' +
+          '<canvas class="dlpx" width="' + W + '" height="' + H + '"></canvas><canvas class="dlpx dlac" width="' + W * 2 + '" height="' + H * 2 + '"></canvas><canvas class="dlfx"></canvas><i class="dlscan" aria-hidden="true"></i>' +
         '</div></div>' +
         '<div class="dldeck">' +
-          '<div class="dlpad" aria-hidden="true"><span>Drag here to fly</span><small>Two fingers: Night shift</small></div>' +
+          '<div class="dlpad" aria-hidden="true"><span>Drag here to fly</span><small>Two fingers: Night shift</small><em>Turn sideways for a bigger screen</em></div>' +
           '<p class="dlhelp">Arrows or WASD fly &middot; Space shoot &middot; X night shift &middot; P pause &middot; M sound</p>' +
           '<div class="dlbtns"><button class="dlb dlsnd" type="button" aria-pressed="false">Sound on</button><button class="dlb dlgo" type="button">Insert coin</button></div>' +
           '<a class="dlreal" href="/contact">Want this for real? Tell us what slows you down.</a>' +
@@ -1569,7 +1588,7 @@
       '<div class="dlform" hidden></div>';
     document.body.appendChild(box);
     cab = box.querySelector('.dlcab'); scr = box.querySelector('.dlscr'); pcv = box.querySelector('.dlpx'); fcv = box.querySelector('.dlfx');
-    g = pcv.getContext('2d'); g.imageSmoothingEnabled = false; fx = fcv.getContext('2d');
+    g = pcv.getContext('2d'); g.imageSmoothingEnabled = false; fx = fcv.getContext('2d'); ga = box.querySelector('.dlac').getContext('2d'); ga.imageSmoothingEnabled = false;
     goBtn = box.querySelector('.dlgo'); sndBtn = box.querySelector('.dlsnd'); real = box.querySelector('.dlreal'); padEl = box.querySelector('.dlpad'); help = box.querySelector('.dlhelp'); formEl = box.querySelector('.dlform');
     box.querySelector('.dlx').addEventListener('click', close);
     goBtn.addEventListener('click', function () { unlock(); mainAction() });
@@ -1596,7 +1615,7 @@
   }
   function startGame() {
     unlock(); sfx('insertCoin'); weekendUI(); newGame(); paused = false;
-    if (crawlSeen()) toMap(-1); else { st = 'crawl'; stT = 0; try { sessionStorage.setItem('mm-deadline-crawl', '1') } catch (e) {} }
+    if (crawlSeen()) toMap(-1); else { st = 'crawl'; stT = 0; crawlK = 0; try { sessionStorage.setItem('mm-deadline-crawl', '1') } catch (e) {} }
     syncUI();
     try { scr.focus({ preventScroll: true }) } catch (e) {}
   }
@@ -1754,11 +1773,11 @@
     box.classList.toggle('dlland', landscape);
     var mq = box.querySelector('.dlmq'), deck = box.querySelector('.dldeck');
     var mqH = landscape ? 0 : mq.offsetHeight, deckH = landscape ? 0 : (coarse ? 170 : deck.offsetHeight || 90);
-    var bez = vw < 600 ? 8 : 22, side = vw < 600 ? 8 : 32;
+    var bez = landscape ? 4 : vw < 600 ? 8 : 22, side = landscape ? 120 : vw < 600 ? 8 : 32;
     var aw = Math.min(vw - side * 2, 1400) - bez * 2, ah = vh - mqH - deckH - bez * 2 - (landscape ? 8 : vw < 600 ? 24 : 56);
     var s = Math.max(.3, Math.min(aw / W, ah / H)), dpr = Math.min(window.devicePixelRatio || 1, 3);
     var si = Math.floor(s), sd = Math.floor(s * dpr) / dpr;
-    if (si >= 1 && si / s >= .78) s = si; else if (sd > 0 && sd / s >= .9) s = sd;
+    if (si >= 1 && si / s >= (coarse ? .92 : .78)) s = si; else if (sd > 0 && sd / s >= .9) s = sd;
     cssScale = s;
     var w = Math.round(W * s), h = Math.round(H * s);
     scr.style.width = w + 'px'; scr.style.height = h + 'px';

@@ -787,7 +787,7 @@ def monta(nome, src):
         s = t.find('<main class="hm cs" id="top">'); e = t.find('</main>', s) + len('</main>')
         assert s > 0 and e > s, 'main'
         t = t[:s] + laboratorio() + t[e:]
-        t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/mr.css"><link rel="stylesheet" href="/css/stanza.css"><link rel="stylesheet" href="/css/rush.css"><link rel="stylesheet" href="/css/stanza-vista.css"><link rel="stylesheet" href="/css/sala-server.css">', 'stile lg')
+        t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/mr.css"><link rel="stylesheet" href="/css/stanza.css"><link rel="stylesheet" href="/css/deadline.css"><link rel="stylesheet" href="/css/stanza-vista.css"><link rel="stylesheet" href="/css/sala-server.css">', 'stile lg')
         s = t.find('/* pagina progetto v3: il Control Room in miniatura')
         e = t.find('\n})();', t.find(".cfn b[data-n]", s)) + len('\n})();')
         assert s > 0 and e > s, 'script del caso'
@@ -833,7 +833,7 @@ def monta(nome, src):
 
     # 6. coda
     i = t.rfind('</body>')
-    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/rush.js"></script><script src="/js/sala-server.js"></script><script src="/js/stanza-vista.js"></script><script src="/js/stanza-oggetti.js"></script><script src="/js/stanza.js"></script>', 'home': '<script src="/js/home.js"></script>', 'systems': '<script src="/js/systems.js"></script>', 'brand': '<script src="/js/brand.js"></script>', 'studio': '<script src="/js/studio.js"></script>','progetto': '<script src="/js/progetto.js"></script>', 'ristorante': '<script src="/js/progetto.js"></script>'}.get(nome, '')
+    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/deadline-art.js"></script><script src="/js/deadline-audio.js"></script><script src="/js/deadline-sign.js"></script><script src="/js/deadline-net.js"></script><script src="/js/deadline.js"></script><script src="/js/sala-server.js"></script><script src="/js/stanza-vista.js"></script><script src="/js/stanza-oggetti.js"></script><script src="/js/stanza.js"></script>', 'home': '<script src="/js/home.js"></script>', 'systems': '<script src="/js/systems.js"></script>', 'brand': '<script src="/js/brand.js"></script>', 'studio': '<script src="/js/studio.js"></script>','progetto': '<script src="/js/progetto.js"></script>', 'ristorante': '<script src="/js/progetto.js"></script>'}.get(nome, '')
     t = t[:i] + coda + t[i:] if i > 0 else t + coda
     (OUT / f'{nome}.html').write_text(t, encoding='utf8')
     return luce

@@ -311,89 +311,8 @@
   // NEMICI: oggetti d'ufficio, rampa carta + inchiostro, un dettaglio d'accento (a = accento del giorno)
   var EPAL = { '0': C.p0, '1': C.p1, '2': C.p2, '3': C.p3, k: C.ink, a: '#FF00FF', A: '#AA00AA', w: C.hot };
   // la a/A si sostituisce con l'accento del giorno nel momento della luce
-  function accentize(src, day) { var s = px(src), d = s.data, a = rgb(D(day)[7]), A = rgb(mix(D(day)[7], C.ink, .45)); if (day === 'sun') { a = rgb('#C2627A'); A = rgb('#7A2E44') } for (var i = 0; i < d.length; i += 4) { if (!d[i + 3]) continue; if (d[i] === 255 && d[i + 1] === 0 && d[i + 2] === 255) { d[i] = a[0]; d[i + 1] = a[1]; d[i + 2] = a[2] } else if (d[i] === 170 && d[i + 1] === 0 && d[i + 2] === 170) { d[i] = A[0]; d[i + 1] = A[1]; d[i + 2] = A[2] } } return fromData(s) }
+  function accentize(src, day) { var s = px(src), d = s.data, a = rgb(D(day)[7]), A = rgb(mix(D(day)[7], C.ink, .45)), Bl = rgb(mix(D(day)[7], C.cream, .55)); if (day === 'sun') { a = rgb('#C2627A'); A = rgb('#7A2E44'); Bl = rgb('#E8A0B0') } for (var i = 0; i < d.length; i += 4) { if (!d[i + 3]) continue; if (d[i] === 255 && d[i + 1] === 0 && d[i + 2] === 255) { d[i] = a[0]; d[i + 1] = a[1]; d[i + 2] = a[2] } else if (d[i] === 170 && d[i + 1] === 0 && d[i + 2] === 170) { d[i] = A[0]; d[i + 1] = A[1]; d[i + 2] = A[2] } else if (d[i] === 255 && d[i + 1] === 128 && d[i + 2] === 255) { d[i] = Bl[0]; d[i + 1] = Bl[1]; d[i + 2] = Bl[2] } } return fromData(s) }
 
-  // NEMICI v2: oggetti d'ufficio con la faccia (come URGENT e MONDAY): occhi arrabbiati, un dettaglio d'accento
-  // Missed call (20x17): telefono a disco, la cornetta che salta, il disco e' la bocca che urla
-  function eCall(f) {
-    var g = grid(23, 19), o = [0, 1, 0, -1][f], lift = f % 2, cx = 11 + o;
-    gr(g, cx - 7, 3 - lift, 15, 2, '1'); gr(g, cx - 6, 2 - lift, 13, 1, '0');
-    gr(g, cx - 9, 4 - lift, 5, 3, '1'); gr(g, cx + 5, 4 - lift, 5, 3, '1'); gr(g, cx - 9, 4 - lift, 5, 1, '0'); gr(g, cx + 5, 4 - lift, 5, 1, '0');
-    gr(g, cx - 4, 5 - lift, 9, 1, '2');
-    gpoly(g, [[cx - 5.5, 7], [cx + 6.5, 7], [cx + 9.5, 17], [cx - 8.5, 17]], '1');
-    gr(g, cx - 5, 7, 11, 1, '0'); gr(g, cx - 8, 16, 18, 1, '2'); for (var y = 8; y < 16; y++) gs(g, cx + 6 + ((y - 7) * 3 / 10 | 0), y, '2');
-    // occhi e sopracciglia (inner basse = arrabbiato)
-    [[cx - 5, cx - 4, cx - 6, 1], [cx + 4, cx + 5, cx + 6, -1]].forEach(function (e) {
-      gr(g, e[0], 9, 2, 2, 'k'); gs(g, e[0], 9, 'w');
-      gs(g, e[2], 7, 'k'); gs(g, e[2] + e[3], 8, 'k'); gs(g, e[2] + 2 * e[3], 8, 'k');
-    });
-    // il disco = bocca che urla
-    gell(g, cx + .5, 13.6, 3.3, 2.8, 'A'); gell(g, cx + .5, 13.6, 2.2, 1.7, 'k');
-    var holes = f % 2 ? [[-3, 0], [3, 0], [0, -2]] : [[-2, -2], [3, -1], [-2, 2]]; holes.forEach(function (h) { gs(g, cx + h[0], 13 + h[1], 'a') });
-    gs(g, cx, 13, 'w');
-    // squilli
-    if (f % 2) { [[cx - 11, 3], [cx - 11, 4], [cx - 12, 2], [cx - 12, 5]].forEach(function (p) { gs(g, p[0], p[1], 'a') }); [[cx + 11, 3], [cx + 11, 4], [cx + 12, 2], [cx + 12, 5]].forEach(function (p) { gs(g, p[0], p[1], 'a') }) }
-    return can(g, EPAL);
-  }
-  // Paper invoice (16x20): foglio con l'angolo piegato, faccia scocciata, timbro DUE in accento
-  function eInvoice(f) {
-    var g = grid(19, 21), sw = [0, 1, 0, -1][f];
-    function S(y) { return Math.round(sw * (y - 10) / 10) }
-    for (var y = 1; y < 20; y++) { gr(g, 2 + S(y), y, 15, 1, '0'); gs(g, 16 + S(y), y, '1') }
-    var a = S(1);
-    [[16, 1], [15, 1], [14, 1], [16, 2], [15, 2], [16, 3]].forEach(function (p) { gs(g, p[0] + a, p[1], '.') });
-    gs(g, 13 + a, 1, '1'); gs(g, 13 + a, 2, '1'); gs(g, 14 + a, 2, '2'); gs(g, 13 + a, 3, '2'); gs(g, 14 + a, 3, '2'); gs(g, 15 + a, 3, '3'); gs(g, 16 + a, 4, '1');
-    gr(g, 4 + S(3), 3, 7, 1, '2'); gr(g, 4 + S(4), 4, 4, 1, '2');
-    // faccia
-    var s7 = S(8);
-    gr(g, 5 + s7, 8, 2, 2, 'k'); gr(g, 11 + s7, 8, 2, 2, 'k'); gs(g, 5 + s7, 8, 'w'); gs(g, 11 + s7, 8, 'w');
-    gs(g, 4 + s7, 6, 'k'); gs(g, 5 + s7, 7, 'k'); gs(g, 6 + s7, 7, 'k'); gs(g, 13 + s7, 6, 'k'); gs(g, 12 + s7, 7, 'k'); gs(g, 11 + s7, 7, 'k');
-    var s11 = S(12); gr(g, 7 + s11, 12, 4, 1, 'k'); gs(g, 6 + s11, 13, 'k'); gs(g, 11 + s11, 13, 'k');
-    // timbro DUE
-    var L = [['##.', '#.#', '##.'], ['#.#', '#.#', '###'], ['###', '##.', '###']], sh = S(16);
-    for (var k = 0; k < 3; k++) for (var r = 0; r < 3; r++) for (var q = 0; q < 3; q++) if (L[k][r][q] === '#') gs(g, 4 + sh + k * 4 + q, 15 + r, 'a');
-    gr(g, 3 + sh, 14, 13, 1, 'A'); gr(g, 3 + sh, 18, 13, 1, 'A');
-    return can(g, EPAL);
-  }
-  // Receipt (8x14): mezzo foglio con gli occhietti, fondo a zig-zag
-  function eReceipt(f) {
-    var g = grid(10, 15);
-    gr(g, 1, 1, 8, 12, '0'); for (var y = 1; y < 13; y++) gs(g, 8, y, '1');
-    for (var x = 1; x < 9; x++) gs(g, x, 13, (x + f) % 2 ? '0' : '.');
-    if (f) { gr(g, 2, 5, 2, 1, 'k'); gr(g, 6, 5, 2, 1, 'k') } else { gr(g, 3, 4, 1, 2, 'k'); gr(g, 6, 4, 1, 2, 'k'); gs(g, 2, 3, 'k'); gs(g, 7, 3, 'k') }
-    gr(g, 4, 7, 2, 1, 'k'); gr(g, 2, 9, 5, 1, '2'); gr(g, 2, 11, 3, 1, '2'); gs(g, 6, 11, 'a'); gs(g, 7, 11, 'a');
-    return can(g, EPAL);
-  }
-  // No-show (15x22): solo una linea tratteggiata che marcia, due occhi vuoti che lampeggiano, cartellino T4
-  var NS_SHAPE = (function () { var g = grid(16, 23); gell(g, 7.5, 4.7, 3.6, 3.8, 'x'); gpoly(g, [[0.6, 22], [1, 15.2], [3.2, 11.8], [11.8, 11.8], [14, 15.2], [14.4, 22]], 'x'); var e = grid(16, 23); for (var y = 0; y < 23; y++) for (var x = 0; x < 16; x++) if (g.a[y][x] === 'x' && (gg(g, x - 1, y) !== 'x' || gg(g, x + 1, y) !== 'x' || gg(g, x, y - 1) !== 'x' || gg(g, x, y + 1) !== 'x')) e.a[y][x] = 'x'; return e })();
-  function eNoshow(f, blink) {
-    var g = grid(16, 23);
-    for (var y = 0; y < 23; y++) for (var x = 0; x < 16; x++) if (NS_SHAPE.a[y][x] === 'x' && (((x + y + f) >> 1) & 1)) gs(g, x, y, '0');
-    if (!blink) { gs(g, 6, 4, '0'); gs(g, 9, 4, '0'); gs(g, 6, 5, '0'); gs(g, 9, 5, '0') } else { gs(g, 6, 5, '0'); gs(g, 9, 5, '0') }
-    gs(g, 11, 13, '2'); gs(g, 12, 14, '2');
-    gr(g, 9, 15, 7, 7, 'a'); gr(g, 10, 16, 5, 5, 'A');
-    [[10, 16], [11, 16], [12, 16], [11, 17], [11, 18], [11, 19], [13, 16], [13, 17], [13, 18], [14, 18], [14, 16], [14, 17], [14, 19], [14, 20]].forEach(function (p) { gs(g, p[0], p[1], '0') });
-    return can(g, EPAL);
-  }
-  // Spam (15x10): busta con le ali di carta che sbattono, !!! in accento
-  function eSpam(f) {
-    var g = grid(17, 12);
-    if (f) { gpoly(g, [[4.5, 5], [0.5, 1], [1.5, 7]], '1'); gpoly(g, [[12.5, 5], [16.5, 1], [15.5, 7]], '1'); gl(g, 1, 1, 4, 5, '2'); gl(g, 15, 1, 12, 5, '2') }
-    else { gpoly(g, [[4.5, 5], [0.5, 10], [2.5, 4]], '1'); gpoly(g, [[12.5, 5], [16.5, 10], [14.5, 4]], '1'); gl(g, 1, 9, 4, 6, '2'); gl(g, 15, 9, 12, 6, '2') }
-    gr(g, 4, 3, 9, 7, '0'); gr(g, 4, 3, 9, 2, '1'); gs(g, 8, 5, '2'); gs(g, 7, 4, '2'); gs(g, 9, 4, '2'); gr(g, 4, 9, 9, 1, '1');
-    [6, 8, 10].forEach(function (x) { gs(g, x, 6, 'a'); gs(g, x, 7, 'a'); gs(g, x, 9, 'a') });
-    gs(g, 8, 6, 'a');
-    return can(g, EPAL);
-  }
-  // Double booking (14x14): biglietto del calendario con la faccia a denti stretti, testata in accento
-  function eDouble(f) {
-    var g = grid(16, 16);
-    gr(g, 1, 3, 14, 12, '0'); gr(g, 1, 3, 14, 3, 'a'); gr(g, 1, 6, 14, 1, 'A'); for (var y = 7; y < 15; y++) gs(g, 14, y, '1');
-    gr(g, 4, 1, 1, 3, '3'); gr(g, 11, 1, 1, 3, '3');
-    if (f) { gr(g, 3, 9, 3, 1, 'k'); gr(g, 10, 9, 3, 1, 'k') } else { gr(g, 4, 8, 2, 2, 'k'); gr(g, 10, 8, 2, 2, 'k'); gs(g, 4, 8, 'w'); gs(g, 10, 8, 'w'); gs(g, 3, 7, 'k'); gs(g, 12, 7, 'k') }
-    gr(g, 4, 11, 8, 2, 'k'); for (var x = 5; x < 11; x += 2) { gs(g, x, 11, '0'); gs(g, x + 1, 12, '0') }
-    return can(g, EPAL);
-  }
   // ======================================================================================
   // BOSS
   // URGENT (64x40): grande busta nel cremisi di MONDAY, il sigillo di ceralacca che batte, la bocca e' il lembo
@@ -423,7 +342,7 @@
     var r = beat ? 6.6 : 5.6; gell(g, 33, tip, r, r, '4'); gell(g, 33, tip, r - 1.3, r - 1.3, '3'); gell(g, 31.8, tip - 1.4, 1.8, 1.3, '1');
     gs(g, 33, tip - 2, '0'); gs(g, 33, tip - 1, '0'); gs(g, 33, tip, '0'); gs(g, 33, tip + 2, '0');
     gtext(g, 'URGENT', 6, top + 33, 'c');
-    return lightUp(can(g, UPAL), 'mon', { top: .25 });
+    return can(g, UPAL);
   }
 
   // MONDAY (160x110): calendario da scrivania, anelli squadrati, la faccia fatta con le celle
@@ -491,14 +410,14 @@
     }
     // fase 3: la sveglia (due campane sopra la testata)
     gtext5(g, 'MONDAY', 46, 14, 'c', 2);
-    return lightUp(can(g, MPAL), 'mon', { top: .2 });
+    return can(g, MPAL);
   }
   // campane della sveglia (rage), 2 frame
   function bells(f) {
     var g = grid(32, 18), o = f ? 1 : -1;
     [[8, o], [23, -o]].forEach(function (b) { var x = b[0] + b[1]; gell(g, x, 10, 6.5, 7, 'Y'); gell(g, x - .5, 10, 5.5, 6, 'y'); gr(g, x - 7, 11, 15, 7, '.'); gr(g, x - 7, 10, 15, 1, 'Y'); gs(g, x - 3, 6, 'w'); gs(g, x - 4, 7, 'w'); gr(g, x - 1, 2, 2, 2, 'n') });
     gr(g, 15 + o * 2, 4, 2, 7, 'n'); gr(g, 14 + o * 2, 3, 4, 2, 'm');
-    return lightUp(pad(can(g, MPAL)), 'mon', { top: 0 });
+    return pad(can(g, MPAL));
   }
 
   // ======================================================================================
@@ -874,12 +793,12 @@
     urgent: { w: 66, h: 38 }, monday: { w: 158, h: 119 }, powerup: { w: 14, h: 16 }, firewall: { w: 36, h: 14 }, icon: { w: 7, h: 7 }, logo: { w: 234, h: 42 }, mapTower: { w: 48, h: 120 } };
   // misure visibili (contorno compreso); MONDAY con le campane della fase 3
   function buildBase() {
-    BASE.call = [0, 1, 2, 3].map(eCall);
-    BASE.invoice = [0, 1, 2, 3].map(eInvoice);
-    BASE.receipt = [0, 0, 0, 1].map(eReceipt);
-    BASE.noshow = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3].map(function (f, i) { return eNoshow(f, i === 11) });
-    BASE.spam = [0, 1].map(eSpam);
-    BASE.double = [0, 0, 0, 0, 0, 1].map(eDouble);
+    BASE.call = [0, 1, 2, 3].map(hCall);
+    BASE.invoice = [0, 1, 2, 3].map(hInvoice);
+    BASE.receipt = [0, 0, 0, 1].map(hReceipt);
+    BASE.noshow = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3].map(function (f, i) { return hNoshow(f, i === 11) });
+    BASE.spam = [0, 1].map(hSpam);
+    BASE.double = [0, 0, 0, 0, 0, 1].map(hDouble);
   }
   function daySprites(day) {
     if (SP[day]) return SP[day];
@@ -895,7 +814,7 @@
     // lo scintillio dell'oro: 1px di linea che attraversa (6 posizioni)
     o.shine = {};
     Object.keys(BASE).forEach(function (k) { o.shine[k] = [0, 1, 2, 3, 4, 5, 6, 7].map(function (f) { var src = o.gold[k][0], w = src.width, h = src.height, s = mk(w, h); s.g.fillStyle = C.gd3; for (var y = 0; y < h; y++) { var x = Math.round((f / 7) * (w + h) - y); s.g.fillRect(x, y, 1, 1) } s.g.globalCompositeOperation = 'destination-in'; s.g.drawImage(src, 0, 0); return s.c }) });
-    o.bul = makeBullets(day);
+    o.bul = makeBullets2(day);
     return (SP[day] = o);
   }
   var SHIP = [], SHIPF = [], SHIELD = [], URG = [], URGF = [], MON = {}, MONF = {}, BELLS = [], ICONS = {}, CAPS = {}, FW = null, FWDATA = null;
@@ -908,18 +827,19 @@
     // colpo del giocatore
     PSHOT = can(rows(['w', 'r', 'r', 'd']), SHIP_PAL);
     // URGENT: bocca 0..2 x battito 0..1
-    for (var m = 0; m < 3; m++) for (var b2 = 0; b2 < 2; b2++) { var u = bUrgent(m, b2); URG[m * 2 + b2] = u; URGF[m * 2 + b2] = solid(u, C.cream) }
-    BELLS = [0, 1].map(bells);
+    for (var m = 0; m < 3; m++) for (var b2 = 0; b2 < 2; b2++) { var u = lightUp(up2(bUrgent(m, b2)), 'mon', { top: .25 }); URG2[m * 2 + b2] = u; URGF2[m * 2 + b2] = solid(u, C.cream) }
+    BELLS2 = [0, 1].map(function (f) { return lightUp(up2(bells(f)), 'mon', { top: 0 }) });
     // icone
     Object.keys(IC).forEach(function (k) { ICONS[k] = can(rows(IC[k]), ICPAL) });
     ICONS.spill = SPILL.map(function (r) { return can(rows(r), ICPAL) });
-    // capsule
-    buildCaps();
+    // capsule e icone HD
+    buildCaps2(); buildIcons2(); shipSet(ART.shipVariant);
     // firewall
     buildFirewall();
     nearLayout(); midLayout();
     buildDay('tue'); buildDay('night');
     buildGlows();
+    var es = shipSet(ART.shipVariant)[2], gc = mk(32, 32); gc.g.fillStyle = C.tomato; es.eng.forEach(function (e) { gc.g.fillRect(Math.round((e[0] + e[1]) / 4), Math.round(e[2] / 2), 2, 2) }); GLOWS.ship = [0, 1, 2, 3].map(function (i) { return blurStamp(gc.c, 6, 3, 4 + i * 3) });
     ART.ready = true; ART.initMs = performance.now() - t0;
     // gli altri giorni si preparano nei momenti liberi, uno alla volta (niente scatti al cambio giorno)
     var rest = DAYK.filter(function (d) { return !DONE[d] });
@@ -1023,62 +943,6 @@
   ART.setDay = function (day) { if (DAYS[day]) { ART.day = day; buildDay(day) } };
   function R0(v) { return Math.round(v) }
 
-  ART.ship = function (ctx, x, y, t, s) {
-    s = s || {}; var b = s.bank || 0, bi = Math.max(0, Math.min(4, Math.round(b * 2) + 2)), I = SHIP_INFO[bi], ox = R0(x - SCX), oy = R0(y - SCY);
-    if (s.shield > 0) { shieldGrab(ctx, x, y, t); shieldGlass(ctx, x, y, t, s.shield) }
-    ctx.drawImage(SHIP[bi], ox, oy);
-    // motori vivi: il nucleo dell'arco pulsa, sotto 0-4 px di fiamma (le fiamme morbide sono sul FX)
-    var th = s.thrust == null ? .5 : s.thrust, fr = (t * 24) | 0, auto = s.power === 'auto';
-    for (var i = 0; i < 3; i++) {
-      var a = I.eng[i], ph = (fr + i * 2) % 6; ctx.fillStyle = ph < 2 ? C.t4 : ph < 4 ? C.t3 : C.tomato; ctx.fillRect(ox + a + 1, oy + 21, 1, 1);
-      var L = (th > .25 ? 1 : 0) + (th > .7 ? 1 : 0) + (auto ? 2 : 0) - ((fr + i) % 3 === 0 ? 1 : 0);
-      for (var j = 0; j < L; j++) { ctx.fillStyle = j === 0 ? C.tomato : j === 1 ? C.t1 : C.t0; ctx.fillRect(ox + a + 1, oy + 22 + j, 1, 1) }
-    }
-    // luci di via (crema, alternate) e il segnale di coda
-    var bl = ((t * 2.2) | 0) % 2, n = I.nav; ctx.fillStyle = C.cream;
-    if (n[bl]) ctx.fillRect(ox + n[bl][0], oy + n[bl][1], 1, 1);
-    if (((t * 3) % 1) < .12) { ctx.fillStyle = C.tomato; ctx.fillRect(ox + 13, oy + 17, 1, 1) }
-    if (s.flash && !reduced) ctx.drawImage(SHIPF[bi], ox, oy);
-    else if (s.flash) { ctx.globalAlpha = .5; ctx.drawImage(SHIPF[bi], ox, oy); ctx.globalAlpha = 1 }
-    if (s.power === 'ai') { ctx.fillStyle = (t * 4 | 0) % 2 ? '#7FD8FF' : C.hot; ctx.fillRect(ox + 13, oy + 8, 1, 1); ctx.fillRect(ox + 13, oy + 5, 1, 1) }
-    if (s.shield > 0) shieldDraw(ctx, x, y, t, s.shield);
-  };
-  ART.hitbox = { dx: 0, dy: -3 };
-  // lo scudo Booking: copia sfocata ferma della scena dietro la nave (ogni 4 frame), cerchio, rosa 10%, arco crema
-  var SH = null, shN = 0, SHR = 19, SHD = 42;
-  function shieldGrab(ctx, x, y, t) {
-    if (!SH) { SH = { a: mk(40, 40), small: mk(10, 10), out: mk(SHD, SHD) }; SH.small.g.imageSmoothingEnabled = true; SH.a.g.imageSmoothingEnabled = true }
-    if ((shN++ & 3) !== 0) return;
-    var sx = R0(x - 20), sy = R0(y - 20);
-    try {
-      SH.small.g.clearRect(0, 0, 10, 10); SH.small.g.drawImage(ctx.canvas, sx + 1, sy + 1, 40, 40, 0, 0, 10, 10);
-      var a = SH.a.g; a.clearRect(0, 0, 40, 40); a.drawImage(SH.small.c, 0, 0, 10, 10, 0, 0, 40, 40);
-      a.globalCompositeOperation = 'source-atop'; a.fillStyle = 'rgba(242,205,190,0.10)'; a.fillRect(0, 0, 40, 40); a.globalCompositeOperation = 'source-over';
-      var o = SH.out.g; o.clearRect(0, 0, SHD, SHD); o.save(); o.beginPath(); o.arc(21, 21, SHR, 0, Math.PI * 2); o.clip(); o.drawImage(SH.a.c, 2, 1); o.restore();
-    } catch (e) {}
-  }
-  var RIM = null;
-  function shieldDraw(ctx, x, y, t, k) {
-    if (!SH) return;
-    if (!RIM) { // bordo del vetro: 1px crema tenue, arco di luce in alto a sinistra, due punti di riflesso
-      RIM = [0, 1, 2].map(function (f) { var g = grid(SHD, SHD); for (var a = 0; a < 360; a += 1) { var th = a * Math.PI / 180, rx = Math.round(21 + Math.cos(th) * (SHR - .2) - .5), ry = Math.round(21 + Math.sin(th) * (SHR - .2) - .5), arc = a > 190 + f * 4 && a < 255 + f * 4; gs(g, rx, ry, arc ? 'h' : (a > 20 && a < 160 ? 'c' : 's')) } for (var a2 = 200 + f * 4; a2 < 240 + f * 4; a2++) { var t2 = a2 * Math.PI / 180; gs(g, Math.round(21 + Math.cos(t2) * (SHR - 3)), Math.round(21 + Math.sin(t2) * (SHR - 3)), 'q') } gs(g, 10 + f, 11, 'h'); return can(g, { h: C.cream, c: '#F4F2EC88', s: '#F2CDBE55', q: '#F4F2EC55' }) });
-    }
-    var ox = R0(x - 21), oy = R0(y - 21), flick = k < .34 && ((t * 12) | 0) % 3 === 0;
-    ctx.globalAlpha = flick ? .4 : 1; ctx.drawImage(RIM[((t * 3) | 0) % 3], ox, oy); ctx.globalAlpha = 1;
-  }
-  // il vetro: la copia sfocata sta dietro la nave (rifrazione di 1px), il bordo sopra
-  function shieldGlass(ctx, x, y, t, k) {
-    if (!SH) return; var flick = k < .34 && ((t * 12) | 0) % 3 === 0;
-    ctx.globalAlpha = flick ? .3 : .6 + .4 * k; ctx.drawImage(SH.out.c, R0(x - 21), R0(y - 21)); ctx.globalAlpha = 1;
-  }
-  ART.shipFx = function (ctx, x, y, t, s) {
-    s = s || {}; var th = s.thrust == null ? .5 : s.thrust, len = (.6 + th) * (s.power === 'auto' ? 2 : 1), f = GLOWS.flame[2];
-    var b = s.bank || 0, bi = Math.max(0, Math.min(4, Math.round(b * 2) + 2)), I = SHIP_INFO[bi];
-    ctx.save(); ctx.globalCompositeOperation = 'lighter';
-    for (var i = 0; i < 3; i++) { var ex = I.eng[i] + 1.5 - SCX - .5, fl = .8 + .2 * Math.sin(t * 40 + i * 2.1), h = f.gh * len * fl, w = f.gw * (i === 1 ? 1.1 : .9); ctx.globalAlpha = .9; ctx.drawImage(f, x + ex - w / 2, y + 10, w, h) }
-    var g = GLOWS.ship[1]; ctx.globalAlpha = .6; ctx.drawImage(g, x - g.gw / 2 + .5, y - g.gh / 2 + .5, g.gw, g.gh);
-    ctx.restore();
-  };
   ART.reticle = function (ctx, x, y, t) {
     var r = 7 + Math.round(Math.sin(t * 6)), x0 = R0(x), y0 = R0(y); ctx.fillStyle = '#7FD8FF';
     [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(function (q) { var cx = x0 + q[0] * r, cy = y0 + q[1] * r; ctx.fillRect(Math.min(cx, cx - q[0] * 2), cy, 3, 1); ctx.fillRect(cx, Math.min(cy, cy - q[1] * 2), 1, 3) });
@@ -1569,4 +1433,441 @@
     if (f > 0 && f < w) { ctx.fillStyle = C.t4; ctx.fillRect(x + f - 1, y, 1, h) }
     ctx.fillStyle = C.cream; ctx.fillRect(x - 1, y - 1, 1, h + 2); ctx.fillRect(x + w, y - 1, 1, h + 2);
   };
+
+  // ======================================================================================
+  // ATTORI IN HD (giro 3): nave, nemici, boss, colpi, capsule, scoppi a densita' doppia. Le funzioni prendono
+  // coordinate di GIOCO (480x270); la scala si legge dal canvas: largo >= 720 = attori a 2x (canvas 960x540).
+  // Su un canvas 480 gli stessi sprite si disegnano dimezzati (ripiego).
+  ART.hd = true;
+  function SC(ctx) { if (ART.actorScale) return ART.actorScale; var c = ctx && ctx.canvas; return c && c.width >= 720 ? 2 : 1 }
+  function putC(ctx, c, x, y, S, dx, dy) {
+    if (S === 2) ctx.drawImage(c, Math.round(x * 2 - c.width / 2 + (dx || 0)), Math.round(y * 2 - c.height / 2 + (dy || 0)));
+    else ctx.drawImage(c, Math.round(x - c.width / 4 + (dx || 0) / 2), Math.round(y - c.height / 4 + (dy || 0) / 2), c.width / 2, c.height / 2);
+  }
+  function up2(src) { var s = mk(src.width * 2, src.height * 2); s.g.drawImage(src, 0, 0, src.width * 2, src.height * 2); return s.c }
+  // rilegge uno sprite: tono di contorno sottile (1px HD), luce della citta' sotto
+  function relight2(src, day, o) { return lightUp(src, day, o || { top: .3 }) }
+
+  // ---------- LA NAVE MOTHER MACHINE: la sagoma e' la m del logo vista da sopra. Tre gambe = tre gondole con il
+  // propulsore pomodoro, gli archi della m restano vuoti tra le gambe, le due anse in alto sono le cabine di vetro.
+  var M_SUB = M_PATH.split('Z').filter(function (p) { return p.trim() }).map(function (p) { return new Path2D(p.trim() + 'Z') });
+  var SHIP_V = {
+    a: { mw: 46, mh: 50, top: 7 },
+    b: { mw: 40, mh: 46, top: 10, wings: 1, lance: 1 },
+    c: { mw: 42, mh: 40, top: 14, wings: 2, prongs: 1 },
+    d: { mw: 44, mh: 46, top: 10, wings: 3, spike: 1, taper: .62, glass: .34 },
+    e: { mw: 46, mh: 44, top: 12, wings: 4, prongs: 1, taper: .7, glass: .3 }
+  };
+  ART.shipVariant = 'd';
+  var SHP = { W: 64, H: 64 };
+  var SHPAL = { o: C.night, '0': '#E4E7E4', '1': C.g1, '2': C.g2, '3': C.g3, '4': C.g4, c: C.cream, w: C.hot, n: '#0C1622', N: '#1C3448', g: '#9FD6E8', r: C.tomato, d: C.t1, D: C.t0, h: C.t3, H: C.t4, e: '#3A4A44' };
+  function shipHD(vk, bank) {
+    var V = SHIP_V[vk], W2 = SHP.W, H2 = SHP.H, Q = 4, big = mk(W2 * Q, H2 * Q), b = big.g, cx = W2 / 2, k = Math.abs(bank) * .12;
+    var sx = V.mw / 680, sy = V.mh / 1468;
+    function region(col, fn) {
+      [-1, 1].forEach(function (side) {
+        var s = ((bank > 0 && side > 0) || (bank < 0 && side < 0)) ? 1 - k : 1;
+        b.save(); b.beginPath(); if (side < 0) b.rect(0, 0, cx * Q, H2 * Q); else b.rect(cx * Q, 0, (W2 - cx) * Q, H2 * Q); b.clip();
+        b.setTransform(Q * s, 0, 0, Q, cx * Q * (1 - s), 0); b.fillStyle = col; fn(b); b.restore();
+      });
+    }
+    function logo(bb, i) { bb.save(); bb.translate(cx - 340 * sx, V.top + 1468 * sy); bb.scale(sx, sy); bb.fill(M_SUB[i]); bb.restore() }
+    function poly(bb, P) { bb.beginPath(); bb.moveTo(P[0][0], P[0][1]); for (var i = 1; i < P.length; i++) bb.lineTo(P[i][0], P[i][1]); bb.closePath(); bb.fill() }
+    var L0 = cx - V.mw / 2, Y = function (f) { return V.top + V.mh * f };
+    if (V.wings) region('#0000ff', function (bb) {
+      var wl = V.wings === 1 ? [[L0 + 3, Y(.38)], [L0 - 11, Y(.78)], [L0 - 12, Y(.95)], [L0 - 6, Y(.92)], [L0 + 3, Y(.8)]] : V.wings === 2 ? [[L0 + 3, Y(.3)], [L0 - 9, Y(.62)], [L0 - 10, Y(.9)], [L0 + 3, Y(.75)]]
+        : V.wings === 3 ? [[L0 + 4, Y(.42)], [L0 - 6, Y(.7)], [L0 - 13, Y(1.02)], [L0 - 9, Y(1.04)], [L0 - 3, Y(.92)], [L0 + 4, Y(.86)]] : [[L0 + 4, Y(.34)], [L0 - 12, Y(.86)], [L0 - 12, Y(1)], [L0 + 4, Y(.8)]];
+      poly(bb, wl); poly(bb, wl.map(function (p) { return [W2 - p[0], p[1]] }));
+    });
+    region('#ff0000', function (bb) {
+      logo(bb, 0);
+      if (V.lance) poly(bb, [[cx, V.top - 9], [cx + 3.2, V.top + 6], [cx - 3.2, V.top + 6]]);
+      if (V.spike) poly(bb, [[cx, V.top - 7], [cx + 4.5, V.top + 5], [cx - 4.5, V.top + 5]]);
+      if (V.prongs) [192, 487].forEach(function (lx) { var px2 = cx + (lx - 340) * sx; poly(bb, [[px2, V.top - 8], [px2 + 8, V.top + 6], [px2 - 8, V.top + 6]]) });
+    });
+    region('#00ff00', function (bb) { logo(bb, 1); logo(bb, 2) });
+    var D = b.getImageData(0, 0, W2 * Q, H2 * Q).data, g = grid(W2, H2), x, y;
+    for (y = 0; y < H2; y++) for (x = 0; x < W2; x++) { var i = ((y * Q + 2) * W2 * Q + x * Q + 2) * 4; if (D[i + 3] < 128) continue; g.a[y][x] = D[i + 1] > 128 ? 'G' : D[i + 2] > 128 ? 'W' : 'M' }
+    if (V.taper) { var gt = gclone(g); for (y = 0; y < H2; y++) { var fy = V.taper + (1 - V.taper) * Math.max(0, Math.min(1, (y - V.top + 4) / V.mh)); for (x = 0; x < W2; x++) { var sxx = Math.round(cx + (x + .5 - cx) / fy - .5); g.a[y][x] = gg(gt, sxx, y) } } }
+    // gambe piu' piene: si allarga di 1px il corpo
+    var g0 = gclone(g); for (y = 0; y < H2; y++) for (x = 0; x < W2; x++) if (g0.a[y][x] === '.' && (gg(g0, x - 1, y) === 'M' || gg(g0, x + 1, y) === 'M')) g.a[y][x] = 'M';
+    // le anse: vetro nella parte alta, pannello incassato sotto (cosi' la m si legge anche a colori)
+    var gTop = H2, gBot = 0; for (y = 0; y < H2; y++) for (x = 0; x < W2; x++) if (g.a[y][x] === 'G') { gTop = Math.min(gTop, y); gBot = Math.max(gBot, y) }
+    var gCut = gTop + Math.round((gBot - gTop) * (V.glass || .5));
+    var src = gclone(g), out = grid(W2, H2);
+    function isB(v) { return v !== '.' }
+    for (y = 0; y < H2; y++) for (x = 0; x < W2; x++) {
+      var r = src.a[y][x]; if (r === '.') continue;
+      var up = !isB(gg(src, x, y - 1)), dn = !isB(gg(src, x, y + 1)), c;
+      if (r === 'G') {
+        if (y > gCut) { c = y === gCut + 1 ? '2' : '4'; if (gg(src, x - 1, y) !== 'G' || gg(src, x + 1, y) !== 'G') c = '3'; if (y === gBot) c = '3' }
+        else { var gx = x - (gg(src, x - 1, y) === 'G' ? 0 : 0); c = y - gTop < 3 ? 'N' : 'n'; }
+      } else if (r === 'W') {
+        c = up ? '0' : dn ? 'c' : '3';
+        if (!up && !dn && gg(src, x, y - 2) === '.') c = '1';
+        if (!up && !dn && gg(src, x, y - 3) === '.' && gg(src, x, y - 2) !== '.') c = '2';
+      } else {
+        var dl = 0, dr = 0; while (isB(gg(src, x - dl - 1, y)) && gg(src, x - dl - 1, y) === 'M' && dl < 30) dl++; while (gg(src, x + dr + 1, y) === 'M' && dr < 30) dr++;
+        var tt = dl / (dl + dr + 1), TN = ['1', '0', '0', '1', '1', '2', '2', '3'];
+        c = TN[Math.min(7, (tt * 8) | 0)];
+        if (dl + dr > 18) c = (y % 6 === 0) ? '3' : '2';
+        if (up) c = '0'; if (dn) c = 'c';
+      }
+      out.a[y][x] = c;
+    }
+    // riflesso sul vetro: diagonale crema in alto a sinistra di ogni cabina
+    for (y = gTop; y <= gCut; y++) for (x = 0; x < W2; x++) if (src.a[y][x] === 'G' && src.a[y][x - 1] !== 'G' && y - gTop < 6) { gs(out, x + 1 + (y - gTop >> 1), y, 'g'); if (y - gTop < 3) gs(out, x + 2 + (y - gTop >> 1), y, 'g') }
+    // cuciture orizzontali sulle gambe (machine)
+    for (y = V.top + 10; y < H2; y += 11) for (x = 0; x < W2; x++) if (src.a[y][x] === 'M' && out.a[y][x] !== 'c' && out.a[y][x] !== '0') out.a[y][x] = out.a[y][x] === '0' ? '1' : '3';
+    // propulsori: in fondo a ogni gamba un arco pomodoro (le tre gambe della m)
+    var yb = 0; for (y = 0; y < H2; y++) for (x = 0; x < W2; x++) if (src.a[y][x] === 'M') yb = Math.max(yb, y);
+    var eng = [], run = -1;
+    for (x = 0; x <= W2; x++) { var on = x < W2 && src.a[yb][x] === 'M'; if (on && run < 0) run = x; if (!on && run >= 0) { eng.push([run, x - 1]); run = -1 } }
+    eng.forEach(function (e) {
+      var x0 = e[0], x1 = e[1];
+      for (var xx = x0; xx <= x1; xx++) { out.a[yb - 1][xx] = '4'; out.a[yb][xx] = '3'; if (out.a[yb - 4][xx] !== 'o') out.a[yb - 4][xx] = xx === x0 || xx === x1 ? 'd' : 'r' }
+      for (xx = x0; xx <= x1; xx++) { var edge = xx === x0 || xx === x1; gs(out, xx, yb + 1, edge ? 'd' : 'r'); gs(out, xx, yb + 2, edge ? 'r' : 'D'); gs(out, xx, yb + 3, edge ? 'D' : '.') }
+      gs(out, x0, yb + 1, 'd'); gs(out, x1, yb + 1, 'd');
+    });
+    // sensore = hitbox (2x2 HD = 1px di gioco) a (x, y - 3)
+    gr(out, cx - 2, H2 / 2 - 7, 4, 4, '4'); gr(out, cx - 1, H2 / 2 - 6, 2, 2, 'w');
+    // emblema: la m crema sull'ala sinistra (o sulla gamba sinistra se non ci sono ali)
+    var MM = ['.##.##.', '#..#..#', '#..#..#', '#######', '#..#..#', '#..#..#', '#..#..#'], ex0 = V.wings ? Math.round(L0 - (V.wings >= 3 ? 7 : 6)) : Math.round(L0 + 1), ey0 = V.wings ? Math.round(Y(V.wings >= 3 ? .74 : .7)) : Math.round(Y(.62));
+    for (y = 0; y < 7; y++) for (x = 0; x < 7; x++) if (MM[y][x] === '#' && out.a[ey0 + y] && out.a[ey0 + y][ex0 + x] && out.a[ey0 + y][ex0 + x] !== '.' && out.a[ey0 + y][ex0 + x] !== 'o') out.a[ey0 + y][ex0 + x] = 'c';
+    // contorno notte (non sotto: la luce viene dalla citta')
+    var f2 = gclone(out); function Af(xx, yy) { var v = gg(f2, xx, yy); return v !== '.' && 'rdDhH'.indexOf(v) < 0 }
+    for (y = 0; y < H2; y++) for (x = 0; x < W2; x++) if (f2.a[y][x] === '.' && !Af(x, y - 1) && (Af(x - 1, y) || Af(x + 1, y) || Af(x, y + 1))) out.a[y][x] = 'o';
+    // luci di via: punta delle ali o cima delle gambe esterne
+    var nav = []; [Math.round(V.wings ? L0 - 11 : L0 + 2), Math.round(V.wings ? W2 - L0 + 10 : W2 - L0 - 3)].forEach(function (nx) { for (var yy = 0; yy < H2; yy++) { var v = out.a[yy][nx]; if (v && v !== '.' && v !== 'o') { nav.push([nx, yy]); break } } });
+    return { c: can(out, SHPAL), eng: eng.map(function (e) { return [e[0], e[1], yb] }), nav: nav };
+  }
+  var SHIPS = {}, SHIPSF = {};
+  function shipSet(vk) { if (!SHIPS[vk]) { SHIPS[vk] = [-2, -1, 0, 1, 2].map(function (b) { return shipHD(vk, b) }); SHIPSF[vk] = SHIPS[vk].map(function (s) { return solid(s.c, C.cream) }) } return SHIPS[vk] }
+  ART.ship = function (ctx, x, y, t, s) {
+    s = s || {}; LASTX = x; LASTY = y; var S = SC(ctx), vk = s.variant || ART.shipVariant, set = shipSet(vk), bb = s.bank || 0, bi = Math.max(0, Math.min(4, Math.round(bb * 2) + 2)), I = set[bi];
+    if (s.shield > 0) { shieldGrab(ctx, x, y, t); shieldGlass(ctx, x, y, t, s.shield, S) }
+    putC(ctx, I.c, x, y, S);
+    var ox = S === 2 ? Math.round(x * 2) - SHP.W / 2 : 0, oy = S === 2 ? Math.round(y * 2) - SHP.H / 2 : 0;
+    // propulsori vivi: nucleo che pulsa e fiamma a pixel HD (la fiamma morbida e' sul FX)
+    var th = s.thrust == null ? .5 : s.thrust, fr = (t * 24) | 0, auto = s.power === 'auto';
+    for (var i = 0; i < I.eng.length; i++) {
+      var e = I.eng[i], w = e[1] - e[0] - 1, ph = (fr + i * 2) % 6, L = 2 + Math.round(th * 4) + (auto ? 5 : 0) - ((fr + i) % 3 === 0 ? 1 : 0);
+      for (var j = 0; j < L; j++) { var col = j < 1 ? (ph < 3 ? C.t4 : C.t3) : j < 3 ? C.tomato : j < 5 ? C.t1 : C.t0, ww = Math.max(1, w - (j > 3 ? 2 : 0)), xx = e[0] + 1 + ((w - ww) >> 1); if (j > 5 && (j + fr) % 2) continue; hdRect(ctx, S, ox, oy, xx, e[2] + 2 + j, ww, 1, col) }
+    }
+    var bl = ((t * 2.2) | 0) % 2, n = I.nav[bl]; if (n) hdRect(ctx, S, ox, oy, n[0], n[1], 1, 1, C.cream);
+    if (s.flash) { ctx.globalAlpha = reduced ? .5 : 1; putC(ctx, SHIPSF[vk][bi], x, y, S); ctx.globalAlpha = 1 }
+    if (s.power === 'ai') { var pc = (t * 4 | 0) % 2 ? '#7FD8FF' : C.hot; hdRect(ctx, S, ox, oy, SHP.W / 2 - 1, SHP.H / 2 - 6, 2, 2, pc) }
+    if (s.shield > 0) shieldDraw(ctx, x, y, t, s.shield, S);
+  };
+  // rettangolo in pixel HD relativo allo sprite (su canvas 480 viene arrotondato)
+  function hdRect(ctx, S, ox, oy, x, y, w, h, col) {
+    ctx.fillStyle = col;
+    if (S === 2) ctx.fillRect(ox + x, oy + y, w, h); else ctx.fillRect(Math.round(LASTX - SHP.W / 4 + x / 2), Math.round(LASTY - SHP.H / 4 + y / 2), Math.max(1, w >> 1), Math.max(1, h >> 1));
+  }
+  var LASTX = 0, LASTY = 0;
+  // ---------- NEMICI HD: oggetti d'ufficio con la faccia. Materiali: carta (crema, ombra calda), plastica (lucida,
+  // un punto di luce). a/A/B = accento del giorno (chiaro/scuro), k inchiostro, w bianco caldo.
+  var EP2 = { '0': C.p0, '1': C.p1, '2': C.p2, '3': C.p3, k: C.ink, w: C.hot, a: '#FF00FF', A: '#AA00AA', B: '#FF80FF', s: '#C9C3B4', y: '#E9E3D3' };
+  // occhio: sclera crema, pupilla che guarda giu' (verso la nave), luce, sopracciglio arrabbiato
+  function eye2(g, cx, cy, side, o) {
+    o = o || {}; var rx = o.rx || 3, ry = o.ry || 2.6;
+    gell(g, cx, cy, rx + 1, ry + 1, 'k'); gell(g, cx, cy, rx, ry, o.blink ? 'k' : 'y');
+    if (!o.blink) { gr(g, Math.round(cx - 1 + side * .5), Math.round(cy - .5), 2, 3, 'k'); gs(g, Math.round(cx - 1 + side * .5), Math.round(cy - .5), 'w') }
+    else gr(g, Math.round(cx - rx), Math.round(cy), Math.round(rx * 2), 1, 'y');
+    if (o.brow !== false) { var bw = rx * 2 + 3; for (var i = 0; i < bw; i++) { var bx = Math.round(cx - rx - 1.5 + i), t = side < 0 ? i / bw : 1 - i / bw, by = Math.round(cy - ry - 2 - (1 - t) * (o.anger || 2.5)); gs(g, bx, by, 'k'); gs(g, bx, by + 1, 'k') } }
+  }
+  // Missed call (44x36 HD = 22x18): telefono a disco di plastica; la cornetta salta, il disco e' la bocca che urla
+  function hCall(f) {
+    var g = grid(52, 40), o = [0, 2, 0, -2][f], lift = f % 2 ? 2 : 0, cx = 26 + o;
+    // cornetta: impugnatura + due coppe
+    gr(g, cx - 13, 6 - lift, 26, 4, '1'); gr(g, cx - 12, 5 - lift, 24, 1, '0'); gr(g, cx - 12, 9 - lift, 24, 1, '2');
+    [-1, 1].forEach(function (sd) { var ex = cx + sd * 14; gell(g, ex, 10 - lift, 5.6, 4, '1'); gell(g, ex - 1, 8.8 - lift, 3.8, 2, '0'); gr(g, ex - 5, 12 - lift, 11, 2, '2'); gr(g, ex - 4, 13 - lift, 9, 1, '3') });
+    // forcella sotto la cornetta
+    gr(g, cx - 9, 13, 3, 3, '2'); gr(g, cx + 7, 13, 3, 3, '2');
+    // corpo trapezio con gli angoli smussati
+    gpoly(g, [[cx - 10, 15], [cx + 10, 15], [cx + 13, 18], [cx + 18, 36], [cx - 18, 36], [cx - 13, 18]], '1');
+    gpoly(g, [[cx - 10, 15], [cx + 10, 15], [cx + 12, 17], [cx - 12, 17]], '0');
+    for (var y = 18; y < 36; y++) { var xr = Math.round(cx + 13 + (y - 18) * 5 / 18); gs(g, xr, y, '2'); gs(g, xr - 1, y, '2') }
+    gr(g, cx - 17, 34, 35, 2, '2'); gr(g, cx - 16, 36, 33, 1, '3');
+    gs(g, cx - 8, 17, 'w'); gs(g, cx - 7, 17, 'w');
+    // occhi arrabbiati
+    eye2(g, cx - 7, 22, -1, { anger: 3 }); eye2(g, cx + 7, 22, 1, { anger: 3 });
+    // il disco = bocca che urla: anello d'accento, fori, gola nera
+    gell(g, cx, 29.5, 6.5, 5.2, 'A'); gell(g, cx, 29, 6, 4.8, 'a'); gell(g, cx, 29.5, 3.2, 2.6, 'k'); gr(g, cx - 2, 31, 4, 1, 'A');
+    var rot = f % 2 ? .4 : 0; for (var k = 0; k < 8; k++) { var an = rot + k * Math.PI / 4.6 - .3; if (an > 3.4) continue; gs(g, Math.round(cx + Math.cos(an + Math.PI) * 4.6), Math.round(29.3 + Math.sin(an + Math.PI) * 3.6), 'B') }
+    gs(g, cx - 1, 29, 'w');
+    // squilli
+    if (f % 2) [-1, 1].forEach(function (sd) { for (var r2 = 0; r2 < 2; r2++) for (var a2 = -5; a2 <= 5; a2++) gs(g, cx + sd * (21 + r2 * 3) + (a2 * a2 > 16 ? -sd : 0), 8 + a2 - lift, 'a') });
+    return can(g, EP2);
+  }
+  // Paper invoice (34x40 = 17x20): foglio con angolo piegato e righe, muso scocciato, timbro DUE storto in accento
+  function hInvoice(f) {
+    var g = grid(40, 44), sw = [0, 1, 0, -1][f], X = function (y) { return Math.round(sw * (y - 22) / 9) };
+    for (var y = 2; y < 42; y++) { gr(g, 5 + X(y), y, 30, 1, '0'); gs(g, 34 + X(y), y, '1'); gs(g, 33 + X(y), y, '1') }
+    for (var y2 = 30; y2 < 42; y2++) for (var x2 = 5; x2 < 35; x2++) if (bay(x2, y2) < (y2 - 30) / 30) gs(g, x2 + X(y2), y2, '1');
+    // angolo piegato
+    var a0 = X(2); for (var q = 0; q < 7; q++) for (var r = 0; r <= q; r++) gs(g, 34 - r + a0, 2 + q - r - 0, '.');
+    for (var q2 = 0; q2 < 7; q2++) for (var r2 = 0; r2 < 7 - q2; r2++) gs(g, 28 + q2 + a0, 2 + q2 + r2 - 0 + 0, r2 === 0 ? '2' : '1');
+    for (var q3 = 0; q3 < 7; q3++) gs(g, 28 + q3 + a0, 9, '2');
+    // intestazione e righe
+    gr(g, 8 + X(5), 5, 14, 2, '2'); gr(g, 8 + X(8), 8, 9, 1, '2');
+    [[27, 20], [30, 16]].forEach(function (l) { gr(g, 9 + X(l[0]), l[0], l[1], 1, 's') });
+    // faccia
+    var fx = X(16);
+    eye2(g, 13 + fx, 16, -1, { rx: 2.6, ry: 2.2, anger: 2 }); eye2(g, 26 + fx, 16, 1, { rx: 2.6, ry: 2.2, anger: 2 });
+    var mx = X(22); gr(g, 15 + mx, 22, 9, 2, 'k'); gs(g, 14 + mx, 23, 'k'); gs(g, 13 + mx, 24, 'k'); gs(g, 24 + mx, 23, 'k'); gs(g, 25 + mx, 24, 'k'); gr(g, 17 + mx, 24, 3, 1, 'a');
+    // timbro DUE (accento, un po' storto)
+    var sx = X(35) + 9, L = [['###.', '#..#', '#..#', '#..#', '###.'], ['#..#', '#..#', '#..#', '#..#', '.##.'], ['####', '#...', '###.', '#...', '####']];
+    for (var x3 = 0; x3 < 23; x3++) { gs(g, sx + x3, 32 - (x3 >> 3), 'A'); gs(g, sx + x3, 40 - (x3 >> 3), 'A') }
+    for (var y3 = 0; y3 < 9; y3++) { gs(g, sx, 32 + y3, 'A'); gs(g, sx + 22, 30 + y3, 'A') }
+    for (var k = 0; k < 3; k++) for (var rr = 0; rr < 5; rr++) for (var c = 0; c < 4; c++) if (L[k][rr][c] === '#') gs(g, sx + 3 + k * 6 + c, 34 + rr - ((k * 6 + c + 3) >> 3), 'a');
+    return can(g, EP2);
+  }
+  // Receipt (20x28 = 10x14): scontrino termico, fondo a zig-zag, faccina preoccupata
+  function hReceipt(f) {
+    var g = grid(24, 32);
+    gr(g, 3, 2, 18, 24, '0'); for (var y = 2; y < 26; y++) { gs(g, 20, y, '1'); gs(g, 19, y, '1') }
+    for (var x = 3; x < 21; x++) { var z = (x >> 1) % 2; gs(g, x, 26, '0'); if (z) gs(g, x, 27, '0') }
+    eye2(g, 8, 8, -1, { rx: 2, ry: 2, anger: 1.5, blink: f === 1 }); eye2(g, 16, 8, 1, { rx: 2, ry: 2, anger: 1.5, blink: f === 1 });
+    gr(g, 10, 13, 4, 1, 'k'); gs(g, 9, 14, 'k'); gs(g, 14, 14, 'k');
+    gr(g, 6, 17, 12, 1, 's'); gr(g, 6, 19, 8, 1, 's'); gr(g, 6, 22, 5, 1, '2'); gr(g, 14, 22, 4, 1, 'a');
+    return can(g, EP2);
+  }
+  // No-show (30x42 = 15x21): niente corpo, solo la linea tratteggiata che marcia, occhi vuoti, cartellino TABLE 4
+  var NS2 = (function () { var g = grid(32, 46); gell(g, 16, 10, 7.5, 8, 'x'); gpoly(g, [[2, 44], [3, 31], [8, 24.5], [24, 24.5], [29, 31], [30, 44]], 'x'); gr(g, 13, 17, 6, 8, 'x'); var e = grid(32, 46); for (var y = 0; y < 46; y++) for (var x = 0; x < 32; x++) if (g.a[y][x] === 'x' && (gg(g, x - 1, y) !== 'x' || gg(g, x + 1, y) !== 'x' || gg(g, x, y - 1) !== 'x' || gg(g, x, y + 1) !== 'x')) e.a[y][x] = 'x'; return e })();
+  function hNoshow(f, blink) {
+    var g = grid(32, 46);
+    for (var y = 0; y < 46; y++) for (var x = 0; x < 32; x++) if (NS2.a[y][x] === 'x' && (((x + y + f * 2) >> 2) & 1)) gs(g, x, y, '0');
+    // occhi vuoti che brillano
+    if (!blink) { gr(g, 12, 9, 2, 3, '0'); gr(g, 18, 9, 2, 3, '0') } else { gr(g, 12, 11, 2, 1, '0'); gr(g, 18, 11, 2, 1, '0') }
+    // cartellino appeso con lo spago
+    gl(g, 16, 25, 21, 29, '2'); gl(g, 16, 25, 11, 29, '2');
+    gr(g, 7, 29, 19, 11, 'A'); gr(g, 8, 30, 17, 9, 'a'); gr(g, 8, 30, 17, 1, 'B'); gs(g, 9, 31, 'k');
+    gtext(g, 'T4', 12, 32, 'k');
+    return can(g, EP2);
+  }
+  // Spam (34x22 = 17x11): busta con le ali di carta che sbattono, occhi cattivi, !!! in accento
+  function hSpam(f) {
+    var g = grid(38, 26), up = f === 0;
+    // ali di carta a tre penne, su e giu'
+    [-1, 1].forEach(function (sd) { var X = function (x) { return sd < 0 ? x : 37 - x };
+      var F = up ? [[[10, 9], [1, 1], [4, 0], [10, 7]], [[10, 11], [0, 5], [3, 4], [10, 9]], [[10, 13], [1, 9], [3, 8], [10, 11]]] : [[[10, 12], [1, 19], [4, 21], [10, 14]], [[10, 14], [0, 24], [3, 25], [10, 16]], [[10, 16], [3, 25], [6, 25], [11, 17]]];
+      F.forEach(function (P, i) { gpoly(g, P.map(function (p) { return [X(p[0]), p[1]] }), i === 0 ? '0' : '1'); gl(g, X(P[0][0]), P[0][1], X(P[1][0] + 1), P[1][1] + (up ? 1 : -1), '2') }) });
+    // busta
+    gr(g, 9, 6, 20, 15, '0'); gr(g, 9, 19, 20, 2, '1'); gr(g, 28, 6, 1, 15, '1');
+    gl(g, 9, 6, 18, 13, '2'); gl(g, 28, 6, 19, 13, '2'); gs(g, 18, 13, '2'); gs(g, 19, 13, '2');
+    gr(g, 10, 6, 18, 1, '1');
+    eye2(g, 14, 12, -1, { rx: 2, ry: 1.8, anger: 2.5 }); eye2(g, 24, 12, 1, { rx: 2, ry: 1.8, anger: 2.5 });
+    [15, 19, 23].forEach(function (x) { gr(g, x, 15, 2, 3, 'a'); gr(g, x, 19, 2, 1, 'a') });
+    return can(g, EP2);
+  }
+  // Double booking (32x30 = 16x15): biglietto del calendario, testata d'accento con gli anelli, denti stretti
+  function hDouble(f) {
+    var g = grid(34, 32);
+    gr(g, 3, 6, 28, 24, '0'); for (var y = 6; y < 30; y++) { gs(g, 30, y, '1'); gs(g, 29, y, '1') } gr(g, 3, 28, 28, 2, '1');
+    gr(g, 3, 6, 28, 7, 'a'); gr(g, 3, 6, 28, 1, 'B'); gr(g, 3, 12, 28, 1, 'A');
+    [9, 24].forEach(function (x) { gr(g, x, 2, 2, 7, '3'); gr(g, x, 2, 1, 6, '2') });
+    eye2(g, 11, 17, -1, { rx: 2.5, ry: 2.2, anger: 3, blink: f === 1 }); eye2(g, 23, 17, 1, { rx: 2.5, ry: 2.2, anger: 3, blink: f === 1 });
+    gr(g, 9, 22, 16, 5, 'k'); for (var x = 10; x < 24; x += 3) { gr(g, x, 22, 2, 2, 'y'); gr(g, x + 1, 25, 2, 2, 'y') }
+    return can(g, EP2);
+  }
+  // contorno notte tutto attorno (colpi e capsule)
+  function outl(g, ch) { var g0 = gclone(g); for (var y = 0; y < g.h; y++) for (var x = 0; x < g.w; x++) if (g0.a[y][x] === '.' && (gg(g0, x - 1, y) !== '.' || gg(g0, x + 1, y) !== '.' || gg(g0, x, y - 1) !== '.' || gg(g0, x, y + 1) !== '.')) g.a[y][x] = ch || 'o'; return g }
+  // ---------- COLPI NEMICI HD: diamanti e anelli, nucleo crema, anello d'accento, bordo notte. Mai pomodoro.
+  function makeBullets2(day) {
+    var d = D(day), sun = day === 'sun', pal = { o: sun ? C.ink : C.night, a: sun ? '#C2627A' : d[7], b: sun ? '#E8A0B0' : mix(d[7], C.cream, .5), c: sun ? C.ink : C.cream, w: sun ? C.ink : C.hot }, o = {};
+    function dia(r, spark) { var n = r * 2 + 5, g = grid(n, n), m = r + 2; for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) { var q = Math.abs(x - m) + Math.abs(y - m); if (q <= r) gs(g, x, y, q === r ? 'a' : q === r - 1 ? 'b' : 'c') } if (spark) { for (var k = -r; k <= r; k++) { gs(g, m + k, m, 'w'); gs(g, m, m + k, 'w') } } return can(outl(g), pal) }
+    o.diamond = [dia(3), dia(3), dia(3, 1)]; o.diamondBig = [dia(5), dia(5, 1), dia(5)];
+    o.ring = [0, 1, 2].map(function (f) { var g = grid(29, 15), rx = 5 + f * 4, ry = 3 + f * 2; for (var a = 0; a <= 64; a++) { var th = Math.PI * a / 64, x = Math.round(14 + Math.cos(th) * rx), y = Math.round(2 + Math.sin(th) * ry); gs(g, x, y, 'c'); gs(g, x, y + 1, 'a') } return can(outl(g), pal) });
+    o.shard = [0, 1, 2].map(function (f) { var g = grid(11, 11), P = [[[1, 2], [9, 4], [3, 9]], [[2, 1], [9, 8], [1, 7]], [[5, 1], [9, 9], [1, 6]]][f]; gpoly(g, P, 'c'); gs(g, P[0][0], P[0][1], 'b'); gl(g, P[0][0], P[0][1], P[1][0], P[1][1], 'a'); return can(outl(g), pal) });
+    o.dot = [dia(2)];
+    o.mail = [0, 1].map(function (f) { var g = grid(17, 13); gr(g, 2, 2, 13, 9, 'c'); gl(g, 2, 2, 8, 7, 'a'); gl(g, 14, 2, 8, 7, 'a'); if (f) { gr(g, 2, 2, 13, 1, 'b') } return can(outl(g), pal) });
+    o.alarm = [0, 1].map(function (f) { var g = grid(15, 15), dx = f ? 1 : -1; gell(g, 7 + dx, 7, 5, 5.4, 'a'); gell(g, 7 + dx, 7.4, 4, 4.4, 'c'); gr(g, 1 + dx, 9, 13, 3, 'c'); gr(g, 1 + dx, 11, 13, 1, 'a'); gr(g, 6 + dx, 12, 3, 2, 'a'); gs(g, 5 + dx, 4, 'w'); return can(outl(g), pal) });
+    return o;
+  }
+  // ---------- CAPSULE HD (32x36 = 16x18): pillola di vetro, icona grande che dice cosa fa
+  var CAPK = { auto: { col: C.cream, name: 'AUTOMATION', line: 'TRIPLE SHOT' }, ai: { col: '#7FD8FF', name: 'AI AIM', line: 'SHOTS FIND THEM' }, booking: { col: C.skin, name: 'BOOKING', line: 'SHIELD UP' }, night: { col: '#8FB4FF', name: 'NIGHT SHIFT', line: 'PRESS X' }, coin: { col: C.gd2, name: 'BONUS', line: '+50 HOURS' } };
+  ART.powerInfo = CAPK;
+  function capIcon(k) {
+    var g = grid(18, 18);
+    if (k === 'auto') { // tre frecce a ventaglio = tre colpi
+      function arrow(x0, y0, x1, y1) { gl(g, x0, y0, x1, y1, 'i'); gl(g, x0 + 1, y0, x1 + 1, y1, 'i'); var dx = x1 - x0, dy = y1 - y0, L = Math.sqrt(dx * dx + dy * dy), ux = dx / L, uy = dy / L; [[-uy, ux], [uy, -ux]].forEach(function (n) { gl(g, x1, y1, Math.round(x1 - ux * 4 + n[0] * 3), Math.round(y1 - uy * 4 + n[1] * 3), 'j'); gl(g, x1 + 1, y1, Math.round(x1 + 1 - ux * 4 + n[0] * 3), Math.round(y1 - uy * 4 + n[1] * 3), 'j') }) }
+      arrow(8, 16, 8, 1); arrow(6, 16, 1, 5); arrow(10, 16, 15, 5);
+    } else if (k === 'ai') { // occhio nel mirino
+      [[1, 1, 1, 1], [16, 1, -1, 1], [1, 16, 1, -1], [16, 16, -1, -1]].forEach(function (c) { for (var i = 0; i < 4; i++) { gs(g, c[0] + c[2] * i, c[1], 'i'); gs(g, c[0], c[1] + c[3] * i, 'i') } });
+      gpoly(g, [[3, 9], [9, 5], [15, 9], [9, 13]], 'i'); gpoly(g, [[5, 9], [9, 6.6], [13, 9], [9, 11.4]], 'k'); gell(g, 9, 9, 2.4, 2.4, 'j'); gr(g, 8, 8, 2, 2, 'k'); gs(g, 8, 8, 'w');
+    } else if (k === 'booking') { // scudo con la spunta
+      gpoly(g, [[2, 2], [16, 2], [16, 9], [9, 17], [2, 9]], 'i'); gpoly(g, [[4, 4], [14, 4], [14, 9], [9, 14.6], [4, 9]], 'k');
+      for (var i = 0; i < 3; i++) { gs(g, 5 + i, 8 + i, 'j'); gs(g, 5 + i, 9 + i, 'j') } for (var j = 0; j < 5; j++) { gs(g, 8 + j, 10 - j, 'j'); gs(g, 8 + j, 11 - j, 'j') }
+    } else if (k === 'night') { // luna e stelle
+      gell(g, 8, 9, 7, 7, 'i'); gell(g, 11.5, 7, 6, 6.2, '.'); gs(g, 14, 3, 'j'); gs(g, 13, 4, 'j'); gs(g, 15, 4, 'j'); gs(g, 14, 5, 'j'); gs(g, 14, 4, 'w'); gs(g, 16, 10, 'j');
+    }
+    return g;
+  }
+  function buildCaps2() {
+    Object.keys(CAPK).forEach(function (k) {
+      if (k === 'coin') return;
+      var col = CAPK[k].col;
+      CAPS2[k] = [0, 1, 2, 3, 4, 5].map(function (f) {
+        var g = grid(34, 38), ic = capIcon(k);
+        grr(g, 1, 1, 32, 36, 11, 'o'); grr(g, 2, 2, 30, 34, 10, f === 0 ? 'R' : 'r'); grr(g, 4, 4, 26, 30, 8.5, 'b'); grr(g, 5, 5, 24, 13, 7, 'B');
+        for (var y = 0; y < 18; y++) for (var x = 0; x < 18; x++) if (ic.a[y][x] !== '.') gs(g, 8 + x, 10 + y, ic.a[y][x]);
+        gr(g, 9, 33, 16, 1, 'c'); gr(g, 8, 6, 9, 1, 'h'); gs(g, 7, 7, 'h'); gs(g, 6, 8, 'h');
+        var gl2 = [[25, 9], [26, 12], [26, 16], [25, 22], [23, 27], [9, 28]][f]; gs(g, gl2[0], gl2[1], 'w'); gs(g, gl2[0], gl2[1] + 1, 'h');
+        if (f < 3) gr(g, 15, 1, 4, 1, 't');
+        return can(g, { o: C.night, r: col, R: mix(col, C.hot, .6), b: '#10141C', B: '#182030', i: col, j: mix(col, C.hot, .5), k: '#10141C', c: mix(col, C.cream, .5), h: '#F4F2EC88', w: C.hot, t: C.tomato });
+      });
+    });
+    CAPS2.coin = [0, 1, 2, 3, 2, 1].map(function (f) {
+      var w = [26, 19, 10, 4][f], g = grid(34, 38), cx = 17;
+      gell(g, cx, 19, w / 2 + 1.2, 14, 'o'); gell(g, cx, 19, w / 2, 13, 'y'); if (w > 6) { gell(g, cx, 19, w / 2 - 2, 11, 'Y'); gell(g, cx - 1, 18, w / 2 - 3, 10, 'z') }
+      if (w <= 4) gr(g, cx - 1, 6, 2, 26, 'y');
+      if (w > 6) for (var y = 8; y < 14; y++) gs(g, cx - Math.round(w / 4) + (y - 8 >> 1), y, 'w');
+      var s = can(g, { o: C.night, y: C.gd1, Y: C.gd2, z: C.gd2, w: C.gd3 }), sg = s.getContext('2d');
+      if (w >= 19) { var mm = markCanvas(14, C.gd0); sg.drawImage(mm, 0, 0, mm.width, mm.height, cx - Math.round(mm.width * w / 52), 12, Math.max(2, Math.round(mm.width * w / 26)), 14) }
+      return s;
+    });
+  }
+  var CAPS2 = {};
+  ART.powerup = function (ctx, kind, x, y, t) {
+    var S = SC(ctx), set = CAPS2[kind] || CAPS2.auto, bob = Math.sin(t * 4) * 1.5, c = set[((t * (kind === 'coin' ? 10 : 6)) | 0) % set.length];
+    putC(ctx, c, x, y + bob, S);
+  };
+  // l'etichetta che sale quando prendi un potenziamento: nome e riga, nel colore del servizio
+  ART.powerLabel = function (ctx, kind, x, y, dt) {
+    if (dt > 1.6) return false; var S = SC(ctx), I = CAPK[kind] || CAPK.auto, k = dt / 1.6, yy = y - 14 - k * 14, a = k < .7 ? 1 : 1 - (k - .7) / .3;
+    ctx.save(); if (S === 2) ctx.scale(2, 2); ctx.globalAlpha = a;
+    var w = Math.max(textWidth(I.name, 1), tinyWidth(I.line)) + 8, x0 = Math.round(x - w / 2), y0 = Math.round(yy);
+    ctx.fillStyle = 'rgba(15,15,14,0.82)'; ctx.fillRect(x0, y0, w, 17); ctx.fillStyle = I.col; ctx.fillRect(x0, y0, w, 1); ctx.fillRect(x0, y0 + 16, 3, 1); ctx.fillRect(x0 + w - 3, y0 + 16, 3, 1);
+    text(ctx, I.name, x, y0 + 3, { align: 'c', color: I.col }); tiny(ctx, I.line, Math.round(x - tinyWidth(I.line) / 2), y0 + 11, C.cream);
+    ctx.restore(); return true;
+  };
+  // ---------- ICONE HUD HD (14x14 = 7x7)
+  var IC2 = {};
+  function buildIcons2() {
+    function G() { return grid(14, 14) }
+    function cup(g, empty) { gr(g, 1, 5, 9, 8, empty ? 's' : 'p'); gr(g, 1, 12, 9, 1, empty ? 's' : 'q'); if (!empty) { gr(g, 2, 5, 7, 2, 'b'); gr(g, 2, 5, 7, 1, 'B') } else gr(g, 2, 5, 7, 6, '.'); gr(g, 10, 7, 3, 1, empty ? 's' : 'p'); gr(g, 12, 7, 1, 4, empty ? 's' : 'p'); gr(g, 10, 10, 3, 1, empty ? 's' : 'p'); gs(g, 2, 7, empty ? '.' : 'w') }
+    IC2.coffee = [0, 1, 2].map(function (f) { var g = G(); cup(g); [[3, 0], [6, 1]].forEach(function (p, i) { var o = (f + i) % 3 - 1; gs(g, p[0] + o, p[1], 'c'); gs(g, p[0] + o + 1, p[1] + 1, 'c'); gs(g, p[0] + o, p[1] + 2, 'c'); gs(g, p[0] + o + 1, p[1] + 3, 'c') }); return g });
+    IC2.coffeeEmpty = [(function () { var g = G(); cup(g, true); return g })()];
+    IC2.spill = [0, 1, 2].map(function (f) { var g = G(); if (f === 0) { gpoly(g, [[2, 6], [8, 3], [12, 9], [6, 12]], 'p'); gpoly(g, [[3, 6.5], [8, 4.2], [9, 6], [4, 8.6]], 'b'); gr(g, 11, 10, 2, 3, 'b') } else if (f === 1) { gr(g, 1, 6, 8, 7, 'p'); gr(g, 2, 7, 6, 5, '.'); gr(g, 8, 11, 6, 2, 'b'); gr(g, 9, 9, 2, 2, 'b') } else { gr(g, 1, 7, 7, 6, 's'); gr(g, 2, 8, 5, 4, '.'); gr(g, 0, 13, 14, 1, 'b'); gr(g, 9, 12, 4, 1, 'b') } return g });
+    IC2.clock = [(function () { var g = G(); gell(g, 7, 7, 6.5, 6.5, 'p'); gell(g, 7, 7, 5.2, 5.2, 'k'); gr(g, 7, 3, 1, 4, 'p'); gr(g, 7, 7, 3, 1, 't'); gs(g, 7, 2, 'p'); return g })()];
+    IC2.night = [(function () { var g = G(); gell(g, 6, 7, 6, 6, 'p'); gell(g, 9, 5.5, 5, 5.2, '.'); gs(g, 11, 2, 'w'); gs(g, 12, 9, 'p'); return g })()];
+    ['auto', 'ai', 'booking'].forEach(function (k) { var g = G(), ic = capIcon(k); for (var y = 0; y < 14; y++) for (var x = 0; x < 14; x++) { var v = ic.a[Math.round(y * 17 / 13)][Math.round(x * 17 / 13)]; if (v === 'i' || v === 'j' || v === 'w') gs(g, x, y, 'p') } IC2[k] = [g] });
+    IC2.coin = [(function () { var g = G(); gell(g, 7, 7, 6.5, 6.5, 'y'); gell(g, 7, 7, 5, 5, 'Y'); gr(g, 4, 5, 6, 1, 'w'); gr(g, 4, 5, 1, 5, 'w'); gr(g, 7, 5, 1, 5, 'w'); gr(g, 9, 5, 1, 5, 'w'); return g })()];
+    var pal = { p: C.cream, q: C.p2, b: '#6E4A2E', B: '#A0704A', c: C.p2, s: C.g3, k: C.night, t: C.tomato, w: C.hot, y: C.gd1, Y: C.gd2 };
+    Object.keys(IC2).forEach(function (k) { IC2[k] = IC2[k].map(function (g) { return can(g, pal) }) });
+  }
+  ART.icon = function (ctx, name, x, y, k) {
+    var S = SC(ctx), set = name === 'coffeeSpill' ? IC2.spill : IC2[name]; if (!set) return;
+    var c = set[Math.max(0, (k | 0)) % set.length];
+    if (S === 2) ctx.drawImage(c, Math.round(x * 2), Math.round(y * 2)); else ctx.drawImage(c, Math.round(x), Math.round(y), 7, 7);
+  };
+  // ---------- SCOPPI HD: scintille nei colori del nemico, cadono e diventano crema; carta che svolazza
+  ART.explosion = function (ctx, x, y, t0, t, kind) {
+    var dt = t - t0, S = SC(ctx); if (dt < 0) return true;
+    if (kind === 'impact') { if (dt > .07) return false; var ix = Math.round(x * S), iy = Math.round(y * S); ctx.fillStyle = C.tomato; ctx.fillRect(ix - 2 * S, iy, S, S); ctx.fillRect(ix + 2 * S, iy, S, S); ctx.fillRect(ix, iy - 2 * S, S, S); ctx.fillStyle = C.hot; ctx.fillRect(ix - (S >> 1), iy - (S >> 1), S, S); return true }
+    var big = kind === 'boss' || kind === 'player', life = big ? 1.5 : .8; if (dt > life) return false;
+    var cols = EXCOL[kind] || EXCOL.paper, n = big ? 44 : 16, seed = ((x * 73 + y * 151 + t0 * 1000) | 0);
+    if (dt < .09 && !reduced) { var r = Math.round((4 + dt * 120) * S / 2), cx = Math.round(x * S), cy = Math.round(y * S); ctx.fillStyle = dt < .04 ? C.hot : C.cream; for (var a = 0; a < 16; a++) { var th = a * Math.PI / 8; ctx.fillRect(cx + Math.round(Math.cos(th) * r), cy + Math.round(Math.sin(th) * r), 1, 1) } }
+    for (var i = 0; i < n; i++) {
+      var h1 = hash(seed + i * 17), h2 = hash(seed + i * 31), h3 = hash(seed + i * 47), my = life * (.45 + .55 * h3); if (dt > my) continue;
+      var ang = h1 * Math.PI * 2, sp = (big ? 40 : 28) + h2 * (big ? 80 : 40), px0 = x + Math.cos(ang) * sp * dt, py0 = y + (Math.sin(ang) * sp - 22) * dt + 95 * dt * dt, k = dt / my;
+      var paper = i % 4 === 0 && kind !== 'player' && kind !== 'gold';
+      ctx.fillStyle = k > .72 ? C.cream : cols[i % cols.length];
+      if (paper) { var fl = ((dt * 14 + i) | 0) % 3; ctx.fillRect(Math.round(px0 * S), Math.round(py0 * S), [3, 2, 1][fl] * (S === 2 ? 1 : 1), S === 2 ? 2 : 1) }
+      else { var sz = S === 2 ? (k < .35 && i % 3 === 0 ? 2 : 1) : 1; ctx.fillRect(Math.round(px0 * S), Math.round(py0 * S), sz, sz) }
+    }
+    return true;
+  };
+  // ---------- disegno degli attori (HD)
+  ART.enemy = function (ctx, type, x, y, t, s) {
+    s = s || {}; var S = SC(ctx), SPd = SP[ART.day] || daySprites(ART.day), gold = type === 'gold', base = gold ? (s.base || 'call') : type;
+    var set = (gold ? SPd.gold : SPd.e)[base]; if (!set) return;
+    var fps = { call: 12, invoice: 3, receipt: 2, noshow: 5, spam: 9, double: 3 }[base] || 6;
+    var f = ((t * fps + (s.phase || 0) * 3.7) | 0) % set.length, c = set[f];
+    if (s.dead) { putC(ctx, SPd.line[base][f], x, y, S); return }
+    if (base === 'noshow' && s.fade) { if (s.fade >= .95) return; var k = Math.min(2, (s.fade * 4 | 0) - 1); c = k < 0 ? c : SPd.fade.noshow[f][k] }
+    putC(ctx, c, x, y, S);
+    if (gold) { var sf = ((t * 8) | 0) % 16; if (sf < 8) putC(ctx, SPd.shine[base][sf], x, y, S) }
+    if (s.hit > 0) { if (reduced) putC(ctx, SPd.line[base][f], x, y, S); else { ctx.globalAlpha = Math.min(1, s.hit); putC(ctx, SPd.flash[base][f], x, y, S); ctx.globalAlpha = 1 } }
+  };
+  ART.cable = function (ctx, x1, y1, x2, y2, t) {
+    var S = SC(ctx), acc = D(ART.day)[7], n = Math.max(2, Math.round((Math.abs(x2 - x1) + Math.abs(y2 - y1)) * S)), p = (t * 1.4) % 1;
+    ctx.fillStyle = mix(acc, C.night, .45);
+    for (var i = 0; i <= n; i++) { var k = i / n, sag = Math.sin(k * Math.PI) * 3; ctx.fillRect(Math.round((x1 + (x2 - x1) * k) * S), Math.round((y1 + (y2 - y1) * k + sag) * S), 1, S) }
+    ctx.fillStyle = acc; for (var j = 0; j < 3; j++) { var k2 = (p + j / 3) % 1, sag2 = Math.sin(k2 * Math.PI) * 3; ctx.fillRect(Math.round((x1 + (x2 - x1) * k2) * S) - (S >> 1), Math.round((y1 + (y2 - y1) * k2 + sag2) * S) - (S >> 1), S + 1, S + 1) }
+  };
+  ART.reticle = function (ctx, x, y, t) {
+    var S = SC(ctx), r = (7 + Math.sin(t * 6)) * S, x0 = Math.round(x * S), y0 = Math.round(y * S), L = 3 * S; ctx.fillStyle = '#7FD8FF';
+    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(function (q) { var cx = Math.round(x0 + q[0] * r), cy = Math.round(y0 + q[1] * r); ctx.fillRect(q[0] > 0 ? cx - L + 1 : cx, cy, L, 1); ctx.fillRect(cx, q[1] > 0 ? cy - L + 1 : cy, 1, L) });
+    ctx.fillRect(x0, y0, 1, 1); var a = t * 3; ctx.fillRect(Math.round(x0 + Math.cos(a) * r * .5), Math.round(y0 + Math.sin(a) * r * .5), 1, 1);
+  };
+  var URG2 = [], URGF2 = [], MON2 = {}, MONF2 = {}, BELLS2 = [], PAGE2 = null;
+  function mondayHD(k) { if (!MON2[k]) { var p = k.split(''); monday(+p[0], +p[1], +p[2], +p[3]); MON2[k] = lightUp(up2(MON[k]), 'mon', { top: .25 }); MONF2[k] = solid(MON2[k], C.cream) } return k }
+  ART.boss = function (ctx, name, x, y, t, s) {
+    s = s || {}; var S = SC(ctx), hit = s.hit > 0, shake = (s.rage || 0) > 0 && !reduced ? Math.round(Math.sin(t * 50) * (s.rage * 2)) : 0;
+    if (name === 'urgent') {
+      var m = Math.max(0, Math.min(2, Math.round((s.mouth || 0) * 2))), beat = (t * 2.4 % 1) < .25 ? 1 : 0, i = m * 2 + beat;
+      putC(ctx, URG2[i], x + shake, y, S); if (hit) { ctx.globalAlpha = reduced ? .4 : Math.min(1, s.hit); putC(ctx, URGF2[i], x + shake, y, S); ctx.globalAlpha = 1 }
+      return;
+    }
+    var ph = Math.max(1, Math.min(3, s.phase || 1)), mo = Math.max(0, Math.min(2, Math.round((s.mouth || 0) * 2))), bl = (t % 3.2) < .12 ? 1 : 0;
+    var k = mondayHD(ph + '' + mo + bl + Math.min(s.pagesTorn || 0, 4)), mc = MON2[k], hh = mc.height / 4;
+    if (ph === 3) putC(ctx, BELLS2[((t * 16) | 0) % 2], x + shake, y - hh - 4, S);
+    putC(ctx, mc, x + shake, y, S);
+    if (s.hp != null) { var bw = mc.width / 2 - 40, bx = Math.round((x - bw / 2) * S), by = Math.round((y + hh + 4) * S); ctx.fillStyle = C.g4; ctx.fillRect(bx, by, bw * S, 2 * S); ctx.fillStyle = C.crim3; ctx.fillRect(bx, by, Math.round(bw * S * Math.max(0, s.hp)), 2 * S) }
+    if (hit) { ctx.globalAlpha = reduced ? .4 : Math.min(1, s.hit); putC(ctx, MONF2[k], x + shake, y, S); ctx.globalAlpha = 1 }
+  };
+  ART.page = function (ctx, x, y, t, k) {
+    if (!PAGE2) { PAGE2 = [0, 1, 2].map(function (f) { var w = [14, 9, 3][f], g = grid(16, 12); var o = (16 - w) >> 1; gr(g, o, 1, w, 10, '0'); gr(g, o, 1, w, 3, 'r'); if (w > 4) { gr(g, o + 2, 6, w - 4, 1, '2'); gr(g, o + 2, 8, w - 5, 1, '2') } for (var x2 = o; x2 < o + w; x2 += 2) gs(g, x2, 0, 'r'); return lightUp(pad(up2(can(g, MPAL)), 2), 'mon', { top: 0 }) }) }
+    var S = SC(ctx), f = (((t * 9) | 0) + (k || 0)) % 4; f = f === 3 ? 1 : f; putC(ctx, PAGE2[f], x, y, S);
+  };
+  ART.bullet = function (ctx, kind, x, y, t, a) {
+    var S = SC(ctx);
+    if (kind === 'player') { // lineetta pomodoro HD: testa bianco caldo, corpo pomodoro
+      var px0 = Math.round(x * S), py0 = Math.round((y - 2) * S);
+      if (S === 2) { ctx.fillStyle = C.hot; ctx.fillRect(px0, py0, 2, 2); ctx.fillStyle = C.t4; ctx.fillRect(px0, py0 + 2, 2, 1); ctx.fillStyle = C.tomato; ctx.fillRect(px0, py0 + 3, 2, 4); ctx.fillStyle = C.t1; ctx.fillRect(px0, py0 + 7, 2, 2); ctx.fillStyle = C.t0; ctx.fillRect(px0, py0 + 9, 2, 1) }
+      else ctx.drawImage(PSHOT, px0, py0);
+      return;
+    }
+    if (kind === 'block') { ART.meeting(ctx, x - 20, y - 6, 40, 12, t, 'MEETING'); return }
+    var SPd = SP[ART.day] || daySprites(ART.day), set = SPd.bul[kind] || SPd.bul.diamond, c = set[((t * 10) | 0) % set.length];
+    putC(ctx, c, x, y, S);
+  };
+  var MEET_SAVE = ART.meeting;
+  ART.meeting = function (ctx, x, y, w, h, t, label) {
+    var S = SC(ctx); if (S === 1) return MEET_SAVE(ctx, x, y, w, h, t, label);
+    ctx.save(); ctx.scale(2, 2); MEET_SAVE(ctx, x, y, w, h, t, label); ctx.restore();
+    // dettaglio HD: la riga dell'ora e il bordo luminoso
+    ctx.fillStyle = 'rgba(244,242,236,0.25)'; ctx.fillRect(Math.round(x * 2) + 4, Math.round(y * 2) + 1, Math.round(w * 2) - 6, 1);
+  };
+  // ---------- lo scudo Booking in HD: copia sfocata ferma dello sfondo (ART.bgCanvas, se c'e'), cerchio, bordo sottile
+  var SH = null, shN = 0, SHR = 21;
+  function shieldGrab(ctx, x, y, t) {
+    if (!SH) { SH = { small: mk(11, 11), a: mk(88, 88), out: mk(88, 88) }; SH.small.g.imageSmoothingEnabled = true; SH.a.g.imageSmoothingEnabled = true }
+    if ((shN++ & 3) !== 0) return;
+    var src = ART.bgCanvas || ctx.canvas, ss = src.width / W;
+    try {
+      SH.small.g.clearRect(0, 0, 11, 11); SH.small.g.drawImage(src, (x - 22) * ss, (y - 22) * ss, 44 * ss, 44 * ss, 0, 0, 11, 11);
+      var a = SH.a.g; a.clearRect(0, 0, 88, 88); a.drawImage(SH.small.c, 0, 0, 11, 11, 0, 0, 88, 88);
+      a.globalCompositeOperation = 'source-atop'; a.fillStyle = 'rgba(242,205,190,0.12)'; a.fillRect(0, 0, 88, 88); a.globalCompositeOperation = 'source-over';
+      var o = SH.out.g; o.clearRect(0, 0, 88, 88); o.save(); o.beginPath(); o.arc(44, 44, SHR * 2, 0, Math.PI * 2); o.clip(); o.drawImage(SH.a.c, 2, 1); o.restore();
+    } catch (e) {}
+  }
+  var RIM2 = null;
+  function shieldDraw(ctx, x, y, t, k, S) {
+    if (!SH) return; S = S || SC(ctx);
+    if (!RIM2) RIM2 = [0, 1, 2].map(function (f) { var g = grid(88, 88), R2 = SHR * 2 - .5; for (var a = 0; a < 720; a++) { var th = a * Math.PI / 360, x2 = Math.round(44 + Math.cos(th) * R2 - .5), y2 = Math.round(44 + Math.sin(th) * R2 - .5), deg = a / 2, arc = deg > 195 + f * 4 && deg < 255 + f * 4; gs(g, x2, y2, arc ? 'h' : (deg > 20 && deg < 160 ? 'c' : 's')) } for (var a2 = 205 + f * 4; a2 < 245 + f * 4; a2++) { var t2 = a2 * Math.PI / 180; gs(g, Math.round(44 + Math.cos(t2) * (R2 - 4)), Math.round(44 + Math.sin(t2) * (R2 - 4)), 'q') } gs(g, 20 + f, 22, 'h'); gs(g, 21 + f, 22, 'h'); gs(g, 20 + f, 23, 'h'); return can(g, { h: C.cream, c: '#F4F2EC99', s: '#F2CDBE66', q: '#F4F2EC55' }) });
+    var flick = k < .34 && ((t * 12) | 0) % 3 === 0; ctx.globalAlpha = flick ? .4 : 1; putC(ctx, RIM2[((t * 3) | 0) % 3], x, y, S); ctx.globalAlpha = 1;
+  }
+  function shieldGlass(ctx, x, y, t, k, S) { if (!SH) return; var flick = k < .34 && ((t * 12) | 0) % 3 === 0; ctx.globalAlpha = flick ? .3 : .6 + .4 * k; putC(ctx, SH.out.c, x, y, S || SC(ctx)); ctx.globalAlpha = 1 }
+  ART.shipFx = function (ctx, x, y, t, s) {
+    s = s || {}; var th = s.thrust == null ? .5 : s.thrust, len = (.6 + th) * (s.power === 'auto' ? 2 : 1), f = GLOWS.flame[2];
+    var set = shipSet(s.variant || ART.shipVariant), bb = s.bank || 0, I = set[Math.max(0, Math.min(4, Math.round(bb * 2) + 2))];
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for (var i = 0; i < I.eng.length; i++) { var e = I.eng[i], ex = ((e[0] + e[1]) / 2 + .5 - SHP.W / 2) / 2, ey = (e[2] - SHP.H / 2) / 2 + 1, fl = .8 + .2 * Math.sin(t * 40 + i * 2.1), h = f.gh * len * fl, w = f.gw * .9; ctx.globalAlpha = .9; ctx.drawImage(f, x + ex - w / 2, y + ey, w, h) }
+    var g = GLOWS.ship[1]; ctx.globalAlpha = .6; ctx.drawImage(g, x - g.gw / 2, y - g.gh / 2, g.gw, g.gh);
+    ctx.restore();
+  };
+  ART.hitbox = { dx: 0, dy: -3 };
 })();
