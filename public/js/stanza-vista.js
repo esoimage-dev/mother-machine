@@ -9,14 +9,14 @@
   /* cosa racconta ogni oggetto: testi corti, un po' di carattere */
   var SCHEDE = {
     truck: { modello: 'truck', k: 'Found on the shelf', h: "Vitalia's Pizza on Wheels", p: 'A pizza truck that books its own parties. 42 events in under two months, deposits paid by card while the owner sleeps.',
-      si: 'Take me to the truck', no: 'Put it back', vai: [4, '/work/vitalias-pizza-on-wheels'] },
+      si: 'Take me to the truck', vai: [4, '/work/vitalias-pizza-on-wheels'] },
     ristorante: { modello: 'menu', k: 'Found on the table', h: "Vitalia's Restaurant", p: 'One menu, everywhere at once. Change a dish and the website and the printed menus follow. Functions quoted in two minutes.',
-      si: 'Open the restaurant', no: 'Put it back', vai: [4, '/work/vitalias-restaurant'] },
+      si: 'Open the restaurant', vai: [4, '/work/vitalias-restaurant'] },
     phone: { modello: 'phone', k: 'It still works', h: 'Tell us what slows you down.', p: 'The first conversation is free. A real person picks up, usually the one who will build it.',
-      si: 'Start a conversation', no: 'Hang up', vai: [0, '/contact'], squillo: true },
+      si: 'Start a conversation', vai: [0, '/contact'], squillo: true },
     systems: { k: 'R01 to R04 · live', h: 'Everything we build runs somewhere.', p: 'Bookings, payments, invoices at night, a private AI. This is what it looks like when nobody is watching.',
-      si: 'Explore Systems · Floor 02', no: 'Close the rack', vai: [2, '/systems'], server: true },
-    film: { k: 'Now playing · 0:38', h: 'The machine behind your business.', p: 'Our film. Old TV, new tricks.', no: 'Switch it off', film: true }
+      si: 'Explore Systems · Floor 02', vai: [2, '/systems'], server: true },
+    film: { k: 'Now playing · 0:38', h: 'The machine behind your business.', p: 'Our film. Old TV, new tricks.', film: true }
   };
 
   var box, stage, tx, scena = null, raf = 0, yaw = 0, vel = 0, drag = null, cur = null, srv = null, last = 0, back = null;
@@ -26,11 +26,15 @@
   function dom() {
     box = el('div', 'lgx'); box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true');
     box.innerHTML = '<div class="lgxbg" aria-hidden="true"></div>' +
-      '<div class="lgxin"><div class="lgxst"></div>' +
-      '<div class="lgxtx"><span class="mo lgxk"></span><h2></h2><p class="lgxp"></p><div class="lgxb"></div></div></div>';
+      '<div class="lgxin"><div class="lgxst"><i class="lgxc c1"></i><i class="lgxc c2"></i><i class="lgxc c3"></i><i class="lgxc c4"></i><div class="lgxobj"></div></div>' +
+      '<div class="lgxtx">' +
+        /* la X: un tasto quadrato come quelli della pulsantiera, con l'anello che si accende; sotto, Esc */
+        '<button class="lgxx" type="button" aria-label="Close"><span class="lgxxk" aria-hidden="true"><i></i><i></i></span><span class="mo">Esc</span></button>' +
+        '<span class="mo lgxk"></span><h2></h2><p class="lgxp"></p><div class="lgxb"></div></div></div>';
     document.body.appendChild(box);
-    stage = box.querySelector('.lgxst'); tx = box.querySelector('.lgxtx');
+    stage = box.querySelector('.lgxobj'); tx = box.querySelector('.lgxtx');
     box.querySelector('.lgxbg').addEventListener('click', function () { chiudi() });
+    box.querySelector('.lgxx').addEventListener('click', function () { chiudi() });
     addEventListener('keydown', function (e) { if (box.classList.contains('on') && e.key === 'Escape') chiudi() });
   }
 
@@ -56,6 +60,11 @@
     S.build(svg, 'lgW'); S.render();
     return { svg: svg, S: S };
   }
+  var pronti = {};
+  function modello(nome) { if (!pronti[nome]) pronti[nome] = vista(nome); return pronti[nome] }
+  function prepara() { ['truck', 'menu', 'phone'].forEach(function (n, i) { setTimeout(function () { try { modello(n) } catch (x) {} }, i * 120) }) }
+  if ('requestIdleCallback' in window) addEventListener('load', function () { setTimeout(function () { requestIdleCallback(prepara) }, 3000) }); else addEventListener('load', function () { setTimeout(prepara, 4000) });
+
   function giro(now) {
     raf = requestAnimationFrame(giro); var dt = Math.min(.05, (now - (last || now)) / 1000); last = now;
     if (!scena) return;
@@ -87,23 +96,29 @@
     tx.querySelector('.lgxk').textContent = C.k; tx.querySelector('h2').textContent = C.h; tx.querySelector('.lgxp').textContent = C.p;
     var bt = tx.querySelector('.lgxb'); bt.innerHTML = '';
     if (C.si) { var a = el('a', 'lgxsi', '<span class="fl" aria-hidden="true"></span>' + C.si); a.href = C.vai[1]; a.addEventListener('click', function (e) { e.preventDefault(); piano(C.vai[0], C.vai[1]) }); bt.appendChild(a) }
-    var no = el('button', 'lgxno', C.no); no.type = 'button'; no.addEventListener('click', function () { chiudi() }); bt.appendChild(no);
-    if (C.modello) { scena = vista(C.modello); if (scena) { stage.appendChild(scena.svg); trascina(scena.svg); stage.appendChild(el('p', 'mo lgxhint', 'Drag to turn it')) } }
-    if (C.server && window.SALA_SERVER) { var w = el('div', 'lgxsrv'); stage.appendChild(w); srv = window.SALA_SERVER.mount(w); setTimeout(function () { srv && srv.start() }, 300) }
-    if (C.film) { var tv = el('div', 'lgxtv', '<iframe src="/film.html" title="Mother Machine, the film" allow="autoplay; fullscreen" loading="lazy"></iframe><i class="lgxscan" aria-hidden="true"></i>'); stage.appendChild(tv);
+    if (C.modello) { scena = modello(C.modello); if (scena) { scena.S.yaw = yaw; scena.S.render(); stage.appendChild(scena.svg); if (!scena.drag) { trascina(scena.svg); scena.drag = 1 } stage.appendChild(el('p', 'mo lgxhint', 'Drag to turn it')) } }
+    if (C.server && window.SALA_SERVER) { var w = el('div', 'lgxsrv'); stage.appendChild(w); srv = window.SALA_SERVER.mount(w); setTimeout(function () { srv && srv.start() }, 450) }
+    if (C.film) { var tv = el('div', 'lgxtv', '<i class="lgxsnow" aria-hidden="true"></i><i class="lgxscan" aria-hidden="true"></i>'); stage.appendChild(tv);
+      /* prima la neve, poi il film: l'iframe si carica dopo l'apertura, cosi' l'apertura non scatta */
+      setTimeout(function () { if (cur !== C) return; var f = el('iframe'); f.src = '/film.html'; f.title = 'Mother Machine, the film'; f.allow = 'autoplay; fullscreen';
+        f.addEventListener('load', function () { tv.classList.add('ok') }); tv.insertBefore(f, tv.firstChild) }, 480);
       /* il film si disegna sempre a 960 x 540 e si rimpicciolisce per entrare nello schermo */
       var fit = function () { tv.style.setProperty('--k', tv.clientWidth / 960) }; fit(); addEventListener('resize', fit) }
+    /* il volo: l'oggetto parte dal punto premuto nella stanza e arriva al centro del mirino */
+    var sr = box.querySelector('.lgxst').getBoundingClientRect();
+    box.style.setProperty('--dx', ((x == null ? sr.left + sr.width / 2 : x) - (sr.left + sr.width / 2)) + 'px');
+    box.style.setProperty('--dy', ((y == null ? sr.top + sr.height / 2 : y) - (sr.top + sr.height / 2)) + 'px');
     if (C.squillo) squillo();
     document.documentElement.classList.add('lgx-on');
     requestAnimationFrame(function () { box.classList.add('in') });
     last = 0; cancelAnimationFrame(raf); if (scena) raf = requestAnimationFrame(giro);
-    setTimeout(function () { var f = bt.querySelector('a,button'); if (f) f.focus() }, 350);
+    setTimeout(function () { var f = bt.querySelector('a') || box.querySelector('.lgxx'); if (f) f.focus() }, 400);
   }
   function chiudi(via) {
     if (!box || !box.classList.contains('on')) return;
     box.classList.remove('in'); document.documentElement.classList.remove('lgx-on');
     if (srv) { srv.stop(); srv = null }
-    setTimeout(function () { box.classList.remove('on'); cancelAnimationFrame(raf); raf = 0; stage.innerHTML = ''; scena = null }, RM ? 0 : 420);
+    setTimeout(function () { box.classList.remove('on'); cancelAnimationFrame(raf); raf = 0; stage.innerHTML = ''; scena = null; cur = null }, RM ? 0 : 380);
     if (!via && back && back.focus) back.focus();
   }
   window.LGVISTA = { open: apri, close: chiudi };

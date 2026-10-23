@@ -153,6 +153,14 @@
 .lgW .hot.on .ln.crt{fill:#DFF8F5;animation:lgstatic .16s steps(2) infinite}
 @keyframes lgstatic{0%{fill-opacity:.5}50%{fill-opacity:.22}}
 .lgW .hot.on .ln.play{opacity:0}
+/* la cabina dell'ascensore: accesa, calda; la luce sul pavimento quando le porte si aprono */
+.lgW .fc.cab{fill:#2b2620}
+.lgW .fc.cabw{fill:#4a4036}
+.lgW .ln.rail{stroke-width:calc(var(--w) * 1.3)}
+.lgW .ln.cabl{fill:#FFE9D6;fill-opacity:.55;stroke:#FFE9D6}
+.lgW .fc.spill{fill:url(#lgLiftG);stroke:none}
+.lgW .lspill{opacity:0;transition:opacity .8s}
+.lgst.lgopen .lgW .lspill{opacity:1}
 /* il quadro: cartello, fulmine, basi e pomelli delle leve */
 .lgW .ln.warn{stroke:#FF5B3A;stroke-width:calc(var(--w) * .9);fill:#0F0F0E}
 .lgW .ln.bolt{stroke:#FF5B3A;fill:#FF5B3A;stroke-width:calc(var(--w) * .4)}

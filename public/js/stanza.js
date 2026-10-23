@@ -173,6 +173,9 @@
   var svg, defs, gAll;
   function build() { gAll = SC.build(svg) }
 
+  /* l'ascensore: quanto sono aperte le porte (0 chiuse, 1 aperte) e la cabina da ritagliare */
+  var LIFT = { s: 0 };
+
   /* ---------- la stanza ---------- */
   var X = 5.6, Y = 3.3, Z0 = 1.2, Z1 = 11.5;
   function stanza() {
@@ -281,6 +284,27 @@
     var dr = p.face([[1.6, 0, zc - .03], [xb, 0, zc - .03], [xb, yt, zc - .03], [1.6, yt, zc - .03]], [0, 0, -1], {});
     [[dl, xa, 1.6], [dr, 1.6, xb]].forEach(function (q) { for (var x = q[1] + .14; x < q[2] - .05; x += .14) p.line([[x, .06, zc - .031], [x, yt - .06, zc - .031]], { cls: 'brush', on: q[0] }) });
     p.line([[1.6, 0, zc - .032], [1.6, yt, zc - .032]], { on: dl });
+    /* le porte si aprono: scorrono dentro gli stipiti (si stringono verso i lati), tutto ricalcolato a ogni fotogramma */
+    [dl, dr].forEach(function (f) { f.base = f.pts.map(function (q) { return q.slice() }); f.det.forEach(function (l) { l.base = l.pts.map(function (q) { return q.slice() }) }) });
+    hooks.push(function () { var k = 1 - LIFT.s * .97;
+      function sx(q, sin) { return [sin ? xa + (q[0] - xa) * k : xb - (xb - q[0]) * k, q[1], q[2]] }
+      [[dl, 1], [dr, 0]].forEach(function (d) { var f = d[0]; f.pts = f.base.map(function (q) { return sx(q, d[1]) }); f.c = null;
+        f.det.forEach(function (l) { l.pts = l.base.map(function (q) { return sx(q, d[1]) }) }) }) });
+    /* dentro: la cabina accesa, vista solo attraverso la porta (ritagliata dal suo vano) */
+    var c = part({ cls: 'cabin' }), zb = zc + 1.5;
+    var cw = c.face([[xa, 0, zb], [xb, 0, zb], [xb, yt, zb], [xa, yt, zb]], [0, 0, -1], { fill: 'cabw' });
+    c.face([[xa, 0, zc], [xa, 0, zb], [xa, yt, zb], [xa, yt, zc]], [1, 0, 0], { fill: 'cab', hatch: 6 });
+    c.face([[xb, 0, zb], [xb, 0, zc], [xb, yt, zc], [xb, yt, zb]], [-1, 0, 0], { fill: 'cab', hatch: 6 });
+    var cf = c.face([[xa, 0, zc], [xb, 0, zc], [xb, 0, zb], [xa, 0, zb]], [0, 1, 0], { fill: 'cab' });
+    var cc = c.face([[xa, yt, zb], [xb, yt, zb], [xb, yt, zc], [xa, yt, zc]], [0, -1, 0], { fill: 'cabw' });
+    c.line([[xa + .1, .95, zb - .001], [xb - .1, .95, zb - .001]], { cls: 'rail', on: cw });
+    c.line([[1.15, 1.05, zb - .001], [2.05, 1.05, zb - .001], [2.05, 2.0, zb - .001], [1.15, 2.0, zb - .001]], { closed: true, cls: 'dt', on: cw });
+    c.line([[1.25, yt - .001, zc + .3], [1.95, yt - .001, zc + .3], [1.95, yt - .001, zb - .3], [1.25, yt - .001, zb - .3]], { closed: true, cls: 'cabl', on: cc });
+    for (var g = xa + .25; g < xb; g += .25) c.line([[g, .001, zc], [g, .001, zb]], { cls: 'dt', on: cf });
+    /* la luce che esce sul pavimento quando le porte sono aperte */
+    var sp = part({ cls: 'lspill' });
+    sp.face([[xa, .002, zc - .02], [xb, .002, zc - .02], [xb + .7, .002, zc - 2.6], [xa - .7, .002, zc - 2.6]], [0, 1, 0], { fill: 'spill' });
+    LIFT.cab = c.P; LIFT.vano = [[xa, 0, zc], [xb, 0, zc], [xb, yt, zc], [xa, yt, zc]];
     /* la cornice: due stipiti e l'architrave che sporgono dal muro */
     p.box([x0, 0, zc - d, xa, yt + .2, zc], ID, { hatch: { r: 5 } });
     p.box([xb, 0, zc - d, x1, yt + .2, zc], ID, { hatch: { l: 5 } });
@@ -318,7 +342,7 @@
     p.curve(e, [e[0] + .3, .2, zc], [e[0] + .9, .02, zc - .3], { cls: 'dt' });
     /* "Staff only": la scritta al neon sopra il caveau, che sfarfalla */
     var t = part({ cls: 'neon2' });
-    t.text([-4.975, 2.42, Z1 - .03], 'STAFF ONLY', .14, { cls: 'nsign', anchor: 'middle' });
+    t.text([3.95, 2.3, Z1 - .03], 'STAFF ONLY', .17, { cls: 'nsign', anchor: 'middle' });
   }
 
   /* la luce del neon: una chiazza calda sul muro e una sul pavimento (gradienti, niente filtri). Le disegna il motore
@@ -376,7 +400,13 @@
     stanza(); server(); quadro(); ascensore(); neon(); disordine(); soglia();
     if (window.STANZA_OGGETTI) window.STANZA_OGGETTI({ part: part, frame: frame, ID: ID, X: X, Y: Y, Z0: Z0, Z1: Z1 });
     defs = el(svg, 'defs', {});
-    build(); var sp = luceNeon(); render();
+    build(); var sp = luceNeon();
+    /* la cabina si vede solo dal vano della porta; la luce sul pavimento sfuma verso chi guarda */
+    var cp = el(el(defs, 'clipPath', { id: 'lgCab' }), 'polygon', {});
+    var lg = el(defs, 'linearGradient', { id: 'lgLiftG', x1: 0, y1: 0, x2: 0, y2: 1 });
+    el(lg, 'stop', { offset: 0, 'stop-color': '#FFE9D6', 'stop-opacity': .42 }); el(lg, 'stop', { offset: 1, 'stop-color': '#FFE9D6', 'stop-opacity': 0 });
+    if (LIFT.cab) { LIFT.cab.g.setAttribute('clip-path', 'url(#lgCab)'); hooks.push(function () { cp.setAttribute('points', LIFT.vano.map(function (q) { var r = prj(q); return r[0].toFixed(1) + ',' + r[1].toFixed(1) }).join(' ')) }) }
+    render();
     /* il pulviscolo nella luce delle plafoniere: pochi puntini che salgono piano */
     if (!RM) { var du = el(gAll, 'g', { class: 'dust' });
       [[0, 4.1], [0, 6.3], [0, 8.4]].forEach(function (c, n) { var q = prj([c[0], 1.6, c[1]]), s = F / c[1];
@@ -406,11 +436,24 @@
       tip.classList.remove('on');
       if (k === 'arcade' && window.RUSH) window.RUSH.open(x, r.top + r.height / 3);
       /* l'ascensore apre la pulsantiera del sito */
-      else if (k === 'lift') { var d = document.getElementById('dispB'); if (d) d.click() }
+      else if (k === 'lift') porte(true, function () { var d = document.getElementById('dispB'); if (d && d.getAttribute('aria-expanded') !== 'true') d.click() });
       else if (k === 'luce') { clack(); st.classList.toggle('dark'); h.classList.toggle('on') }
       /* il resto viene in primo piano: l'oggetto che gira, o la sua finestra */
       else if (window.LGVISTA) window.LGVISTA.open(k, x, y);
     }
+    /* le porte dell'ascensore: il ding, poi scorrono in 0,9 secondi */
+    function ding() { try { var a = new (window.AudioContext || window.webkitAudioContext)(); [1319, 1047].forEach(function (f, i) { var o = a.createOscillator(), v = a.createGain(); o.type = 'sine'; o.frequency.value = f;
+      v.gain.setValueAtTime(.06, a.currentTime + i * .28); v.gain.exponentialRampToValueAtTime(.0001, a.currentTime + i * .28 + 1.1); o.connect(v); v.connect(a.destination); o.start(a.currentTime + i * .28); o.stop(a.currentTime + i * .28 + 1.2) }) } catch (x) {} }
+    var lt = 0;
+    function porte(apri, poi) {
+      if (apri && LIFT.s > .99) { poi && poi(); return } if (!apri && LIFT.s < .01) return;
+      if (apri) ding(); st.classList.toggle('lgopen', apri); cancelAnimationFrame(lt);
+      var s0 = LIFT.s, t0 = performance.now(), T = RM ? 1 : (apri ? 900 : 700);
+      (function f(n) { var u = Math.min(1, (n - t0) / T), e = u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2; LIFT.s = s0 + ((apri ? 1 : 0) - s0) * e; render();
+        if (u < 1) lt = requestAnimationFrame(f); else if (poi) setTimeout(poi, 120) })(t0);
+    }
+    var db = document.getElementById('dispB');
+    if (db && 'MutationObserver' in window) new MutationObserver(function () { if (db.getAttribute('aria-expanded') !== 'true' && LIFT.s > .5) setTimeout(function () { porte(false) }, 250) }).observe(db, { attributes: true, attributeFilter: ['aria-expanded'] });
     /* sul telefono si parte dal centro della stanza */
     if (wrap && wrap.scrollWidth > wrap.clientWidth) wrap.scrollLeft = (wrap.scrollWidth - wrap.clientWidth) / 2;
     /* e una spinta, finito il disegno: la stanza scivola verso il cabinato e torna, per dire che si trascina */
