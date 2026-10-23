@@ -12,8 +12,10 @@
      (canvas attori 960x540) disegnano a densita' doppia; su un canvas 480 disegnano dimezzato. ART.actorScale (1|2)
      forza la scala. Il canvas attori deve avere imageSmoothingEnabled = false.
    - ART.bgCanvas = il canvas di sfondo (480x270): lo scudo Booking ne fa la copia sfocata (se manca usa il canvas attori).
-   - ART.side = true: la nave e' vista di lato e guarda a destra (la m coricata: tre propulsori dietro, fiamme a
-     sinistra). s.bank = beccheggio -1..1. s.view = 'top' per la vecchia nave vista dall'alto (ART.shipVariant 'a'..'e').
+   - ART.side = true: la nave e' vista di lato e guarda a destra. Versione 2 (default): caccia basso e lungo, scafo
+     crema con la riga pomodoro, cabina che luccica, ala a freccia e deriva; la m e' il blocco motore dietro (il fondo
+     della m del logo coricato: tre ugelli corti con gli archi, fiamme pomodoro). ART.shipVariant2 = 'a' | 'b' | 'c'
+     (s.variant2 per provarle); s.view = 'side1' per la prima versione di lato. s.bank = beccheggio -1..1. s.view = 'top' per la vecchia nave vista dall'alto (ART.shipVariant 'a'..'e').
      ART.hitbox = {dx, dy}: il sensore (1px bianco caldo) rispetto al centro: usarlo al posto di y - 3.
    - Il colpo 'player' e' orizzontale (testa a destra). I nemici guardano a sinistra; 'ring' si apre verso sinistra.
    - ART.street(ctx, day, scroll, t): la strada vicina che scorre (parallasse 0.6), striscia di 960 senza giunture,
@@ -157,16 +159,18 @@
   function mk(w, h) { var c = document.createElement('canvas'); c.width = Math.max(1, w); c.height = Math.max(1, h); var g = c.getContext('2d'); g.imageSmoothingEnabled = false; return { c: c, g: g } }
 
   // ---------- griglie a caratteri (per disegnare a pixel con controllo)
-  function grid(w, h) { var a = []; for (var y = 0; y < h; y++) { var r = []; for (var x = 0; x < w; x++) r.push('.'); a.push(r) } return { w: w, h: h, a: a } }
+  var GK = 1;
+  function grid(w, h) { if (GK !== 1) { w = Math.round(w * GK); h = Math.round(h * GK) } var a = []; for (var y = 0; y < h; y++) { var r = []; for (var x = 0; x < w; x++) r.push('.'); a.push(r) } return { w: w, h: h, a: a } }
   function rows(rs) { var g = grid(rs[0].length, rs.length); for (var y = 0; y < g.h; y++) for (var x = 0; x < g.w; x++) g.a[y][x] = rs[y][x] || '.'; return g }
-  function gs(g, x, y, c) { x = x | 0; y = y | 0; if (x >= 0 && y >= 0 && x < g.w && y < g.h) g.a[y][x] = c }
+  function gsr(g, x, y, c) { x = x | 0; y = y | 0; if (x >= 0 && y >= 0 && x < g.w && y < g.h) g.a[y][x] = c }
+  function gs(g, x, y, c) { if (GK === 1) return gsr(g, x, y, c); x = x | 0; y = y | 0; var x0 = Math.round(x * GK), x1 = Math.max(x0 + 1, Math.round((x + 1) * GK)), y0 = Math.round(y * GK), y1 = Math.max(y0 + 1, Math.round((y + 1) * GK)); for (var j = y0; j < y1; j++) for (var i = x0; i < x1; i++) gsr(g, i, j, c) }
   function gg(g, x, y) { return (x >= 0 && y >= 0 && x < g.w && y < g.h) ? g.a[y][x] : '.' }
-  function gr(g, x, y, w, h, c) { for (var j = 0; j < h; j++) for (var i = 0; i < w; i++) gs(g, x + i, y + j, c) }
+  function gr(g, x, y, w, h, c) { if (GK !== 1) { var x0 = Math.round(x * GK), x1 = Math.round((x + w) * GK), y0 = Math.round(y * GK), y1 = Math.round((y + h) * GK); for (var jj = y0; jj < y1; jj++) for (var ii = x0; ii < x1; ii++) gsr(g, ii, jj, c); return } for (var j = 0; j < h; j++) for (var i = 0; i < w; i++) gsr(g, x + i, y + j, c) }
   function gbox(g, x, y, w, h, c) { for (var i = 0; i < w; i++) { gs(g, x + i, y, c); gs(g, x + i, y + h - 1, c) } for (var j = 0; j < h; j++) { gs(g, x, y + j, c); gs(g, x + w - 1, y + j, c) } }
-  function gl(g, x0, y0, x1, y1, c) { var dx = Math.abs(x1 - x0), dy = -Math.abs(y1 - y0), sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1, e = dx + dy; for (var n = 0; n < 999; n++) { gs(g, x0, y0, c); if (x0 === x1 && y0 === y1) break; var e2 = 2 * e; if (e2 >= dy) { e += dy; x0 += sx } if (e2 <= dx) { e += dx; y0 += sy } } }
-  function gpoly(g, P, c) { var x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9, i; for (i = 0; i < P.length; i++) { x0 = Math.min(x0, P[i][0]); x1 = Math.max(x1, P[i][0]); y0 = Math.min(y0, P[i][1]); y1 = Math.max(y1, P[i][1]) }
+  function gl(g, x0, y0, x1, y1, c) { if (GK !== 1) { x0 = Math.round(x0 * GK); y0 = Math.round(y0 * GK); x1 = Math.round(x1 * GK); y1 = Math.round(y1 * GK); var sk = GK; GK = 1; gl(g, x0, y0, x1, y1, c); GK = sk; return } var dx = Math.abs(x1 - x0), dy = -Math.abs(y1 - y0), sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1, e = dx + dy; for (var n = 0; n < 999; n++) { gs(g, x0, y0, c); if (x0 === x1 && y0 === y1) break; var e2 = 2 * e; if (e2 >= dy) { e += dy; x0 += sx } if (e2 <= dx) { e += dx; y0 += sy } } }
+  function gpoly(g, P, c) { if (GK !== 1) { var sk = GK; GK = 1; gpoly(g, P.map(function (p) { return [p[0] * sk, p[1] * sk] }), c); GK = sk; return } var x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9, i; for (i = 0; i < P.length; i++) { x0 = Math.min(x0, P[i][0]); x1 = Math.max(x1, P[i][0]); y0 = Math.min(y0, P[i][1]); y1 = Math.max(y1, P[i][1]) }
     for (var y = Math.floor(y0); y <= y1; y++) for (var x = Math.floor(x0); x <= x1; x++) { var px = x + .5, py = y + .5, ins = false; for (i = 0, j = P.length - 1; i < P.length; j = i++) { var a = P[i], b = P[j]; if ((a[1] > py) !== (b[1] > py) && px < (b[0] - a[0]) * (py - a[1]) / (b[1] - a[1]) + a[0]) ins = !ins } if (ins) gs(g, x, y, c) } var j }
-  function gell(g, cx, cy, rx, ry, c) { for (var y = Math.floor(cy - ry); y <= cy + ry; y++) for (var x = Math.floor(cx - rx); x <= cx + rx; x++) { var dx = (x + .5 - cx) / rx, dy = (y + .5 - cy) / ry; if (dx * dx + dy * dy <= 1) gs(g, x, y, c) } }
+  function gell(g, cx, cy, rx, ry, c) { if (GK !== 1) { var sk = GK; GK = 1; gell(g, cx * sk, cy * sk, rx * sk, ry * sk, c); GK = sk; return } for (var y = Math.floor(cy - ry); y <= cy + ry; y++) for (var x = Math.floor(cx - rx); x <= cx + rx; x++) { var dx = (x + .5 - cx) / rx, dy = (y + .5 - cy) / ry; if (dx * dx + dy * dy <= 1) gs(g, x, y, c) } }
   function gtext(g, str, x, y, c) { for (var i = 0; i < str.length; i++) { var gl3 = T3[str[i]]; if (!gl3) { x += 4; continue } for (var r = 0; r < 5; r++) for (var q = 0; q < gl3[r].length; q++) if (gl3[r][q] === '#') gs(g, x + q, y + r, c); x += gl3[0].length + 1 } }
   function gtext5(g, str, x, y, c, sz) { sz = sz || 1; for (var i = 0; i < str.length; i++) { var gp = GLY[str[i]] || GLY['?']; for (var r = 0; r < gp.r.length; r++) for (var q = 0; q < gp.w; q++) if (gp.r[r][q] === '#') gr(g, x + q * sz, y + r * sz, sz, sz, c); x += (gp.w + 1) * sz } }
   // griglia -> canvas
@@ -483,7 +487,7 @@
     o.alarm = [0, 1].map(function (f) { var r = ['..ooo..', '.oaaao.', 'oacccao', 'oacccao', 'oaaaaao', '.oo.oo.', '..o.o..']; if (f) r = r.map(function (q) { return q.slice(1) + '.' }); return can(rows(r), { o: out, c: core, a: ringC }) });
     return o;
   }
-  function gclone(g) { var n = grid(g.w, g.h); for (var y = 0; y < g.h; y++) for (var x = 0; x < g.w; x++) n.a[y][x] = g.a[y][x]; return n }
+  function gclone(g) { var sk = GK; GK = 1; var n = grid(g.w, g.h); GK = sk; for (var y = 0; y < g.h; y++) for (var x = 0; x < g.w; x++) n.a[y][x] = g.a[y][x]; return n }
   // il colpo del giocatore: 1x4, testa bianco caldo e corpo pomodoro (la scia e' sul FX)
   var PSHOT;
 
@@ -835,12 +839,18 @@
     urgent: { w: 66, h: 38 }, monday: { w: 158, h: 119 }, powerup: { w: 14, h: 16 }, firewall: { w: 36, h: 14 }, icon: { w: 7, h: 7 }, logo: { w: 234, h: 42 }, mapTower: { w: 48, h: 120 } };
   // misure visibili (contorno compreso); MONDAY con le campane della fase 3
   function buildBase() {
+    GK = 1.25;
     BASE.call = [0, 1, 2, 3].map(hCall);
     BASE.invoice = [0, 1, 2, 3].map(hInvoice);
+    GK = 1;
     BASE.receipt = [0, 0, 0, 1].map(hReceipt);
+    GK = 1.25;
     BASE.noshow = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3].map(function (f, i) { return hNoshow(f, i === 11) });
+    GK = 1;
     BASE.spam = [0, 1].map(hSpam);
+    GK = 1.25;
     BASE.double = [0, 0, 0, 0, 0, 1].map(hDouble);
+    GK = 1;
   }
   function daySprites(day) {
     if (SP[day]) return SP[day];
@@ -2244,7 +2254,7 @@
     var c = can(g, BPAL); if (hurt) c = dissolve(c, .35); return c;
   }
   // misure visibili in pixel di gioco (giro 3, HD): replyall con le buste che girano, onestar con il fumetto
-  ART.size.call = { w: 21, h: 17 }; ART.size.invoice = { w: 16, h: 21 }; ART.size.receipt = { w: 10, h: 14 }; ART.size.noshow = { w: 14, h: 21 }; ART.size.spam = { w: 19, h: 11 }; ART.size.double = { w: 15, h: 15 }; ART.size.powerup = { w: 16, h: 18 }; ART.size.urgent = { w: 65, h: 38 }; ART.size.monday = { w: 157, h: 120 };
+  ART.size.call = { w: 26, h: 21 }; ART.size.invoice = { w: 20, h: 26 }; ART.size.receipt = { w: 10, h: 14 }; ART.size.noshow = { w: 18, h: 26 }; ART.size.spam = { w: 19, h: 11 }; ART.size.double = { w: 19, h: 18 }; ART.size.powerup = { w: 16, h: 18 }; ART.size.urgent = { w: 65, h: 38 }; ART.size.monday = { w: 157, h: 120 };
   ART.size.voicemail = { w: 63, h: 39 }; ART.size.replyall = { w: 55, h: 37, orbit: 80 }; ART.size.paperjam = { w: 62, h: 44 }; ART.size.onestar = { w: 56, h: 54, bubble: 79 }; ART.size.scaries = { w: 39, h: 58 };
   var BDEF = { voicemail: { fn: bVoicemail, day: 'tue', n: 4, fps: 6, face: [66, 46] }, replyall: { fn: bReplyAll, day: 'wed', n: 2, fps: 4, face: [55, 48] }, paperjam: { fn: bPaperJam, day: 'thu', n: 2, fps: 5, face: [66, 52] }, onestar: { fn: bOneStar, day: 'sat', n: 2, fps: 3, face: [56, 58] }, scaries: { fn: bScaries, day: 'sun', n: 3, fps: 5, face: [50, 40] } };
   var BC = {};
@@ -2831,4 +2841,91 @@
     if (sign && sign.img) { var sl = sh.slot, im = tinted(sign.img, flick ? C.off : (sign.color || mix(col, C.cream, .55))), sc = Math.min(sl.w / im.width, sl.h / im.height), dw = Math.max(1, Math.round(im.width * sc)), dh = Math.max(1, Math.round(im.height * sc)); ctx.drawImage(im, x + sl.x + Math.round((sl.w - dw) / 2), y + sl.y + Math.round((sl.h - dh) / 2), dw, dh) }
     else if (sign && sign.name) { var sl2 = sh.slot, nm = String(sign.name).toUpperCase().slice(0, Math.max(1, (sl2.w / 4) | 0)); tiny(ctx, nm, x + sl2.x + Math.round((sl2.w - tinyWidth(nm)) / 2), y + sl2.y + Math.round((sl2.h - 5) / 2), mix(col, C.cream, .5)) }
   };
+
+  // ======================================================================================
+  // NAVE DI LATO v2: caccia basso e lungo, scafo crema con la riga pomodoro e le linee dei pannelli, cabina di vetro
+  // che luccica, ala a freccia e deriva. La m e' UN blocco motore dietro: il profilo e' il fondo della m del logo
+  // (tre gambe corte con gli archi), coricato; ogni gamba e' un ugello con la fiamma pomodoro.
+  var SV2 = {
+    a: { hull: [[18, 19], [40, 16], [52, 13], [62, 12], [74, 15], [92, 23], [94, 24], [80, 27], [56, 30], [30, 31], [18, 30]], glass: [[48, 16], [56, 11.5], [66, 11.5], [74, 16]], wing: [[34, 26], [60, 26], [46, 37], [32, 37]], fin: [[18, 19], [30, 19], [22, 6], [15, 6]], eng: { x: 11, y: 15, len: 7, th: 17 } },
+    b: { hull: [[18, 20], [44, 17], [56, 14], [66, 13.5], [76, 16], [94, 23], [96, 24], [84, 26.5], [60, 29], [30, 30], [18, 30]], glass: [[52, 17], [60, 12.5], [70, 12.5], [78, 17]], wing: [[30, 25], [62, 25], [40, 39], [26, 39]], fin: [[18, 20], [32, 20], [20, 4], [13, 4]], canard: [[74, 25], [84, 25], [76, 30], [72, 30]], eng: { x: 11, y: 16, len: 7, th: 16 } },
+    c: { hull: [[20, 18], [42, 15], [54, 12], [64, 12], [74, 15], [88, 22], [90, 23], [78, 27], [54, 30], [30, 31], [20, 31]], glass: [[50, 15], [57, 11], [66, 11], [73, 15]], wing: [[36, 27], [58, 27], [50, 38], [36, 38]], fin: [[20, 18], [33, 18], [26, 3], [18, 3]], fin2: [[22, 31], [32, 31], [26, 38], [20, 38]], eng: { x: 8, y: 13, len: 9, th: 21 } }
+  };
+  ART.shipVariant2 = 'a';
+  var SP2W = 100, SP2H = 48;
+  var SV2PAL = { o: C.night, '0': C.hot, '1': '#ECE8DE', '2': '#CFCABD', '3': '#9C978B', '4': '#55524B', c: C.cream, n: '#0C1820', N: '#1E3C52', g: '#CDEFF7', w: C.hot,
+    m: C.g1, M: C.g2, K: C.g3, L: C.g4, r: C.tomato, d: C.t1, D: C.t0, h: C.t3, H: C.t4 };
+  function shipSide2(vk, pitch) {
+    var V = SV2[vk], Q = 4, big = mk(SP2W * Q, SP2H * Q), b = big.g, cx = SP2W / 2, cy = SP2H / 2;
+    b.setTransform(Q, 0, 0, Q, 0, 0); b.translate(cx, cy); b.rotate(-pitch * .14); b.translate(-cx, -cy);
+    function poly(P, col) { if (!P) return; b.fillStyle = col; b.beginPath(); b.moveTo(P[0][0], P[0][1]); for (var i = 1; i < P.length; i++) b.lineTo(P[i][0], P[i][1]); b.closePath(); b.fill() }
+    poly(V.fin, '#ffff00'); poly(V.fin2, '#ffff00'); poly(V.wing, '#0000ff'); poly(V.hull, '#ff0000'); poly(V.canard, '#0000ff'); poly(V.glass, '#00ff00');
+    // il blocco motore: il fondo della m (gambe + archi), coricato con le gambe verso sinistra
+    var E = V.eng, s = E.len / 528, s2 = E.th / 680;
+    b.save(); b.beginPath(); b.rect(E.x - 1, E.y - 2, E.len + 1.5, E.th + 4); b.clip(); b.transform(0, s2, -s, 0, E.x, E.y); b.fillStyle = '#ff00ff'; b.fill(M_SUB[0]); b.restore();
+    b.fillStyle = '#ff00ff'; b.fillRect(E.x + E.len - 1, E.y + 1, 18 - E.x - E.len + 6, E.th - 2);
+    var D = b.getImageData(0, 0, SP2W * Q, SP2H * Q).data, g = grid(SP2W, SP2H), x, y, REG = [['H', 255, 0, 0], ['G', 0, 255, 0], ['W', 0, 0, 255], ['F', 255, 255, 0], ['E', 255, 0, 255]];
+    for (y = 0; y < SP2H; y++) for (x = 0; x < SP2W; x++) { var i = ((y * Q + 2) * SP2W * Q + x * Q + 2) * 4; if (D[i + 3] < 128) continue; var best = 'H', bd = 1e9; REG.forEach(function (R) { var dd = Math.abs(D[i] - R[1]) + Math.abs(D[i + 1] - R[2]) + Math.abs(D[i + 2] - R[3]); if (dd < bd) { bd = dd; best = R[0] } }); g.a[y][x] = best }
+    var ge = gclone(g); for (y = 0; y < SP2H; y++) for (x = 0; x < SP2W; x++) if (ge.a[y][x] === '.' && (gg(ge, x, y - 1) === 'E' || gg(ge, x, y + 1) === 'E') && x < V.eng.x + V.eng.len) g.a[y][x] = 'E';
+    var src = gclone(g), out = grid(SP2W, SP2H);
+    function solid2(v) { return v === 'H' || v === 'G' || v === 'E' }
+    for (y = 0; y < SP2H; y++) for (x = 0; x < SP2W; x++) {
+      var r = src.a[y][x]; if (r === '.') continue; var up = gg(src, x, y - 1) === '.', dn = gg(src, x, y + 1) === '.', c;
+      if (r === 'H') { var du = 0, dd2 = 0; while (solid2(gg(src, x, y - du - 1)) && du < 30) du++; while (solid2(gg(src, x, y + dd2 + 1)) && dd2 < 30) dd2++; var tt = du / (du + dd2 + 1); c = ['0', '1', '1', '1', '2', '2', '3', '3'][Math.min(7, (tt * 8) | 0)]; if (up) c = '0'; if (dn) c = 'c' }
+      else if (r === 'G') { var gu = 0; while (gg(src, x, y - gu - 1) === 'G') gu++; c = gu < 1 ? 'N' : 'n' }
+      else if (r === 'W' || r === 'F') { c = up ? 'm' : dn ? 'c' : 'K'; if (!up && !dn && gg(src, x, y - 2) === '.') c = 'M' }
+      else { var eu = 0, ed = 0; while (gg(src, x, y - eu - 1) === 'E' && eu < 20) eu++; while (gg(src, x, y + ed + 1) === 'E' && ed < 20) ed++; c = up ? '0' : dn ? 'c' : ['1', '1', '2', '2', '3'][Math.min(4, (eu / (eu + ed + 1) * 5) | 0)]; if (gg(src, x - 1, y) === '.') c = '4'; if (x === V.eng.x + V.eng.len) c = '3' }
+      out.a[y][x] = c;
+    }
+    // riflesso sulla cabina: diagonale chiara
+    for (y = 0; y < SP2H; y++) for (x = 0; x < SP2W; x++) if (src.a[y][x] === 'G' && src.a[y][x - 2] !== 'G' && src.a[y - 1] && src.a[y - 1][x] === 'G') { gs(out, x + 2, y, 'g'); gs(out, x + 3, y - 1, 'g') }
+    // riga pomodoro lungo lo scafo e linee dei pannelli
+    function midAt(xx) { var a0 = -1, a1 = -1; for (var yy = 0; yy < SP2H; yy++) if (src.a[yy][xx] === 'H') { if (a0 < 0) a0 = yy; a1 = yy } return a0 < 0 ? -1 : a0 + (a1 - a0) * .58 }
+    var sx0 = E.x + E.len + 8, sx1 = sx0; for (x = SP2W - 1; x > sx0; x--) if (midAt(x) >= 0) { sx1 = x - 4; break } var sy0 = midAt(sx0), sy1 = midAt(sx1);
+    for (x = E.x + E.len + 2; x <= sx1; x++) { var my = Math.round(sy0 + (sy1 - sy0) * (x - sx0) / Math.max(1, sx1 - sx0)); if (src.a[my] && src.a[my][x] === 'H') { out.a[my][x] = 'r'; if (src.a[my + 1] && src.a[my + 1][x] === 'H') out.a[my + 1][x] = 'd' } }
+    [30, 42, 80].forEach(function (px0) { for (var yy2 = 0; yy2 < SP2H; yy2++) if (src.a[yy2][px0] === 'H' && out.a[yy2][px0] !== 'r' && out.a[yy2][px0] !== 'd' && gg(src, px0, yy2 - 1) === 'H' && gg(src, px0, yy2 + 1) === 'H') out.a[yy2][px0] = '3' });
+    // ugelli: le tre gambe della m, ognuna con la bocca pomodoro
+    var eng = [], ang = -pitch * .14, ca = Math.cos(ang), sa = Math.sin(ang);
+    [45, 340, 635].forEach(function (lx) { var px0 = E.x, py0 = E.y + lx * s2, rx = cx + (px0 - cx) * ca - (py0 - cy) * sa, ry = cy + (px0 - cx) * sa + (py0 - cy) * ca, ex = Math.round(rx), ey = Math.round(ry), hh = Math.max(1, Math.round(90 * s2 / 2));
+      for (var yy3 = ey - hh; yy3 <= ey + hh; yy3++) { var edge = yy3 === ey - hh || yy3 === ey + hh; gs(out, ex - 1, yy3, edge ? 'd' : 'r'); gs(out, ex - 2, yy3, edge ? 'D' : 'h') }
+      eng.push([ex - 2, ey - hh, ey + hh]) });
+    // sensore = hitbox: il pilota nella cabina (2x2 bianco caldo)
+    var gx0 = 1e9, gx1 = -1, gy0 = 1e9, gy1 = -1; for (y = 0; y < SP2H; y++) for (x = 0; x < SP2W; x++) if (src.a[y][x] === 'G') { gx0 = Math.min(gx0, x); gx1 = Math.max(gx1, x); gy0 = Math.min(gy0, y); gy1 = Math.max(gy1, y) }
+    var hx = Math.round((gx0 + gx1) / 2) - 2, hy = gy1 - 2; gr(out, hx, hy, 2, 2, 'w');
+    // contorno notte tranne sotto
+    var f2 = gclone(out); function Af(xx, yy4) { var v = gg(f2, xx, yy4); return v !== '.' && 'rdDhH'.indexOf(v) < 0 }
+    for (y = 0; y < SP2H; y++) for (x = 0; x < SP2W; x++) if (f2.a[y][x] === '.' && !Af(x, y - 1) && (Af(x - 1, y) || Af(x + 1, y) || Af(x, y + 1))) out.a[y][x] = 'o';
+    // luce di via: punta della deriva
+    var nav = []; for (y = 0; y < SP2H && !nav.length; y++) for (x = 0; x < SP2W; x++) if (src.a[y][x] === 'F') { nav.push([x, y]); break }
+    return { c: can(out, SV2PAL), eng: eng, nav: nav, hit: [hx + 1 - SP2W / 2, hy + 1 - SP2H / 2] };
+  }
+  var SIDE2 = {}, SIDE2F = {};
+  function side2Set(vk) { if (!SIDE2[vk]) { SIDE2[vk] = [-2, -1, 0, 1, 2].map(function (p) { return shipSide2(vk, p / 2) }); SIDE2F[vk] = SIDE2[vk].map(function (s) { return solid(s.c, C.cream) }) } return SIDE2[vk] }
+  var SHIP_SIDE1 = ART.ship;
+  ART.ship = function (ctx, x, y, t, s) {
+    s = s || {}; if (!ART.side || s.view === 'top' || s.view === 'side1') return SHIP_SIDE1(ctx, x, y, t, s);
+    var S = SC(ctx), vk = s.variant2 || ART.shipVariant2, set = side2Set(vk), bb = s.bank || 0, bi = Math.max(0, Math.min(4, Math.round(-bb * 2) + 2)), I = set[bi];
+    if (vk === ART.shipVariant2) ART.hitbox = { dx: set[2].hit[0] / 2, dy: set[2].hit[1] / 2 };
+    if (s.shield > 0) { shieldGrab(ctx, x, y, t); shieldGlass(ctx, x, y, t, s.shield, S) }
+    putC(ctx, I.c, x, y, S);
+    var k = S === 2 ? 1 : .5, ox = Math.round(x * S) - SP2W * k / 2, oy = Math.round(y * S) - SP2H * k / 2;
+    var th = s.thrust == null ? .5 : s.thrust, fr = (t * 24) | 0, auto = s.power === 'auto';
+    for (var i = 0; i < I.eng.length; i++) {
+      var e = I.eng[i], len = 5 + Math.round(th * 9) + (auto ? 9 : 0) - ((fr + i) % 3 === 0 ? 2 : 0), h0 = e[2] - e[1] + 1;
+      for (var j = 0; j < len; j++) { var col = j < 2 ? ((fr + i) % 2 ? C.t4 : C.t3) : j < 5 ? C.tomato : j < 9 ? C.t1 : C.t0, hh = Math.max(1, h0 - (j > 4 ? 1 : 0) - (j > 8 ? 1 : 0)); if (j > 8 && (j + fr) % 2) continue; ctx.fillStyle = col; ctx.fillRect(Math.round(ox + (e[0] - j) * k), Math.round(oy + (e[1] + ((h0 - hh) >> 1)) * k), Math.max(1, Math.round(k)), Math.max(1, Math.round(hh * k))) }
+    }
+    if (I.nav[0] && ((t * 2.2) | 0) % 2) { ctx.fillStyle = C.tomato; ctx.fillRect(Math.round(ox + I.nav[0][0] * k), Math.round(oy + I.nav[0][1] * k), Math.max(1, Math.round(2 * k)), Math.max(1, Math.round(2 * k))) }
+    if (s.flash) { ctx.globalAlpha = reduced ? .5 : 1; putC(ctx, SIDE2F[vk][bi], x, y, S); ctx.globalAlpha = 1 }
+    if (s.power === 'ai') { ctx.fillStyle = (t * 4 | 0) % 2 ? '#7FD8FF' : C.hot; var hb = set[2].hit; ctx.fillRect(Math.round(x * S + hb[0] * k) - 1, Math.round(y * S + hb[1] * k) - 1, Math.max(1, Math.round(2 * k)), Math.max(1, Math.round(2 * k))) }
+    if (s.shield > 0) shieldDraw(ctx, x, y, t, s.shield, S);
+  };
+  var SHIPFX_SIDE1 = ART.shipFx;
+  ART.shipFx = function (ctx, x, y, t, s) {
+    s = s || {}; if (!ART.side || s.view === 'top' || s.view === 'side1') return SHIPFX_SIDE1(ctx, x, y, t, s);
+    var I = side2Set(s.variant2 || ART.shipVariant2)[2], th = s.thrust == null ? .5 : s.thrust, len = (.6 + th) * (s.power === 'auto' ? 2 : 1), f = GLOWS.flame[2];
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for (var i = 0; i < I.eng.length; i++) { var e = I.eng[i], ex = (e[0] - SP2W / 2) / 2, ey = ((e[1] + e[2]) / 2 - SP2H / 2) / 2, fl = .8 + .2 * Math.sin(t * 40 + i * 2.1), ww = f.gh * len * fl, hh = f.gw * .7; ctx.globalAlpha = .9; ctx.drawImage(f, x + ex - ww, y + ey - hh / 2, ww, hh) }
+    ctx.restore();
+  };
+  ART.size.ship = { w: 45, h: 17 };
 })();
