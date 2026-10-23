@@ -303,6 +303,13 @@ Tutto quello che abbiamo deciso, per intero (in ordine di come e' nato nella dis
 - **Un gioco solo, fatto bene.** Idee per dopo, forse: Night Shift (scorrimento), Night Drive (stile OutRun, mai il truck
   di Vitalia's: e' un lavoro per un cliente).
 
+**Aggiunte di Eso (dopo i primi screenshot).** Mappa del mondo tra i giorni (la citta' dall'alto con sette quartieri e
+la torre di MONDAY, la nave che avanza e sblocca il giorno dopo, come Super Mario Bros; non un calendario). Intro
+narrativa corta e buffa che scorre come Star Wars, saltabile ("Not long ago, in an office not so far away..."). MONDAY
+un pizzico piu' cattivo. Nave da rifare molto piu' figa; nemici, colpi, potenziamenti e interfaccia piu' fighi; valutare
+personaggi con piu' dettaglio dello sfondo. Livelli diversi tra loro (meccanica o sorpresa per giorno). Piu' giri di
+verifica e miglioramento con gli agenti.
+
 ## B6 · Altre cose belle (quando c'e' tempo)
 - [ ] Animazioni allo scroll, film nuovo, footer ripensato (se non fatto in A3).
 - [ ] LG: idee in piu' (inquadratura d'angolo, altri giochi).
