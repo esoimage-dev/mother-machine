@@ -119,6 +119,18 @@ File: `public/js/stanza.js` (motore e stanza), `public/js/stanza-oggetti.js` (og
   lato**, piu' in alto, lasciando solo una linguetta da cui volendo lo tiri fuori.
 - [ ] Da ridisegnare (lista vecchia di Eso): tazzina e tazza, divano nel complesso.
 
+### Aggiunte di Eso (dopo l'inizio di DEADLINE)
+- [x] Cabinato: insegna DEADLINE e schermo con le seccature in fila, la nave e la citta' (fatto).
+- [ ] **Logo DEADLINE da pensare bene** (alla fine, quando il gioco c'e'): come farlo figo; poi riportarlo sull'insegna
+  del cabinato nella stanza (la cassa da fuori va ritoccata di poco per accoglierlo).
+- [ ] Sul cabinato o vicino, da fuori: magari un nemico o il boss principale (MONDAY) e il protagonista. Alla fine.
+- [ ] **L'astronave di Mother Machine in 3D come oggetto nella stanza** (un modellino, appeso o su una mensola), dopo che
+  la nave del gioco e' decisa (nave o altro mezzo, da confermare con Eso).
+- [ ] **Audit completo di LG fatto da Claude**, prima di rifare la stanza: linee, cavi e fili, oggetti da rifare, da
+  spostare, da mettere piu' armoniosi; se c'e' troppa roba; ogni elemento singolo da migliorare (rack e server compresi;
+  l'oggetto in basso a sinistra, oggi la cassa AUDIO con il synth: cambiarlo e/o metterlo meglio, o toglierlo se e'
+  troppo). Il risultato e' una lista con priorita' da approvare con Eso, poi si fa tutto insieme.
+
 ## A5b · Note rimaste aperte nei piani vecchi (`docs/archivio/`), da verificare nell'audit
 Alcune potrebbero essere gia' fatte: nell'audit si controlla e si spunta. Fonti: `DA-FARE-vecchio.md`, `AUDIT.md`.
 - [ ] Home: frase sotto il titolo piu' corta (proposta vecchia: "Software your company runs on. A brand it's known by.").
