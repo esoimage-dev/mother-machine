@@ -1,24 +1,16 @@
 <main class="hm mrp" id="top">
-  <!-- LG · Machine Room, la faccia pubblica: la sezione del palazzo e la porta dello staff. Le macchine che c'erano qui
-       sono passate in Systems o sono state tolte perche' doppioni (23 ottobre). Il back office vero sta dietro la chiave. -->
+  <!-- LG · Machine Room: la sala macchine sotto lo studio, disegnata a linee in prospettiva (public/js/stanza.js e
+       stanza-oggetti.js, stile in public/css/stanza.css). Il back office vero sta dietro la chiave. -->
 
-  <!-- 1 · apertura: la sezione del palazzo, LG sotto terra che alimenta tutti i piani -->
-  <section class="hs mro" data-luce="notte" data-f="LG" data-n="Machine Room" id="m1"><div class="in">
-    <div class="mrot">
-      <div class="mrotop mo"><span>LG · Lower ground</span><span class="mut"><i class="mrled"></i>Staff only</span></div>
-      <h1>The lab under the studio.</h1>
-      <p class="mrlede">Every floor above runs on what we build down here. You can watch. Only we touch.</p>
-      <dl class="mrkv mo">
-        <div><dt>Floor</dt><dd>LG</dd></div>
-        <div><dt>Access</dt><dd>Key only</dd></div>
-        <div><dt>Your time</dt><dd id="mrClock">--:--</dd></div>
-      </dl>
+  <!-- 1 · la stanza -->
+  <section class="hs lgr" data-luce="notte" data-f="LG" data-n="Machine Room" id="m1">
+    <div class="lgst">
+      <div class="lgsv"><svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="The machine room under the studio, drawn in white lines: server racks, an arcade cabinet, a workbench, a vault door and a neon sign of the Mother Machine mark."></svg></div>
     </div>
-    <figure class="mrsec" aria-label="Cross-section of the building: six floors above ground, the machine room below, a lift running between them">
-      <svg id="mrBld" viewBox="0 0 440 660" role="img" aria-hidden="true"></svg>
-    </figure>
-  </div></section>
+    <div class="in lgcap">
+      <div><span class="mo">LG · Lower ground</span><h1>The lab under the studio.</h1></div>
+      <p class="mrlede">Every floor above runs on what we build down here. You can watch. Only we touch.</p>
+    </div>
+  </section>
 
-  <!-- 2 · la porta per G: la stessa della home -->
-  <!-- MM:PORTA-G -->
 </main>

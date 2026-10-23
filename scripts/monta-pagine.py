@@ -468,7 +468,7 @@ def ritocchi(nome, t):
     # footer: l'elenco del palazzo (ridisegnato il 19 ottobre), generato qui per ogni pagina
     s = t.find('<footer class="ftr"'); e = t.find('</footer>', s) + len('</footer>')
     assert s > 0 and e > s and '<nav aria-label="Floors">' in t[s:e], 'footer'
-    t = t[:s] + footer(nome) + t[e:]
+    t = t[:s] + ('' if nome == 'lg' else footer(nome)) + t[e:]   # LG senza footer: la stanza e' tutta la pagina
 
     if nome == 'home':
         # i lavori in home: Vitalia's (vero) al posto di Lumen Lab; i concept si chiamano Study come nel registro
@@ -720,11 +720,9 @@ def registro():
 
 
 def laboratorio():
-    """Il contenuto di LG (src/sezioni/lg.html) con la porta per G presa identica dalla home."""
+    """Il contenuto di LG (src/sezioni/lg.html). Niente porta per G: in LG si telefona dal tavolino (deciso con Eso)."""
     t = (ROOT / 'src/sezioni/lg.html').read_text(encoding='utf8')
-    home = (PROTO / 'home.html').read_text(encoding='utf8')
-    s = home.find('<section class="hs gd"'); e = home.find('</section>', s) + len('</section>')
-    return una(t, '<!-- MM:PORTA-G -->', home[s:e], 'porta G')
+    return t
 
 
 def monta(nome, src):
@@ -789,7 +787,7 @@ def monta(nome, src):
         s = t.find('<main class="hm cs" id="top">'); e = t.find('</main>', s) + len('</main>')
         assert s > 0 and e > s, 'main'
         t = t[:s] + laboratorio() + t[e:]
-        t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/mr.css">', 'stile lg')
+        t = una(t, FOGLIO, FOGLIO + '<link rel="stylesheet" href="/css/mr.css"><link rel="stylesheet" href="/css/stanza.css"><link rel="stylesheet" href="/css/rush.css"><link rel="stylesheet" href="/css/stanza-vista.css"><link rel="stylesheet" href="/css/sala-server.css">', 'stile lg')
         s = t.find('/* pagina progetto v3: il Control Room in miniatura')
         e = t.find('\n})();', t.find(".cfn b[data-n]", s)) + len('\n})();')
         assert s > 0 and e > s, 'script del caso'
@@ -835,7 +833,7 @@ def monta(nome, src):
 
     # 6. coda
     i = t.rfind('</body>')
-    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/mr.js"></script>', 'home': '<script src="/js/home.js"></script>', 'systems': '<script src="/js/systems.js"></script>', 'brand': '<script src="/js/brand.js"></script>', 'studio': '<script src="/js/studio.js"></script>','progetto': '<script src="/js/progetto.js"></script>', 'ristorante': '<script src="/js/progetto.js"></script>'}.get(nome, '')
+    coda = CODA + {'work': '<script src="/js/work.js"></script>', 'lg': '<script src="/js/rush.js"></script><script src="/js/sala-server.js"></script><script src="/js/stanza-vista.js"></script><script src="/js/stanza-oggetti.js"></script><script src="/js/stanza.js"></script>', 'home': '<script src="/js/home.js"></script>', 'systems': '<script src="/js/systems.js"></script>', 'brand': '<script src="/js/brand.js"></script>', 'studio': '<script src="/js/studio.js"></script>','progetto': '<script src="/js/progetto.js"></script>', 'ristorante': '<script src="/js/progetto.js"></script>'}.get(nome, '')
     t = t[:i] + coda + t[i:] if i > 0 else t + coda
     (OUT / f'{nome}.html').write_text(t, encoding='utf8')
     return luce
