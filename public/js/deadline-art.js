@@ -6,6 +6,22 @@
    - centro in x,y: ship, enemy, boss, bullet, powerup, explosion, mark, logo (x = centro, y = alto), page, reticle.
    - angolo in alto a sinistra: text (con align), firewall, meeting, icon, building, digits, tiny.
 
+   GIRO 2 (richieste di Eso): nave nuova 27x23 (5 inclinazioni, motori vivi, luci di via), nemici con la faccia e piu'
+   grandi, MONDAY piu' cattivo (pupille rosse, ghigno, zanne, corna, crepe, inchiostro che cola), capsule a pillola,
+   moneta che gira, colpi nemici animati, pezzi di scena diversi per ogni giorno, mappa del mondo, intro.
+   - ART.hitbox = {dx:0, dy:-3}: la cabina (1px bianco caldo) rispetto al centro della nave. Invariato dal giro 1.
+   - ART.map(ctx, t, s): mappa 480x270 della citta' dall'alto. s = {current: 0..6 (6 = MONDAY, 7 accettato),
+     done: [bool], unlocked: n (quartieri aperti, default current+1), shipPos: 0..6 float (viaggio sulla strada),
+     pulse: 0..1 (facoltativo), labels: true, ship: true}. Nodi 0..5 = TUE..SUN, 6 = la torre di MONDAY.
+   - ART.mapNode(i) -> {x,y} del nodo (per etichette e nave); ART.mapPoint(f) -> {x,y} sulla strada (f 0..6 float).
+   - ART.intro(ctx, t, lines, o) -> 0..1 avanzamento (>= 1 finito). lines[0] e' il cartello d'apertura (4 s), il resto
+     scorre in prospettiva sopra la citta' e sparisce dietro i palazzi. o.speed (default 9), o.first per forzarlo.
+   - ART.introCard(ctx, t, line, o) -> true quando la riga e' tutta scritta: macchina da scrivere, cursore pomodoro.
+     o = {size: 2, cps: 26, y: 135, width: 420, color}.
+   - ART.frame(ctx, x, y, w, h, o): cornice da disegno tecnico (angoli crema, fondo scuro). o = {fill|false, color, label}.
+   - ART.bar(ctx, x, y, w, k, o): barra 0..1 (pomodoro di default) con le tacche. o = {h, color, track}.
+   - ART.icon(ctx, 'coffee', x, y, k): k = fotogramma del vapore (0..2).
+
    AGGIUNTE al contratto (il contratto resta intatto):
    - ART.setDay(day): giorno corrente per la luce degli sprite (bordo alto = accento del giorno, sotto = crema).
      Anche ART.sky(ctx, day) lo imposta. ART.day = giorno corrente.
@@ -36,7 +52,7 @@
    - ART.explosion(...) -> true finche' e' viva. kind: tipo del nemico ('call','invoice',...) | 'impact' (colpo del
      giocatore, 1 frame) | 'player' | 'boss' | 'gold' | 'paper'.
    - ART.logo(ctx, x, y, t, glitch, o): o.rule = 0..1 la riga pomodoro sotto (default: si riempie da sola col tempo).
-   - ART.ship: 19x16, la cabina (1px bianco caldo, la hitbox visibile) e' a (x, y - 3). Lo scudo (s.shield > 0) copia
+   - ART.ship: 27x23, la cabina (1px bianco caldo, la hitbox visibile) e' a (x, y - 3). Lo scudo (s.shield > 0) copia
      la scena gia' disegnata dietro la nave: disegnare la nave dopo sfondo e nemici.
    - ART.reduced: true se prefers-reduced-motion (niente glitch, lampi, tremolii).
    - ART.W, ART.H, ART.cityTop (y dove comincia la citta' vicina), ART.streetTop.
@@ -440,7 +456,7 @@
       if (phase >= 2 && c0[1] < 4) [[3, 3], [9, 5], [14, 2]].forEach(function (d0) { for (var dd = 0; dd < d0[1]; dd++) gs(g, rx + d0[0], ry + CELL_H - 1 + dd, dd === d0[1] - 1 ? 'R' : 'r') }) }
     // corna: gli angoli della testata si piegano in su (fase 2 e 3)
     if (phase >= 2) [0, 1].forEach(function (sd) { var X = function (x) { return sd ? 159 - x : x }, tip = phase === 3 ? 0 : 3;
-      gpoly(g, [[X(4), 12], [X(15), 11], [X(5), 6], [X(2), tip]], 'N'); gl(g, X(6), 10, X(3), tip + 3, 'n'); gs(g, X(2), tip, 'd'); gs(g, X(2), tip + 1, 'd'); gs(g, X(3), tip + 1, 'D') });
+      gpoly(g, [[X(4), 12.5], [X(16), 11], [X(6), 6], [X(1.5), tip]], '1'); gl(g, X(7), 10, X(3), tip + 3, '0'); gl(g, X(12), 11, X(6), 7, '2'); gs(g, X(2), tip, 'R'); gs(g, X(2), tip + 1, 'r'); gs(g, X(3), tip + 2, 'r'); gs(g, X(2), tip + 2, 'R') });
     // fase 3: crepe nella pagina e la vena della rabbia
     if (phase === 3) { [[14, 92, 22, 86, 20, 80], [150, 40, 143, 46, 146, 52], [128, 98, 120, 92, 124, 88]].forEach(function (c) { gl(g, c[0], c[1], c[2], c[3], '3'); gl(g, c[2], c[3], c[4], c[5], '3') });
       [[0, 1], [1, 0], [1, 2], [2, 1]].forEach(function (v) { gr(g, 133 + v[0] * 4, 40 + v[1] * 4, 3, 3, 'r') }) }
@@ -627,6 +643,8 @@
     var stars = [];
     for (var i2 = 0; i2 < n; i2++) { var sx = (R() * W) | 0, sy = (R() * 120) | 0, b = R(); s.g.fillStyle = mix(d[0], C.cream, b < .15 ? .7 : .3 + b * .2); s.g.fillRect(sx, sy, 1, 1); if (b < .3) stars.push([sx, sy, R() * 6]) }
     // luna piccola e fredda su TUE e NIGHT (niente sole outrun)
+    if (day === 'sat') { var gd = grid(61, 61); gell(gd, 30.5, 30.5, 30, 30, 'h'); gell(gd, 30.5, 30.5, 20, 20, 's'); s.g.globalAlpha = .25; s.g.drawImage(can(gd, { h: '#FFC56A', s: '#FFC56A' }), 360, 120); s.g.globalAlpha = .55; s.g.drawImage(can(gd, { s: '#FFD9A0' }), 360, 120); s.g.globalAlpha = 1;
+      for (var gy = 0; gy < 3; gy++) { s.g.fillStyle = 'rgba(255,217,160,' + (.12 - gy * .03) + ')'; s.g.fillRect(0, 186 + gy * 5, W, 1) } }
     if (day === 'tue' || day === 'night') { var mx = 392, my = 38; var gm = grid(13, 13); gell(gm, 6.5, 6.5, 6, 6, 'm'); gell(gm, 8.8, 5.2, 5.2, 5.6, '.'); s.g.drawImage(can(gm, { m: mix(C.cream, d[7], .15) }), mx, my) }
     if (day === 'sun') { // disco pallido dell'alba, basso e velato
       var gs2 = grid(25, 25); gell(gs2, 12.5, 12.5, 12, 12, 's'); s.g.globalAlpha = .55; s.g.drawImage(can(gs2, { s: C.hot }), 300, 196); s.g.globalAlpha = 1 }
@@ -720,13 +738,14 @@
       else if (onOff && ((A(x, y - 1) && A(x - 1, y - 1) && A(x + 1, y - 1)) || (A(x, y + 1) && A(x - 1, y + 1) && A(x + 1, y + 1)))) { q[o] = halo[0]; q[o + 1] = halo[1]; q[o + 2] = halo[2]; q[o + 3] = 153 } }
     s.g.putImageData(id, 0, 0); return s.c;
   }
-  function adMask(i, w, h) {
-    var s = mk(w, h), L = AD_TXT[i];
+  var AD_MON = [['MONDAY', '9:00 AM'], ['ALL HANDS', 'MEETING'], ['INBOX', '999+'], ['DEADLINE', 'TODAY']];
+  function adMask(i, w, h, mon) {
+    var s = mk(w, h), L = (mon ? AD_MON : AD_TXT)[i];
     if (L[0] === 'm') { var m = markCanvas(16, '#ffffff'); s.g.drawImage(m, 5, (h - 16) >> 1); tiny(s.g, 'MOTHER', 18, 7, '#ffffff'); tiny(s.g, 'MACHINE', 18, 14, '#ffffff') }
     else { var y0 = Math.round((h - (L.length * 7 - 2)) / 2); L.forEach(function (ln, j) { tiny(s.g, ln, Math.round((w - tinyWidth(ln)) / 2), y0 + j * 7, '#ffffff') }) }
     return s.c;
   }
-  function buildAds(day) { var acc = D(day)[7]; return AD_TXT.map(function (t, i) { var m = adMask(i, 54, 24); return { on: neonize(m, acc, true), off: neonize(m, acc, false) } }) }
+  function buildAds(day) { var acc = D(day)[7]; return AD_TXT.map(function (t, i) { var m = adMask(i, 54, 24, day === 'mon'); return { on: neonize(m, acc, true), off: neonize(m, acc, false) } }) }
   // insegne dei vincitori tinte nell'accento (una volta per immagine e giorno)
   var TINT = typeof WeakMap !== 'undefined' ? new WeakMap() : null;
   function tinted(img, col) {
@@ -752,13 +771,22 @@
     ROOFS.length = 0; out.forEach(function (b) { ROOFS.push([b.x - 8, STREET - b.h, b.w]) });
     return (NEAR_B = out);
   }
-  var WIN_TONE = [], NEAR_R = [], WIN_PREV = [], WIN_OFF_T = [];
+  var WIN_TONE = [], NEAR_R = [], WIN_PREV = [], WIN_OFF_T = [], LAMPS = [], VENTS = [], BEACONS = [], THU_SIGNS = null, CONE = null, PUFF = null, UMB = null;
   function buildNear(day) {
     var d = D(day), s = mk(NEAR_W, H - CITY_TOP + 20), g = s.g, B = nearLayout(), oy = CITY_TOP - 20;
     B.forEach(function (b) { g.drawImage(buildingCanvas(b.kind, b.w, b.h, day, true), b.x, STREET - b.h - oy) });
     // strada
     g.fillStyle = mix(d[5], C.night, .5); g.fillRect(0, STREET - oy, NEAR_W, H - STREET);
     g.fillStyle = mix(d[5], d[6], .25); g.fillRect(0, STREET - oy, NEAR_W, 1);
+    var R = rnd(77 + DAYK.indexOf(day)), gaps = [];
+    for (var i = 0; i < B.length - 1; i++) gaps.push(B[i].x + B[i].w + 1);
+    if (day === 'sat') { // ombre lunghe del tramonto sulla strada
+      g.fillStyle = 'rgba(10,4,6,.55)'; B.forEach(function (b) { for (var k = 0; k < 6; k++) g.fillRect(b.x + 4 + k * 3, STREET - oy + k, b.w, 1) }) }
+    if (day === 'sun') { // alberi del parco tra i palazzi
+      gaps.forEach(function (x, i) { if (i % 2) return; var tg = grid(13, 16); gr(tg, 6, 9, 1, 7, 'k'); gell(tg, 6.5, 6, 6, 5.6, 'T'); gell(tg, 6, 5, 5, 4.4, 't'); gs(tg, 4, 2, 'u'); gs(tg, 3, 3, 'u'); gs(tg, 5, 2, 'u'); g.drawImage(lightUp(can(tg, { k: '#2A2D2C', T: '#344A30', t: '#4E6E44', u: '#8AA870' }), 'sun', { top: 0 }), x - 6, STREET - oy - 15) }) }
+    if (day === 'wed') { LAMPS = []; gaps.forEach(function (x, i) { if (i % 3) return; g.fillStyle = '#2A2D2C'; g.fillRect(x, STREET - oy - 16, 1, 16); g.fillRect(x, STREET - oy - 16, 4, 1); g.fillStyle = C.cream; g.fillRect(x + 3, STREET - oy - 15, 2, 1); LAMPS.push(x + 4 - 8) }) }
+    if (day === 'thu') { VENTS = []; [40, 150, 270, 390].forEach(function (x) { g.fillStyle = '#060805'; g.fillRect(x, STREET - oy + 4, 7, 2); g.fillStyle = '#2F3A1F'; for (var k = 0; k < 7; k += 2) g.fillRect(x + k, STREET - oy + 4, 1, 2); VENTS.push(x + 3 - 8) }) }
+    if (day === 'mon') { BEACONS = []; B.forEach(function (b, i) { if (i % 3) return; g.fillStyle = '#1A0709'; g.fillRect(b.x + 3, STREET - b.h - oy - 2, 3, 2); BEACONS.push([b.x + 4 - 8, STREET - b.h - 3]) }) }
     return { c: s.c, oy: oy, off: mix(d[5], d[6], .18) };
   }
 
@@ -842,8 +870,8 @@
   // INIT
   var SP = {}; // sprite per giorno
   var BASE = {};
-    ART.size = { ship: { w: 19, h: 16 }, call: { w: 16, h: 13 }, invoice: { w: 14, h: 17 }, receipt: { w: 8, h: 12 }, noshow: { w: 13, h: 19 }, spam: { w: 11, h: 7 }, double: { w: 14, h: 13 },
-    urgent: { w: 66, h: 38 }, monday: { w: 156, h: 118 }, powerup: { w: 12, h: 12 }, firewall: { w: 36, h: 14 }, icon: { w: 7, h: 7 }, logo: { w: 234, h: 42 } };
+    ART.size = { ship: { w: 27, h: 23 }, call: { w: 21, h: 16 }, invoice: { w: 17, h: 20 }, receipt: { w: 10, h: 14 }, noshow: { w: 15, h: 21 }, spam: { w: 17, h: 10 }, double: { w: 16, h: 15 },
+    urgent: { w: 66, h: 38 }, monday: { w: 158, h: 119 }, powerup: { w: 14, h: 16 }, firewall: { w: 36, h: 14 }, icon: { w: 7, h: 7 }, logo: { w: 234, h: 42 }, mapTower: { w: 48, h: 120 } };
   // misure visibili (contorno compreso); MONDAY con le campane della fase 3
   function buildBase() {
     BASE.call = [0, 1, 2, 3].map(eCall);
@@ -1085,7 +1113,7 @@
     }
     var ph = Math.max(1, Math.min(3, s.phase || 1)), mo = Math.max(0, Math.min(2, Math.round((s.mouth || 0) * 2))), bl = (t % 3.2) < .12 ? 1 : 0;
     var k = monday(ph, mo, bl, s.pagesTorn || 0), mc = MON[k], mx = R0(x - mc.width / 2) + shake, my = R0(y - mc.height / 2);
-    if (ph === 3) { var bf = ((t * 16) | 0) % 2; ctx.drawImage(BELLS[bf], mx + 2, my - 12); ctx.drawImage(BELLS[1 - bf], mx + mc.width - 36, my - 12) }
+    if (ph === 3) { var bf = ((t * 16) | 0) % 2; ctx.drawImage(BELLS[bf], mx + (mc.width >> 1) - 17, my - 13) }
     ctx.drawImage(mc, mx, my);
     if (s.hp != null) { // barra della vita sotto (sottile, crema)
       var bw = mc.width - 40; ctx.fillStyle = C.g4; ctx.fillRect(mx + 20, my + mc.height + 3, bw, 2); ctx.fillStyle = C.crim3; ctx.fillRect(mx + 20, my + mc.height + 3, R0(bw * Math.max(0, s.hp)), 2) }
@@ -1191,6 +1219,7 @@
       } else if (bb && bb.name) { var nm = String(bb.name).toUpperCase().slice(0, 13); tiny(ctx, nm, bx + R0((bd.w - tinyWidth(nm)) / 2), by + 10, on ? mix(acc, C.cream, .5) : C.off) }
       else { var ad = ads[(i + (day.charCodeAt(0) + day.charCodeAt(1)) % 4) % 4]; ctx.drawImage(on ? ad.on : ad.off, bx + 1, by + 1) }
     }
+    if (day === 'fri') { var LC = [acc, C.cream, acc]; for (var lz = 0; lz < 3; lz++) { var lx0 = 80 + lz * 160, ly0 = 120 - lz * 6, an = -Math.PI / 2 + Math.sin((t || 0) * (.7 + lz * .2) + lz * 2) * .7, dx = Math.cos(an), dy = Math.sin(an); ctx.fillStyle = LC[lz]; for (var q = 0; q < 140; q += 2) { var qx = Math.round(lx0 + dx * q), qy = Math.round(ly0 + dy * q); if (qy < 10) break; ctx.globalAlpha = .7 - q / 260; ctx.fillRect(qx, qy, 1, 1) } } ctx.globalAlpha = 1 }
     // luci rosse delle antenne
     ctx.fillStyle = acc;
     for (var j = 0; j < MID_BLINK.length; j++) { var L = MID_BLINK[j]; if (((t || 0) * .9 + L[2]) % 1 < .3) { var lx = ((L[0] + x) % MID_W + MID_W) % MID_W; if (lx < W) ctx.fillRect(R0(lx), y + L[1], 1, 1) } }
@@ -1218,12 +1247,33 @@
       else { ctx.fillStyle = n.off; ctx.fillRect(wx, wy, r.w, r.h) }
       if (!on && dt < .8 && dt > .1) { var ey = wy + r.h + Math.min(4, (dt - .1) * 10); ctx.fillStyle = C.cream; ctx.fillRect(wx + 1, R0(ey), 1, 1) }
     }
+    cityExtras(ctx, day, tt, sh);
     // riflesso: 12 righe capovolte a mezza scala, ondulate
     ctx.globalAlpha = .3;
     for (var row = 0; row < 12; row++) { var sy = 25 - row * 2; if (sy < 0) break; var off = R0(Math.sin(row * .9 + tt * 3)); ctx.drawImage(EMI.c, 0, sy, W, 1, off, STREET + row, W, 1) }
     ctx.globalAlpha = 1;
   };
   ART.windowGlowRects = function () { return ART.windowRects };
+  // i pezzi di scena di ogni giorno (sopra la citta' vicina): pochi drawImage, niente allocazioni
+  function cityExtras(ctx, day, t, sh) {
+    var d = D(day), i, k;
+    if (day === 'tue') { // ombrelli che passano e cerchi nelle pozzanghere
+      if (!UMB) UMB = [C.cream, d[7], C.g2, '#C2627A'].map(function (c) { return can(rows(['.ooo.', 'ouuuo', 'o.k.o', '..k..', '..k..']), { o: C.night, u: c, k: C.g4 }) });
+      for (i = 0; i < 5; i++) { var spd = 9 + i * 3, dir = i % 2 ? 1 : -1, x = ((hash(i * 9) * 520 + dir * t * spd) % 520 + 520) % 520 - 20, bob = ((t * 6 + i) | 0) % 2; ctx.drawImage(UMB[i & 3], Math.round(x) + sh, STREET - 5 - bob) }
+      ctx.fillStyle = mix(d[6], C.cream, .4); for (i = 0; i < 4; i++) { var ph = (t * .9 + i * .27) % 1, px = 60 + i * 110 + sh, r = Math.round(ph * 5); if (ph < .7) { ctx.globalAlpha = .7 - ph; ctx.fillRect(px - r, STREET + 2, 1, 1); ctx.fillRect(px + r, STREET + 2, 1, 1); ctx.fillRect(px, STREET + 1, 1, 1); ctx.globalAlpha = 1 } }
+    } else if (day === 'wed') { // coni di luce dei lampioni nella nebbia
+      if (!CONE) { var cg = grid(17, 18); for (var y = 0; y < 18; y++) { var hw = 1 + y * .45; for (var x2 = 0; x2 < 17; x2++) if (Math.abs(x2 - 8) <= hw && bay(x2, y) < .55 - y * .02) gs(cg, x2, y, 'c') } CONE = can(cg, { c: '#E8DCF8' }) }
+      for (i = 0; i < LAMPS.length; i++) { ctx.globalAlpha = ((t * 9 + i * 3) | 0) % 23 === 0 ? .1 : .32; ctx.drawImage(CONE, LAMPS[i] + sh - 4, STREET - 15) } ctx.globalAlpha = 1;
+    } else if (day === 'thu') { // vapore dai tombini e insegne acide che sfarfallano
+      if (!PUFF) PUFF = [2, 3, 4].map(function (r) { var pg = grid(r * 2 + 1, r * 2 + 1); gell(pg, r + .5, r + .5, r, r, 'c'); for (var y = 0; y < pg.h; y++) for (var x3 = 0; x3 < pg.w; x3++) if (pg.a[y][x3] === 'c' && bay(x3, y) > .6) pg.a[y][x3] = '.'; return can(pg, { c: '#B8C29A' }) });
+      for (i = 0; i < VENTS.length; i++) for (k = 0; k < 4; k++) { var p2 = (t * .7 + k * .25 + i * .13) % 1, pf = PUFF[Math.min(2, (p2 * 3) | 0)]; ctx.globalAlpha = .45 * (1 - p2); ctx.drawImage(pf, VENTS[i] + sh - (pf.width >> 1) + Math.round(Math.sin(p2 * 5 + i) * 2), STREET + 3 - Math.round(p2 * 22) - (pf.height >> 1)) }
+      ctx.globalAlpha = 1;
+      if (!THU_SIGNS) THU_SIGNS = ['OPEN', '24H', 'BAR'].map(function (w) { var m = mk(tinyWidth(w) + 4, 9); tiny(m.g, w, 2, 2, '#ffffff'); return [neonize(m.c, d[7], true), neonize(m.c, d[7], false)] });
+      var sx = [30, 200, 352]; for (i = 0; i < 3; i++) { var st = '1110111101101111111001111'[(((t * 12) | 0) + i * 7) % 25], on = st === '1' && hash(((t * 12) | 0) * 3 + i) > .12; ctx.drawImage(THU_SIGNS[i][on ? 0 : 1], sx[i] + sh, CITY_TOP + 2 + i * 2) }
+    } else if (day === 'mon') { // lampeggianti rossi sui tetti
+      for (i = 0; i < BEACONS.length; i++) { var ph2 = (t * 2.5 + i * .3) % 1, b = BEACONS[i]; ctx.fillStyle = ph2 < .5 ? C.crim3 : '#3A0E13'; ctx.fillRect(b[0] + sh, b[1], 1, 1); if (ph2 < .5) { ctx.globalAlpha = .4; ctx.fillRect(b[0] + sh + (ph2 < .25 ? 2 : -4), b[1], 3, 1); ctx.globalAlpha = 1 } }
+    }
+  }
 
   // ---------- meteo
   var RAIN = null, DROPS = null;
@@ -1263,6 +1313,8 @@
     } else if (day === 'mon') {
       if (!reduced && k > 0) { var slot = (t * 12) | 0; if (hash(slot) < .12 * k) ART.glitch(ctx, t, k) }
       var bar = (t * 40) % (H + 40) - 20; ctx.fillStyle = d[7]; ctx.globalAlpha = .06; ctx.fillRect(0, R0(bar), W, 3); ctx.globalAlpha = 1;
+    } else if (day === 'sun') {
+      ctx.fillStyle = C.g3; for (var bd = 0; bd < 7; bd++) { var bx = ((hash(bd * 5) * 520 + t * (8 + bd)) % 520) - 20, by = 40 + hash(bd * 11) * 70 + Math.sin(t * 1.5 + bd) * 3, wg = ((t * 6 + bd) | 0) % 2; ctx.fillRect(Math.round(bx), Math.round(by), 1, 1); ctx.fillRect(Math.round(bx) - 1, Math.round(by) - 1 + wg, 1, 1); ctx.fillRect(Math.round(bx) + 1, Math.round(by) - 1 + wg, 1, 1); ctx.fillRect(Math.round(bx) - 2, Math.round(by) - 1 + wg * 2, 1, 1); ctx.fillRect(Math.round(bx) + 2, Math.round(by) - 1 + wg * 2, 1, 1) }
     } else if (day === 'night') {
       ctx.fillStyle = mix(d[7], C.cream, .4); for (var m2 = 0; m2 < 24; m2++) { var mx = hash(m2 * 3) * W, my = 20 + hash(m2 * 9) * 200 - (t * 10 + m2 * 7) % 40; if (((t * 2 + m2) | 0) % 3) ctx.fillRect(R0(mx), R0(my), 1, 1) }
     }
@@ -1313,5 +1365,208 @@
       ctx.fillStyle = k > .7 ? C.cream : cols[i % cols.length]; ctx.fillRect(R0(px0), R0(py0), (k < .3 && i % 3 === 0) ? 2 : 1, 1);
     }
     return true;
+  };
+
+  // ======================================================================================
+  // MAPPA DEL MONDO: la citta' vista dall'alto (3/4), sei quartieri = TUE..SUN e la torre di MONDAY. Base pre-cotta,
+  // per frame solo poche decine di pixel animati.
+  var MAP_N = [[50, 214], [118, 170], [190, 208], [258, 150], [330, 194], [356, 104], [436, 134]];
+  var MAP_D = ['tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'mon'];
+  var MAP = null;
+  ART.mapNode = function (i) { i = Math.max(0, Math.min(6, Math.round(i))); return { x: MAP_N[i][0], y: MAP_N[i][1] } };
+  // il percorso: tra due nodi un tratto dritto e uno a 45 gradi (machine)
+  function mapPath() {
+    var pts = [];
+    for (var i = 0; i < 6; i++) {
+      var a = MAP_N[i], b = MAP_N[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], sx = dx < 0 ? -1 : 1, sy = dy < 0 ? -1 : 1, ad = Math.min(Math.abs(dx), Math.abs(dy));
+      var c = Math.abs(dx) > Math.abs(dy) ? [b[0] - sx * ad, a[1]] : [a[0], b[1] - sy * ad];
+      [a, c].forEach(function (p, k) { var q = k ? b : c, n = Math.max(1, Math.round(Math.max(Math.abs(q[0] - p[0]), Math.abs(q[1] - p[1])))); for (var j = 0; j < n; j++) pts.push([p[0] + (q[0] - p[0]) * j / n, p[1] + (q[1] - p[1]) * j / n, i + (k ? .5 + .5 * j / n : .5 * j / n)]) });
+    }
+    pts.push([MAP_N[6][0], MAP_N[6][1], 6]); return pts;
+  }
+  ART.mapPoint = function (f) {
+    if (!MAP) buildMap(); var P = MAP.path; f = Math.max(0, Math.min(6, f || 0));
+    for (var i = 1; i < P.length; i++) if (P[i][2] >= f) { var a = P[i - 1], b = P[i], k = (f - a[2]) / Math.max(1e-6, b[2] - a[2]); return { x: a[0] + (b[0] - a[0]) * k, y: a[1] + (b[1] - a[1]) * k } }
+    return { x: MAP_N[6][0], y: MAP_N[6][1] };
+  };
+  // un palazzo in 3/4: tetto chiaro, facciata sud scura con le finestre
+  function box(g, x, y, w, d, h, roof, face, win, lit, R) {
+    gr(g, x, y + d, w, h, face); gr(g, x, y, w, d, roof); gr(g, x, y, w, 1, 'c');
+    for (var j = y + d + 1; j < y + d + h - 1; j += 2) for (var i = x + 1; i < x + w - 1; i += 2) gs(g, i, j, lit && R() < .5 ? win : 'k');
+  }
+  var DSTYLE = {
+    tue: { gnd: '#121A2E', roof: '#33476E', face: '#18223C', acc: '#5FD3FF' },
+    wed: { gnd: '#1A1428', roof: '#4A3A6A', face: '#241A38', acc: '#B99CFF' },
+    thu: { gnd: '#151B12', roof: '#3A4A2A', face: '#1A2214', acc: '#C6EE48' },
+    fri: { gnd: '#210F21', roof: '#5A2A52', face: '#2C1028', acc: '#FF86CF' },
+    sat: { gnd: '#2D1A1B', roof: '#7A4434', face: '#3A201C', acc: '#FFC56A' },
+    sun: { gnd: '#2C4430', roof: '#8A9088', face: '#4A524C', acc: '#F2CDBE' }
+  };
+  function district(i, lit) {
+    var day = MAP_D[i], S = DSTYLE[day], g = grid(72, 52), R = rnd(500 + i * 7);
+    // terreno del quartiere (piastra squadrata con gli angoli tagliati)
+    gpoly(g, [[4, 10], [10, 4], [66, 4], [70, 8], [70, 46], [64, 50], [6, 50], [2, 46]], 'g');
+    gr(g, 6, 27, 60, 2, 's'); gr(g, 34, 6, 2, 42, 's');
+    if (day === 'sun') {
+      gell(g, 50, 36, 9, 6, 'p'); gell(g, 50, 35, 7, 4, 'P');
+      [[12, 14], [22, 10], [18, 22], [30, 18], [44, 14], [58, 18], [14, 38], [26, 42], [60, 30]].forEach(function (t) { gell(g, t[0], t[1] + 1, 4, 3.4, 'T'); gell(g, t[0], t[1], 4, 3.4, 't'); gs(g, t[0] - 1, t[1] - 2, 'u'); gs(g, t[0] - 2, t[1] - 1, 'u') });
+      box(g, 40, 40, 10, 3, 4, 'r', 'f', 'w', lit, R);
+    } else {
+      var B = [[8, 8, 12, 5, 9], [24, 6, 8, 4, 14], [40, 8, 14, 5, 8], [56, 10, 10, 4, 12], [8, 32, 10, 4, 8], [22, 30, 10, 5, 11], [40, 32, 12, 4, 7], [56, 30, 10, 5, 10]];
+      if (day === 'fri') B[5] = [20, 30, 0, 0, 0];
+      B.forEach(function (b) { if (b[2]) box(g, b[0], b[1], b[2], b[3], b[4], 'r', 'f', 'w', lit, R) });
+      if (day === 'fri') { gell(g, 26, 38, 7, 5, 'f'); gell(g, 26, 36, 7, 5, 'r'); gell(g, 25, 35, 4, 2.5, 'a'); gs(g, 23, 33, 'c') }
+      if (day === 'thu') [[28, 2], [62, 6]].forEach(function (c) { gr(g, c[0], c[1], 3, 8, 'f'); gr(g, c[0], c[1], 3, 1, 'c') });
+      if (day === 'sat') B.forEach(function (b) { if (b[2]) for (var k = 0; k < 7; k++) gr(g, b[0] + b[2] + k, b[1] + b[3] + k, 1, b[4] - 1, 'h') });
+      if (day === 'tue') [[18, 26], [46, 28], [30, 48], [62, 48]].forEach(function (q) { gr(g, q[0], q[1], 3, 1, 'a') });
+      if (day === 'wed') [[20, 26], [52, 26]].forEach(function (q) { gs(g, q[0], q[1], 'w'); gs(g, q[0], q[1] - 1, 'f') });
+    }
+    var pal = { g: S.gnd, s: mix(S.gnd, C.night, .4), r: S.roof, f: S.face, c: mix(S.roof, C.cream, .45), w: C.win2, k: mix(S.face, C.night, .4), a: S.acc, p: '#355E72', P: '#5E8AA0', t: '#4E7A44', T: '#2E4A2C', u: '#7AA860', h: mix(S.gnd, C.night, .55) };
+    if (!lit) Object.keys(pal).forEach(function (k) { var c = rgb(pal[k]), l = (c[0] + c[1] + c[2]) / 3; pal[k] = mix(hx(l, l, l), C.night, .55) });
+    return lightUp(can(g, pal), 'night', { top: 0, rim: false });
+  }
+  function monTower(lit) {
+    var g = grid(48, 120), x0 = 12, w = 20, top = 34, bot = 112;
+    // ombra rossa per terra
+    gpoly(g, [[x0 - 6, bot + 4], [x0 + w + 14, bot + 4], [x0 + w + 8, bot - 2], [x0 - 2, bot - 2]], 'h');
+    // fianco e facciata
+    gpoly(g, [[x0 + w, top + 4], [x0 + w + 8, top], [x0 + w + 8, bot - 4], [x0 + w, bot]], 's');
+    gr(g, x0, top + 4, w, bot - top - 4, 'f'); gr(g, x0, top + 4, w, 1, 'c');
+    gpoly(g, [[x0, top + 4], [x0 + 8, top], [x0 + w + 8, top], [x0 + w, top + 4]], 'r');
+    for (var y = top + 8; y < bot - 3; y += 4) for (var x = x0 + 2; x < x0 + w - 2; x += 3) gr(g, x, y, 2, 2, ((x * 7 + y * 3) % 5 === 0) ? 'R' : 'k');
+    for (var y2 = top + 6; y2 < bot - 6; y2 += 4) gs(g, x0 + w + 3, y2 + 1, 'k');
+    gr(g, x0 + 7, bot - 6, 6, 6, 'k');
+    // il calendario cattivo in cima, sostenuto da due tralicci
+    gr(g, x0 + 4, top - 6, 1, 6, 'm'); gr(g, x0 + w - 5, top - 6, 1, 6, 'm');
+    gr(g, x0 - 3, top - 26, w + 6, 21, 'p'); gr(g, x0 - 3, top - 26, w + 6, 6, 'R'); gr(g, x0 - 3, top - 21, w + 6, 1, 'D');
+    gr(g, x0 + 1, top - 17, 6, 4, 'e'); gr(g, x0 + w - 7, top - 17, 6, 4, 'e'); gr(g, x0 + 4, top - 16, 2, 2, 'R'); gr(g, x0 + w - 6, top - 16, 2, 2, 'R');
+    gl(g, x0, top - 19, x0 + 6, top - 18, 'e'); gl(g, x0 + w - 1, top - 19, x0 + w - 7, top - 18, 'e');
+    gr(g, x0 + 2, top - 11, w - 4, 3, 'e'); for (var t = x0 + 3; t < x0 + w - 3; t += 2) gs(g, t, top - 11, 'c');
+    gs(g, x0 - 1, top - 28, 'm'); gs(g, x0 + 3, top - 28, 'm'); gs(g, x0 + w - 4, top - 28, 'm'); gs(g, x0 + w, top - 28, 'm'); gs(g, x0 - 1, top - 27, 'm'); gs(g, x0 + w, top - 27, 'm');
+    gr(g, x0 + (w >> 1), top - 34, 1, 7, 'm');
+    var pal = { h: '#2A0A0E', s: '#1A0709', f: '#26090D', r: '#3A0E13', c: '#7A1C25', k: '#140406', R: C.crim3, D: C.crim1, p: C.p0, e: C.ink, m: C.g3 };
+    if (!lit) { pal.R = C.crim1; pal.p = C.p2 }
+    return lightUp(can(g, pal), 'mon', { top: 0, rim: false });
+  }
+  var MINI = null;
+  function buildMap() {
+    var base = mk(W, H), b = base.g, R = rnd(909);
+    // terreno notturno con gli isolati appena accennati
+    b.fillStyle = '#080B12'; b.fillRect(0, 0, W, H);
+    for (var y = 3; y < H; y += 10) for (var x = ((y / 10) & 1) * 6 - 4; x < W; x += 13) { b.fillStyle = R() < .5 ? '#0C111A' : '#0A0E16'; b.fillRect(x, y, 11, 8); if (R() < .25) { b.fillStyle = '#18202E'; b.fillRect(x + 1 + ((R() * 8) | 0), y + 1 + ((R() * 6) | 0), 1, 1) } }
+    // il fiume (diagonale, riflessi crema)
+    for (var i = 0; i < W; i++) { var ry = 40 + i * .18 + Math.sin(i / 37) * 10; b.fillStyle = '#0B1726'; b.fillRect(i, ry, 1, 12); b.fillStyle = '#10223A'; b.fillRect(i, ry + 3, 1, 5); if (R() < .05) { b.fillStyle = '#3A5078'; b.fillRect(i, ry + 4 + ((R() * 3) | 0), 2, 1) } }
+    // la strada del viaggio
+    var path = mapPath();
+    path.forEach(function (p) { b.fillStyle = '#1C2230'; b.fillRect(Math.round(p[0]) - 3, Math.round(p[1]) - 3, 7, 7) });
+    path.forEach(function (p) { b.fillStyle = '#262E3E'; b.fillRect(Math.round(p[0]) - 2, Math.round(p[1]) - 2, 5, 5) });
+    MAP = { base: base.c, path: path, lit: [], dim: [], mon: [monTower(false), monTower(true)] };
+    for (var d = 0; d < 6; d++) { MAP.lit[d] = district(d, true); MAP.dim[d] = district(d, false) }
+    MINI = can(rows(['....o....', '...o1o...', '...o2o...', '..o121o..', '.o12w21o.', 'o1222221o', 'occ222cco', '.rd.r.dr.']), SHIP_PAL);
+    // spunta e lucchetto
+    MAP.check = can(rows(['ooooooooo', 'occcccccc', 'occcccckc', 'occccckcc', 'ockcckccc', 'occkkcccc', 'occckcccc', 'occcccccc', 'ooooooooo'].map(function (r) { return r.slice(0, 8) + 'o' })), { o: C.night, c: C.cream, k: C.ink });
+    MAP.lock = can(rows(['.ooo.', 'o...o', 'ooooo', 'oosoo', 'ooooo']), { o: C.g3, s: C.g4 });
+  }
+  ART.map = function (ctx, t, s) {
+    if (!MAP) buildMap(); s = s || {}; t = t || 0;
+    var cur = s.current == null ? 0 : Math.min(6, s.current), done = s.done || [], unl = s.unlocked == null ? cur + 1 : s.unlocked;
+    ctx.drawImage(MAP.base, 0, 0);
+    // la strada: tratteggio crema fin dove si e' arrivati, grigio dopo
+    var P = MAP.path, lim = Math.max(cur, unl - 1);
+    for (var i = 0; i < P.length; i += 3) { var p = P[i], on = p[2] <= lim + .001; if (((i / 3) | 0) % 2) continue; ctx.fillStyle = on ? C.cream : '#3A4152'; ctx.fillRect(Math.round(p[0]), Math.round(p[1]), 1, 1) }
+    // macchine sulla strada (fari crema, stop rossi), solo nel tratto aperto
+    for (var c = 0; c < 6; c++) { var f = ((t * (.05 + c * .013) + c * .37) % 1) * Math.max(.5, lim), q = ART.mapPoint(f); ctx.fillStyle = c % 2 ? C.cream : C.crim3; ctx.fillRect(Math.round(q.x) + (c % 2 ? 1 : -2), Math.round(q.y) + 1, 1, 1) }
+    // quartieri
+    for (var d = 0; d < 6; d++) {
+      var n = MAP_N[d], open = d < unl || done[d], img = open ? MAP.lit[d] : MAP.dim[d], ox = n[0] - 36, oy = n[1] - 50;
+      ctx.drawImage(img, ox, oy); if (open) mapLife(ctx, d, ox, oy, t);
+    }
+    // la torre di MONDAY
+    var mon = MAP_N[6], monOpen = unl >= 7 || cur >= 6, mt = MAP.mon[monOpen ? 1 : 0], mx = mon[0] - 22, my = mon[1] - 112;
+    ctx.drawImage(mt, mx, my);
+    if (((t * 1.5) % 1) < .5) { ctx.fillStyle = C.crim3; ctx.fillRect(mx + 22, my + 0, 1, 1); ctx.fillRect(mx + 21, my + 1, 3, 1) }
+    if (monOpen && ((t * 3) % 1) < .5) { ctx.fillStyle = '#FF6A7A'; ctx.fillRect(mx + 16, my + 18, 2, 2); ctx.fillRect(mx + 26, my + 18, 2, 2) }
+    // nodi: fatto = spunta crema, attuale = cornice pomodoro che pulsa, chiuso = lucchetto
+    for (var k = 0; k < 7; k++) {
+      var m = MAP_N[k], lbl = k === 6 ? 'MON' : MAP_D[k].toUpperCase(), isDone = !!done[k], isCur = k === cur, isOpen = k < unl || isDone || isCur;
+      if (isDone) ctx.drawImage(MAP.check, m[0] - 4, m[1] - 4);
+      else if (isCur) { var pz = s.pulse != null ? s.pulse : (Math.sin(t * 6) * .5 + .5), r = 5 + Math.round(pz * 2); ctx.fillStyle = C.tomato; [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(function (v) { var cx = m[0] + v[0] * r, cy = m[1] + v[1] * r; ctx.fillRect(Math.min(cx, cx - v[0] * 2), cy, 3, 1); ctx.fillRect(cx, Math.min(cy, cy - v[1] * 2), 1, 3) }); ctx.fillRect(m[0], m[1], 1, 1) }
+      else if (!isOpen) ctx.drawImage(MAP.lock, m[0] - 2, m[1] - 3);
+      else { ctx.fillStyle = C.cream; ctx.fillRect(m[0] - 1, m[1] - 1, 3, 3) }
+      if (s.labels !== false) { var tw = tinyWidth(lbl), lx = m[0] - (tw >> 1), ly = m[1] + 8; ctx.fillStyle = C.night; ctx.fillRect(lx - 2, ly - 1, tw + 4, 7); tiny(ctx, lbl, lx, ly, k === 6 ? C.crim3 : isOpen ? C.cream : C.g3) }
+    }
+    // la navetta che viaggia
+    if (s.ship !== false) { var sp = ART.mapPoint(s.shipPos == null ? cur : s.shipPos), bob = Math.round(Math.sin(t * 5)); ctx.drawImage(MINI, Math.round(sp.x) - 4, Math.round(sp.y) - 16 + bob); ctx.fillStyle = ((t * 20) | 0) % 2 ? C.t4 : C.tomato; ctx.fillRect(Math.round(sp.x), Math.round(sp.y) - 8 + bob, 1, 1); ctx.fillStyle = 'rgba(15,15,14,.6)'; ctx.fillRect(Math.round(sp.x) - 3, Math.round(sp.y) - 2, 7, 1) }
+  };
+  // la vita di ogni quartiere (pochi pixel per frame)
+  function mapLife(ctx, d, ox, oy, t) {
+    var S = DSTYLE[MAP_D[d]];
+    if (d === 0) { ctx.fillStyle = mix(S.acc, C.cream, .4); for (var i = 0; i < 14; i++) { var x = ox + 6 + hash(i * 7) * 60, y = oy + ((hash(i * 13) * 50 + t * 60) % 50); ctx.fillRect(Math.round(x - (y - oy) * .2), Math.round(y), 1, 2) } }
+    else if (d === 1) { ctx.globalAlpha = .35; ctx.fillStyle = '#6E5A94'; for (var j = 0; j < 3; j++) { var fy = oy + 12 + j * 12, fx = ox + Math.sin(t * .6 + j) * 8; for (var k = 0; k < 64; k += 2) if (((k + j + ((t * 4) | 0)) & 3) === 0) ctx.fillRect(Math.round(fx + 4 + k), fy + (k & 1), 2, 1) } ctx.globalAlpha = 1 }
+    else if (d === 2) { ctx.fillStyle = mix(S.acc, C.night, .3); [[29, 2], [63, 6]].forEach(function (c, i) { for (var k = 0; k < 4; k++) { var ph = (t * .8 + k * .25 + i * .5) % 1; ctx.globalAlpha = 1 - ph; ctx.fillRect(ox + c[0] + Math.round(Math.sin(ph * 6 + k) * 2), oy + c[1] - Math.round(ph * 10), 2, 2) } }); ctx.globalAlpha = 1; if (((t * 12) | 0) % 7 !== 0) { ctx.fillStyle = S.acc; ctx.fillRect(ox + 41, oy + 13, 6, 1) } }
+    else if (d === 3) { var cols = [S.acc, C.cream, C.gd2, '#7FD8FF']; for (var l = 0; l < 6; l++) { ctx.fillStyle = cols[(l + ((t * 6) | 0)) & 3]; ctx.fillRect(ox + 20 + l * 2, oy + 32 + (l & 1), 1, 1) } ctx.globalAlpha = .25 + .2 * Math.sin(t * 8); ctx.fillStyle = S.acc; ctx.fillRect(ox + 16, oy + 28, 20, 14); ctx.globalAlpha = 1 }
+    else if (d === 4) { ctx.globalAlpha = .18 + .08 * Math.sin(t * 2); ctx.fillStyle = S.acc; ctx.fillRect(ox + 4, oy + 4, 64, 3); ctx.globalAlpha = 1 }
+    else if (d === 5) { ctx.fillStyle = C.ink; for (var bd = 0; bd < 3; bd++) { var bx = ox + ((t * 14 + bd * 23) % 80) - 4, by = oy + 8 + bd * 6 + Math.round(Math.sin(t * 3 + bd) * 2), wing = ((t * 8 + bd) | 0) % 2; ctx.fillRect(Math.round(bx), by, 1, 1); ctx.fillRect(Math.round(bx) - 1, by - wing, 1, 1); ctx.fillRect(Math.round(bx) + 1, by - wing, 1, 1) } }
+  }
+
+  // ======================================================================================
+  // INTRO: testo che scorre in prospettiva sopra la citta' (alla Star Wars, ma nostro), piu' il cartello a macchina
+  var CRAWL = { key: '', c: null, h: 0 };
+  function crawlTex(lines) {
+    var key = lines.join('|'); if (CRAWL.key === key) return CRAWL;
+    var TW = 210, FS = 2, out = [];
+    lines.forEach(function (ln, i) { var words = String(ln).split(' '), cur = ''; words.forEach(function (w) { var nx = cur ? cur + ' ' + w : w; if (textWidth(nx, 1) > TW && cur) { out.push(cur); cur = w } else cur = nx }); if (cur) out.push(cur); if (i < lines.length - 1) out.push('') });
+    var h = (out.length * 11 + 4) * FS, s = mk(TW * FS, h);
+    out.forEach(function (ln, i) { var x = Math.round((TW - textWidth(ln, 1)) / 2) * FS; ln.split(' ').forEach(function (w, j) { if (j) x += 4 * FS; var red = /MONDAY/.test(w); x += text(s.g, w, x, (i * 11 + 2) * FS, { color: red ? C.crim3 : C.cream, size: FS }) + FS }) });
+    CRAWL = { key: key, c: s.c, h: h, w: TW * FS, f: FS }; return CRAWL;
+  }
+  ART.intro = function (ctx, t, lines, o) {
+    o = o || {}; lines = lines || []; ART.sky(ctx, 'night', t); ART.skyline(ctx, 'night', t * 4, t);
+    var first = o.first == null ? (lines.length > 1 ? lines[0] : '') : o.first, rest = o.first == null && lines.length > 1 ? lines.slice(1) : lines;
+    var T0 = first ? 4.2 : 0, speed = o.speed || 9;
+    if (first && t < T0) { // il cartello d'apertura: appare, resta, sparisce
+      var a = Math.min(1, t / .8, (T0 - t) / .8); ART.city(ctx, null, t, 'night', 0); ctx.globalAlpha = Math.max(0, a); text(ctx, first, W / 2, 120, { align: 'c', color: '#7FD8FF' }); ctx.globalAlpha = 1; return t / (T0 + 1);
+    }
+    var tex = crawlTex(rest), sc = ((t - T0) * speed - 8) * tex.f, y0 = 30, y1 = CITY_TOP + 6, Dp = 70 * tex.f, cx = W / 2;
+    for (var y = y0 + 12; y < y1; y++) {
+      var k = (y - y0) / (y1 - y0), v = sc - Dp * (1 / k - 1); if (v < 0 || v >= tex.h) continue;
+      var s2 = (.3 + 1.6 * k) / tex.f, dw = Math.round(tex.w * s2), al = Math.min(1, (k - .06) * 4); if (al <= 0) continue;
+      ctx.globalAlpha = al; ctx.drawImage(tex.c, 0, v | 0, tex.w, 1, Math.round(cx - dw / 2), y, dw, 1);
+    }
+    ctx.globalAlpha = 1;
+    ART.city(ctx, null, t, 'night', 0);
+    var total = (tex.h + Dp * 2.2) / tex.f; return Math.min(1, (T0 + Math.max(0, sc / tex.f) / speed) / (T0 + total / speed));
+  };
+  // cartello a macchina da scrivere: le lettere escono una alla volta, cursore pomodoro
+  ART.introCard = function (ctx, t, line, o) {
+    o = o || {}; var size = o.size || 2, str = String(line), n = Math.floor(t * (o.cps || 26)), maxW = o.width || 420;
+    var words = str.split(' '), L = [], cur = '';
+    words.forEach(function (w) { var nx = cur ? cur + ' ' + w : w; if (textWidth(nx, size) > maxW && cur) { L.push(cur); cur = w } else cur = nx }); L.push(cur);
+    var y = Math.round((o.y != null ? o.y : 135) - L.length * 10 * size / 2), left = n, cx = 0, cy = y;
+    for (var i = 0; i < L.length; i++) {
+      var ln = L[i], x = Math.round(W / 2 - textWidth(ln, size) / 2), part = ln.slice(0, Math.max(0, left));
+      if (part) { var wpx = text(ctx, part, x, y + i * 10 * size, { size: size, color: o.color || C.cream, shadow: true }); cx = x + wpx + size; cy = y + i * 10 * size }
+      else if (left >= 0 && i === 0) { cx = x; cy = y }
+      left -= ln.length + 1; if (left < 0) break;
+    }
+    if (((t * 3) | 0) % 2 === 0 || n < str.length) { ctx.fillStyle = C.tomato; ctx.fillRect(cx, cy, 3 * size, 7 * size) }
+    return n >= str.length;
+  };
+
+
+  // ======================================================================================
+  // INTERFACCIA: cornice da disegno tecnico, barra, targhetta
+  ART.frame = function (ctx, x, y, w, h, o) {
+    o = o || {}; x = R0(x); y = R0(y); w = R0(w); h = R0(h); var col = o.color || C.cream;
+    if (o.fill !== false) { ctx.fillStyle = o.fill || 'rgba(15,15,14,0.78)'; ctx.fillRect(x, y, w, h) }
+    ctx.fillStyle = col; ctx.globalAlpha = .35; ctx.fillRect(x, y, w, 1); ctx.fillRect(x, y + h - 1, w, 1); ctx.fillRect(x, y, 1, h); ctx.fillRect(x + w - 1, y, 1, h); ctx.globalAlpha = 1;
+    var L = o.corner || 4; [[x, y, 1, 1], [x + w - 1, y, -1, 1], [x, y + h - 1, 1, -1], [x + w - 1, y + h - 1, -1, -1]].forEach(function (c) { ctx.fillRect(c[2] > 0 ? c[0] : c[0] - L + 1, c[1], L, 1); ctx.fillRect(c[0], c[3] > 0 ? c[1] : c[1] - L + 1, 1, L) });
+    if (o.label) { var tw = tinyWidth(o.label); ctx.fillStyle = C.night; ctx.fillRect(x + 6, y - 3, tw + 4, 7); tiny(ctx, o.label, x + 8, y - 2, col) }
+  };
+  ART.bar = function (ctx, x, y, w, k, o) {
+    o = o || {}; x = R0(x); y = R0(y); w = R0(w); var h = o.h || 2, f = R0(w * Math.max(0, Math.min(1, k)));
+    ctx.fillStyle = o.track || C.g4; ctx.fillRect(x, y, w, h); ctx.fillStyle = o.color || C.tomato; ctx.fillRect(x, y, f, h);
+    if (f > 0 && f < w) { ctx.fillStyle = C.t4; ctx.fillRect(x + f - 1, y, 1, h) }
+    ctx.fillStyle = C.cream; ctx.fillRect(x - 1, y - 1, 1, h + 2); ctx.fillRect(x + w, y - 1, 1, h + 2);
   };
 })();
