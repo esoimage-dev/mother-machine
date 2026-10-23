@@ -660,7 +660,7 @@ AVVIO = ("<script>/* avvio: niente transizioni finche' la pagina non e' pronta; 
          "if(!vt){res();return}fonts().then(go,go);setTimeout(go,900)});else res()"
          "})();</script>")
 FOGLIO = '<link rel="stylesheet" href="/css/mm-sito.css">'
-CODA = '<script src="/js/mm-sito.js"></script><script src="/js/mm-chiave.js"></script>'
+CODA = '<script src="/js/mm-sito.js"></script><script src="/js/mm-chiave.js"></script><script src="/js/musica.js" defer></script>'
 # subito dopo la testata: se arriviamo con l'ascensore la testata nasce gia' "in corsa" (chiara sulle porte, senza fascia)
 # e, se la pagina di prima aveva il logo piccolo, nasce piegata. Cosi' vale dal primo disegno.
 DOPO_TESTATA = ("<script>(function(){var R=document.documentElement,b=document.getElementById('bar');"

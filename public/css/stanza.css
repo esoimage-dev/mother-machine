@@ -57,17 +57,19 @@
 .lgW .ln.tube{animation:lgfluo 1.3s steps(1) 2.6s both}
 .lgW .lamp:nth-of-type(odd) .ln.tube{animation-delay:3s}
 @keyframes lgfluo{0%{stroke-opacity:.12}12%{stroke-opacity:.9}18%{stroke-opacity:.12}34%{stroke-opacity:.9}40%{stroke-opacity:.3}55%,100%{stroke-opacity:.9}}
-.lgW .pool{animation:lgpool 1s ease-out 3.6s both}
+.lgW .pool{animation:lgpool 1s ease-out 2.2s both}
 @keyframes lgpool{from{opacity:0}}
-.lgW .nspill{animation:lgpool 1.2s ease-out 2.4s both}
+.lgW .nspill{animation:lgpool 1.2s ease-out 1.6s both}
 
 /* l'arrivo: le linee si disegnano dal fondo verso chi guarda, poi le facce si riempiono */
-.lgst .lgW .dw{stroke-dasharray:1;stroke-dashoffset:0;transition:stroke-dashoffset 1.5s cubic-bezier(.6,0,.2,1) calc(var(--i) * 32ms),fill-opacity .7s calc(var(--i) * 32ms + 1s)}
+.lgst .lgW .dw{stroke-dasharray:1;stroke-dashoffset:0;transition:stroke-dashoffset 1.3s cubic-bezier(.6,0,.2,1) calc(var(--i) * 11ms),fill-opacity .6s calc(var(--i) * 11ms + .9s)}
+/* i dettagli (spie, testi, immagini, puntini) arrivano con il loro oggetto, non prima */
+.lgst.pre :where(.lgW .lgP :not(g):not(.dw)){opacity:0}
+.lgst.drawn:not(.done) :where(.lgW .lgP :not(g):not(.dw)){transition:opacity .6s calc(var(--i) * 11ms + .8s)}
 .lgst.pre .lgW .dw{stroke-dashoffset:1;fill-opacity:0;transition:none}
 /* finito l'arrivo, via le transizioni: muovendo la camera il browser non deve ricontrollarle su ogni linea */
 .lgst.done .lgW .dw{transition:none;stroke-dasharray:none}
 .lgst.pre .lgW .tx{opacity:0}
-.lgW .tx{transition:opacity .8s 2.2s}
 .lgst.lg-off .lgW *{animation-play-state:paused!important}
 
 /* sotto la stanza: il titolo e la frase */
@@ -242,3 +244,24 @@
 .lgW .ln.bpg{stroke-width:calc(var(--w) * .25);stroke-opacity:.22}
 .lgW .tx.bpt{font-family:var(--f-mono);letter-spacing:.06em;fill-opacity:.9}
 .lgW .lgP.bprint{opacity:1}
+
+/* oggetti, giro 5 */
+/* il telefono: le facce curve senza segno (un filo nero chiude le fessure tra le facce), il contorno viene dalla pelle
+   rovesciata che sporge dietro; anche passandoci sopra le facce curve restano nere */
+.lgW .fc.sf,.lgW .hot:hover .fc.sf,.lgW .hot:focus-visible .fc.sf{stroke:#0F0F0E;stroke-width:calc(var(--w) * .9)}
+.lgW .fc.hull{fill:none;stroke-width:calc(var(--w) * 3.4)}
+/* l'oscilloscopio: la griglia fioca, la traccia chiara (crema: non si preme) */
+.lgW .ln.osg{stroke-width:calc(var(--w) * .25);stroke-opacity:.3}
+.lgW .ln.osg.c{stroke-opacity:.5}
+.lgW .ln.osw{stroke-width:calc(var(--w) * .7);stroke:#F4F2EC}
+/* la tavola del progetto: il nome grande in bastoni, le scritte scure sui pezzi chiari */
+.lgW .tx.bpt.big{font-family:var(--f-body);font-weight:700;letter-spacing:-.01em}
+.lgW .tx.bpt.dk{fill:#1b1a18;fill-opacity:1}
+/* il telefono nella stanza, piccolo: il contorno piu' sottile */
+.lgsv .lgW .fc.hull{stroke-width:calc(var(--w) * 2)}
+
+/* oggetti, giro 6 */
+/* le cose di piu' parti si accendono insieme (classe hov da stanza-oggetti.js); telefono e giradischi tutti interi */
+.lgW .hot.hov .fc{stroke:#FF5B3A}
+.lgW .hot.hov .ln.dt{stroke:#FFB4A1}
+.lgW .hot.acc:hover .ln,.lgW .hot.acc.hov .ln,.lgW .hot.acc:focus-visible .ln{stroke:#FF5B3A}

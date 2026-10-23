@@ -180,7 +180,7 @@
   function build() { gAll = SC.build(svg) }
 
   /* l'ascensore: quanto sono aperte le porte (0 chiuse, 1 aperte) e la cabina da ritagliare */
-  var LIFT = { s: 0 };
+  var LIFT = { s: RM ? 0 : 1 };
   /* la leva della luce: 0 su (accesa), 1 giu' (spenta) */
   var LEVA = { s: 0 };
 
@@ -188,7 +188,7 @@
   var X = 5.6, Y = 3.3, Z0 = 1.2, Z1 = 11.5;
   function stanza() {
     /* il guscio: pavimento a piastrelle, pareti a pannelli, soffitto. Solo linee: si vede attraverso */
-    var s = part({ cls: 'room' });
+    var s = part({ cls: 'room' }); s.P.zf = 1e3;
     var ov = 10;
     [[-X, 0], [X, 0], [-X, Y], [X, Y]].forEach(function (c) { s.line([[c[0], c[1], Z0], [c[0], c[1], Z1]], { over: ov, cls: 'edge' }) });
     s.line([[-X, 0, Z1], [X, 0, Z1], [X, Y, Z1], [-X, Y, Z1]], { closed: true, cls: 'edge' });
@@ -202,7 +202,6 @@
       var jt = []; for (var xb = -X + (r % 2 ? .2 : .4); xb < X; xb += .4) { if (yb - .2 < VY && xb > VA && xb < VB) continue; jt.push([xb, yb - .2, Z1 - .001], [xb, yb, Z1 - .001], null) }
       bw.line(jt, { cls: 'bk2' }) }
     /* il mirino sul punto di fuga, lasciato come nei disegni tecnici */
-    s.line([[-.12, 1.6, 9e3], [.12, 1.6, 9e3]], { cls: 'cn' }); s.line([[0, 1.48, 9e3], [0, 1.72, 9e3]], { cls: 'cn' });
     for (var z = 2; z < Z1; z += 1.2) s.line([[-X, 0, z], [X, 0, z]], { cls: 'fl' });
     for (var x = -X + 1.4; x < X; x += 1.4) s.line([[x, 0, Z0], [x, 0, Z1]], { cls: 'fl' });
     for (var z2 = 2.6; z2 < Z1; z2 += 2.2) { s.line([[-X, 0, z2], [-X, Y, z2]], { cls: 'dt' }); s.line([[X, 0, z2], [X, Y, z2]], { cls: 'dt' }) }
@@ -210,7 +209,6 @@
     s.line([[-X, .14, Z0], [-X, .14, Z1]], { cls: 'dt' }); s.line([[X, .14, Z0], [X, .14, Z1]], { cls: 'dt' });
     s.line([[-X, .14, Z1], [X, .14, Z1]], { cls: 'dt' });
     /* le linee di costruzione verso il punto di fuga: lasciate, come in un disegno che si sta facendo */
-    [[-X, 0], [X, 0], [-X, Y], [X, Y]].forEach(function (c) { s.line([[c[0], c[1], Z1], [c[0] * .001, c[1] + (1.6 - c[1]) * .999, 9e3]], { cls: 'cn' }) });
 
     /* soffitto: travi a ritmo, e tra una trave e l'altra la condotta dell'aria, i tubi, le plafoniere.
        Le cose lunghe sono spezzate a tratti, cosi' si ordinano bene in profondita' con le travi */
@@ -222,12 +220,12 @@
       var zb = i + 1 < ZB.length ? ZB[i + 1] : Z1 - .02;
       var d = part({ cls: 'ceil' }); var db = d.box([-4.9, 2.62, za, -3.95, 2.98, zb], ID, { hatch: { r: 3 } });
       d.line([[-3.95, 2.62, za + .05], [-3.95, 2.62, zb - .05]], { cls: 'dt', on: db.b });
-      var t1 = part({ cls: 'ceil' }); t1.tubeZ(3.55, 2.86, za, zb, .11, { hatch: 3 });
-      var t2 = part({ cls: 'ceil' }); t2.tubeZ(4.0, 2.9, za, zb, .065, {});
-      /* le staffe: un tirante dal soffitto e il collare attorno a ogni tubo, a meta' tratto */
+      /* a destra un binario di luce: una scatola chiusa con la striscia accesa sotto, come le plafoniere */
+      var t1 = part({ cls: 'ceil rail' }), rb = t1.box([3.3, 2.82, za + .05, 3.8, 2.98, zb - .05], ID, { hatch: { l: 2 } });
+      t1.line([[3.42, 2.819, za + .12], [3.42, 2.819, zb - .12]], { cls: 'tube', on: rb.b }); t1.line([[3.68, 2.819, za + .12], [3.68, 2.819, zb - .12]], { cls: 'tube', on: rb.b });
+      /* il tirante dal soffitto, a meta' tratto */
       var zm = (za + zb) / 2;
-      t1.line([[3.55, 2.97, zm], [3.55, Y, zm]], { cls: 'dt' }); t1.circle([3.55, 2.86, zm], .125, 'z', { k: 12, cls: 'clamp' });
-      t2.line([[4.0, 2.965, zm + .3], [4.0, Y, zm + .3]], { cls: 'dt' }); t2.circle([4.0, 2.9, zm + .3], .08, 'z', { k: 10, cls: 'clamp' });
+      t1.line([[3.55, 2.98, zm], [3.55, Y, zm]], { cls: 'dt' });
       /* la plafoniera: un pannello piatto sotto il soffitto, la luce che cade come una pozza sul pavimento */
       if (i + 1 < ZB.length) {
         var l = part({ cls: 'lamp' });
@@ -299,7 +297,8 @@
     /* le porte, appena rientrate, con la fessura in mezzo e la spazzolatura */
     var dl = p.face([[xa, 0, zc - .03], [1.6, 0, zc - .03], [1.6, yt, zc - .03], [xa, yt, zc - .03]], [0, 0, -1], {});
     var dr = p.face([[1.6, 0, zc - .03], [xb, 0, zc - .03], [xb, yt, zc - .03], [1.6, yt, zc - .03]], [0, 0, -1], {});
-    [[dl, xa, 1.6], [dr, 1.6, xb]].forEach(function (q) { for (var x = q[1] + .14; x < q[2] - .05; x += .14) p.line([[x, .06, zc - .031], [x, yt - .06, zc - .031]], { cls: 'brush', on: q[0] }) });
+    /* porte lisce: solo lo zoccolo in basso e una riga di luce in alto */
+    [[dl, xa, 1.6], [dr, 1.6, xb]].forEach(function (q) { p.line([[q[1], .16, zc - .031], [q[2], .16, zc - .031]], { cls: 'dt', on: q[0] }); p.line([[q[1], yt - .08, zc - .031], [q[2], yt - .08, zc - .031]], { cls: 'brush', on: q[0] }) });
     p.line([[1.6, 0, zc - .032], [1.6, yt, zc - .032]], { on: dl });
     /* le porte si aprono: scorrono dentro gli stipiti (si stringono verso i lati), tutto ricalcolato a ogni fotogramma */
     [dl, dr].forEach(function (f) { f.base = f.pts.map(function (q) { return q.slice() }); f.det.forEach(function (l) { l.base = l.pts.map(function (q) { return q.slice() }) }) });
@@ -314,8 +313,9 @@
     c.face([[xb, 0, zb], [xb, 0, zc], [xb, yt, zc], [xb, yt, zb]], [-1, 0, 0], { fill: 'cab', hatch: 6 });
     var cf = c.face([[xa, 0, zc], [xb, 0, zc], [xb, 0, zb], [xa, 0, zb]], [0, 1, 0], { fill: 'cab' });
     var cc = c.face([[xa, yt, zb], [xb, yt, zb], [xb, yt, zc], [xa, yt, zc]], [0, -1, 0], { fill: 'cabw' });
-    c.line([[xa + .1, .95, zb - .001], [xb - .1, .95, zb - .001]], { cls: 'rail', on: cw });
-    c.line([[1.15, 1.05, zb - .001], [2.05, 1.05, zb - .001], [2.05, 2.0, zb - .001], [1.15, 2.0, zb - .001]], { closed: true, cls: 'dt', on: cw });
+    /* dentro, una cosa sola: il corrimano staccato dal muro con i suoi due supporti, che da' la profondita' */
+    c.line([[xa + .25, .95, zb - .07], [xb - .25, .95, zb - .07]], { cls: 'rail' });
+    [xa + .4, xb - .4].forEach(function (x) { c.line([[x, .95, zb - .07], [x, .95, zb - .001]], { cls: 'dt' }) });
     c.line([[1.25, yt - .001, zc + .3], [1.95, yt - .001, zc + .3], [1.95, yt - .001, zb - .3], [1.25, yt - .001, zb - .3]], { closed: true, cls: 'cabl', on: cc });
     for (var g = xa + .25; g < xb; g += .25) c.line([[g, .001, zc], [g, .001, zb]], { cls: 'dt', on: cf });
     /* la luce che esce sul pavimento quando le porte sono aperte */
@@ -323,8 +323,8 @@
     sp.face([[xa, .002, zc - .02], [xb, .002, zc - .02], [xb + .7, .002, zc - 2.6], [xa - .7, .002, zc - 2.6]], [0, 1, 0], { fill: 'spill' });
     LIFT.cab = c.P; LIFT.vano = [[xa, 0, zc], [xb, 0, zc], [xb, yt, zc], [xa, yt, zc]];
     /* la cornice: due stipiti e l'architrave che sporgono dal muro */
-    p.box([x0, 0, zc - d, xa, yt + .2, zc], ID, { hatch: { r: 5 } });
-    p.box([xb, 0, zc - d, x1, yt + .2, zc], ID, { hatch: { l: 5 } });
+    p.box([x0, 0, zc - d, xa, yt, zc], ID, { hatch: { r: 5 } });
+    p.box([xb, 0, zc - d, x1, yt, zc], ID, { hatch: { l: 5 } });
     var hd = p.box([x0, yt, zc - d, x1, yt + .2, zc], ID, { hatch: { b: 3 } });
     /* il display sopra: LG in arancione e la freccia */
     var ds = p.box([1.24, 2.58, zc - .07, 1.96, 2.86, zc], ID, {});
@@ -345,7 +345,7 @@
   /* il neon del marchio: la m del logo, due archi con le aste lunghe e due archi piccoli sotto, in tubo doppio */
   function neon() {
     var p = part({ cls: 'neon' });
-    var zc = Z1 - .03, s = 2.05 / 1468, ox = -2.9, oy = .75, k = 18;
+    var zc = Z1 - .03, s = 2.05 / 1468, ox = -3.15, oy = .75, k = 18;
     function m(u, v) { return [ox + u * s, oy + (1468 - v) * s, zc] }
     var D = [[190.5, 190.5, 1277], [489.5, 190.5, 1277], [190.5, 1130.5, 40], [489.5, 1130.5, 40]];
     D.forEach(function (a) { var pts = [m(a[0] - 149.5, a[1] + a[2])];
@@ -372,9 +372,9 @@
     var w = el(g, 'ellipse', { fill: 'url(#lgSpill)' }), f = el(g, 'ellipse', { fill: 'url(#lgSpill)', opacity: '.6' });
     gAll.insertBefore(g, gAll.firstChild);
     hooks.push(function () {
-      var c = prj([-2.4, 1.7, Z1]), e = prj([-.4, 1.7, Z1]), r = e[0] - c[0];
+      var c = prj([-2.65, 1.7, Z1]), e = prj([-.65, 1.7, Z1]), r = e[0] - c[0];
       w.setAttribute('cx', c[0].toFixed(1)); w.setAttribute('cy', c[1].toFixed(1)); w.setAttribute('rx', (r * 1.3).toFixed(1)); w.setAttribute('ry', (r * 1.1).toFixed(1));
-      var a = prj([-2.4, 0, Z1 - 1.4]), b = prj([-.6, 0, Z1 - 1.4]), d = prj([-2.4, 0, Z1 - 2.6]);
+      var a = prj([-2.65, 0, Z1 - 1.4]), b = prj([-.85, 0, Z1 - 1.4]), d = prj([-2.65, 0, Z1 - 2.6]);
       f.setAttribute('cx', a[0].toFixed(1)); f.setAttribute('cy', a[1].toFixed(1)); f.setAttribute('rx', (b[0] - a[0]).toFixed(1)); f.setAttribute('ry', Math.max(4, d[1] - a[1]).toFixed(1));
     });
     return g;
@@ -431,7 +431,7 @@
           style: 'animation-duration:' + (7 + Math.random() * 7).toFixed(1) + 's;animation-delay:-' + (Math.random() * 9).toFixed(1) + 's' }) }) }
     /* l'arrivo: le linee si disegnano, dal fondo verso chi guarda; poi le facce si riempiono */
     var wrap = st.querySelector('.lgsv');
-    if (!RM) { st.classList.add('pre'); requestAnimationFrame(function () { requestAnimationFrame(function () { st.classList.remove('pre'); st.classList.add('drawn'); setTimeout(function () { st.classList.add('done') }, 4800) }) }) } else st.classList.add('drawn', 'done');
+    if (!RM) { st.classList.add('pre'); requestAnimationFrame(function () { requestAnimationFrame(function () { st.classList.remove('pre'); st.classList.add('drawn'); setTimeout(function () { st.classList.add('done') }, 3400) }) }) } else st.classList.add('drawn', 'done');
     /* la camera segue il mouse, piano */
     var fine = matchMedia('(hover:hover) and (pointer:fine)').matches, raf = 0, on = true;
     function tick() { raf = 0; if (!on) return; var dx = to.x - cam.x, dy = to.y - cam.y; cam.x += dx * .08; cam.y += dy * .08; render(); if (Math.abs(dx) + Math.abs(dy) > .0008) raf = requestAnimationFrame(tick) }
@@ -460,6 +460,7 @@
         (function f(n) { var u = Math.min(1, (n - t0) / (RM ? 1 : 220)); LEVA.s = s0 + ((giu ? 1 : 0) - s0) * u * u; render();
           if (u < 1) requestAnimationFrame(f); else { clack(); st.classList.toggle('dark', giu); h.classList.toggle('on', giu) } })(t0) }
       /* il resto viene in primo piano: l'oggetto che gira, o la sua finestra */
+      else if (k === 'music' && window.MUSICA) window.MUSICA.open(x, y);
       else if (window.LGVISTA) window.LGVISTA.open(k, x, y);
     }
     /* le porte dell'ascensore: il ding, poi scorrono in 0,9 secondi */
@@ -474,6 +475,8 @@
         if (apri && poi && u > .55) { var q = poi; poi = null; q() }
         if (u < 1) lt = requestAnimationFrame(f); else if (poi) poi() })(t0);
     }
+    /* siamo appena arrivati: le porte sono aperte, finito il disegno si chiudono */
+    if (LIFT.s > .5) { st.classList.add('lgopen'); setTimeout(function () { porte(false) }, 2700) }
     var db = document.getElementById('dispB');
     if (db && 'MutationObserver' in window) new MutationObserver(function () { if (db.getAttribute('aria-expanded') !== 'true' && LIFT.s > .5) setTimeout(function () { porte(false) }, 250) }).observe(db, { attributes: true, attributeFilter: ['aria-expanded'] });
     /* sul telefono si parte dal centro della stanza */
