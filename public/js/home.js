@@ -117,21 +117,27 @@
   var cursor = function () { return mmc || (mmc = document.querySelector('.mmc')) };
   tr.addEventListener('pointerdown', function (e) {
     if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('.wkcta')) return;
+    e.preventDefault();   /* niente selezione del testo ne' trascinamento delle immagini */
     cancelAnimationFrame(anim); auto = false;
     down = { x: e.clientX, l: tr.scrollLeft }; start = tr.scrollLeft; moved = false; hist = [[tr.scrollLeft, performance.now()]];
   });
+  /* la striscia si sposta una volta per fotogramma, non a ogni movimento del mouse: niente scatti */
+  var px = 0, pr = 0;
+  var muovi = function () { pr = 0; if (down) tr.scrollLeft = px };
   addEventListener('pointermove', function (e) {
     if (!down) return;
     var dx = e.clientX - down.x;
-    if (!moved && Math.abs(dx) > 5) { moved = true; tr.classList.add('drag', 'free'); if (cursor()) mmc.classList.add('wmv') }
+    if (!moved && Math.abs(dx) > 5) { moved = true; tr.classList.add('drag', 'free'); if (cursor()) mmc.classList.add('wmv'); var s = getSelection && getSelection(); if (s) s.removeAllRanges() }
     if (!moved) return;
-    tr.scrollLeft = down.l - dx;
-    hist.push([tr.scrollLeft, performance.now()]); if (hist.length > 6) hist.shift();
+    px = Math.max(0, Math.min(max(), down.l - dx));
+    if (!pr) pr = requestAnimationFrame(muovi);
+    hist.push([px, performance.now()]); if (hist.length > 6) hist.shift();
   });
   addEventListener('pointerup', function () {
     if (!down) return; down = null;
     if (cursor()) mmc.classList.remove('wmv');
     if (!moved) return;
+    if (pr) { cancelAnimationFrame(pr); pr = 0; tr.scrollLeft = px }
     tr.classList.remove('drag');
     release();
   });
