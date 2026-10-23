@@ -93,5 +93,33 @@ Da fare a piccoli blocchi, pochi token. File: `public/js/stanza.js` (motore e st
 - **Ordine di lavoro:** (1) gioco giocabile nel browser: nave, nemici, sette giorni, MONDAY, punteggio; (2) grafica, suoni,
   scritte, accensione; (3) classifica sul server con anti imbrogli (Cloudflare D1); (4) premio: modulo, motore
   dell'insegna, approvazione, palazzi (Cloudflare R2). Ogni passo si guarda sull'anteprima prima del successivo.
+- **Schermata:** in alto, sottile: a sinistra giorno e orologio (9-17, fa da barra di avanzamento), al centro HOURS SAVED,
+  a destra le tazze di caffe'. In basso, piccolo: a sinistra il potenziamento attivo con la barra che si svuota, a destra
+  lo slot di NIGHT SHIFT. Sotto la nave la citta' con le finestre (la vita).
+- **Sparo:** un colpo solo, lineetta pomodoro corta con scia. Niente armi da scegliere, cambia solo con i potenziamenti.
+- **Potenziamenti:** cadono da un nemico speciale dorato (1-2 per giorno), capsula con icona, si prendono passandoci sopra.
+  AUTOMATION (10 s): tre colpi a ventaglio, motori piu' lunghi. AI (10 s): colpi che curvano verso i nemici, mirino.
+  BOOKING: scudo a bolla di vetro tonda che para tre colpi (la cybersicurezza; nave squadrata = machine, scudo tondo = mother).
+  NIGHT SHIFT: va nello slot, si usa quando vuoi (tasto X, due dita sul telefono): schermo blu notte, la nave va da sola
+  e ripulisce tutto per 3 secondi.
+- **Nemici in dettaglio:** Missed call (telefono che vibra, zig-zag, tira onde "ring"); Paper invoice (foglio con timbro,
+  lento, colpito si divide in due ricevute); No-show (sagoma tratteggiata col cartellino "table 4", sparisce e ti riappare
+  vicino, ti viene addosso); Spam (busta con "!!!", sciami a onda, puntini); Speciale dorato (lascia il potenziamento).
+  In piu': **Double booking** (due nemici legati, vanno colpiti tutti e due). **Mini-boss del venerdi': URGENT**, una
+  grande busta rossa alle 16:59.
+- **Ripari:** al posto dei bunker di Space Invaders, tre blocchi **FIREWALL** sopra la citta' che si consumano pixel per pixel.
+- **I giorni:** TUE blu notte e pioggia (solo Missed call); WED nebbia viola (Paper invoice); THU smog verde acido, insegne
+  che sfarfallano (No-show); FRI rosa, luci da festa, musica veloce, URGENT; SAT tramonto arancio, tanti Spam; SUN alba
+  chiara, quasi vuoto, silenzio; MONDAY rosso allarme, glitch, la sveglia, poi il boss. Ogni giorno circa 45 s in tre
+  ondate; tra i giorni "CLOCKED OUT 17:00" e il riepilogo. Partita intera circa 6 minuti.
+- **Lo sfondo a tre strati:** skyline lontano (sagome, si muove appena), torri di mezzo con i **cartelloni pubblicitari**,
+  citta' vicina con le finestre. Pioggia, nebbia, scintille davanti.
+- **Le insegne dei vincitori:** durante la partita stanno sui cartelloni delle torri di mezzo (ogni giorno ne girano
+  altre, si vedono ma non si cliccano). Si cliccano nella **CITY**: la schermata tra una partita e l'altra e dopo il
+  game over, una citta' ferma che si fa scorrere con calma; passando su un'insegna la targhetta (nome, cosa fanno),
+  cliccando il loro link. In piu' la lista nella classifica.
+- **Tocchi:** nemico colpito = pixel che cadono come scintille; colpo subito = lo schermo trema e la tazza si rovescia;
+  FLOW STATE = lo sfondo pulsa a tempo; entrata di MONDAY = la musica si ferma, suona la sveglia, il calendario scende e
+  strappa la pagina SUNDAY.
 - **Un gioco solo, fatto bene.** Idee per dopo, forse: Night Shift (scorrimento), Night Drive (stile OutRun, mai il truck
   di Vitalia's: e' un lavoro per un cliente).
