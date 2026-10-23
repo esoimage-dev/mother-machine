@@ -44,6 +44,8 @@
         /* testo: at = punto 3D della linea di base, size = altezza in metri. Di base sta su un piano che guarda chi guarda;
            con o.u (direzione della riga) e o.v (l'alto delle lettere) sta su qualunque piano, in prospettiva */
         text: function (at, txt, size, o) { o = o || {}; var t = { text: 1, at: at, txt: txt, size: size, cls: o.cls || '', anchor: o.anchor || 'start', u: o.u, v: o.v }; (o.on ? o.on.det : P.lines).push(t); return t },
+        /* immagine su un piano (per i loghi veri): at = angolo in alto a sinistra, w e h in metri, u = verso destra, v = verso l'alto */
+        image: function (at, href, w, h, o) { o = o || {}; var im = { img: 1, at: at, href: href, w: w, h: h, u: o.u || [1, 0, 0], v: o.v || [0, 1, 0], cls: o.cls || '' }; (o.on ? o.on.det : P.lines).push(im); return im },
         /* scatola: angoli in coordinate locali [x0,y0,z0,x1,y1,z1], T = sistema locale. o.hatch = {l,r,t,b,f,k: righe}; o.fill per tutte */
         box: function (b, T, o) {
           T = T || ID; o = o || {}; var h = o.hatch || {}, x0 = b[0], y0 = b[1], z0 = b[2], x1 = b[3], y1 = b[4], z1 = b[5];
@@ -126,12 +128,16 @@
       return g;
     };
     function mk(p, l) {
+      if (l.img) { var im = el(p, 'image', { class: 'im ' + l.cls, width: 100, height: 100, preserveAspectRatio: 'none' }); im.setAttribute('href', l.href); return im }
       /* 'lab' qui e' 'tlab': la classe .lab del sito fissa le etichette a 11px e la prospettiva sparirebbe */
       if (l.text) { var t = el(p, 'text', { class: 'tx ' + l.cls.replace(/\blab\b/, 'tlab'), 'text-anchor': l.anchor }); t.textContent = l.txt; return t }
       var a = { class: 'ln ' + l.cls + (l.fill ? ' ' + l.fill : '') }; if (!/\bcn\b/.test(l.cls)) { a.pathLength = 1; a['class'] += ' dw' }
       return el(p, 'path', a);
     }
     function upd(l) {
+      if (l.img) { /* l'immagine: il quadrato 100 x 100 portato sul piano, una matrice affine (va bene per le cose piccole) */
+        var a0 = l.at, o0 = prj(a0), px = prj([a0[0] + l.u[0] * l.w, a0[1] + l.u[1] * l.w, a0[2] + l.u[2] * l.w]), py = prj([a0[0] - l.v[0] * l.h, a0[1] - l.v[1] * l.h, a0[2] - l.v[2] * l.h]);
+        l.e.setAttribute('transform', 'matrix(' + [(px[0] - o0[0]) / 100, (px[1] - o0[1]) / 100, (py[0] - o0[0]) / 100, (py[1] - o0[1]) / 100, o0[0], o0[1]].map(function (n) { return n.toFixed(4) }).join(' ') + ')'); return }
       if (l.text) {
         if (l.u) { /* in prospettiva: la riga e l'alto delle lettere proiettati, una matrice per il testo alto 1 */
           var o = prj(l.at), pu = prj([l.at[0] + l.u[0] * l.size, l.at[1] + l.u[1] * l.size, l.at[2] + l.u[2] * l.size]), pv = prj([l.at[0] + l.v[0] * l.size, l.at[1] + l.v[1] * l.size, l.at[2] + l.v[2] * l.size]);
@@ -211,9 +217,9 @@
     var ZB = [];
     for (var zb = 3.0; zb < Z1; zb += 2.15) ZB.push(zb);
     ZB.forEach(function (zb) { var bm = part({ cls: 'beam' }); bm.box([-X, 3.04, zb, X, Y, zb + .24], ID, { hatch: { f: 0, b: 0 } }) });
-    var tr0 = [Z0 + .1].concat(ZB.map(function (z) { return z + .24 }));
+    var tr0 = ZB.map(function (z) { return z + .24 });
     tr0.forEach(function (za, i) {
-      var zb = i < ZB.length ? ZB[i] : Z1 - .02;
+      var zb = i + 1 < ZB.length ? ZB[i + 1] : Z1 - .02;
       var d = part({ cls: 'ceil' }); var db = d.box([-4.9, 2.62, za, -3.95, 2.98, zb], ID, { hatch: { r: 3 } });
       d.line([[-3.95, 2.62, za + .05], [-3.95, 2.62, zb - .05]], { cls: 'dt', on: db.b });
       var t1 = part({ cls: 'ceil' }); t1.tubeZ(3.55, 2.86, za, zb, .11, { hatch: 3 });
@@ -223,7 +229,7 @@
       t1.line([[3.55, 2.97, zm], [3.55, Y, zm]], { cls: 'dt' }); t1.circle([3.55, 2.86, zm], .125, 'z', { k: 12, cls: 'clamp' });
       t2.line([[4.0, 2.965, zm + .3], [4.0, Y, zm + .3]], { cls: 'dt' }); t2.circle([4.0, 2.9, zm + .3], .08, 'z', { k: 10, cls: 'clamp' });
       /* la plafoniera: un pannello piatto sotto il soffitto, la luce che cade come una pozza sul pavimento */
-      if (i > 0 && i < ZB.length) {
+      if (i + 1 < ZB.length) {
         var l = part({ cls: 'lamp' });
         var lb = l.box([-.3, 2.86, za + .45, .3, 2.94, zb - .45], ID, { hatch: { f: 0 } });
         /* i due tiranti che la tengono appesa, e le stecche del diffusore */
@@ -346,7 +352,7 @@
       for (var i = 0; i <= k; i++) { var t = Math.PI + i / k * Math.PI; pts.push(m(a[0] + 149.5 * Math.cos(t), a[1] + 149.5 * Math.sin(t))) }
       pts.push(m(a[0] + 149.5, a[1] + a[2]));
       p.line(pts.map(function (q) { return [q[0] + .05, q[1] - .06, zc + .02] }), { cls: 'nshadow' });
-      p.line(pts, { cls: 'nglow' }); p.line(pts, { cls: 'ntube' }); p.line(pts, { cls: 'ncore' }) });
+      p.line(pts, { cls: 'ndead' }); p.line(pts, { cls: 'nglow' }); p.line(pts, { cls: 'ntube' }); p.line(pts, { cls: 'ncore' }) });
     /* le staffe e il cavo che scende */
     [[60, 300], [620, 300], [60, 1300], [620, 1300]].forEach(function (q) { var a = m(q[0], q[1]); p.line([a, [a[0], a[1], a[2] + .03]], { cls: 'dt' }); p.line([[a[0] - .03, a[1], zc + .02], [a[0] + .03, a[1], zc + .02]], { cls: 'dt' }) });
     var e = m(489.5 + 149.5, 1467);
@@ -429,8 +435,9 @@
     /* la camera segue il mouse, piano */
     var fine = matchMedia('(hover:hover) and (pointer:fine)').matches, raf = 0, on = true;
     function tick() { raf = 0; if (!on) return; var dx = to.x - cam.x, dy = to.y - cam.y; cam.x += dx * .08; cam.y += dy * .08; render(); if (Math.abs(dx) + Math.abs(dy) > .0008) raf = requestAnimationFrame(tick) }
-    if (fine && !RM) st.addEventListener('pointermove', function (e) { var r = st.getBoundingClientRect(); to.x = ((e.clientX - r.left) / r.width - .5) * 1.1; to.y = 1.6 - ((e.clientY - r.top) / r.height - .5) * .55; if (!raf) raf = requestAnimationFrame(tick) }, { passive: true });
-    var nn = [].slice.call(svg.querySelectorAll('.lgP.neon')).concat([sp]), cap = capricci(nn);
+    if (fine && !RM) st.addEventListener('pointermove', function (e) { var r = st.getBoundingClientRect(); to.x = ((e.clientX - r.left) / r.width - .5) * 1.1; to.y = 1.6 - ((e.clientY - r.top) / r.height - .5) * .34; if (!raf) raf = requestAnimationFrame(tick) }, { passive: true });
+    /* lo sfarfallio spegne la luce, non il vetro: il tubo spento resta visibile */
+    var nn = [].slice.call(svg.querySelectorAll('.lgP.neon .nglow, .lgP.neon .ntube, .lgP.neon .ncore, .lgP.neon .nshadow')).concat([sp]), cap = capricci(nn);
     if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { on = es[0].isIntersecting; st.classList.toggle('lg-off', !on); if (RM) return; on ? setTimeout(cap.start, 3200) : cap.stop() }).observe(st);
     /* le cose da premere: il contorno si accende, un'etichetta segue il mouse; con la tastiera Tab e Invio */
     var tip = document.createElement('div'); tip.className = 'lgtip mo'; tip.setAttribute('aria-hidden', 'true'); st.appendChild(tip);
