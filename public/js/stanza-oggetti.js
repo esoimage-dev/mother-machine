@@ -176,7 +176,7 @@
     function at(q, d, t, y, e) { return [q[0] + d[0] * t + e[0], q[1] + y + e[1], q[2] + d[2] * t + e[2]] }
     /* una copertina: lo spessore, il dentro e il fuori; ritorna la faccia di fuori e le sue direzioni */
     function cop(a, sg) {
-      var d = [Math.cos(a), 0, sg * Math.sin(a)], ou = [-Math.sin(a), 0, -sg * Math.cos(a)], o0 = [0, 0, 0], o1 = [ou[0] * th, 0, ou[2] * th];
+      var d = [Math.cos(a), 0, sg * Math.sin(a)], ou = [-Math.sin(a), 0, sg * Math.cos(a)], o0 = [0, 0, 0], o1 = [ou[0] * th, 0, ou[2] * th];
       var A = [at(S, d, 0, 0, o0), at(S, d, W, 0, o0), at(S, d, W, H, o0), at(S, d, 0, H, o0)].map(T), B = [at(S, d, 0, 0, o1), at(S, d, W, 0, o1), at(S, d, W, H, o1), at(S, d, 0, H, o1)].map(T);
       var ins = T(at(S, d, W / 2, H / 2, [o1[0] / 2, 0, o1[2] / 2])), fo = fc(p, B, ins, { cls: 'mcov' });
       fc(p, A, ins, { cls: 'mcov' });
@@ -305,7 +305,7 @@
 
     /* la prolunga arrotolata per terra tra il cabinato e il banco, la ciabatta accesa, il cavo del cabinato */
     function prolunga(T) {
-      var p = part({ cls: 'coil' });
+      var p = part({ cls: 'coil' }); zz(p, 7.2);
       var cx = 3.75, cz = 6.85;
       for (var i = 0; i < 5; i++) p.circle([cx + Math.sin(i * 1.7) * .03, .006 + i * .004, cz + Math.cos(i * 2.1) * .025], .22 - i * .012, 'y', { cls: 'cable', k: 30 });
       var x0 = 4.05, z0 = 6.22;
@@ -513,19 +513,19 @@
       scritta(q, 'PIZZA', function (gx, gy) { return C(x0 + gx * u, .055 + gy * u) }, { cls: 'px', on: F });
     }
 
-    /* la tazza sul banco: dritta, il bordo, il caffe' dentro, il manico verso chi guarda, il vapore; l'alone accanto */
+    /* la tazza sul banco: dritta, il bordo, il caffe' dentro, il manico di lato, il vapore; l'alone accanto */
     function tazza() {
-      var p = part({ cls: 'mug' }); zz(p, 10.4);
-      var T = frame([4.45, .92, 7.95], 0);
-      var m = fusto(p, T, [0, 0], .041, .044, 0, .1, 16, { hatch: function (n) { return n[0] > .4 ? 2 : 0 } });
+      var p = part({ cls: 'mug' }); zz(p, 10.2);
+      var T = frame([5.22, .92, 7.76], 0);
+      var m = fusto(p, T, [0, 0], .041, .044, 0, .1, 10, {});
       p.line(anello(T, [0, .1, 0], .038, 'y', 16), { closed: true, fill: 'kf', on: m.t });
       p.line(anello(T, [0, .1, 0], .03, 'y', 14), { closed: true, cls: 'dt', on: m.t });
       /* la riga attorno, solo dove si vede */
       p.line(arco(T, [0, .072, 0], .0435, 'y', PI * .55, PI * 1.6, 12), { cls: 'dt' });
-      var hd = unit([-.55, 0, -.83]);
+      var hd = unit([-.86, 0, .5]);
       p.line(manico(T, [hd[0], hd[2]], .043, .042, .022, .085, .036), { cls: 'stick' });
       vapore(p, T, [0, 0], .12, .26, 3, .014);
-      p.line(arco(ID, [4.6, .921, 8.25], .043, 'y', .4, 2 * PI - .3, 18), { cls: 'dt' });
+      p.line(arco(ID, [5.05, .921, 7.98], .043, 'y', .4, 2 * PI - .3, 18), { cls: 'dt' });
     }
 
     /* la lampadina nuda, appesa al suo filo sopra il banco */
@@ -701,9 +701,9 @@
       [[-1, -1, 1, 0], [1, -1, 0, 1], [1, 1, -1, 0], [-1, 1, 0, -1]].forEach(function (e) { for (var i = 0; i < 6; i++) { var t = i / 6, a = e[0] * .15 + e[2] * .3 * t, b = e[1] * .15 + e[3] * .3 * t, g = .022 * Math.sin(t * PI);
         sq.push([a - e[3] * g, b + e[2] * g]) } });
       /* lo spessore: il retro, un poco piu' grande e scostato verso lo schienale, spunta dietro il davanti */
-      var nb = [0, -sl * .06, cl * .06], fr = su(Mc, sq);
-      var bk = sq.map(function (q) { var a = Cc[0] + q[0] * 1.04 * Ux[0] + q[1] * 1.04 * Vy[0] + nb[0], b = Cc[1] + q[0] * 1.04 * Ux[1] + q[1] * 1.04 * Vy[1] + nb[1], c = Cc[2] + q[0] * 1.04 * Ux[2] + q[1] * 1.04 * Vy[2] + nb[2]; return T([a, b, c]) });
-      var ins = T([Cc[0] + nb[0] * 3, Cc[1] + nb[1] * 3, Cc[2] + nb[2] * 3]);
+      var nb = [0, -sl * .022, cl * .022], fr = su(Mc, sq);
+      var bk = sq.map(function (q) { var a = Cc[0] + q[0] * 1.02 * Ux[0] + q[1] * 1.02 * Vy[0] + nb[0], b = Cc[1] + q[0] * 1.02 * Ux[1] + q[1] * 1.02 * Vy[1] + nb[1], c = Cc[2] + q[0] * 1.02 * Ux[2] + q[1] * 1.02 * Vy[2] + nb[2]; return T([a, b, c]) });
+      var ins = T([Cc[0] + nb[0] * 6, Cc[1] + nb[1] * 6, Cc[2] + nb[2] * 6]);
       fc(cs, bk, ins, {});
       var cf = fc(cu, fr, ins, {});
       [[-1, -1], [1, -1], [1, 1], [-1, 1]].forEach(function (q) { cu.line(su(Mc, [[q[0] * .13, q[1] * .13], [q[0] * .08, q[1] * .07]]), { cls: 'dt', on: cf }) });
@@ -738,7 +738,7 @@
       var ph = MOD.phone(L, frame(T([.38, .42, -.02]), -.42), { hot: 'phone', label: 'Telephone. Start a conversation' });
       zz(ph[0], 3.56); zz(ph[1], 3.555); zz(ph[2], 3.55);
       /* la tazzina con il piattino: il piattino svasato con l'incavo, la tazzina sul suo piede, il caffe' con la crema,
-         il manico verso chi guarda, due fili di vapore, il cucchiaino */
+         il manico di lato, due fili di vapore, il cucchiaino */
       var c = part({ cls: 'mug' }); zz(c, 3.58);
       var Tc = frame(T([.07, .42, -.15]), 0);
       var sp = fusto(c, Tc, [0, 0], .046, .066, 0, .01, 22, {});
@@ -749,8 +749,8 @@
       var m = fusto(cp, Tc, [0, 0], .031, .035, .032, .062, 14, { hatch: function (n) { return n[0] > .4 ? 2 : 0 } });
       cp.line(anello(Tc, [0, .062, 0], .032, 'y', 16), { closed: true, fill: 'kf', on: m.t });
       cp.line(anello(Tc, [.003, .062, -.002], .02, 'y', 12), { closed: true, cls: 'dt', on: m.t });
-      var hd = unit([.75, 0, -.66]);
-      cp.line(manico(Tc, [hd[0], hd[2]], .034, .027, .03, .056, .02), { cls: 'stick' });
+      var hd = unit([.97, 0, .22]);
+      cp.line(manico(Tc, [hd[0], hd[2]], .034, .029, .026, .058, .03), { cls: 'stick' });
       vapore(cp, Tc, [0, 0], .07, .13, 2, .008);
       cp.line([Tc([-.045, .012, -.035]), Tc([-.025, .013, -.008])], { cls: 'stick' });
       cp.line(anello(Tc, [-.052, .012, -.044], .008, 'y', 8), { closed: true, fill: 'wf' });
@@ -856,6 +856,95 @@
       /* il filo, dal retro giu' fino al cavo per terra */
       var w = part({ cls: 'vinyl' }); zz(w, 6.8);
       w.curve(T([-.45, .3, .21]), T([-.55, .0, .45]), [-1.9, .01, 7.4], { cls: 'cable' });
+    }
+
+    /* ---------- il disegno grande sulla parete di destra, dietro il cabinato: il progetto del cabinato stesso, in blu
+       da cianografia (la griglia, la vista di fianco con le quote, la vista davanti, il dettaglio della leva, il cartiglio) */
+    function progetto() {
+      var p = part({ cls: 'bprint' }); zz(p, 6.0);
+      var xw = L.X - .02, zc = 5.65, Y0 = .88;
+      var M = function (a, b) { return [xw, Y0 + b, zc - a] }, N = function (a, b) { return [xw - .002, Y0 + b, zc - a] };
+      var f = p.face(su(M, [[-1.12, 0], [1.12, 0], [1.12, 1.74], [-1.12, 1.74]]), [-1, 0, 0], { cls: 'bpp' });
+      var U = [0, 0, -1], V = [0, 1, 0];
+      function ln(pts, cls, cl) { return p.line(su(N, pts), { cls: cls || '', closed: !!cl, on: f }) }
+      function tx(a, b, t, sz, an) { return p.text(N(a, b), t, sz, { u: U, v: V, cls: 'bpt', anchor: an || 'start', on: f }) }
+      /* la cornice e la griglia */
+      ln([[-1.06, .06], [1.06, .06], [1.06, 1.68], [-1.06, 1.68]], '', 1);
+      var g = []; for (var a = -1.0; a < 1.06; a += .1) g.push(N(a, .06), N(a, 1.68), null);
+      for (var b = .16; b < 1.68; b += .1) g.push(N(-1.06, b), N(1.06, b), null);
+      p.line(g, { cls: 'bpg', on: f });
+      /* la vista di fianco: il profilo vero del cabinato, in scala */
+      var pr = [[.04, 0], [.8, 0], [.8, 1.25], [.62, 1.86], [-.02, 1.86], [-.02, 1.56], [.3, 1.5], [.12, 1.02], [-.16, .94], [-.16, .84], [.04, .8]];
+      var k = .66, a0 = -.86, b0 = .24;
+      function sv(q) { return [a0 + (q[0] + .16) * k, b0 + q[1] * k] }
+      ln(pr.map(sv), '', 1);
+      ln([sv([.775, .18]), sv([.07, .56])], 'dt'); ln([sv([.775, .38]), sv([.07, .76])], 'dt');
+      /* le quote: l'altezza a sinistra, la profondita' sotto */
+      var xa = a0 - .08, t0 = b0, t1 = b0 + 1.86 * k;
+      ln([[xa, t0], [xa, t1]]); ln([[xa - .025, t0], [xa + .025, t0]]); ln([[xa - .025, t1], [xa + .025, t1]]);
+      tx(xa - .015, (t0 + t1) / 2, '1860', .045, 'end');
+      var yb = b0 - .08, s0 = sv([-.16, 0])[0], s1 = sv([.8, 0])[0];
+      ln([[s0, yb], [s1, yb]]); ln([[s0, yb - .025], [s0, yb + .025]]); ln([[s1, yb - .025], [s1, yb + .025]]);
+      tx((s0 + s1) / 2, yb - .06, '960', .045, 'middle');
+      tx(a0, 1.58, 'SIDE', .05);
+      /* la vista davanti: il mobile, l'insegna, lo schermo, la pulsantiera, lo sportello */
+      var fa = .07, fw = .68 * k / 2;
+      function fv(x, y) { return [fa + x * k, b0 + y * k] }
+      ln([fv(-.34, 0), fv(.34, 0), fv(.34, 1.86), fv(-.34, 1.86)], '', 1);
+      ln([fv(-.31, 1.6), fv(.31, 1.6), fv(.31, 1.82), fv(-.31, 1.82)], 'dt', 1);
+      ln([fv(-.25, 1.08), fv(.25, 1.08), fv(.25, 1.46), fv(-.25, 1.46)], '', 1);
+      ln([fv(-.34, .92), fv(.34, .92)]); ln([fv(-.34, .82), fv(.34, .82)], 'dt');
+      ln([fv(-.12, .2), fv(.12, .2), fv(.12, .48), fv(-.12, .48)], 'dt', 1);
+      p.line(su(N, cer(fv(-.17, .95)[0], fv(0, .95)[1], .02, 10)), { closed: true, on: f });
+      ln([fv(0, -.03), fv(0, 1.92)], 'cn');
+      tx(fa - fw, 1.58, 'FRONT', .05);
+      /* il dettaglio A: la leva, grande, in un cerchio */
+      var dc = [.62, 1.12], dr = .3;
+      p.line(su(N, cer(dc[0], dc[1], dr, 36)), { closed: true, on: f });
+      ln([[dc[0] - .16, dc[1] - .2], [dc[0] + .16, dc[1] - .2], [dc[0] + .16, dc[1] - .14], [dc[0] - .16, dc[1] - .14]], '', 1);
+      ln([[dc[0], dc[1] - .14], [dc[0] + .03, dc[1] + .1]]);
+      p.line(su(N, cer(dc[0] + .035, dc[1] + .15, .06, 20)), { closed: true, on: f });
+      ln([[dc[0] - .25, dc[1] + .05], [dc[0] - .05, dc[1] + .05]], 'dt');
+      tx(dc[0] - .25, dc[1] + .07, 'R 30', .035);
+      tx(dc[0] - dr, dc[1] + dr + .04, 'DETAIL A  2:1', .045);
+      /* il cartiglio */
+      ln([[.3, .1], [1.02, .1], [1.02, .5], [.3, .5]], '', 1); ln([[.3, .36], [1.02, .36]]); ln([[.3, .23], [1.02, .23]]); ln([[.7, .1], [.7, .23]]);
+      tx(.33, .4, 'RUSH HOUR CABINET', .06);
+      tx(.33, .275, 'MOTHER MACHINE  LG', .04);
+      tx(.33, .145, 'SCALE 1:10', .035); tx(.73, .145, 'DWG 04  REV B', .035);
+      /* le puntine */
+      [[-1.08, 1.7], [1.08, 1.7], [-1.08, .04], [1.08, .04]].forEach(function (q) { p.circle(N(q[0], q[1]), .018, 'x', { fill: 'wf', on: f, k: 10 }) });
+    }
+
+    /* per terra a destra: la bobina del cavo, in piedi, e due cassette di plastica una sopra l'altra */
+    function bobina() {
+      var cz = 6.95, cx = 4.35, cy = .32, R = .32, hw = .15, k = 22;
+      function disco(z, zv) { var p = part({ cls: 'reel' }); zz(p, zv); var A = [], B = [];
+        for (var i = 0; i < k; i++) { var a = i / k * 2 * PI; A.push([cx + R * Math.cos(a), cy + R * Math.sin(a), z - .02]); B.push([cx + R * Math.cos(a), cy + R * Math.sin(a), z + .02]) }
+        var ins = [cx, cy, z];
+        var fa = fc(p, A, ins, {}); fc(p, B, ins, {});
+        for (var j = 0; j < k; j++) { var jj = (j + 1) % k; fc(p, [A[j], A[jj], B[jj], B[j]], ins, {}) }
+        return { p: p, f: fa } }
+      disco(cz + hw, 7.0);
+      /* il tamburo con il cavo avvolto */
+      var d = part({ cls: 'reel' }); zz(d, 6.95);
+      var r = .2, A = [], B = [];
+      for (var i = 0; i < k; i++) { var a = i / k * 2 * PI; A.push([cx + r * Math.cos(a), cy + r * Math.sin(a), cz - hw]); B.push([cx + r * Math.cos(a), cy + r * Math.sin(a), cz + hw]) }
+      for (var j = 0; j < k; j++) { var jj = (j + 1) % k, fq = fc(d, [A[j], A[jj], B[jj], B[j]], [cx, cy, cz], {});
+        for (var w = 1; w < 6; w++) { var t = w / 6; d.line([lerp3(A[j], B[j], t), lerp3(A[jj], B[jj], t)], { cls: 'dt', on: fq }) } }
+      var n = disco(cz - hw, 6.9);
+      n.p.line(anello(ID, [cx, cy, cz - hw - .021], .26, 'z', 22), { closed: true, cls: 'dt', on: n.f });
+      n.p.line(anello(ID, [cx, cy, cz - hw - .021], .05, 'z', 12), { closed: true, fill: 'kf', on: n.f });
+      [0, 2.1, 4.2].forEach(function (a) { n.p.line(anello(ID, [cx + .15 * Math.cos(a + .5), cy + .15 * Math.sin(a + .5), cz - hw - .021], .035, 'z', 10), { closed: true, fill: 'kf', on: n.f }) });
+      /* il capo del cavo che pende per terra */
+      n.p.curve([cx - .18, cy + .1, cz - .05], [cx - .45, .02, cz - .3], [cx - .7, .01, cz - .1], { cls: 'cable' });
+      /* le cassette */
+      [[4.76, 0, 7.06, 0, 7.05], [4.78, .3, 7.08, .1, 7.04]].forEach(function (c) {
+        var T = frame([c[0] + .24, c[1], c[2] + .18], c[3]), p = part({ cls: 'reel' }); zz(p, c[4]);
+        var b = p.box([-.24, 0, -.18, .24, .28, .18], T, { hatch: { l: 2 } });
+        for (var s2 = 0; s2 < 4; s2++) { var x = -.19 + s2 * .1; p.line([T([x, .07, -.182]), T([x + .07, .07, -.182]), T([x + .07, .2, -.182]), T([x, .2, -.182])], { closed: true, cls: 'dt', on: b.f }) }
+        p.line([T([-.08, .225, -.182]), T([.08, .225, -.182]), T([.08, .255, -.182]), T([-.08, .255, -.182])], { closed: true, on: b.f });
+        for (var s3 = 0; s3 < 3; s3++) { var z = -.13 + s3 * .1; p.line([T([-.242, .07, z]), T([-.242, .07, z + .07]), T([-.242, .2, z + .07]), T([-.242, .2, z])], { closed: true, cls: 'dt', on: b.l }) } });
     }
 
     /* ---------- i manifesti ---------- */
@@ -1020,7 +1109,7 @@
     var T = cabinato(); prolunga(T);
     banco(); cassetta(); tavola(); pannello(); schizzo(); mensola(); furgone(); cartoni(); tazza(); lampadina();
     tappeto(); tv(); var TC = console8(), TT = tavolino();
-    divano(); sulTavolino(TT); caffe(); giradischi();
+    divano(); sulTavolino(TT); caffe(); giradischi(); progetto(); bobina();
     /* un joystick sul tavolino, il filo che pende dal bordo e corre per terra fino alla console */
     var pj = TC([.09, .025, -.131]);
     joystick(TT([-.1, .42, -.255]), -1.6, 3.545, [.03, -.02], [[TT([-.14, .43, -.33]), TT([-.17, .422, -.338])], [TT([-.2, .25, -.4]), TT([-.28, .004, -.52])], [[-.9, .004, 3.05], pj]]);

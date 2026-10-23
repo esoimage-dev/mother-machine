@@ -182,9 +182,12 @@ Fuori dal palazzo: `/privacy`.
   tasto su (premuto: ding, le porte si aprono sulla cabina accesa, poi la pulsantiera), quadro con le leve (spegnendo scende
   la leva di destra e la stanza va al buio), cabinato a destra (-> Rush hour), banco con attrezzi, disegno tecnico e mensola
   col pizza truck; in primo piano il salotto di sbieco: divano, tavolino (menu del ristorante e telefono), TV sulla cassa
-  (-> il film, `public/film.html`) e la console "Mother 8" con due joystick a terra; macchina del caffe', calendario del robot
-  sullo sportello del rack R04 (mese vero, oggi cerchiato, cliccando gira il mese: la parete di sinistra non si vede da
-  nessuna posizione), poster "Dead Pixels", Staff only al neon accanto all'ascensore, estintore, post-it.
+  (-> il film, `public/film.html`) su uno scatolone, la console "Mother 8" con due joystick (uno sul tavolino); il menu e' una
+  cartellina verde con il logo vero; al centro un mobiletto con il giradischi; a destra bobina e casse; sulla parete di
+  destra il grande disegno tecnico del cabinato (coperto in parte dal cabinato); calendario del robot frontale sul fianco del
+  rack R01 (tutto a sinistra, si vede spostando il mouse; mese vero, oggi cerchiato, cliccando gira il mese), poster
+  "Dead Pixels", Staff only al neon accanto all'ascensore, neon che spegnendosi lascia il tubo grigio visibile.
+  **Da ridisegnare meglio (lista di Eso):** telefono, tazzina e tazza, divano nel complesso, altri dettagli che non convincono.
   **Primo piano stile inventario** (`stanza-vista.js`): truck, menu e telefono volano dal punto premuto dentro un mirino e
   girano (trascinandoli si ruotano), con una frase, il bottone per andare al progetto o a Contact e la X a tasto (Esc).
   I modelli si preparano in anticipo e la stanza dietro si ferma: niente scatti. I modelli stanno in

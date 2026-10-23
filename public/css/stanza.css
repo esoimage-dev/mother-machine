@@ -236,3 +236,9 @@
 /* oggetti, giro 4 */
 /* la pallina dei joystick: piena, pomodoro */
 .lgW .ln.jball{stroke-width:calc(var(--w) * .4)}
+/* il menu chiuso, verde; il disegno grande in blu da cianografia; il logo in prospettiva */
+.lgW .fc.mcov{fill:#3C6A4B}
+.lgW .fc.bpp{fill:#1b1a18;fill-opacity:1}
+.lgW .ln.bpg{stroke-width:calc(var(--w) * .25);stroke-opacity:.22}
+.lgW .tx.bpt{font-family:var(--f-mono);letter-spacing:.06em;fill-opacity:.9}
+.lgW .lgP.bprint{opacity:1}
