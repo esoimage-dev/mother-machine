@@ -36,8 +36,6 @@ Da fare a piccoli blocchi, pochi token. File: `public/js/stanza.js` (motore e st
 - [ ] **Rush hour:** da ripensare e rifare.
 - [ ] **Musica:** cambiando pagina il player si ferma. Vorrebbe che ripartisse da solo (su telefono a volte lo fa).
   Nota: il browser blocca l'audio senza un tocco; vero play continuo = sito a pagina unica (Astro ClientRouter), da decidere.
-- [ ] **Mini player su telefono:** da' fastidio, copre cose (es. in home il selettore dei progetti: non si riesce a
-  passare da un progetto all'altro). Ripensarlo su telefono (piu' piccolo, o che si nasconde, o in un altro punto).
-
-## Fuori da LG (notato da Eso)
-- [ ] **Home, selettore dei progetti:** non funziona bene, non si riesce a muoversi tra i progetti (anche a parte il player). Da capire e sistemare.
+- [ ] **Mini player:** in vetro (glassmorfismo fatto bene, con la tecnica del sito: niente backdrop-filter dal vivo
+  su aree grandi), su computer e telefono. Su telefono oggi copre il selettore dei progetti in home: deve **sparire di
+  lato**, piu' in alto, lasciando solo una linguetta da cui volendo lo tiri fuori.
