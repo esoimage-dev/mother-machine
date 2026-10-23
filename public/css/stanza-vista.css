@@ -92,3 +92,5 @@ html.lgx-on,html.lgx-on body{overflow:hidden}
 @media (prefers-reduced-motion:reduce){.lgxbg,.lgxobj,.lgxc,.lgxtx>*{transition:none!important}.lgxsnow{animation:none}}
 /* mentre il primo piano e' aperto, la stanza dietro si ferma */
 html.lgx-on .lgst .lgW *{animation-play-state:paused!important}
+/* il cursore del sito: dentro il primo piano e il gioco e' tutto scuro, quindi diventa chiaro */
+html.lgx-on .mmc,html.rush-on .mmc{--cc:#F4F2EC!important}

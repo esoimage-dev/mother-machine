@@ -161,6 +161,9 @@
 .lgW .fc.spill{fill:url(#lgLiftG);stroke:none}
 .lgW .lspill{opacity:0;transition:opacity .8s}
 .lgst.lgopen .lgW .lspill{opacity:1}
+/* a luce spenta si spegne anche la lampadina sopra il banco */
+.lgst.dark .lgW .ln.bulb{fill:#2a2826;stroke:#4a4844;animation:none}
+.lgst.dark .lgW .ln.halo{fill-opacity:0}
 /* il quadro: cartello, fulmine, basi e pomelli delle leve */
 .lgW .ln.warn{stroke:#FF5B3A;stroke-width:calc(var(--w) * .9);fill:#0F0F0E}
 .lgW .ln.bolt{stroke:#FF5B3A;fill:#FF5B3A;stroke-width:calc(var(--w) * .4)}

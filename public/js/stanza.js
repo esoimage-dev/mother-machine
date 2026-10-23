@@ -188,8 +188,12 @@
     s.line([[-X, 0, Z1], [X, 0, Z1], [X, Y, Z1], [-X, Y, Z1]], { closed: true, cls: 'edge' });
     /* il muro di fondo in blocchi di cemento: corsi orizzontali e giunti sfalsati, appena accennati */
     var bw = part({ cls: 'blocks' });
-    for (var yb = .2, r = 0; yb < Y; yb += .2, r++) { bw.line([[-X, yb, Z1 - .001], [X, yb, Z1 - .001]], { cls: 'bk2' });
-      var jt = []; for (var xb = -X + (r % 2 ? .2 : .4); xb < X; xb += .4) jt.push([xb, yb - .2, Z1 - .001], [xb, yb, Z1 - .001], null);
+    /* i corsi si interrompono sul vano dell'ascensore: dentro la cabina niente mattoni */
+    var VA = .62, VB = 2.58, VY = 2.28;
+    for (var yb = .2, r = 0; yb < Y; yb += .2, r++) {
+      if (yb < VY) bw.line([[-X, yb, Z1 - .001], [VA, yb, Z1 - .001], null, [VB, yb, Z1 - .001], [X, yb, Z1 - .001]], { cls: 'bk2' });
+      else bw.line([[-X, yb, Z1 - .001], [X, yb, Z1 - .001]], { cls: 'bk2' });
+      var jt = []; for (var xb = -X + (r % 2 ? .2 : .4); xb < X; xb += .4) { if (yb - .2 < VY && xb > VA && xb < VB) continue; jt.push([xb, yb - .2, Z1 - .001], [xb, yb, Z1 - .001], null) }
       bw.line(jt, { cls: 'bk2' }) }
     /* il mirino sul punto di fuga, lasciato come nei disegni tecnici */
     s.line([[-.12, 1.6, 9e3], [.12, 1.6, 9e3]], { cls: 'cn' }); s.line([[0, 1.48, 9e3], [0, 1.72, 9e3]], { cls: 'cn' });
@@ -226,7 +230,8 @@
         l.line([[0, 2.94, za + .7], [0, Y, za + .7]], { cls: 'dt' }); l.line([[0, 2.94, zb - .7], [0, Y, zb - .7]], { cls: 'dt' });
         for (var zd = za + .65; zd < zb - .5; zd += .25) l.line([[-.3, 2.86, zd], [.3, 2.86, zd]], { cls: 'dt', on: lb.b });
         l.line([[-.2, 2.855, za + .5], [-.2, 2.855, zb - .5]], { cls: 'tube', on: lb.b }); l.line([[.2, 2.855, za + .5], [.2, 2.855, zb - .5]], { cls: 'tube', on: lb.b });
-        var pz = part({ cls: 'pool' }); pz.circle([0, .004, (za + zb) / 2], 1.25, 'y', { cls: 'cn', k: 36 });
+        /* le cose stese sul pavimento si disegnano per prime: tappeto e mobili ci passano sopra */
+        var pz = part({ cls: 'pool' }); pz.P.zf = 1e3; pz.circle([0, .004, (za + zb) / 2], 1.25, 'y', { cls: 'cn', k: 36 });
       }
     });
     /* la canalina dei cavi sopra i server */
@@ -308,7 +313,7 @@
     c.line([[1.25, yt - .001, zc + .3], [1.95, yt - .001, zc + .3], [1.95, yt - .001, zb - .3], [1.25, yt - .001, zb - .3]], { closed: true, cls: 'cabl', on: cc });
     for (var g = xa + .25; g < xb; g += .25) c.line([[g, .001, zc], [g, .001, zb]], { cls: 'dt', on: cf });
     /* la luce che esce sul pavimento quando le porte sono aperte */
-    var sp = part({ cls: 'lspill' });
+    var sp = part({ cls: 'lspill' }); sp.P.zf = 1e3;
     sp.face([[xa, .002, zc - .02], [xb, .002, zc - .02], [xb + .7, .002, zc - 2.6], [xa - .7, .002, zc - 2.6]], [0, 1, 0], { fill: 'spill' });
     LIFT.cab = c.P; LIFT.vano = [[xa, 0, zc], [xb, 0, zc], [xb, yt, zc], [xa, yt, zc]];
     /* la cornice: due stipiti e l'architrave che sporgono dal muro */
@@ -386,7 +391,7 @@
     var b = p2.box([3.45, .62, 10.75, 4.0, .98, 11.25], ID, { hatch: { l: 4 } }); p2.text([3.52, .74, 10.749], 'CABLES', .07, { cls: 'lab', on: b.f });
     var p3 = part({ cls: 'mess' });
     p3.box([4.35, 0, 10.75, 5.1, .45, 11.42], ID, { hatch: { l: 4 } });
-    var c = part({ cls: 'mess' });
+    var c = part({ cls: 'mess' }); c.P.zf = 1e3;
     c.curve([-4.6, .01, 6], [-2.4, .01, 4.4], [-1.9, .01, 7.4], { cls: 'cable' });
     c.curve([-4.6, .01, 8.2], [-1.2, .01, 8.6], [.2, .01, 9.6], { cls: 'cable' });
     c.curve([.2, .01, 9.6], [.8, .01, 10.4], [.9, .01, Z1 - .5], { cls: 'cable' });
@@ -459,7 +464,8 @@
       if (apri) ding(); st.classList.toggle('lgopen', apri); cancelAnimationFrame(lt);
       var s0 = LIFT.s, t0 = performance.now(), T = RM ? 1 : (apri ? 900 : 700);
       (function f(n) { var u = Math.min(1, (n - t0) / T), e = u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2; LIFT.s = s0 + ((apri ? 1 : 0) - s0) * e; render();
-        if (u < 1) lt = requestAnimationFrame(f); else if (poi) setTimeout(poi, 120) })(t0);
+        if (apri && poi && u > .55) { var q = poi; poi = null; q() }
+        if (u < 1) lt = requestAnimationFrame(f); else if (poi) poi() })(t0);
     }
     var db = document.getElementById('dispB');
     if (db && 'MutationObserver' in window) new MutationObserver(function () { if (db.getAttribute('aria-expanded') !== 'true' && LIFT.s > .5) setTimeout(function () { porte(false) }, 250) }).observe(db, { attributes: true, attributeFilter: ['aria-expanded'] });
