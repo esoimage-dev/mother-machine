@@ -49,7 +49,7 @@
   function warn(n, e) { try { console.warn('DEADLINE: ART.' + n + ' non va, uso il segnaposto', e) } catch (x) {} }
   function fail(n, e) { broken[n] = true; warn(n, e) }
   function au() { return window.DEADLINE_AUDIO || null }
-  var SO = { pan: 0 }, curTrack = '', muted = false;
+  var SO = { pan: 0 }, curTrack = '', muted = false, curInt = 0;
   function sfx(n, x) {
     var a = au(); if (!a || typeof a.sfx !== 'function') return;
     SO.pan = x == null ? 0 : clamp(x / W * 2 - 1, -1, 1) * .7;
@@ -58,7 +58,7 @@
   function music(tr, force) {
     var a = au(); if (!a || typeof a.music !== 'function') return;
     if (tr === curTrack && !force) return; curTrack = tr;
-    try { a.music(tr, { intensity: 0, flow: false }) } catch (e) {}
+    try { a.music(tr, { intensity: curInt, flow: !!(Gm && Gm.flow) }) } catch (e) {}
   }
   function aucall(fn, v) { var a = au(); if (a && typeof a[fn] === 'function') try { a[fn](v) } catch (e) {} }
 
@@ -296,31 +296,36 @@
   /* rows = tipi delle file della formazione (dall'alto), march = passo, dive = ogni quanti secondi un tuffo,
      fire = ogni quanti secondi un colpo, cap = colpi nemici al massimo, ev = eventi a tempo dentro l'ondata */
   var DEF = {
-    tue: { hint: 'Missed calls. Stop them before they hit the city.', main: 'Calls', speed: 1, waves: [
-      { rows: ['call', 'call'], cols: 6, march: 13, creep: .35, dive: 6.5, fire: 2.8, cap: 2 },
-      { rows: ['call', 'call', 'call'], cols: 7, march: 15, creep: .45, dive: 4.8, fire: 2.3, cap: 3, ev: [{ at: 3, k: 'gold', p: 'auto' }] },
-      { rows: ['call', 'call', 'call'], cols: 8, march: 17, creep: .55, dive: 3.8, fire: 2, cap: 4 }] },
-    wed: { hint: 'Paper invoices. Hit one and it splits in two.', main: 'Invoices', speed: 1.05, waves: [
-      { rows: ['invoice', 'invoice'], cols: 6, march: 14, creep: .45, dive: 0, fire: 2.2, cap: 3 },
-      { rows: ['call', 'invoice', 'invoice'], cols: 7, march: 16, creep: .5, dive: 4.6, fire: 1.9, cap: 4, ev: [{ at: 4, k: 'gold' }] },
-      { rows: ['call', 'call', 'invoice', 'invoice'], cols: 7, march: 18, creep: .6, dive: 3.6, fire: 1.7, cap: 5 }] },
-    thu: { hint: 'No-shows. Watch where they reappear.', main: 'No-shows', speed: 1.1, waves: [
-      { rows: ['noshow', 'call', 'call'], cols: 6, march: 15, creep: .5, dive: 3.8, fire: 2, cap: 4 },
-      { rows: ['invoice', 'invoice'], cols: 6, march: 16, creep: .5, dive: 0, fire: 2, cap: 4, ev: [{ at: 1, k: 'double', x: 140 }, { at: 5, k: 'double', x: 340 }, { at: 7, k: 'gold' }] },
-      { rows: ['noshow', 'noshow', 'call', 'invoice'], cols: 7, march: 18, creep: .6, dive: 3, fire: 1.6, cap: 5, ev: [{ at: 6, k: 'double', x: 240 }] }] },
-    fri: { hint: 'Friday rush. Something urgent always lands at 16:59.', main: 'Jobs', speed: 1.18, waves: [
-      { rows: ['call', 'invoice', 'call'], cols: 8, march: 20, creep: .55, dive: 3.2, fire: 1.6, cap: 5 },
-      { rows: ['noshow', 'invoice', 'invoice'], cols: 7, march: 19, creep: .6, dive: 3.2, fire: 1.6, cap: 5, ev: [{ at: 1, k: 'double', x: 120 }, { at: 4, k: 'swarm', n: 8, path: 'sine', side: 1, y: 60 }, { at: 6, k: 'gold' }, { at: 8, k: 'double', x: 360 }] },
-      { rows: ['noshow', 'call', 'call', 'invoice'], cols: 8, march: 21, creep: .65, dive: 2.6, fire: 1.4, cap: 6 }] },
-    sat: { hint: 'Spam day. They come in waves.', main: 'Spam', speed: 1.18, waves: [
-      { rows: ['call', 'call'], cols: 6, march: 16, creep: .5, dive: 4, fire: 2, cap: 5, ev: [{ at: .5, k: 'swarm', n: 10, path: 'sine', side: -1, y: 50 }, { at: 5, k: 'swarm', n: 10, path: 'sine', side: 1, y: 74 }] },
-      { rows: [], ev: [{ at: .3, k: 'swarm', n: 12, path: 'swoop', side: -1 }, { at: 3, k: 'swarm', n: 12, path: 'swoop', side: 1 }, { at: 5, k: 'gold' }, { at: 6.5, k: 'swarm', n: 14, path: 'sine', side: -1, y: 40 }, { at: 9, k: 'swarm', n: 14, path: 'swoop', side: 1 }, { at: 11, k: 'swarm', n: 14, path: 'swoop', side: -1 }] },
-      { rows: ['invoice', 'noshow', 'call'], cols: 7, march: 19, creep: .6, dive: 3, fire: 1.6, cap: 6, ev: [{ at: 2, k: 'swarm', n: 10, path: 'sine', side: 1, y: 96 }, { at: 6, k: 'double', x: 240 }, { at: 9, k: 'swarm', n: 12, path: 'swoop', side: -1 }] }] },
-    sun: { hint: 'Sunday. Quiet. Catch your breath.', main: 'Jobs', speed: .9, waves: [
+    /* TUE: si impara. Solo chiamate, la prima ondata non spara */
+    tue: { hint: 'Missed calls. Stop them before they hit the city.', teaser: 'Rain. Only missed calls.', speed: 1, waves: [
+      { rows: ['call', 'call'], cols: 5, march: 13, creep: .4, dive: 6, fire: 0, cap: 0 },
+      { rows: ['call', 'call'], cols: 6, march: 15, creep: .5, dive: 4.2, fire: 2.4, cap: 2, ev: [{ at: 2.5, k: 'gold', p: 'auto' }] },
+      { rows: ['call', 'call', 'call'], cols: 6, march: 17, creep: .6, dive: 3.4, fire: 2, cap: 3 }] },
+    /* WED: nebbia, i nemici in alto non si vedono finche' non si avvicinano; fatture che si dividono */
+    wed: { hint: 'Fog. Paper invoices split in two.', teaser: 'Fog hides what is coming.', speed: 1.05, fog: true, waves: [
+      { rows: ['invoice', 'call'], cols: 5, march: 14, creep: .5, dive: 5, fire: 2.2, cap: 3 },
+      { rows: ['call', 'invoice'], cols: 5, march: 16, creep: .55, dive: 4.2, fire: 1.9, cap: 4, ev: [{ at: 3, k: 'gold' }] },
+      { rows: ['call', 'call', 'invoice'], cols: 5, march: 18, creep: .6, dive: 3.4, fire: 1.7, cap: 4 }] },
+    /* THU: smog acido, i no-show si teletrasportano e le insegne fanno corto circuito */
+    thu: { hint: 'No-shows teleport. Mind the acid signs.', teaser: 'No-shows and acid neon.', speed: 1.1, acid: true, waves: [
+      { rows: ['noshow', 'call'], cols: 5, march: 15, creep: .5, dive: 3.6, fire: 2, cap: 3 },
+      { rows: ['invoice'], cols: 5, march: 16, creep: .5, dive: 0, fire: 2, cap: 4, ev: [{ at: 1, k: 'double', x: 140 }, { at: 4, k: 'double', x: 340 }, { at: 6, k: 'gold' }] },
+      { rows: ['noshow', 'noshow', 'call'], cols: 6, march: 18, creep: .6, dive: 2.8, fire: 1.6, cap: 5 }] },
+    /* FRI: festa, tutto piu' veloce, coriandoli di spam, alle 16:59 URGENT */
+    fri: { hint: 'Friday rush. Something urgent lands at 16:59.', teaser: 'Party. Fast. Then URGENT.', speed: 1.2, party: true, waves: [
+      { rows: ['call', 'invoice', 'call'], cols: 6, march: 21, creep: .55, dive: 3, fire: 1.6, cap: 5 },
+      { rows: ['noshow', 'call'], cols: 6, march: 20, creep: .6, dive: 3, fire: 1.6, cap: 5, ev: [{ at: 1, k: 'swarm', n: 9, path: 'sine', side: 1, y: 70 }, { at: 3, k: 'double', x: 140 }, { at: 5, k: 'gold' }] }] },
+    /* SAT: tramonto, l'inbox esplode: treni di spam */
+    sat: { hint: 'Inbox flood. Spam comes in trains.', teaser: 'Sunset. The inbox floods.', speed: 1.18, waves: [
+      { rows: ['call', 'call'], cols: 5, march: 16, creep: .5, dive: 3.6, fire: 2, cap: 4, ev: [{ at: .5, k: 'swarm', n: 10, path: 'sine', side: -1, y: 64 }, { at: 4.5, k: 'swarm', n: 10, path: 'sine', side: 1, y: 88 }] },
+      { rows: [], ev: [{ at: .3, k: 'swarm', n: 12, path: 'swoop', side: -1 }, { at: 2.6, k: 'swarm', n: 12, path: 'swoop', side: 1 }, { at: 4, k: 'gold' }, { at: 5.6, k: 'swarm', n: 14, path: 'sine', side: -1, y: 50 }, { at: 8, k: 'swarm', n: 14, path: 'swoop', side: 1 }] },
+      { rows: ['invoice', 'noshow'], cols: 6, march: 19, creep: .6, dive: 3, fire: 1.6, cap: 5, ev: [{ at: 2, k: 'swarm', n: 10, path: 'sine', side: 1, y: 100 }, { at: 5, k: 'double', x: 240 }] }] },
+    /* SUN: calma strana, pochi nemici... e la trappola alla fine */
+    sun: { hint: 'Sunday. Quiet. Too quiet.', teaser: 'Calm. Too calm.', speed: .9, waves: [
       { rows: ['call'], cols: 4, march: 10, creep: .3, dive: 7, fire: 3.5, cap: 2 },
-      { rows: [], ev: [{ at: .5, k: 'double', x: 240 }, { at: 3, k: 'gold' }] },
-      { rows: ['invoice'], cols: 3, march: 10, creep: .3, dive: 0, fire: 3.5, cap: 2, ev: [{ at: 2, k: 'swarm', n: 6, path: 'sine', side: -1, y: 70 }] }] },
-    mon: { hint: '', main: 'Monday', speed: 1.25, waves: [] }
+      { rows: [], ev: [{ at: .5, k: 'double', x: 240 }, { at: 2.5, k: 'gold' }] },
+      { rows: [], ev: [{ at: .8, k: 'trap' }] }] },
+    mon: { hint: '', teaser: 'MONDAY.', speed: 1.25, waves: [] }
   };
   var PTS = { call: 1, invoice: 2, receipt: 1, noshow: 3, spam: 1, double: 3, gold: 5 };
   /* hitbox (meta' larghezza, meta' altezza), piu' piccole degli sprite */
@@ -390,7 +395,7 @@
   function startDay(d) {
     Gm.day = d; Gm.phase = d === 6 ? 'monin' : 'intro'; Gm.phaseT = 0; Gm.wave = -1; Gm.clock = 0; Gm.clockShow = 0; Gm.overtime = false;
     Gm.def = DEF[DAYS[d]]; Gm.F.on = false; Gm.dayT = 0; Gm.coinDay = false; Gm.boss = null; Gm.monIn = 0;
-    Gm.ds = { kills: 0, h0: Gm.score, best: 0, bonus: 0 };
+    Gm.ds = { kills: 0, h0: Gm.score, best: 0, bonus: 0 }; curInt = 0; HZ.st = 'off'; HZ.next = 4;
     clearPool(EN); clearPool(EB); clearPool(BL); clearPool(PU); clearPool(PG);
     resetFirewalls();
     Gm.ship.inv = 1.5;
@@ -400,7 +405,7 @@
   }
   function startWave(i) {
     var wd = Gm.def.waves[i]; Gm.wave = i; Gm.wdef = wd; Gm.waveT = 0; Gm.evI = 0; Gm.waveTotal = 0; Gm.waveDone = 0;
-    Gm.diveT = wd.dive ? wd.dive * .8 : 0; Gm.fireT = wd.fire * 1.2;
+    Gm.diveT = wd.dive ? wd.dive * .8 : 0; Gm.fireT = (wd.fire || 2) * 1.2;
     var F = Gm.F, rows = wd.rows || [];
     F.on = rows.length > 0; F.cols = wd.cols || 0; F.rows = rows.length; F.dir = Math.random() < .5 ? 1 : -1;
     F.x = (W - (F.cols - 1) * F.sx) / 2; F.y = 30; F.total = 0;
@@ -412,7 +417,7 @@
     F.alive = F.total;
     if (wd.ev) Gm.waveTotal += countEv(wd.ev);
   }
-  function countEv(ev) { var n = 0; for (var i = 0; i < ev.length; i++) n += ev[i].k === 'swarm' ? ev[i].n : ev[i].k === 'double' ? 2 : 1; return n }
+  function countEv(ev) { var n = 0; for (var i = 0; i < ev.length; i++) n += ev[i].k === 'swarm' ? ev[i].n : ev[i].k === 'double' ? 2 : ev[i].k === 'trap' ? 4 : 1; return n }
   function spawnEnemy(type, x, y) {
     var e = take(EN); if (!e) return null;
     e.type = type; e.base = type; e.x = x; e.y = y; e.vx = e.vy = 0; e.hp = type === 'gold' ? 2 : 1; e.st = 'free'; e.t = 0; e.hit = 0; e.fade = 1;
@@ -427,6 +432,13 @@
   /* eventi a tempo dentro un'ondata */
   function runEvent(ev) {
     var sp = Gm.def.speed, i, e;
+    if (ev.k === 'trap') { /* Sunday scaries: quattro no-show riappaiono intorno alla nave, uno dopo l'altro */
+      Gm.waveTotal -= 4; ftext('SUNDAY SCARIES', 240, 100, C.crim); sfx('blip');
+      var s0 = Gm.ship, ang = [-2.4, -.7, -1.9, -1.2];
+      for (i = 0; i < 4; i++) { e = spawnEnemy('noshow', 0, 0); if (!e) break; e.st = 'mark'; e.t = -i * .45; e.fade = 0;
+        e.x = clamp(s0.x + Math.cos(ang[i]) * 80, 16, W - 16); e.y = clamp(s0.y + Math.sin(ang[i]) * 80, 34, 150) }
+      return;
+    }
     if (ev.k === 'gold') {
       var side = Math.random() < .5 ? -1 : 1; Gm.waveTotal--; /* gia' contato */
       e = spawnEnemy('gold', side < 0 ? -12 : W + 12, 24); if (!e) return;
@@ -529,6 +541,7 @@
     comboKill();
     var col = e.type === 'gold' ? C.gold : e.type === 'noshow' ? C.cream : C.p2;
     spark(e.x, e.y, art('explosion') ? 3 : e.type === 'spam' ? 5 : 9, col, C.cream, 75); boom(e.x, e.y, e.type === 'gold' ? 'gold' : e.type); corpse(e);
+    if (Gm.def.party) { spark(e.x, e.y, 6, accent('fri'), C.gold, 60, 50); spark(e.x, e.y, 3, C.cream, C.p3, 50, 50) }
     if (!quiet) sfx(e.type === 'invoice' ? 'split' : 'kill', e.x);
     if (e.type === 'invoice') {
       for (var s = -1; s < 2; s += 2) { var r = spawnEnemy('receipt', e.x + s * 4, e.y); if (r) { r.st = 'fall'; r.x0 = e.x + s * 4; r.vx = s * 46; r.vy = 18; r.y0 = e.y } }
@@ -600,7 +613,8 @@
     RT += dt;
     if (st === 'boot') { bootT += dt; if (bootT > 3.4) toTitle(); return }
     if (st === 'title' || st === 'form' || st === 'board') { T += dt; titleUpdate(dt); return }
-    if (st === 'over' || st === 'win' || st === 'init' || st === 'clock') { T += dt; stT += dt; ambient(dt); if (st === 'clock' && stT > 5.2) nextDay(); if ((st === 'over' || st === 'win') && stT > 6) toInit(); return }
+    if (st === 'crawl') { T += dt; stT += dt; if (stT > CRAWL_DUR) toMap(-1); return }
+    if (st === 'over' || st === 'win' || st === 'init' || st === 'clock') { T += dt; stT += dt; ambient(dt); if (st === 'clock' && stT > mapDur()) nextDay(); if ((st === 'over' || st === 'win') && stT > 6) toInit(); return }
     if (st !== 'play' || paused) return;
     if (Gm.hitStop > 0) { Gm.hitStop -= dt; return }
     var wdt = Gm.phase === 'dying' ? dt * .35 : dt;
@@ -611,6 +625,7 @@
     formationUpdate(wdt);
     enemiesUpdate(wdt);
     if (Gm.boss) bossUpdate(Gm.boss, wdt);
+    hazUpdate(wdt);
     blocksUpdate(wdt);
     bulletsUpdate(wdt);
     pickupsUpdate(wdt);
@@ -641,7 +656,7 @@
     /* la musica accelera quando restano pochi nemici */
     if (((RT * 2) | 0) !== ((RT * 2 - dt * 2) | 0)) {
       var k = Gm.waveTotal ? Gm.waveDone / Gm.waveTotal : 0; if (Gm.boss) k = 1 - Gm.boss.hp / Gm.boss.max;
-      aucall('intensity', clamp(k, 0, 1));
+      curInt = clamp(k, 0, 1); aucall('intensity', curInt);
     }
   }
 
@@ -670,13 +685,14 @@
   function autoPilot(dt) {
     var s = Gm.ship, tx = s.x, best = null, bd = 1e9, i, e;
     for (i = 0; i < EN.length; i++) { e = EN[i]; if (!e.on || e.y < 0 || e.st === 'out' || e.st === 'mark') continue; var d = Math.abs(e.x - s.x) + (CITY_Y - e.y) * .6; if (d < bd) { bd = d; best = e } }
-    if (best) tx = best.x; else if (Gm.boss) tx = Gm.boss.x;
+    if (best) tx = best.x + (best.vxe || 0) * clamp((s.y - best.y) / 330, 0, 1); else if (Gm.boss) tx = Gm.boss.x;
     var ty = 182;
     if (botOn && Gm.nightT <= 0) {
       /* il bot schiva: prova posizioni vicine e sceglie quella con meno pericolo */
       var bx = s.x, by = s.y, bscore = 1e9;
       for (var ox = -48; ox <= 48; ox += 8) for (var oy = -24; oy <= 24; oy += 12) {
-        var cx = clamp(s.x + ox, 12, W - 12), cy = clamp(s.y + oy, SHIP_MIN + 30, SHIP_MAX), sc = Math.abs(cx - tx) * .25 + Math.abs(ox) * .05 + Math.abs(cy - ty) * .05;
+        var cx = clamp(s.x + ox, 12, W - 12), cy = clamp(s.y + oy, SHIP_MIN + 30, SHIP_MAX), sc = Math.abs(cx - tx) * .8 + Math.abs(ox) * .05 + Math.abs(cy - ty) * .1;
+        if (HZ.st !== 'off' && cx + 6 > HZ.x && cx - 6 < HZ.x + HZ.w) sc += HZ.st === 'on' ? 5000 : 900;
         for (var j = 0; j < EB.length; j++) { var b = EB[j]; if (!b.on) continue;
           for (var k = 0; k <= 4; k++) { var tt = k * .1, px = b.x + b.vx * tt, py = b.y + b.vy * tt, ddx = px - cx, ddy = py - cy, dd = ddx * ddx + ddy * ddy; if (dd < 220) sc += (220 - dd) * (1.5 - tt * 2) } }
         for (j = 0; j < EN.length; j++) { e = EN[j]; if (!e.on) continue; var ex = e.x + e.vx * .3, ey = e.y + e.vy * .3, d2 = (ex - cx) * (ex - cx) + (ey - cy) * (ey - cy); if (d2 < 700) sc += (700 - d2) }
@@ -703,7 +719,7 @@
         Gm.waveT += dt;
         while (wd.ev && Gm.evI < wd.ev.length && Gm.waveT >= wd.ev[Gm.evI].at) runEvent(wd.ev[Gm.evI++]);
         var left = aliveCount(), pending = wd.ev && Gm.evI < wd.ev.length;
-        var prog = (Gm.wave + (Gm.waveTotal ? Gm.waveDone / Gm.waveTotal : 0) * .97) / 3;
+        var prog = (Gm.wave + (Gm.waveTotal ? Gm.waveDone / Gm.waveTotal : 0) * .97) / d.waves.length;
         Gm.clock = Math.max(Gm.clock, Math.min(.995, prog));
         Gm.overtime = Gm.waveT > 26;
         if (left === 0 && !pending && Gm.waveT > 1) {
@@ -725,10 +741,30 @@
     } else if (p === 'boss') {
       if (Gm.boss) { var bb = Gm.boss; Gm.clock = Math.min(.999, 1 - bb.hp / bb.max) }
     } else if (p === 'out') {
-      Gm.clock = 1; if (Gm.phaseT > 1.4) toClock();
+      Gm.clock = 1; if (Gm.won) { if (Gm.phaseT > 2.6) winGame() } else if (Gm.phaseT > 1.4) toMap(Gm.day);
     } else if (p === 'dying') {
       if (Gm.phaseT > 2) gameOver();
     }
+  }
+  /* le insegne acide (THU): avviso onesto di un secondo, poi la colonna brucia */
+  var HZ = { st: 'off', x: 0, w: 22, t: 0, next: 5 };
+  function hazUpdate(dt) {
+    if (!Gm.def.acid || Gm.phase !== 'fight') { HZ.st = 'off'; return }
+    HZ.t += dt;
+    if (HZ.st === 'off') { HZ.next -= dt; if (HZ.next <= 0) { HZ.st = 'warn'; HZ.t = 0; HZ.x = clamp(Gm.ship.x + rnd(-50, 50), 20, W - 20 - HZ.w); sfx('blip', HZ.x) } }
+    else if (HZ.st === 'warn' && HZ.t > 1.1) { HZ.st = 'on'; HZ.t = 0; sfx('cityHit', HZ.x); shake(2) }
+    else if (HZ.st === 'on') {
+      var s = Gm.ship; if (!s.dead && s.x + 2 > HZ.x && s.x - 2 < HZ.x + HZ.w && s.y > 128) hurt('acid');
+      if (HZ.t > .8) { HZ.st = 'off'; HZ.next = rnd(4.5, 7) }
+    }
+  }
+  function drawHaz(t) {
+    if (HZ.st === 'off') return;
+    var ac = accent('thu'), x = Math.round(HZ.x);
+    if (HZ.st === 'warn') { if (((t * 12) | 0) % 2) { for (var y = 132; y < CITY_Y; y += 4) { R(x, y, 1, 2, ac); R(x + HZ.w - 1, y, 1, 2, ac) } } txt('!', x + HZ.w / 2, 134, ac, 1, 'c'); return }
+    g.globalAlpha = .55 + .25 * Math.sin(t * 60); R(x, 128, HZ.w, CITY_Y - 128, ac); g.globalAlpha = 1;
+    R(x + HZ.w / 2 - 1, 128, 2, CITY_Y - 128, C.cream);
+    for (var i = 0; i < 3; i++) R(x + rnd(0, HZ.w), rnd(130, CITY_Y), 1, 2, C.cream);
   }
   function aliveCount() { var n = 0; for (var i = 0; i < EN.length; i++) if (EN[i].on && EN[i].counts) n++; return n }
   function clockOut() {
@@ -738,8 +774,69 @@
     Gm.log.days.push([Math.round(Gm.playT * 10) / 10, Math.floor(Gm.score)]);
     if (Gm.day === 5 && Gm.coffee < 3 && !weekend) { Gm.coffee++; Gm.ds.rest = true }
   }
-  function toClock() { st = 'clock'; stT = 0; music(null); var a = window.DEADLINE_ART; try { if (a && a.prepareDay) a.prepareDay(DAYS[Gm.day + 1] || 'mon'); if (a && a.prepareBoss && Gm.day === 5) a.prepareBoss() } catch (e) {} }
-  function nextDay() { if (Gm.day >= 5) startDay(6); else startDay(Gm.day + 1) }
+  /* la mappa del mondo tra un giorno e l'altro: pochi secondi, si salta */
+  function toMap(from) {
+    st = 'clock'; stT = 0; Gm.mapFrom = from; clearPool(EB); clearPool(PB);
+    if (from >= 0) music(null);
+    var a = window.DEADLINE_ART; try { if (a && a.prepareDay) a.prepareDay(DAYS[from + 1] || 'mon'); if (a && a.prepareBoss && from >= 4) a.prepareBoss() } catch (e) {}
+  }
+  function mapDur() { return Gm.mapFrom < 0 ? 2.2 : 3.6 }
+  function nextDay() { startDay(Math.min(6, Gm.mapFrom + 1)) }
+  /* l'intro che scorre, una volta per sessione */
+  var CRAWL = ['Not long ago, in an office', 'not so far away...', '', 'Small businesses are under attack.', '', 'Missed calls. Paper invoices.', 'No-shows. Spam.', '',
+    'Every week the chores multiply.', '', 'And at the end of every week', 'waits the worst of them all:', 'MONDAY.', '', 'One machine was built to fight back.', '',
+    'Save the hours.', 'Protect the city.', '', 'Beat MONDAY before the deadline.'];
+  var CRAWL_SP = 26, CRAWL_DUR = (300 + CRAWL.length * 15 - 40) / CRAWL_SP;
+  function crawlSeen() { try { return sessionStorage.getItem('mm-deadline-crawl') === '1' } catch (e) { return false } }
+  function drawCrawl() {
+    dSky('night', T); R(0, 0, W, H, 'rgba(6,11,30,.45)');
+    for (var i = 0; i < CRAWL.length; i++) {
+      var y = 290 + i * 15 - stT * CRAWL_SP; if (y < 20 || y > H) continue;
+      /* finta prospettiva: grande in basso, piccolo e spento in alto */
+      var big = y > 150, a = clamp((y - 20) / 70, 0, 1), mon = CRAWL[i] === 'MONDAY.';
+      g.globalAlpha = a; txt(CRAWL[i], 240, y, mon ? C.crim : C.goldL, big || mon ? 2 : 1, 'c', C.night);
+    }
+    g.globalAlpha = 1;
+    txt(touchMode ? 'Tap to skip' : 'Any key to skip', W - 6, H - 10, C.p3, 1, 'r');
+    hot.push({ x: 0, y: 0, w: W, h: H, id: 'cont' });
+  }
+  var MAPN = [[48, 214], [108, 186], [168, 210], [228, 178], [288, 204], [348, 172], [424, 128]];
+  function drawMap() {
+    var from = Gm.mapFrom, to = Math.min(6, from + 1), k = from < 0 ? 0 : easeIO((stT - .7) / 1.4), pos = from < 0 ? 0 : from + k;
+    var pulse = (Math.sin(RT * 6) + 1) / 2, a = art('map'), drawn = false;
+    if (a) { try { a.map(g, T, { current: to, done: from + 1, shipPos: pos, unlocked: k >= 1 || from < 0 ? to : from, pulse: pulse, days: DAYS }); drawn = true } catch (e) { fail('map', e) } }
+    if (!drawn) {
+      dSky('night', T); R(0, 96, W, H - 96, 'rgba(6,10,24,.75)');
+      for (var i = 0; i < 6; i++) { var p0 = MAPN[i], p1 = MAPN[i + 1], n = 24, lit = i < from || (i === from && k >= 1);
+        for (var j = 0; j < n; j += 2) { var q = j / n, x = p0[0] + (p1[0] - p0[0]) * q, y = p0[1] + (p1[1] - p0[1]) * q; if (i === from && q > k) lit = false; R(x, y, 2, 1, lit ? C.tom : C.g3) } }
+      R(MAPN[6][0] - 9, MAPN[6][1] - 70, 18, 70, '#16070A'); R(MAPN[6][0] - 7, MAPN[6][1] - 66, 14, 10, C.crim);
+      for (i = 0; i < 7; i++) {
+        var nx = MAPN[i][0], ny = MAPN[i][1], done = i <= from, cur = i === to, d = DAYS[i];
+        R(nx - 6, ny - 4, 13, 9, C.night); R(nx - 5, ny - 3, 11, 7, done ? accent(d) : cur ? (pulse > .5 ? C.tom : C.tomD) : C.g4);
+        if (done) { R(nx - 2, ny, 1, 1, C.night); R(nx - 1, ny + 1, 1, 1, C.night); R(nx, ny, 1, 1, C.night); R(nx + 1, ny - 1, 1, 1, C.night); R(nx + 2, ny - 2, 1, 1, C.night) }
+        txt(d.toUpperCase(), nx, ny + 9, done ? C.cream : cur ? C.tom : C.p4, 1, 'c');
+      }
+    }
+    /* la nave lungo la strada */
+    var i0 = Math.min(5, Math.floor(pos)), f = pos - i0, A = MAPN[i0], B = MAPN[Math.min(6, i0 + 1)];
+    if (!drawn) { SS.bank = 0; SS.thrust = .6; SS.shield = 0; SS.flash = false; SS.power = null; dShip(A[0] + (B[0] - A[0]) * f, A[1] + (B[1] - A[1]) * f - 16, T) }
+    /* il riepilogo del giorno finito, compatto, in alto */
+    var nd = DAYS[to];
+    if (from >= 0) {
+      var y0 = 14; panel(130, y0, 220, 62);
+      txt('CLOCKED OUT 17:00', 240, y0 + 6, C.cream, 1, 'c');
+      txt(DAYNAME[DAYS[from]] + ' DONE', 240, y0 + 17, accent(DAYS[from]), 1, 'c');
+      txt('Hours +' + Math.round(Gm.score - Gm.ds.h0), 140, y0 + 31, C.p2, 1); txt('Jobs ' + Gm.ds.kills, 340, y0 + 31, C.p2, 1, 'r');
+      txt('Streak ' + Gm.ds.best, 140, y0 + 43, C.p2, 1); txt('Lit ' + countLit() + '/' + Gm.wins.length, 340, y0 + 43, C.p2, 1, 'r');
+      if (Gm.ds.bonus) txt('On time +' + Gm.ds.bonus, 240, y0 + 43, C.p2, 1, 'c');
+      if (Gm.ds.rest) txt('Rested: +1 coffee', 240, y0 + 54, C.pink, 1, 'c');
+    }
+    var ky = from >= 0 ? 84 : 40, ka = clamp((stT - (from >= 0 ? 1.8 : .3)) * 3, 0, 1);
+    g.globalAlpha = ka; panel(150, ky, 180, 24);
+    txt(nd === 'mon' ? 'MONDAY' : DAYNAME[nd], 240, ky + 5, nd === 'mon' ? C.crim : C.cream, 1, 'c');
+    txt(DEF[nd].teaser, 240, ky + 14, C.p3, 1, 'c'); g.globalAlpha = 1;
+    if (stT > .6) hot.push({ x: 0, y: 0, w: W, h: H, id: 'cont' });
+  }
 
   function formationUpdate(dt) {
     var F = Gm.F; if (!F.on) return;
@@ -755,7 +852,7 @@
     /* tuffi e spari della formazione */
     if (Gm.phase !== 'fight') return;
     if (wd.dive) { Gm.diveT -= dt; if (Gm.diveT <= 0) { Gm.diveT = wd.dive * rnd(.7, 1.2) / Gm.def.speed; diveOne() } }
-    Gm.fireT -= dt; if (Gm.fireT <= 0) { Gm.fireT = wd.fire * rnd(.7, 1.25) / Gm.def.speed; formFire() }
+    if (wd.fire) { Gm.fireT -= dt; if (Gm.fireT <= 0) { Gm.fireT = wd.fire * rnd(.7, 1.25) / Gm.def.speed; formFire() } }
   }
   function countF() { var n = 0; for (var i = 0; i < EN.length; i++) if (EN[i].on && EN[i].fromF) n++; return n }
   function diveOne() {
@@ -788,7 +885,7 @@
     var s = Gm.ship, sp = Gm.def.speed, F = Gm.F;
     for (var i = 0; i < EN.length; i++) {
       var e = EN[i]; if (!e.on) continue;
-      e.t += dt; if (e.hit > 0) e.hit -= dt * 7; if (e.marked > 0) { e.marked -= dt; if (e.marked <= 0) ftext('STILL DOUBLE', e.x, e.y - 10, C.p2) }
+      e.ox = e.x; e.t += dt; if (e.hit > 0) e.hit -= dt * 7; if (e.marked > 0) { e.marked -= dt; if (e.marked <= 0) ftext('STILL DOUBLE', e.x, e.y - 10, C.p2) }
       if (e.charge > 0) { e.charge -= dt; if (e.charge <= 0) { e.charge = 0; enemyShot(e) } }
       switch (e.st) {
         case 'enter': {
@@ -812,7 +909,7 @@
             e.x = clamp(s.x + side * rnd(48, 74), 16, W - 16); e.y = clamp(s.y - rnd(70, 90), 34, 150); }
           break;
         case 'mark': /* ...lascia il segno dove riappare... */
-          e.fade = 0; if (e.t > .75) { e.st = 'in'; e.t = 0; sfx('blip', e.x) } break;
+          e.fade = 0; if (e.t > .8) { e.st = 'in'; e.t = 0; sfx('blip', e.x) } break;
         case 'in':
           e.fade = Math.min(1, e.t / .25);
           if (e.t > .45) { e.st = 'ram'; e.t = 0; var dx = s.x - e.x, dy = s.y - e.y, d = Math.sqrt(dx * dx + dy * dy) || 1, v = 150 * sp; e.vx = dx / d * v; e.vy = dy / d * v }
@@ -852,6 +949,7 @@
           break;
       }
       if (!e.on) continue;
+      e.vxe = (e.x - e.ox) / dt;
       /* contatto con la nave */
       var hb = HB[e.type === 'gold' ? e.base : e.type] || HB.call;
       if (!s.dead && e.fade > .5 && Math.abs(e.x - s.x) < hb[0] + 3 && Math.abs(e.y - s.y) < hb[1] + 3) {
@@ -1109,6 +1207,8 @@
     fxBegin();
     if (st === 'boot') drawBoot();
     else if (st === 'title' || st === 'board' || st === 'form') drawTitle();
+    else if (st === 'crawl') drawCrawl();
+    else if (st === 'clock') drawMap();
     else drawGame();
     fxEnd();
   }
@@ -1202,23 +1302,13 @@
   }
 
   function drawGame() {
-    var t = T, day = curDayKey(), sh = Gm.shake, ox = 0, oy = 0;
+    var t = T, day = curDayKey(), sh = Gm.shake, ox = 0, oy = 0, i;
     if (sh > 0 && !RM()) { ox = Math.round(rnd(-sh, sh) * .5); oy = Math.round(rnd(-sh, sh) * .5) }
     g.setTransform(1, 0, 0, 1, ox, oy);
     var scroll = T * 6 + Gm.ship.x * .15;
-    if (st === 'clock') {
-      /* il cielo passa al giorno dopo, dietro il riepilogo */
-      scene(DAYS[Gm.day], t, scroll);
-      var nd = DAYS[Math.min(6, Gm.day + 1)], k = clamp((stT - 1) / 1.6, 0, 1);
-      if (k > 0) { g.globalAlpha = k; scene(nd, t, scroll); g.globalAlpha = 1 }
-      dCity(Gm.wins, t, k > .5 ? nd : DAYS[Gm.day]);
-      for (var i = 0; i < fws.length; i++) dFirewall(fws[i]);
-      g.setTransform(1, 0, 0, 1, 0, 0);
-      drawHUD(t); drawSummary(t); return;
-    }
     scene(day, t, scroll);
     /* FLOW STATE: lo sfondo pulsa a tempo */
-    if (Gm.flow) { var beat = 60 / 128, pk = RM() ? .5 : Math.pow(1 - (T % beat) / beat, 3); g.globalAlpha = .05 + .07 * pk; R(-4, -4, W + 8, CITY_Y + 4, accent(day)); g.globalAlpha = 1 }
+    if (Gm.flow) { var beat = 60 / 128, pk = RM() ? .5 : Math.pow(1 - (T % beat) / beat, 3), A0 = au(); if (A0 && A0.beat && !RM()) { try { var bt = A0.beat(); if (bt && bt.on) pk = Math.pow(1 - bt.phase, 3) } catch (e) {} } g.globalAlpha = .05 + .07 * pk; R(-4, -4, W + 8, CITY_Y + 4, accent(day)); g.globalAlpha = 1 }
     dCity(Gm.wins, t, day);
     if (!art('city')) drawWinOff();
     for (i = 0; i < fws.length; i++) dFirewall(fws[i]);
@@ -1229,14 +1319,16 @@
     /* nemici */
     for (i = 0; i < EN.length; i++) {
       var e = EN[i]; if (!e.on) continue;
-      if (e.st === 'mark') { drawMark(e, t); continue }
+      if (e.st === 'mark') { if (e.t >= 0) drawMark(e, t); continue }
       if (e.type === 'double' && e.lead && e.partner && e.partner.on) { pairLine(e, e.partner, t) }
       SE.hit = RM() ? (e.hit > .5 ? 1 : 0) : clamp(e.hit, 0, 1); SE.phase = e.c; SE.fade = art('enemy') ? 1 - e.fade : e.fade; SE.base = e.type === 'gold' ? e.base : null; SE.marked = e.marked > 0;
-      dEnemy(e.type, e.x, e.y, t + e.c * .13);
+      if (Gm.def.fog && Gm.nightT <= 0) { var fa = clamp(1 - (Gm.ship.y - e.y - 64) / 56, .1, 1); if (e.hit > 0) fa = 1; g.globalAlpha = fa }
+      dEnemy(e.type, e.x, e.y, t + e.c * .13); g.globalAlpha = 1;
       if (e.marked > 0) { R(e.x - 2, e.y - 12, 5, 1, C.cream); R(e.x - 1, e.y - 11, 3, 1, C.cream) }
     }
     for (i = 0; i < CP.length; i++) { var cp = CP[i]; if (!cp.on) continue; if (RT - cp.t0 > .045) { cp.on = false; continue } SE.dead = true; SE.hit = 0; SE.fade = 0; SE.base = cp.type === 'gold' ? cp.base : null; dEnemy(cp.type, cp.x, cp.y, t); SE.dead = false }
     if (Gm.boss) drawBoss(Gm.boss, t);
+    drawHaz(t);
     for (i = 0; i < PG.length; i++) { var q = PG[i]; if (q.on) { if (art('page')) { try { AR.page(g, q.x, q.y, T, i); continue } catch (x) { fail('page', x) } } var f = ((q.r | 0) % 3); R(q.x - (f === 1 ? 1 : 3), q.y - (f === 1 ? 3 : 2), f === 1 ? 2 : 6, f === 1 ? 6 : 4, C.cream); R(q.x - 2, q.y, f === 1 ? 1 : 4, 1, C.p3) } }
     /* colpi */
     for (i = 0; i < PB.length; i++) if (PB[i].on) dBullet('player', PB[i].x, PB[i].y, t, Math.atan2(PB[i].vy, PB[i].vx));
@@ -1380,20 +1472,6 @@
   function panel(x, y, w, h) { R(x, y, w, h, 'rgba(15,15,14,.88)'); R(x, y, w, 1, 'rgba(244,242,236,.35)'); R(x, y + h - 1, w, 1, 'rgba(244,242,236,.35)');
     R(x, y, 3, 1, C.cream); R(x, y, 1, 3, C.cream); R(x + w - 3, y, 3, 1, C.cream); R(x + w - 1, y, 1, 3, C.cream);
     R(x, y + h - 1, 3, 1, C.cream); R(x, y + h - 3, 1, 3, C.cream); R(x + w - 3, y + h - 1, 3, 1, C.cream); R(x + w - 1, y + h - 3, 1, 3, C.cream) }
-  function drawSummary(t) {
-    var d = DAYS[Gm.day], k = easeOut(stT / .5), y = Math.round(60 + (1 - k) * 20);
-    g.globalAlpha = clamp(stT * 3, 0, 1);
-    panel(130, y, 220, 120);
-    txt('CLOCKED OUT 17:00', 240, y + 10, C.cream, 1, 'c');
-    txt(DAYNAME[d] + ' DONE', 240, y + 22, accent(d), 1, 'c');
-    var L = [['Jobs handled', '' + Gm.ds.kills], ['Hours saved', '+' + (Gm.score - Gm.ds.h0)], ['Left on time', '+' + Gm.ds.bonus], ['Best streak', '' + Gm.ds.best], ['Windows lit', countLit() + '/' + Gm.wins.length]];
-    if (Gm.ds.rest) L.push(['Rested', '+1 coffee']);
-    for (var i = 0; i < L.length; i++) { if (stT < .4 + i * .18) break; txt(L[i][0], 150, y + 38 + i * 11, C.p3, 1); txt(L[i][1], 330, y + 38 + i * 11, C.cream, 1, 'r') }
-    var nd = DAYS[Gm.day + 1];
-    if (stT > 1.6) txt(nd === 'mon' ? 'Next: ...' : 'Next: ' + DAYNAME[nd], 240, y + 106, ((RT * 2) | 0) % 2 || nd !== 'mon' ? C.cream : C.crim, 1, 'c');
-    g.globalAlpha = 1;
-    hot.push({ x: 0, y: 0, w: W, h: H, id: 'cont' });
-  }
   function countLit() { var n = 0; for (var i = 0; i < Gm.wins.length; i++) if (Gm.wins[i]) n++; return n }
   function drawEnd(t) {
     var k = clamp(stT * 2, 0, 1); g.globalAlpha = k * .75; R(0, 0, W, H, C.night); g.globalAlpha = k;
@@ -1447,7 +1525,7 @@
   function fxEnd() {
     fx.globalCompositeOperation = 'lighter';
     var i, oxk = 0;
-    if (st === 'play' || st === 'clock' || st === 'over' || st === 'win' || st === 'init') {
+    if (st === 'play' || st === 'over' || st === 'win' || st === 'init') {
       var s = Gm.ship, day = curDayKey(), red = day === 'mon' ? 'red' : 'cyan';
       var ax = window.DEADLINE_ART;
       if (ax && typeof ax.shafts === 'function' && !broken.shafts) { fx.setTransform(fxk, 0, 0, fxk, 0, 0); try { ax.shafts(fx, day, T) } catch (e) { fail('shafts', e) } fx.setTransform(1, 0, 0, 1, 0, 0); fx.globalCompositeOperation = 'lighter' }
@@ -1510,13 +1588,16 @@
     else cont();
   }
   function cont() {
-    if (st === 'clock' && stT > 1) nextDay();
+    if (st === 'clock' && stT > .6) nextDay();
+    else if (st === 'crawl') toMap(-1);
     else if ((st === 'over' || st === 'win') && stT > 1) toInit();
     else if (st === 'init') confirmIni();
     else if (st === 'board' && stT > .5) { toTitle() }
   }
   function startGame() {
-    unlock(); sfx('insertCoin'); weekendUI(); newGame(); startDay(0); paused = false; syncUI();
+    unlock(); sfx('insertCoin'); weekendUI(); newGame(); paused = false;
+    if (crawlSeen()) toMap(-1); else { st = 'crawl'; stT = 0; try { sessionStorage.setItem('mm-deadline-crawl', '1') } catch (e) {} }
+    syncUI();
     try { scr.focus({ preventScroll: true }) } catch (e) {}
   }
   function pause() { if (st !== 'play' || paused) return; paused = true; aucall('duck', true); keys.l = keys.r = keys.u = keys.d = keys.f = 0; syncUI() }
@@ -1524,7 +1605,7 @@
   function weekendUI() {}
   function syncUI() {
     if (!box) return;
-    var lbl = { boot: 'Skip', title: 'Insert coin', clock: 'Next day', over: 'Continue', win: 'Continue', init: 'Save', board: 'Continue', form: 'Insert coin' }[st] || 'Pause';
+    var lbl = { boot: 'Skip', crawl: 'Skip', title: 'Insert coin', clock: 'Go', over: 'Continue', win: 'Continue', init: 'Save', board: 'Continue', form: 'Insert coin' }[st] || 'Pause';
     if (st === 'play') lbl = paused ? 'Resume' : 'Pause';
     goBtn.textContent = lbl; goBtn.classList.toggle('dlblink', st === 'title');
     sndBtn.textContent = muted ? 'Sound off' : 'Sound on'; sndBtn.setAttribute('aria-pressed', muted ? 'true' : 'false');
@@ -1608,6 +1689,7 @@
     konami.push(low); if (konami.length > 10) konami.shift();
     if ((st === 'title' || st === 'boot') && konami.join(',') === KONAMI) { weekend = !weekend; konami = []; sfx('coin'); ftextT(weekend ? 'WEEKEND MODE' : 'WEEKDAYS AGAIN'); return }
     if (st === 'form') return;
+    if (st === 'crawl' && k !== 'Escape' && !e.repeat) { e.preventDefault(); toMap(-1); return }
     if (k === 'Escape') { e.preventDefault(); if (st === 'play') { paused ? resume() : pause() } else close(); return }
     if (st === 'play') {
       var m = keyMap(low);
