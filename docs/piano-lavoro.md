@@ -111,7 +111,7 @@ File: `public/js/stanza.js` (motore e stanza), `public/js/stanza-oggetti.js` (og
 
 ### Funzioni
 - [ ] **TV:** il video non parte. Poi forse un video diverso.
-- [ ] **Il gioco del cabinato:** al posto di Rush hour arriva DEADLINE (vedi la sezione sotto).
+- [ ] **Il gioco del cabinato:** al posto di Rush hour arriva DEADLINE (vedi B5).
 - [ ] **Musica:** cambiando pagina il player si ferma. Vorrebbe che ripartisse da solo (su telefono a volte lo fa).
   Nota: il browser blocca l'audio senza un tocco; vero play continuo = sito a pagina unica (Astro ClientRouter), da decidere.
 - [ ] **Mini player:** in vetro (glassmorfismo fatto bene, con la tecnica del sito: niente backdrop-filter dal vivo
