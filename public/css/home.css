@@ -252,8 +252,9 @@ html .mmc.wdr:not(.hit) i::after{width:0;height:0}
 
 @media (max-width:860px){
   .wkxh{align-items:flex-start;flex-direction:column}
-  .wkc{grid-template-columns:none;grid-template-rows:auto 1fr;width:86vw;height:auto}
-  .wst{aspect-ratio:4/3.4}
+  /* su telefono scheda + selettore riempiono lo schermo sotto la testata: la foto prende lo spazio che resta */
+  .wkc{grid-template-columns:none;grid-template-rows:minmax(0,1fr) auto;width:86vw;height:clamp(470px,calc(100svh - 176px),680px)}
+  .wst{min-height:0}
   .wif{grid-template-rows:none;gap:12px;padding:22px 20px 22px}
   .wif h3{font-size:30px}
   .wif p{font-size:15.5px}
@@ -388,7 +389,7 @@ html .mmc.wdr:not(.hit) i::after{width:0;height:0}
 /* telefono (24 ottobre): un po' piu' d'aria, e una descrizione corta scritta per il telefono, mai tagliata */
 .wif .wps{display:none}
 @media (max-width:860px){
-  .wst{aspect-ratio:16/12}
+  .wst{aspect-ratio:auto}
   .wif{gap:12px;padding:20px 20px 0}
   .wif h3{margin-top:4px}
   .wif p{display:none}
