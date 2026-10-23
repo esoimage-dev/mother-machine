@@ -119,6 +119,26 @@ File: `public/js/stanza.js` (motore e stanza), `public/js/stanza-oggetti.js` (og
   lato**, piu' in alto, lasciando solo una linguetta da cui volendo lo tiri fuori.
 - [ ] Da ridisegnare (lista vecchia di Eso): tazzina e tazza, divano nel complesso.
 
+## A5b · Note rimaste aperte nei piani vecchi (`docs/archivio/`), da verificare nell'audit
+Alcune potrebbero essere gia' fatte: nell'audit si controlla e si spunta. Fonti: `DA-FARE-vecchio.md`, `AUDIT.md`.
+- [ ] Home: frase sotto il titolo piu' corta (proposta vecchia: "Software your company runs on. A brand it's known by.").
+- [ ] Home: ordine delle sezioni, lo slider di 05.4, i "three steps" di 05.5.
+- [ ] Home: il bottone dell'apertura porta dritto a Contact con l'ascensore (non alla porta G in fondo).
+- [ ] Via la scritta tecnica "wght 400" (rumore per chi visita).
+- [ ] Via i codici di sezione interni ("05.2 · What we build", "Study 03 Systems", "M-04") e le troppe etichette mono
+  sopra i titoli: dove il titolo basta, l'etichetta va via. Un momento forte per sezione, non tre.
+- [ ] Una demo protagonista per piano (Brand e Systems: una forte, il resto si accorcia).
+- [ ] Testo nuovo della pagina Work; footer di Work senza le lingue.
+- [ ] Pagine progetto: via "da confermare" e "Bozza"; citazione e foto vere; materiali veri dei progetti.
+- [ ] Contact: riga privacy sotto il bottone ("We only use this to answer you. Privacy."); al posto di "Already
+  booked?" la frase "Lost it? Enter your order number and we send the link again."
+- [ ] Privacy: nome legale, registrazione (ABN), indirizzo, rilettura da avvocato, togliere la scritta "Bozza".
+  ABN anche nel footer.
+- [ ] Doctype nelle pagine, con confronto visivo completo prima/dopo.
+- [ ] Dopo il lancio: la posta dentro la Machine Room (Email Routing -> Worker -> D1), il Gmail resta come copia.
+- [ ] Brand: altre modifiche che dara' Eso.
+- [ ] Idea vecchia per LG (da rivalutare): "le provette" con i nostri prodotti.
+
 ---
 
 # BINARIO A · ULTIMI PASSI
