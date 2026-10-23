@@ -1,0 +1,128 @@
+/* LG · DEADLINE: il cabinato a tutto schermo (public/js/deadline.js). Si apre come un cerchio che cresce dal cabinato
+   nella stanza. Insegna al neon, schermo a tubo con le righe e la curva, sotto il pannello dei comandi.
+   Il CSS del sito mette max-width e margini su molti elementi: qui tutto e' forzato. */
+
+.dl,.dl *{box-sizing:border-box}
+.dl{position:fixed!important;inset:0!important;margin:0!important;padding:16px!important;max-width:none!important;width:auto!important;height:auto!important;
+  z-index:2147482000;display:none;place-items:center;overflow:auto;overscroll-behavior:contain;
+  background:radial-gradient(ellipse at 50% 28%,#16110f 0%,#0b0b0a 58%,#060606 100%);color:#F4F2EC;
+  clip-path:circle(0 at var(--ox,50%) var(--oy,50%));transition:clip-path .6s cubic-bezier(.7,0,.2,1);
+  -webkit-tap-highlight-color:transparent;font:400 13px/1.4 var(--f-body,system-ui,sans-serif)}
+.dl.on{display:grid}
+.dl.in{clip-path:circle(260vmax at var(--ox,50%) var(--oy,50%))}
+html.dl-on,html.dl-on body{overflow:hidden!important}
+html.dl-on .mmc{--cc:#F4F2EC!important}
+html.dl-play .mmc{opacity:0!important}
+.dl p,.dl div,.dl canvas,.dl button,.dl a,.dl form,.dl label,.dl h2,.dl fieldset,.dl input{max-width:none;margin:0}
+
+/* il tasto per uscire */
+.dlx{all:unset;box-sizing:border-box;position:fixed!important;top:14px;right:14px;z-index:3;cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px 13px;
+  border:1.5px solid rgba(244,242,236,.4);background:rgba(11,11,10,.7);font:500 12px var(--f-mono,monospace);letter-spacing:.1em;text-transform:uppercase;color:#F4F2EC;transition:border-color .2s,color .2s}
+.dlx span{padding:2px 6px;border:1px solid rgba(244,242,236,.4)}
+.dlx:hover,.dlx:focus-visible{border-color:#FF5B3A;color:#FF5B3A;outline:none}
+
+/* il cabinato */
+.dlcab{width:var(--dlw,600px)!important;max-width:100%!important;margin:0 auto!important;display:flex;flex-direction:column;align-items:stretch;
+  transform:translateY(30px) scale(.95);opacity:0;transition:transform .7s cubic-bezier(.2,.8,.2,1) .15s,opacity .5s .15s}
+.dl.in .dlcab{transform:none;opacity:1}
+
+/* l'insegna al neon */
+.dlmq{position:relative;display:flex;justify-content:center;align-items:baseline;gap:.08em;padding:12px 20px 10px;border-radius:14px 14px 0 0;
+  background:linear-gradient(180deg,#1b1310,#0e0b0a);border:2px solid #2a201c;border-bottom:0;
+  font:700 clamp(26px,5vw,40px)/1 var(--f-mono,monospace);letter-spacing:.18em;text-transform:uppercase;user-select:none}
+.dlmq1,.dlmq2{color:#FFF1EA;text-shadow:0 0 3px #FF5B3A,0 0 10px #FF5B3A,0 0 24px rgba(255,91,58,.6)}
+.dlmq2{animation:dlflk 7s steps(1) infinite}
+@keyframes dlflk{0%,100%{opacity:1}41%{opacity:.3}42%{opacity:1}43%{opacity:.45}44%{opacity:1}}
+
+/* lo schermo: cornice, tubo curvo, righe, vignetta */
+.dlbez{padding:var(--dlbz,22px);background:#0f0d0c;border:2px solid #2a201c;border-top:0;border-bottom:0;box-shadow:inset 0 0 40px rgba(0,0,0,.9)}
+.dlscr{position:relative!important;margin:0 auto!important;max-width:none!important;border-radius:18px/22px;overflow:hidden;background:#0F0F0E;touch-action:none;
+  box-shadow:0 0 0 2px #050505,0 0 40px rgba(255,91,58,.08),inset 0 0 60px rgba(0,0,0,.8)}
+.dlscr canvas{position:absolute!important;inset:0;display:block;width:100%!important;height:100%!important;max-width:none!important;margin:0!important}
+.dlscr:focus,.dlscr:focus-visible{outline:none!important}
+.dlpx{image-rendering:pixelated;image-rendering:crisp-edges}
+.dlfx{pointer-events:none}
+.dlscan{position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:repeating-linear-gradient(180deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px),
+    radial-gradient(ellipse at 50% 50%,transparent 58%,rgba(0,0,0,.5) 100%),
+    linear-gradient(168deg,rgba(255,255,255,.05),transparent 38%);
+  box-shadow:inset 0 0 18px rgba(0,0,0,.55)}
+
+/* il pannello dei comandi */
+.dldeck{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:14px clamp(14px,3vw,26px) 16px;
+  background:linear-gradient(180deg,#1c1512,#100c0b);border:2px solid #2a201c;border-radius:0 0 16px 16px;box-shadow:inset 0 2px 0 rgba(255,91,58,.3)}
+.dlhelp{flex:1 1 320px;font:400 11px/1.5 var(--f-mono,monospace);letter-spacing:.08em;text-transform:uppercase;color:rgba(244,242,236,.5)}
+.dlbtns{display:flex;gap:10px;margin-left:auto}
+.dlb{all:unset;box-sizing:border-box;cursor:pointer;padding:10px 14px;border-radius:6px;border:1.5px solid rgba(244,242,236,.35);color:#F4F2EC;
+  font:500 12px/1 var(--f-mono,monospace);letter-spacing:.12em;text-transform:uppercase;text-align:center;
+  background:linear-gradient(#FF5B3A,#FF5B3A) no-repeat 0 100%/100% 0,#0b0b0a;transition:background-size .25s cubic-bezier(.2,.8,.2,1),color .2s,border-color .2s}
+.dlb:hover,.dlb:focus-visible{background-size:100% 100%;color:#0b0b0a;border-color:#FF5B3A;outline:none}
+.dlgo{border-color:#FF5B3A;color:#FF5B3A;min-width:120px}
+.dlgo.dlblink{animation:dlgo 1.2s steps(1) infinite}
+@keyframes dlgo{50%{border-color:rgba(255,91,58,.35)}}
+.dlreal{display:none;flex:1 0 100%;text-align:center;font:400 12px/1.4 var(--f-mono,monospace);letter-spacing:.06em;color:rgba(244,242,236,.6);text-decoration:none;padding:4px 0}
+.dlreal.on{display:block}
+.dlreal:hover,.dlreal:focus-visible{color:#FF5B3A;outline:none}
+
+/* il tappetino per il dito (telefono) */
+.dlpad{display:none;flex:1 0 100%;min-height:120px;border-radius:12px;border:1.5px dashed rgba(244,242,236,.22);place-items:center;align-content:center;gap:4px;touch-action:none;user-select:none;
+  font:500 11px var(--f-mono,monospace);letter-spacing:.12em;text-transform:uppercase;color:rgba(244,242,236,.45);
+  background:repeating-linear-gradient(90deg,rgba(244,242,236,.03) 0 1px,transparent 1px 16px),repeating-linear-gradient(0deg,rgba(244,242,236,.03) 0 1px,transparent 1px 16px)}
+.dlpad small{font-size:10px;opacity:.7}
+.dltouch .dlpad{display:grid}
+.dltouch .dlhelp{display:none}
+.dltouch .dldeck{flex-direction:column;align-items:stretch}
+.dltouch .dlbtns{margin:0;order:-1}
+.dltouch .dlbtns .dlb{flex:1}
+.dltouch.dlplaying .dlpad{border-color:rgba(255,91,58,.4)}
+
+/* telefono in orizzontale: solo lo schermo */
+.dlland{padding:4px!important}
+.dlland .dlmq,.dlland .dlpad{display:none!important}
+.dlland .dldeck{position:fixed;left:8px;bottom:8px;padding:0;background:none;border:0;box-shadow:none;width:auto}
+.dlland .dlbez{border:0;background:none;box-shadow:none}
+.dlland .dlhelp{display:none}
+.dlland .dlx{top:6px;right:6px;padding:6px 9px}
+
+@media (max-width:600px){
+  .dl{padding:8px!important;align-items:start}
+  .dlx{top:8px;right:8px;padding:7px 10px;font-size:11px}
+  .dlcab{margin-top:44px!important}
+  .dlmq{padding:9px 12px 7px;font-size:24px}
+  .dlbez{border-left-width:1px;border-right-width:1px}
+  .dlscr{border-radius:10px/12px}
+}
+
+/* il modulo del premio: un pannello sopra il cabinato */
+.dlform{position:fixed!important;inset:0;z-index:4;overflow:auto;padding:24px 16px;background:rgba(8,8,8,.86)}
+.dlform[hidden]{display:none!important}
+.dlf{width:min(560px,100%)!important;margin:24px auto!important;padding:24px;border:1px solid rgba(244,242,236,.25);border-radius:4px;background:#0F0F0E;display:grid;gap:14px}
+.dlfk{font:500 11px var(--f-mono,monospace);letter-spacing:.14em;text-transform:uppercase;color:#E8B64A}
+.dlf h2{font:650 clamp(24px,4vw,34px)/1.05 var(--f-body,system-ui);letter-spacing:-.03em;color:#F4F2EC;padding:0}
+.dlfs{color:rgba(244,242,236,.7);font-size:14px}
+.dlfprev{border:1px solid rgba(244,242,236,.15);border-radius:4px;overflow:hidden;background:#060B1E}
+.dlfprev canvas{display:block;width:100%!important;height:auto!important;aspect-ratio:4/3;image-rendering:pixelated}
+.dlff{display:grid;gap:6px;border:0;padding:0;min-width:0}
+.dlff>span,.dlff legend{font:500 11px var(--f-mono,monospace);letter-spacing:.12em;text-transform:uppercase;color:rgba(244,242,236,.6);display:flex;justify-content:space-between;padding:0}
+.dlff em{font:400 12px var(--f-body,system-ui);font-style:normal;color:rgba(244,242,236,.45)}
+.dlff b{font-weight:500;color:rgba(244,242,236,.45)}
+.dlf input[type=text],.dlf input[type=email]{width:100%!important;padding:11px 12px;border:1.5px solid rgba(244,242,236,.25);border-radius:4px;background:#121211;color:#F4F2EC;font:400 15px var(--f-body,system-ui)}
+.dlf input[type=text]:focus,.dlf input[type=email]:focus{border-color:#FF5B3A;outline:none}
+.dlf input[type=file]{color:rgba(244,242,236,.7);font:400 13px var(--f-body,system-ui)}
+.dlf input[type=range]{width:100%!important;accent-color:#FF5B3A}
+.dlkinds{display:flex;flex-wrap:wrap;gap:8px}
+.dlkinds legend{width:100%;margin-bottom:6px}
+.dlkinds label{cursor:pointer}
+.dlkinds input{position:absolute;opacity:0;pointer-events:none}
+.dlkinds span{display:block;padding:8px 11px;border:1.5px solid rgba(244,242,236,.25);border-radius:999px;font:500 12px var(--f-body,system-ui);color:rgba(244,242,236,.8)}
+.dlkinds input:checked+span{border-color:#FF5B3A;color:#FF5B3A}
+.dlkinds input:focus-visible+span{outline:2px solid #FF5B3A;outline-offset:2px}
+.dlfmsg{min-height:1.4em;color:#FF9A7A;font-size:13px}
+.dlfbtn{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.dlfgo{border-color:#FF5B3A;color:#FF5B3A}
+.dlfterms{font:400 11px var(--f-mono,monospace);letter-spacing:.04em;color:rgba(244,242,236,.45)}
+
+@media (prefers-reduced-motion:reduce){
+  .dl,.dlcab{transition:none}
+  .dlmq2,.dlgo.dlblink{animation:none}
+}
