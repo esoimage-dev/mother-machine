@@ -2,6 +2,7 @@
 
 
 ## DA ESO, 24 ottobre, dopo aver giocato (prima di tutto il resto)
+- [x] Suoni nuovi collegati (24 ottobre): tema di ogni boss sulla carta, sirena, CLOCK IN, voce di M8, spari per sistema, MONDAY con la sua musica, install, consegne, carta strappata, telefono.
 - [ ] **Cosa sparano i nemici**: i colpi nemici vanno ripensati (piu' belli, piu' a tema, piu' leggibili).
 - [ ] **I palazzi della CITY per le insegne (ristorante, hotel, ecc.) sono brutti**: rifarli; Eso vuole rivederli uno
   per uno con Claude (veloce) prima di chiuderli.

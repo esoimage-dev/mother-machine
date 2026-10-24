@@ -99,7 +99,7 @@ File: `public/js/stanza.js` (motore e stanza), `public/js/stanza-oggetti.js` (og
 `public/js/stanza-vista.js` (primo piano), `public/js/musica.js`. A piccoli blocchi.
 
 ### Subito (primo blocco)
-- [ ] Togliere i puntini bianchi a bassa opacita' al centro della pagina (sembrano bollicine, ci cade l'occhio).
+- [x] Togliere i puntini bianchi a bassa opacita' al centro della pagina (sembrano bollicine, ci cade l'occhio).
 
 ### Oggetti
 - [ ] **Mobiletto dei vinili:** al passaggio si illumina tutto (mobiletto, giradischi, dischi). Spostarlo ancora piu' a sinistra.
@@ -123,7 +123,7 @@ File: `public/js/stanza.js` (motore e stanza), `public/js/stanza-oggetti.js` (og
   (sembrerebbe che teniamo dati della gente). Niente telecamera (mette ansia).
 
 ### Pulizia linee
-- [ ] Soffitto: i tiranti delle lampade centrali e delle lampade in prospettiva entrano dentro le lampade, vanno tagliati.
+- [x] Soffitto: i tiranti delle lampade centrali e delle lampade in prospettiva entrano dentro le lampade, vanno tagliati.
 - [ ] Altri microfix di linee qua e la'.
 
 ### Funzioni
