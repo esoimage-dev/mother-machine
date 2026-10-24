@@ -1,5 +1,14 @@
 # DEADLINE · cosa resta da fare (scritto dagli agenti a fine giro, 24 ottobre)
 
+
+## DA ESO, 24 ottobre, dopo aver giocato (prima di tutto il resto)
+- [ ] **Cosa sparano i nemici**: i colpi nemici vanno ripensati (piu' belli, piu' a tema, piu' leggibili).
+- [ ] **I palazzi della CITY per le insegne (ristorante, hotel, ecc.) sono brutti**: rifarli; Eso vuole rivederli uno
+  per uno con Claude (veloce) prima di chiuderli.
+- [ ] **Dialoghi troppo veloci**: entrata dei boss e ogni scambio di battute M8/boss non si fanno in tempo a leggere.
+  Rallentare: piu' tempo per riga, pause piu' lunghe tra un messaggio e l'altro, il giocatore deve potersi godere le
+  battute (il gioco resta veloce, ma qui ci vuole respiro). Le battute possono diventare ancora piu' buffe.
+
 ## CORE
 # DEADLINE · CORE · cose ancora da fare (in ordine)
 
