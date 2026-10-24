@@ -225,13 +225,15 @@
       t1.line([[3.42, 2.819, za + .12], [3.42, 2.819, zb - .12]], { cls: 'tube', on: rb.b }); t1.line([[3.68, 2.819, za + .12], [3.68, 2.819, zb - .12]], { cls: 'tube', on: rb.b });
       /* il tirante dal soffitto, a meta' tratto */
       var zm = (za + zb) / 2;
-      t1.line([[3.55, 2.98, zm], [3.55, Y, zm]], { cls: 'dt' });
+      var tr1 = part({ cls: 'ceil' }); tr1.P.zf = 1e3; tr1.line([[3.55, 2.98, zm], [3.55, Y, zm]], { cls: 'dt' });
       /* la plafoniera: un pannello piatto sotto il soffitto, la luce che cade come una pozza sul pavimento */
       if (i + 1 < ZB.length) {
         var l = part({ cls: 'lamp' });
         var lb = l.box([-.3, 2.86, za + .45, .3, 2.94, zb - .45], ID, { hatch: { f: 0 } });
         /* i due tiranti che la tengono appesa, e le stecche del diffusore */
-        l.line([[0, 2.94, za + .7], [0, Y, za + .7]], { cls: 'dt' }); l.line([[0, 2.94, zb - .7], [0, Y, zb - .7]], { cls: 'dt' });
+        /* i tiranti in una parte a se', disegnata prima: la plafoniera li copre, non entrano dentro la lampada */
+        var tir = part({ cls: 'ceil' }); tir.P.zf = 1e3;
+        tir.line([[0, 2.94, za + .7], [0, Y, za + .7]], { cls: 'dt' }); tir.line([[0, 2.94, zb - .7], [0, Y, zb - .7]], { cls: 'dt' });
         for (var zd = za + .65; zd < zb - .5; zd += .25) l.line([[-.3, 2.86, zd], [.3, 2.86, zd]], { cls: 'dt', on: lb.b });
         l.line([[-.2, 2.855, za + .5], [-.2, 2.855, zb - .5]], { cls: 'tube', on: lb.b }); l.line([[.2, 2.855, za + .5], [.2, 2.855, zb - .5]], { cls: 'tube', on: lb.b });
         /* le cose stese sul pavimento si disegnano per prime: tappeto e mobili ci passano sopra */
@@ -424,11 +426,6 @@
     el(lg, 'stop', { offset: 0, 'stop-color': '#FFE9D6', 'stop-opacity': .42 }); el(lg, 'stop', { offset: 1, 'stop-color': '#FFE9D6', 'stop-opacity': 0 });
     if (LIFT.cab) { LIFT.cab.g.setAttribute('clip-path', 'url(#lgCab)'); hooks.push(function () { cp.setAttribute('points', LIFT.vano.map(function (q) { var r = prj(q); return r[0].toFixed(1) + ',' + r[1].toFixed(1) }).join(' ')) }) }
     render();
-    /* il pulviscolo nella luce delle plafoniere: pochi puntini che salgono piano */
-    if (!RM) { var du = el(gAll, 'g', { class: 'dust' });
-      [[0, 4.1], [0, 6.3], [0, 8.4]].forEach(function (c, n) { var q = prj([c[0], 1.6, c[1]]), s = F / c[1];
-        for (var i = 0; i < 7; i++) el(du, 'circle', { cx: (q[0] + (Math.random() - .5) * s * 1.6).toFixed(1), cy: (q[1] + (Math.random() - .3) * s * 1.4).toFixed(1), r: (.6 + Math.random() * 1.1).toFixed(2),
-          style: 'animation-duration:' + (7 + Math.random() * 7).toFixed(1) + 's;animation-delay:-' + (Math.random() * 9).toFixed(1) + 's' }) }) }
     /* l'arrivo: le linee si disegnano, dal fondo verso chi guarda; poi le facce si riempiono */
     var wrap = st.querySelector('.lgsv');
     if (!RM) { st.classList.add('pre'); requestAnimationFrame(function () { requestAnimationFrame(function () { st.classList.remove('pre'); st.classList.add('drawn'); setTimeout(function () { st.classList.add('done') }, 3400) }) }) } else st.classList.add('drawn', 'done');
@@ -452,7 +449,7 @@
     function azione(h) {
       var k = h.getAttribute('data-hot'), r = h.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
       tip.classList.remove('on');
-      if (k === 'arcade' && (window.DEADLINE || window.RUSH)) (window.DEADLINE || window.RUSH).open(x, r.top + r.height / 3);
+      if (k === 'arcade' && window.DEADLINE) window.DEADLINE.open(x, r.top + r.height / 3);
       /* l'ascensore apre la pulsantiera del sito */
       else if (k === 'lift') porte(true, function () { var d = document.getElementById('dispB'); if (d && d.getAttribute('aria-expanded') !== 'true') d.click() });
       else if (k === 'luce') { var giu = !st.classList.contains('dark'), s0 = LEVA.s, t0 = performance.now();

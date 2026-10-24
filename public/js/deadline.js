@@ -523,8 +523,8 @@
     if (Gm.nightT > 0) { pbullet(s.x, s.y - 10, rnd(-30, 30), -340, 2); s.cool = .06; return }
     var home = pw === 'ai' ? 2 : Gm.sys.ai ? 1 : 0, sx0 = SX(s.y);
     if (pw === 'auto') { pbullet(s.x, s.y - 10, 0, -340, home); pbullet(s.x - 4, s.y - 6, -70, -325, home); pbullet(s.x + 4, s.y - 6, 70, -325, home); s.cool = .16; sfx('shootAuto', sx0) }
-    else if (Gm.sys.auto) { pbullet(s.x, s.y - 10, 0, -335, home); pbullet(s.x - 3, s.y - 7, -38, -330, home); pbullet(s.x + 3, s.y - 7, 38, -330, home); s.cool = .28; sfx('shoot', sx0) }
-    else { pbullet(s.x, s.y - 10, 0, home ? -310 : -335, home); s.cool = home === 2 ? .17 : .2; sfx('shoot', sx0) }
+    else if (Gm.sys.auto) { pbullet(s.x, s.y - 10, 0, -335, home); pbullet(s.x - 3, s.y - 7, -38, -330, home); pbullet(s.x + 3, s.y - 7, 38, -330, home); s.cool = .28; sfx(home ? 'shootAI' : 'shootAuto', sx0) }
+    else { pbullet(s.x, s.y - 10, 0, home ? -310 : -335, home); s.cool = home === 2 ? .17 : .2; sfx(home ? 'shootAI' : 'shoot', sx0) }
     Gm.log.shots++;
   }
   function pbullet(x, y, vx, vy, home) {
@@ -597,7 +597,7 @@
     var col = e.type === 'gold' ? C.gold : e.type === 'noshow' ? C.cream : C.p2;
     spark(e.x, e.y, art('explosion') ? 3 : e.type === 'spam' ? 5 : 9, col, C.cream, 75); boom(e.x, e.y, e.type === 'gold' ? 'gold' : e.type); corpse(e);
     if (Gm.def.party) { spark(e.x, e.y, 6, accent('fri'), C.gold, 60, 50); spark(e.x, e.y, 3, C.cream, C.p3, 50, 50) }
-    if (!quiet) sfx(e.type === 'invoice' ? 'split' : 'kill', e.x);
+    if (!quiet) { sfx(e.type === 'invoice' ? 'paper' : 'explosion', e.x); if (e.type === 'call') sfx('ring', e.x) }
     if (e.type === 'invoice') {
       quip(e, 'sigh.', .35);
       for (var s = -1; s < 2; s += 2) { var r = spawnEnemy('receipt', e.x + s * 6, e.y); if (r) { r.st = 'fall'; r.x0 = e.x + s * 10; r.vx = 0; r.vy = s * 30; r.y0 = e.y } }
@@ -652,7 +652,7 @@
   function hurt(by) {
     var s = Gm.ship; hurtBy = by || '?'; if (s.inv > 0 || Gm.nightT > 0 || god || Gm.phase === 'dying' || Gm.phase === 'out') return;
     if (Gm.shield > 0) { Gm.shield--; s.inv = .8; sfx(Gm.shield ? 'shield' : 'shieldBreak', s.x); spark(s.x, s.y, 8, C.pink, C.cream, 60); clearNear(s.x, s.y, 40); return }
-    Gm.log.hits++; if (DBG) { Gm.dbgHurt = Gm.dbgHurt || {}; Gm.dbgHurt[hurtBy] = (Gm.dbgHurt[hurtBy] || 0) + 1 } endFlow(); shake(5); Gm.flash = .25; Gm.glitch = .08; sfx('hurt', s.x);
+    sfx('m8Hurt', s.x); Gm.log.hits++; if (DBG) { Gm.dbgHurt = Gm.dbgHurt || {}; Gm.dbgHurt[hurtBy] = (Gm.dbgHurt[hurtBy] || 0) + 1 } endFlow(); shake(5); Gm.flash = .25; Gm.glitch = .08; sfx('hurt', s.x);
     spark(s.x, s.y, 14, C.tom, C.cream, 90);
     if (!weekend) { Gm.coffee--; Gm.cupT = 1; tip('energy', 'Your energy: three coffees', W - 18, 21, 3) }
     else ftext('WEEKEND MODE', s.x, s.y - 16, C.cream);
@@ -846,12 +846,12 @@
     for (var i = 0; i < 3; i++) R(x + rnd(0, HZ.w), rnd(130, CITY_Y), 1, 2, C.cream);
   }
   /* il dialogo del boss: ritratto, macchina da scrivere, si salta con un tasto o un tocco */
-  function say(who, text, mood) { Gm.dlg = { who: who, text: text, t: 0, hold: 1.1, mood: mood || '' }; sfx('blip') }
-  function dlgLen(d) { return d.text.length / 30 }
+  function say(who, text, mood) { Gm.dlg = { who: who, text: text, t: 0, hold: 1.4 + text.length * .03, mood: mood || '' }; sfx(who === 'm8' ? 'm8Happy' : 'blip') }
+  function dlgLen(d) { return d.text.length / 20 }   /* scrittura piu' lenta: si legge con calma (Eso) */
   function dlgUpdate(dt) {
     var d = Gm.dlg; if (!d) return; d.t += dt;
     if (d.t > dlgLen(d) + d.hold) Gm.dlg = null;
-    else if (d.t < dlgLen(d) && ((d.t * 10) | 0) !== (((d.t - dt) * 10) | 0)) sfx('type');
+    else if (d.t < dlgLen(d) && ((d.t * 10) | 0) !== (((d.t - dt) * 10) | 0)) sfx('typewriter');
   }
   function dlgSkip() { if (Gm && Gm.ent && Gm.ent.step === 'card') { Gm.ent.fast = true; return true } var d = Gm && Gm.dlg; if (!d) return false; if (d.t < dlgLen(d)) d.t = dlgLen(d); else Gm.dlg = null; return true }
   var PORTOK = {}, ptmp = null;
@@ -862,7 +862,7 @@
   }
   function drawDialog(t) {
     var d = Gm.dlg; if (!d) return;
-    var n0 = Math.min(d.text.length, Math.floor(d.t * 30)), ad = canPortrait(d.who) && art('dialog');
+    var n0 = Math.min(d.text.length, Math.floor(d.t * 20)), ad = canPortrait(d.who) && art('dialog');
     if (ad) { hd0(); try { ad.dialog(g, 60, 108, 360, 60, t, { name: BOSS[d.who] ? BOSS[d.who].name : '', portrait: d.who, mood: d.mood || (d.who === 'm8' ? (n0 < d.text.length ? 'focus' : 'happy') : n0 < d.text.length ? 'angry' : 'idle'), color: d.who === 'm8' ? C.tom : undefined, text: d.text, chars: n0 }); hd1(); return } catch (e) { hd1(); fail('dialog', e) } }
     var x = 70, y = 112, w = 340, h = 38, n = n0, mon = d.who === 'monday';
     R(x, y, w, h, 'rgba(15,15,14,.9)'); panel(x, y, w, h);
@@ -1239,19 +1239,19 @@
   /* ---------- i boss: URGENT (venerdi' 16:59) e MONDAY ---------- */
   function bossEntrance(kind) {
     Gm.phase = 'boss'; Gm.phaseT = 0; Gm.clock = 479 / 480; spawnBoss(kind);
-    Gm.ent = { step: 'siren', t: 0, i: 0 }; aucall('duck', true); sfx(kind === 'urgent' ? 'urgent' : 'alarm');
+    Gm.ent = { step: 'siren', t: 0, i: 0 }; aucall('duck', true); sfx('siren');
   }
   /* il copione dell'entrata: ogni riga 1,6-2 s, un tasto o un tocco la accorcia */
   function entUpdate(dt) {
     var E = Gm.ent; if (!E) return; E.t += dt; var b = Gm.boss;
-    if (E.step === 'siren' && E.t > .5) { E.step = 'card'; E.t = 0; sfx('blip') }
-    else if (E.step === 'card' && E.t > (E.fast ? .4 : 1.4)) { E.step = 'talk'; E.t = 0; E.i = 0; E.fast = false }
+    if (E.step === 'siren' && E.t > .8) { E.step = 'card'; E.t = 0; aucall('sting', b ? b.kind : '') }
+    else if (E.step === 'card' && E.t > (E.fast ? .4 : 2.2)) { E.step = 'talk'; E.t = 0; E.i = 0; E.fast = false }
     else if (E.step === 'talk') {
       if (!Gm.dlg) {
-        var L = b && BOSS[b.kind].talk; if (!L || E.i >= L.length) { E.step = 'clockin'; E.t = 0; sfx('combo'); return }
-        say(L[E.i][0], L[E.i][1], L[E.i][0] === 'monday' && E.i === 0 ? 'smug' : ''); Gm.dlg.hold = clamp(1.75 - Gm.dlg.text.length / 30, .5, 1.1); E.i++;
+        var L = b && BOSS[b.kind].talk; if (!L || E.i >= L.length) { E.step = 'clockin'; E.t = 0; sfx('clockIn'); return }
+        say(L[E.i][0], L[E.i][1], L[E.i][0] === 'monday' && E.i === 0 ? 'smug' : ''); Gm.dlg.hold = 1.6 + Gm.dlg.text.length * .035; E.i++;   /* tempo di leggere e ridere, poi la riga dopo */
       }
-    } else if (E.step === 'clockin' && E.t > .7) { Gm.ent = null; aucall('duck', false); music('boss', true) }
+    } else if (E.step === 'clockin' && E.t > .7) { Gm.ent = null; aucall('duck', false); music(b && b.kind === 'monday' ? 'monday' : 'boss', true) }
   }
   function drawEntrance(t) {
     var E = Gm.ent; if (!E || !Gm.boss) return; var B = BOSS[Gm.boss.kind];
@@ -1357,7 +1357,7 @@
   var SYSORD = ['booking', 'auto', 'ai', 'night'];
   function install(kind) {
     var k = SYS[kind]; if (!k || Gm.sys[k]) return;
-    Gm.sys[k] = true; Gm.installed = k; sfx('power'); tip('sys', 'Installed for the rest of the week', W - 30, H - 22, 3.5);
+    Gm.sys[k] = true; Gm.installed = k; sfx('install'); tip('sys', 'Installed for the rest of the week', W - 30, H - 22, 3.5);
     if (k === 'booking') Gm.shield = Math.max(Gm.shield, 1);
     if (k === 'night') Gm.night = true;
   }
@@ -1479,7 +1479,7 @@
       if (p.carried) {
         p.x = s.x + 10; p.y = s.y + 4;
         var ts = targetShop(p), sx = ts ? ts.cx : shopX(p.shop), near = ts ? s.x > ts.top - 30 && SX(s.y) > ts.x - 10 && SX(s.y) < ts.x + ts.w + 10 : s.x > STREET - 18 && Math.abs(SX(s.y) - sx) < 26;
-        if (near) { p.on = false; Gm.deliv++; addScore(6, s.x, s.y); if (T - p.pick < 6) { addScore(3, s.x, s.y); quipAt(s.x - 16, s.y, 'Express delivery!') } sfx('coin', sx); quipS(sx, ts ? ts.top - 34 : STREET - 8, THANKS[Math.random() * THANKS.length | 0]); for (var q = 0; q < 10; q++) sparkS(sx, STREET + 4, SHOPS[p.shop].col); Gm.ds.k.deliv = Gm.deliv; Gm.clock = Math.max(Gm.clock, Math.min(.99, Gm.deliv / DGOAL)) }
+        if (near) { p.on = false; Gm.deliv++; addScore(6, s.x, s.y); if (T - p.pick < 6) { addScore(3, s.x, s.y); quipAt(s.x - 16, s.y, 'Express delivery!') } sfx('deliver', sx); quipS(sx, ts ? ts.top - 34 : STREET - 8, THANKS[Math.random() * THANKS.length | 0]); for (var q = 0; q < 10; q++) sparkS(sx, STREET + 4, SHOPS[p.shop].col); Gm.ds.k.deliv = Gm.deliv; Gm.clock = Math.max(Gm.clock, Math.min(.99, Gm.deliv / DGOAL)) }
         continue;
       }
       p.x += 30 * dt; p.y += 8 * dt + Math.sin(p.t * 2) * 6 * dt;

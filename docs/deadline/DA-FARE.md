@@ -1,5 +1,15 @@
 # DEADLINE · cosa resta da fare (scritto dagli agenti a fine giro, 24 ottobre)
 
+
+## DA ESO, 24 ottobre, dopo aver giocato (prima di tutto il resto)
+- [x] Suoni nuovi collegati (24 ottobre): tema di ogni boss sulla carta, sirena, CLOCK IN, voce di M8, spari per sistema, MONDAY con la sua musica, install, consegne, carta strappata, telefono.
+- [ ] **Cosa sparano i nemici**: i colpi nemici vanno ripensati (piu' belli, piu' a tema, piu' leggibili).
+- [ ] **I palazzi della CITY per le insegne (ristorante, hotel, ecc.) sono brutti**: rifarli; Eso vuole rivederli uno
+  per uno con Claude (veloce) prima di chiuderli.
+- [~] **Dialoghi troppo veloci** (primo giro fatto il 24 ottobre: scrittura a 20 lettere/s, ogni riga resta 1,6 s + il tempo di leggerla, carta del boss 2,2 s; da riprovare): entrata dei boss e ogni scambio di battute M8/boss non si fanno in tempo a leggere.
+  Rallentare: piu' tempo per riga, pause piu' lunghe tra un messaggio e l'altro, il giocatore deve potersi godere le
+  battute (il gioco resta veloce, ma qui ci vuole respiro). Le battute possono diventare ancora piu' buffe.
+
 ## CORE
 # DEADLINE · CORE · cose ancora da fare (in ordine)
 

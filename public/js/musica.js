@@ -546,8 +546,8 @@
   /* ---------- il mini lettore ---------- */
   var mn = null;
   var mt = 0;
-  function apri() { if (!mn || !mn.classList.contains('side')) return; mn.classList.add('open'); clearTimeout(mt); mt = setTimeout(chiudi, 5000) }
-  function chiudi() { clearTimeout(mt); if (mn) mn.classList.remove('open') }
+  function apriMini() { if (!mn || !mn.classList.contains('side')) return; mn.classList.add('open'); clearTimeout(mt); mt = setTimeout(chiudiMini, 5000) }
+  function chiudiMini() { clearTimeout(mt); if (mn) mn.classList.remove('open') }
   function mini() {
     var serve = S.st !== 'off' && !(box && box.classList.contains('on'));
     if (!serve) { if (mn && !mn.hidden) { mn.classList.remove('in'); var m = mn; setTimeout(function () { if (!m.classList.contains('in')) m.hidden = true }, RM ? 0 : 320) } return }
@@ -562,10 +562,10 @@
         '<button class="musmb" type="button" data-a="stop" aria-label="Stop">' + IC.stop + '</button>';
       mn.addEventListener('click', function (e) {
         /* sul telefono il primo tocco tira fuori il lettore; poi i tasti */
-        if (mn.classList.contains('side') && !mn.classList.contains('open')) { apri(); return }
-        var b = e.target.closest('[data-a]'); if (b) { comando(b.dataset.a); apri() }
+        if (mn.classList.contains('side') && !mn.classList.contains('open')) { apriMini(); return }
+        var b = e.target.closest('[data-a]'); if (b) { comando(b.dataset.a); apriMini() }
       });
-      addEventListener('pointerdown', function (e) { if (mn && mn.classList.contains('open') && !mn.contains(e.target)) chiudi() }, true);
+      addEventListener('pointerdown', function (e) { if (mn && mn.classList.contains('open') && !mn.contains(e.target)) chiudiMini() }, true);
       var lato = matchMedia('(max-width:860px)');
       var metti = function () { mn.classList.toggle('side', lato.matches); if (!lato.matches) mn.classList.remove('open') };
       if (lato.addEventListener) lato.addEventListener('change', metti); metti();

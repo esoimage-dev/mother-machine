@@ -3,16 +3,19 @@
 Chi lavora su questo progetto (una persona o un Claude, anche su un altro account) legge **solo questo file** e sa
 come muoversi: cosa è il sito, come è fatto, le regole, cosa è fatto, cosa manca e in che ordine. Si aggiorna qui e
 basta: si spunta quello che è fatto, si scrive quello che si decide diversamente, si aggiunge quello che nasce.
-Ultimo aggiornamento: 26 ottobre 2026 (Studio ritoccato, "free" in due posti soli).
+Ultimo aggiornamento: 24 ottobre 2026 (il gioco DEADLINE nel cabinato di LG; piano unico in docs/piano-lavoro.md).
 
 ---
 
 ## 0 · Dove siamo (per chi riprende da qui)
-- **Tutto il lavoro è su `main`** (ultima pull request unita: #10). Ogni sessione di Claude ha il suo branch (oggi `claude/trusting-johnson-wybhvj`),
+- **Tutto il lavoro è su `main`** (ultima pull request unita: #12; aperta: #13, il gioco DEADLINE + correzioni). Ogni sessione di Claude ha il suo branch (oggi `claude/trusting-johnson-wybhvj`),
   ripartendo dal `main` aggiornato: con il push si apre la pull request e Eso la unisce. Anteprima: `https://<branch con i trattini>.mother-machine.pages.dev`,
   ma **Cloudflare taglia il nome a 28 caratteri** (oggi `https://claude-trusting-johnson-wybh.mother-machine.pages.dev`).
   Il link giusto sta sempre nel commento del bot di Cloudflare nella pull request ("Branch Preview URL").
 - **Il piano completo, a fasi: `docs/piano-lavoro.md`** (Contact, prima del lancio, lancio, lingue, back office, crescita).
+  **Si parte sempre da li'**: in A4 i glitch segnalati da Eso (Chrome scattoso, Safari vetro/ascensore/testata).
+- **Il gioco DEADLINE**: tutto il progetto e cosa resta in **`docs/deadline/`** (DA-FARE.md per ripartire; NARRATIVA.md
+  vincolante per personaggi e battute).
 - **Prossimi passi, in ordine** (lavorare con pochi token, niente stravolgimenti, proporre in chat prima di toccare):
   1. **Studio (01):** rifatto (26 ottobre), da approvare sull'anteprima. Aperto: la regola 03 "One number to move."
      ripete il titolo della home ("Three steps. One number to move."): Eso decide se cambiarla.
@@ -97,7 +100,7 @@ Ultimo aggiornamento: 26 ottobre 2026 (Studio ritoccato, "free" in due posti sol
   4. `npm run build` costruisce in `dist/`; `npx astro preview --port 4321` per vederlo in locale.
 - **Pezzi in `src/sezioni/`:** `lavori-home.html` (la striscia dei lavori in home), `work.html` (pagina 04), `systems-notte.html`, `brand-sistema.html`, `lg.html`.
 - **CSS e JS per pagina** in `public/css` e `public/js`: `home.css/js` (striscia lavori, selettore, cursore di trascinamento),
-  `progetto.css/js` (pagine progetto, demo, fasce), `systems.css/js` (turno di notte, registro di bordo), `brand.css/js` (apertura, tre stili dei controlli, sistema; caratteri in `public/brand/fonts`, non in `public/fonts` che lo script rifà da zero), `work.css/js`, `mr.css` (LG, resti) e per LG `stanza.css` + `stanza.js` (il motore della prospettiva e la stanza) + `stanza-oggetti.js` (gli oggetti da premere) + `rush.css/js` (il gioco). `mm-sito.*` comuni.
+  `progetto.css/js` (pagine progetto, demo, fasce), `systems.css/js` (turno di notte, registro di bordo), `brand.css/js` (apertura, tre stili dei controlli, sistema; caratteri in `public/brand/fonts`, non in `public/fonts` che lo script rifà da zero), `work.css/js`, `mr.css` (LG, resti) e per LG `stanza.css` + `stanza.js` (il motore della prospettiva e la stanza) + `stanza-oggetti.js` (gli oggetti da premere) + il gioco DEADLINE: `deadline-art.js` (grafica), `deadline.js` + `deadline.css` (motore), `deadline-audio.js`, `deadline-net.js` + `deadline-sign.js` (classifica e premio, rotte `/api/deadline/*` in `_worker.js`, setup in `docs/deadline-server.md`). `musica.js` (giradischi e mini player) su tutte le pagine. `mm-sito.*` comuni.
 - **Pagine progetto:** in `monta-pagine.py` il dizionario `CASI` (una voce per lavoro) e la funzione `caso()` montano
   copertina, demo, cosa abbiamo fatto, numeri, prima e dopo, fasce tipografiche, marchio, galleria, Next.
   Per un lavoro nuovo: una voce in `CASI`, una in `PAGINE`, `META`, `CORRENTE`, l'indirizzo in `[...slug].html.ts` e `public/sitemap.xml`.
@@ -123,7 +126,7 @@ Ogni pagina è un piano. Si naviga con la pulsantiera (il menu) e si scende come
 | 02 | `/systems` | grigio macchina | il dentro: software, gestionali, app, CMS, automazioni, AI privata |
 | 01 | `/studio` | rosa | chi siamo, come lavoriamo, con chi parli |
 | G | `/contact` | rosa | "Tell us what slows you down." Il modulo (ordine di lavoro). Primo incontro gratis |
-| LG | `/lg` | notte | la sala macchine disegnata a linee in prospettiva, con le cose da premere e il gioco Rush hour |
+| LG | `/lg` | notte | la sala macchine disegnata a linee in prospettiva, con le cose da premere e il gioco DEADLINE nel cabinato |
 | SL | `/lg/room` | notte | **Secret lab**: il nostro back office, piano segreto sotto LG, con il codice sulla pulsantiera. In testata "SL · Secret lab", nessun quadratino acceso |
 
 Systems è al 02 e Brand al 03: scendere vuol dire entrare, e i sistemi sono il lavoro che vogliamo vendere di più.
@@ -200,6 +203,11 @@ Fuori dal palazzo: `/privacy`.
   girano (trascinandoli si ruotano), con una frase, il bottone per andare al progetto o a Contact e la X a tasto (Esc).
   I modelli si preparano in anticipo e la stanza dietro si ferma: niente scatti. I modelli stanno in
   `stanza-oggetti.js` (`STANZA_MODELLI`). **Rush hour** (`rush.js`): da rivedere, Eso vuole cambiarlo.
+- [x] **DEADLINE** (23-24 ottobre), il gioco del cabinato al posto di Rush hour: sparatutto a scorrimento laterale,
+  il protagonista e' M8 (il robottino di Mother Machine), sette giorni con un boss che parla (MONDAY finale e cameo),
+  sistemi che si installano (Booking, Automation, AI, Night shift), giovedi' il virus, venerdi' le consegne, plancia
+  Control Room, mappa a 7 tappe, Game Boy su telefono, audio chiptune in codice, classifica e premio (insegna del
+  vincitore approvata da Eso su `/lg/signs`). Stato e lista: `docs/deadline/DA-FARE.md`.
 - [x] "Free" solo due volte: nella porta verso G ("The first one is free.") e in Contact ("The first conversation is free.").
 
 ## 8 · Scaletta (in ordine)
