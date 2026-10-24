@@ -217,6 +217,9 @@ Move call, Make quote; stato delle mail; notifica "New work order" sul telefono)
 - [ ] Lavori nuovi in Work appena arrivano (sostituiscono Birrificio Mare e Forno Nove).
 - [ ] Piu' avanti, se serve: Instagram/LinkedIn con contenuti dal sito (stanza, demo, gioco) e poche sponsorizzate. Non ora.
 
+> **Stato al 24 ottobre:** il gioco gira (scorrimento laterale, M8, sette boss che parlano, sistemi, virus, consegne,
+> plancia, Game Boy su telefono, audio). Progetto e cosa resta: **`docs/deadline/`** (DA-FARE.md per ripartire).
+
 ## B5 · DEADLINE, il gioco del cabinato (al posto di Rush hour, `public/js/rush.js`) · piano intero
 Tutto quello che abbiamo deciso, per intero (in ordine di come e' nato nella discussione).
 

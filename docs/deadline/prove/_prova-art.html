@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DEADLINE art gallery</title>
+<style>
+  html,body{margin:0;background:#070707;color:#F4F2EC;font:12px monospace}
+  .wrap{position:relative;width:1920px;height:1080px;overflow:hidden}
+  canvas{display:block;position:absolute;left:0;top:0;width:1920px;height:1080px;image-rendering:pixelated}
+  #fx{image-rendering:auto;pointer-events:none}
+  #info{position:absolute;top:1084px;left:8px}
+</style></head><body>
+<div class="wrap"><canvas id="px" width="480" height="270"></canvas><canvas id="ac" width="960" height="540"></canvas><canvas id="fx" width="1920" height="1080"></canvas></div>
+<div id="info"></div>
+<script src="js/deadline-art.js"></script>
+<script>
+(function () {
+  var A = DEADLINE_ART.init(), Q = new URLSearchParams(location.search), view = Q.get('v') || 'scene', day = Q.get('day') || 'tue';
+  var fixedT = Q.get('t') != null ? +Q.get('t') : null, fxOn = Q.get('fx') !== '0', zoom = +(Q.get('z') || 1);
+  var pc = document.getElementById('px'), g = pc.getContext('2d'), ac = document.getElementById('ac'), a = ac.getContext('2d'), fc = document.getElementById('fx'), f = fc.getContext('2d');
+  if (zoom > 1) { ac.width = Math.round(960 / zoom); ac.height = Math.round(540 / zoom); pc.width = Math.round(480 / zoom); pc.height = Math.round(270 / zoom); A.actorScale = 2 }
+  g.imageSmoothingEnabled = false; a.imageSmoothingEnabled = false;
+  if (Q.get('ship')) A.shipVariant = Q.get('ship');
+  A.bgCanvas = pc;
+  var info = document.getElementById('info');
+  var masks = [A.firewallMask(), A.firewallMask(), A.firewallMask()];
+  for (var i = 0; i < 90; i++) { var x = (Math.random() * 14 + 10) | 0, y = (Math.random() * 6) | 0; masks[1][y * 36 + x] = 0 }
+  var wins = []; for (var w = 0; w < A.cityWindows; w++) wins.push(w % 7 !== 3);
+  var FULL = { tue: 'TUESDAY', wed: 'WEDNESDAY', thu: 'THURSDAY', fri: 'FRIDAY', sat: 'SATURDAY', sun: 'SUNDAY', mon: 'MONDAY', night: 'NIGHT SHIFT' };
+  var LINES = ["Not long ago, in an office not so far away...", "Small businesses are under attack.", "Missed calls. Paper invoices. No-shows. Spam.", "Every week the chores multiply.", "And at the end of every week waits the worst of them all: MONDAY.", "One machine was built to fight back.", "Save the hours. Protect the city.", "Beat MONDAY before the deadline."];
+  function clearA() { a.setTransform(1, 0, 0, 1, 0, 0); a.clearRect(0, 0, ac.width, ac.height) }
+  function scene(t) {
+    A.sky(g, day, t); A.skyline(g, day, t * 20, t); A.towers(g, day, t * 20, t, []);
+    A.city(g, wins, t, day, Math.round(Math.sin(t * .7) * 6));
+    [100, 222, 344].forEach(function (x, i) { A.firewall(g, x, 206, masks[i]) });
+    clearA();
+    var row = ['call', 'invoice', 'noshow', 'spam', 'double', 'receipt'];
+    row.forEach(function (k, i) { A.enemy(a, k, 60 + i * 44, 48 + Math.sin(t * 2 + i) * 3, t, { phase: i }) });
+    A.cable(a, 236, 48, 266, 48, t); A.enemy(a, 'double', 280, 48, t, { phase: 2 });
+    A.enemy(a, 'gold', 330, 48, t, { base: 'call' }); A.enemy(a, 'gold', 370, 48, t, { base: 'spam' });
+    for (var s = 0; s < 7; s++) A.enemy(a, 'spam', 60 + s * 22, 92 + Math.sin(t * 4 + s) * 4, t, { phase: s });
+    A.enemy(a, 'call', 390, 92, t, { hit: (t % 1) < .1 ? 1 : 0 }); A.enemy(a, 'invoice', 430, 92, t, { dead: true });
+    A.bullet(a, 'ring', 60, 66 + (t * 30) % 40, t);
+    ['diamond', 'diamondBig', 'shard', 'dot', 'mail', 'alarm'].forEach(function (k, i) { A.bullet(a, k, 214 + i * 14, 128, t) });
+    for (var b = 0; b < 4; b++) A.bullet(a, 'player', 240, 176 - b * 14 - (t * 120) % 14, t);
+    A.explosion(a, 380, 140, Math.floor(t), t, 'invoice'); A.explosion(a, 420, 140, Math.floor(t / 1.6) * 1.6, t, 'gold');
+    ['auto', 'ai', 'booking', 'night', 'coin'].forEach(function (k, i) { A.powerup(a, k, 300 + i * 22, 168, t) });
+    A.powerLabel(a, 'auto', 300, 168, (t % 2.5));
+    var sx = 240 + Math.sin(t * 1.2) * 60, bank = Math.cos(t * 1.2);
+    A.ship(a, sx, 196, t, { bank: bank, thrust: .6, shield: (t % 6) < 3 ? 1 : 0, power: (t % 6) > 4 ? 'ai' : null });
+    if ((t % 6) > 4) A.reticle(a, 200, 48, t);
+    A.weather(g, day, t, 1);
+    hud(t);
+  }
+  function hud(t) {
+    var dark = day === 'sun', col = dark ? '#121211' : '#F4F2EC';
+    g.fillStyle = dark ? 'rgba(244,242,236,.5)' : 'rgba(15,15,14,.55)'; g.fillRect(0, 0, 480, 10);
+    var wd = A.text(g, FULL[day], 4, 2, { color: col }); A.digits(g, '11:40', 8 + wd, 2, col);
+    A.bar(g, 4, 11, 70, .4, {}); A.text(g, 'HOURS SAVED', 196, 2, { color: col }); A.digits(g, '0412', 262, 2, col);
+    A.icon(a, 'coffee', 440, 1, (t * 4) | 0); A.icon(a, 'coffee', 449, 1, ((t * 4) | 0) + 1); A.icon(a, 'coffeeSpill', 458, 1, Math.min(2, (t * 3 | 0) % 4));
+    A.icon(a, 'auto', 4, 260); A.bar(g, 14, 263, 30, (1 - (t % 6) / 6), {}); A.icon(a, 'night', 468, 260);
+  }
+  function fx(t) {
+    f.setTransform(1, 0, 0, 1, 0, 0); f.clearRect(0, 0, 1920, 1080); if (!fxOn || view !== 'scene') return;
+    f.setTransform(4, 0, 0, 4, 0, 0); A.shafts(f, day, t); f.globalCompositeOperation = 'lighter';
+    var sx = 240 + Math.sin(t * 1.2) * 60; A.shipFx(f, sx, 196, t, { thrust: .6, bank: Math.cos(t * 1.2) });
+    for (var b = 0; b < 4; b++) { var gl = A.glow('player', 1); f.globalAlpha = .6; f.drawImage(gl, 240.5 - gl.gw / 2, 176 - b * 14 - (t * 120) % 14 - gl.gh / 2 + 4, gl.gw, gl.gh) }
+    var wr = A.windowRects, wg = A.glow('window', 1); f.globalAlpha = .12; for (var i = 0; i < wr.length; i++) if (wins[i]) f.drawImage(wg, wr[i].x + 1.5 - wg.gw / 2, wr[i].y + 1 - wg.gh / 2, wg.gw, wg.gh);
+    f.globalAlpha = .3; [[330, 48], [370, 48]].forEach(function (p) { var gg = A.glow('gold', 1); f.drawImage(gg, p[0] - gg.gw / 2, p[1] - gg.gh / 2, gg.gw, gg.gh) });
+    f.globalAlpha = 1; f.globalCompositeOperation = 'source-over'; f.setTransform(1, 0, 0, 1, 0, 0); f.fillStyle = 'rgba(0,0,0,.06)'; for (var y = 0; y < 1080; y += 4) f.fillRect(0, y, 1920, 1);
+  }
+  // varianti della nave, ingrandite (z=4: 240x135 HD = 120x67 di gioco)
+  function ships(t) {
+    g.fillStyle = Q.get('bg') || '#10172A'; g.fillRect(0, 0, pc.width, pc.height); A.setDay(day); clearA();
+    ['a', 'c', 'd', 'e'].forEach(function (v, i) { A.ship(a, 22 + i * 39, 24, t, { variant: v, thrust: .8 }); A.ship(a, 22 + i * 39, 66, t, { variant: v, bank: i % 2 ? -1 : 1, thrust: .4, power: i === 2 ? 'auto' : null }) });
+  }
+  function sheet(t) {
+    g.fillStyle = Q.get('bg') || '#1A2440'; g.fillRect(0, 0, pc.width, pc.height); A.setDay(day); clearA();
+    ['call', 'invoice', 'receipt', 'noshow', 'spam', 'double'].forEach(function (k, i) { var cx = 14 + i * 22; A.enemy(a, k, cx, 14, t, {}); A.enemy(a, 'gold', cx, 38, t, { base: k }); A.enemy(a, k, cx, 62, t, { dead: true }); A.enemy(a, k, cx, 84, t, { hit: 1 }) });
+    ['auto', 'ai', 'booking', 'night', 'coin'].forEach(function (k, i) { A.powerup(a, k, 146, 12 + i * 20, t) });
+    ['ring', 'diamond', 'diamondBig', 'shard', 'dot', 'mail', 'alarm', 'player'].forEach(function (k, i) { A.bullet(a, k, 140 + (i % 2) * 0 + 24, 10 + i * 10, t) });
+    ['coffee', 'coffeeEmpty', 'clock', 'night', 'auto', 'ai', 'booking', 'coin'].forEach(function (k, i) { A.icon(a, k, 134 + (i % 4) * 9, 102 - 22 + Math.floor(i / 4) * 9 + 0, (t * 4) | 0) });
+    for (var s = 0; s < 3; s++) A.icon(a, 'coffeeSpill', 134 + s * 9, 100, s);
+  }
+  function bosses(t) {
+    A.sky(g, 'mon', t); clearA(); var ph = +(Q.get('ph') || 1), mo = +(Q.get('mo') || 0);
+    A.boss(a, 'monday', 110, 90, t, { phase: ph, mouth: mo / 2, hp: .6, pagesTorn: ph - 1, rage: ph === 3 ? .5 : 0 });
+    A.boss(a, 'urgent', 300, 70, t, { mouth: mo / 2 });
+    A.page(a, 280, 140, t, 0); A.page(a, 300, 150, t, 1); A.page(a, 320, 136, t, 2); A.meeting(a, 260, 180, 70, 12, t, 'ALL HANDS');
+  }
+  function map(t) { clearA(); var cur = +(Q.get('cur') || 3), done = []; for (var i = 0; i < cur; i++) done[i] = true; A.map(Q.get('lo') ? g : a, t, { current: cur, done: done, unlocked: cur + 1, shipPos: Q.get('sp') != null ? +Q.get('sp') : cur }) }
+  function intro(t) { clearA(); A.intro(g, t, LINES) }
+  function card(t) { clearA(); A.sky(g, 'night', t); A.introCard(g, t, LINES[4]) }
+  function logo(t) { clearA(); A.sky(g, 'night', t); A.skyline(g, 'night', 0, t); A.towers(g, 'night', 0, t, []); A.mark(g, 240, 40, 30, Q.get('mt') != null ? +Q.get('mt') : t); A.text(g, 'MOTHER MACHINE PRESENTS', 240, 60, { align: 'c' }); A.logo(a, 240, 80, t, Q.get('gl') ? 1 : 0); A.text(g, 'INSERT COIN', 240, 200, { align: 'c', color: ((t * 2) | 0) % 2 ? '#F4F2EC' : '#4A4E4C' }) }
+  function city(t) { clearA(); A.sky(g, 'night', t); A.skyline(g, 'night', 0, t); A.towers(g, 'night', 0, t, []); var K = ['food', 'fashion', 'shop', 'beauty', 'hotel', 'services'], Wd = [70, 60, 80, 34, 54, 64], Hd = [56, 90, 60, 120, 140, 100], x = 6; K.forEach(function (k, i) { A.building(g, k, x, 252 - Hd[i], Wd[i], Hd[i], t, null); x += Wd[i] + 8 }) }
+  function font(t) { clearA(); g.fillStyle = '#0F0F0E'; g.fillRect(0, 0, 480, 270); A.text(g, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789', 6, 6); A.text(g, 'TUESDAY WEDNESDAY THURSDAY FRIDAY SATURDAY SUNDAY MONDAY', 6, 20, { size: 1 }); A.text(g, 'CLOCKED OUT 17:00', 6, 40, { size: 2, shadow: true }) }
+  function bosses2(t) {
+    A.sky(g, Q.get('day') || 'night', t); clearA(); var st = Q.get('st') || 'idle';
+    A.boss(a, 'voicemail', 50, 40, t, { state: st }); A.boss(a, 'replyall', 150, 40, t, { state: st }); A.boss(a, 'paperjam', 262, 42, t, { state: st }); A.boss(a, 'onestar', 370, 44, t, { state: st }); A.boss(a, 'scaries', 446, 50, t, { state: st });
+    ['voicemail', 'replyall', 'paperjam', 'onestar', 'scaries', 'urgent', 'monday'].forEach(function (n, i) { A.portrait(a, n, 6 + i * 67, 112, t, i === 6 ? 'smug' : (st === 'attack' ? 'angry' : 'idle')) });
+    A.dialog(a, 20, 196, 300, 62, t, { name: 'MONDAY', portrait: 'monday', mood: 'smug', text: 'Good morning. I am MONDAY. See you next week.', chars: 99 });
+    A.dialog(a, 330, 196, 140, 62, t, { name: 'THE VOICEMAIL', text: 'You have... 47 new messages.', chars: 18 });
+  }
+  function side(t) {
+    g.fillStyle = Q.get('bg') || '#10172A'; g.fillRect(0, 0, pc.width, pc.height); A.setDay(day); clearA();
+    for (var b = -1; b <= 1; b++) A.ship(a, 26 + (b + 1) * 52, 22, t, { bank: b, thrust: .7 });
+    A.ship(a, 40, 62, t, { thrust: 1, power: 'auto' }); A.ship(a, 110, 62, t, { thrust: .4, shield: 1 });
+  }
+  function hscene(t) {
+    var sc = Q.get('sc') != null ? +Q.get('sc') : t * 60;
+    A.sky(g, day, t); A.skyline(g, day, sc, t); A.towers(g, day, sc, t, []); A.street(g, day, sc, t);
+    clearA();
+    var row = ['call', 'invoice', 'noshow', 'spam', 'double', 'receipt'];
+    row.forEach(function (k, i) { A.enemy(a, k, 300 + (i % 3) * 52, 50 + Math.floor(i / 3) * 50 + Math.sin(t * 2 + i) * 4, t, { phase: i }) });
+    A.enemy(a, 'gold', 440, 160, t, { base: 'call' });
+    for (var s2 = 0; s2 < 5; s2++) A.enemy(a, 'spam', 400 + s2 * 14, 190 + Math.sin(t * 4 + s2) * 6, t, { phase: s2 });
+    ['diamond', 'ring', 'mail', 'alarm', 'shard'].forEach(function (k, i) { A.bullet(a, k, 240 - ((t * 60 + i * 30) % 120), 70 + i * 22, t) });
+    for (var b = 0; b < 5; b++) A.bullet(a, 'player', 90 + b * 26 + (t * 200) % 26, 130, t);
+    A.explosion(a, 360, 150, Math.floor(t), t, 'invoice');
+    A.powerup(a, 'auto', 200, 200, t); A.powerup(a, 'booking', 230, 205, t);
+    A.ship(a, 64, 130 + Math.sin(t * 1.5) * 20, t, { bank: Math.cos(t * 1.5), thrust: .7 });
+    A.weather(g, day, t, 1);
+    A.hudClock(a, 4, 3, 120, .45, day, t, {}); A.hudCounter(a, 240, 3, 412 + (t % 1), t); A.hudCups(a, 476, 3, 2, 3, t);
+    A.hudSign(a, 6, 252, 'OPEN', t, false); A.hudSystems(a, 476, 248, { booking: 1, auto: 1, ai: 0, night: 1, nightCharge: (t % 4) / 4, key: 'X' }, t);
+  }
+  function hud(t) {
+    A.sky(g, 'night', t); clearA();
+    A.hudClock(a, 10, 10, 130, .62, 'wed', t, {}); A.hudClock(a, 10, 34, 130, 1, 'fri', t, { overtime: true });
+    A.hudCounter(a, 240, 10, 1287 + (t % 1), t); A.hudCups(a, 470, 10, 1, 3, t, (t % 1));
+    ['OPEN', 'BRB', 'CLOSED'].forEach(function (k, i) { A.hudSign(a, 160 + i * 40, 40, k, t, i === 0) });
+    A.hudSystems(a, 470, 40, { booking: 1, auto: 1, ai: 1, night: 1, nightCharge: .6, key: 'X' }, t);
+    A.systemCard(a, 'booking', 1.6); A.hint(a, 60, 222, 'HOLD SPACE TO FIRE', 'down', t); A.hint(a, 420, 200, 'NIGHT SHIFT READY', 'right', t);
+    A.plus(a, 300, 220, '+3h', .4);
+  }
+  function ui(t) {
+    g.fillStyle = '#0F0F0E'; g.fillRect(0, 0, 480, 270); clearA();
+    var c = a; c.save(); c.setTransform(1, 0, 0, 1, 0, 0);
+    A.uiButton(c, 'primary', 20, 20, 180, 56, '', { label: 'PLAY', u: 4 }); A.uiButton(c, 'primary', 220, 20, 180, 56, 'down', { label: 'PLAY', u: 4 });
+    A.uiButton(c, 'secondary', 420, 20, 180, 56, '', { label: 'SCORES', u: 4 }); A.uiButton(c, 'icon', 620, 20, 64, 56, '', { icon: 'pause', u: 4 }); A.uiButton(c, 'icon', 700, 20, 64, 56, 'hover', { icon: 'sound', u: 4 }); A.uiButton(c, 'icon', 780, 20, 64, 56, '', { icon: 'mute', u: 4 }); A.uiButton(c, 'icon', 860, 20, 64, 56, '', { icon: 'close', u: 4 });
+    A.pad(c, 160, 110, 640, 384, { up: true, a: (t % 1) < .5 }, { labels: { a: 'NIGHT', b: 'SHIELD' } }); c.restore();
+  }
+  function virus(t) { A.serverBg(g, t); clearA(); for (var y = 0; y < 6; y++) for (var x = 0; x < 9; x++) { var k = Math.max(0, Math.min(1, ((t * 2 - Math.hypot(x - 4, y - 3)) * .5))); if (k > 0) A.virusCell(a, 258 + x * 12, 66 + y * 12, t, k) } A.virusCore(a, 306, 102, t, {}); A.ship(a, 60, 135, t, { thrust: .4 }) }
+  function delivery(t) { A.sky(g, 'fri', t); A.skyline(g, 'fri', t * 40, t); A.towers(g, 'fri', t * 40, t, []); A.street(g, 'fri', t * 40, t); clearA(); ['food', 'fashion', 'shop', 'beauty', 'hotel', 'services'].forEach(function (k, i) { A.parcel(a, k, 160 + i * 40, 60 + (i % 2) * 20, t, {}) }); var shops = A.streetShops('fri', t * 40); A.targetShop(a, shops[3], t); A.ship(a, 70, 120, t, { thrust: .6 }); A.parcel(a, 'food', 50, 138, t, { carried: true, glow: true }) }
+  function city3(t) { A.sky(g, 'night', t); A.skyline(g, 'night', 0, t); A.towers(g, 'night', 0, t, []); clearA(); var K = ['restaurant', 'streetfood', 'clothing', 'hairdresser', 'supermarket', 'hotel', 'cafe', 'gym'], Wd = [62, 50, 44, 44, 70, 52, 50, 48], Hd = [70, 54, 120, 80, 64, 150, 60, 96], x = 6, signImg = (function () { var c = document.createElement('canvas'); c.width = 40; c.height = 16; var q = c.getContext('2d'); q.fillStyle = '#fff'; q.font = 'bold 13px sans-serif'; q.fillText('Bao!', 4, 13); return c })(); K.forEach(function (k, i) { A.building(g, k, x, 252 - Hd[i], Wd[i], Hd[i], t, Q.get('signs') && i % 3 === 0 ? { img: signImg } : null); x += Wd[i] + 4 }); g.fillStyle = '#060A18'; g.fillRect(0, 252, 480, 18) }
+  function ships2(t) { g.fillStyle = Q.get('bg') || '#10172A'; g.fillRect(0, 0, pc.width, pc.height); A.setDay(day); clearA(); ['a', 'b', 'c'].forEach(function (v, i) { A.ship(a, 30 + i * 52, 22, t, { variant2: v, thrust: .8 }); A.ship(a, 30 + i * 52, 64, t, { variant2: v, bank: i === 1 ? 1 : -1, thrust: .5 }) }) }
+  function shipsday(t) { var sc = t * 60; A.sky(g, day, t); A.skyline(g, day, sc, t); A.towers(g, day, sc, t, []); A.street(g, day, sc, t); clearA(); ['a', 'b', 'c'].forEach(function (v, i) { A.ship(a, 80, 60 + i * 60, t, { variant2: v, thrust: .7, bank: Math.sin(t + i) * .5 }); A.text(g, v.toUpperCase(), 30, 57 + i * 60, {}) }); ['call', 'invoice', 'noshow', 'double', 'spam'].forEach(function (k, i) { A.enemy(a, k, 260 + i * 40, 120, t, { phase: i }) }); for (var b = 0; b < 4; b++) A.bullet(a, 'player', 120 + b * 24, 60, t); A.weather(g, day, t, 1) }
+  function m8(t) { g.fillStyle = Q.get('bg') || '#10172A'; g.fillRect(0, 0, pc.width, pc.height); A.setDay(day); clearA();
+    ['a', 'b', 'c'].forEach(function (v, i) { A.ship(a, 22 + i * 40, 18, t, { variant: v, thrust: .7, still: 1 }) });
+    ['happy', 'focus', 'hurt', 'surprised'].forEach(function (m, i) { A.ship(a, 18 + i * 30, 52, t, { mood: m, thrust: .5, still: 1 }) });
+    A.ship(a, 140, 52, t, { night: 1, still: 1, thrust: .3 }); A.ship(a, 140, 18, t, { bank: 1, fire: 1, still: 1, thrust: .9 }); }
+  function m8day(t) { var sc = t * 60; A.sky(g, day, t); A.skyline(g, day, sc, t); A.towers(g, day, sc, t, []); A.street(g, day, sc, t); clearA(); ['a', 'b', 'c'].forEach(function (v, i) { A.ship(a, 70, 60 + i * 60, t, { variant: v, thrust: .7, bank: Math.sin(t + i) * .5, fire: i === 1 ? 1 : 0 }); A.text(g, v.toUpperCase(), 30, 57 + i * 60, {}) }); for (var b = 0; b < 5; b++) A.bullet(a, b % 2 ? 'player' : 'gearAI', 110 + b * 26 + (t * 120) % 26, 120, t); ['call', 'invoice', 'noshow', 'double', 'spam'].forEach(function (k, i) { A.enemy(a, k, 260 + i * 42, 120, t, { phase: i }) }); A.weather(g, day, t, 1); A.portrait(a, 'm8', 360, 190, t, 'talk'); A.portrait(a, 'voicemail', 420, 190, t, 'angry') }
+  function bcard(t) { var bk = Q.get('b') || 'voicemail', bd = A.bossInfo[bk].day; A.sky(g, bd, t); A.skyline(g, bd, t * 30, t); A.towers(g, bd, t * 30, t, []); A.street(g, bd, t * 30, t); clearA(); A.bossCard(a, t, bk, null, Q.get('k') != null ? +Q.get('k') : (t % 3) / 3) }
+  function ports(t) { g.fillStyle = '#10172A'; g.fillRect(0, 0, pc.width, pc.height); clearA(); ['m8', 'voicemail', 'replyall', 'paperjam', 'urgent', 'onestar', 'scaries', 'monday'].forEach(function (n, i) { var x = 8 + (i % 4) * 120, y = 8 + (i >> 2) * 130; A.portrait(a, n, x, y, t, 'talk'); A.portrait(a, n, x + 58, y, t, 'angry'); A.text(g, n.toUpperCase(), x, y + 52, {}) }); A.tiny(g, 'TALK / ANGRY', 8, 262, '#F4F2EC') }
+  var V = { bcard: bcard, ports: ports, m8: m8, m8day: m8day, ships2: ships2, shipsday: shipsday, hscene: hscene, hud: hud, ui: ui, virus: virus, delivery: delivery, city3: city3, side: side, bosses2: bosses2, scene: scene, ships: ships, sheet: sheet, bosses: bosses, map: map, intro: intro, card: card, logo: logo, city: city, font: font };
+  function frame(now) { var t = fixedT != null ? fixedT : now / 1000; (V[view] || scene)(t); fx(t); if (fixedT == null) requestAnimationFrame(frame) }
+  if (Q.get('perf')) {
+    var T = []; for (var r = 0; r < 300; r++) { var t0 = performance.now(); scene(r / 60); T.push(performance.now() - t0) } T.sort(function (p, q) { return p - q });
+    window.PERF = { init: A.initMs, sceneAvg: T.reduce(function (s, v) { return s + v }, 0) / T.length, sceneMed: T[150], sceneP95: T[285] }; info.textContent = JSON.stringify(window.PERF);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body></html>

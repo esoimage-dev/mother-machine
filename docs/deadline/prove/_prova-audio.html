@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DEADLINE audio test</title>
+<style>
+  :root { --notte: #0F0F0E; --crema: #F4F2EC; --pom: #FF5B3A }
+  body { margin: 0; padding: 20px 16px 60px; background: var(--notte); color: var(--crema); font: 14px/1.4 ui-monospace, monospace }
+  h1 { font-size: 16px; letter-spacing: .1em; margin: 0 0 4px }
+  h2 { font-size: 12px; opacity: .6; letter-spacing: .12em; margin: 22px 0 8px; text-transform: uppercase }
+  .row { display: flex; flex-wrap: wrap; gap: 6px }
+  button { background: transparent; color: var(--crema); border: 1px solid rgba(244,242,236,.35); padding: 7px 10px; font: inherit; cursor: pointer }
+  button:hover, button.on { border-color: var(--pom); color: var(--pom) }
+  label { display: flex; align-items: center; gap: 10px; margin: 6px 0 }
+  input[type=range] { width: min(320px, 60vw); accent-color: var(--pom) }
+  pre { white-space: pre-wrap; font-size: 12px; opacity: .85; background: rgba(244,242,236,.05); padding: 10px }
+</style>
+</head>
+<body>
+<h1>DEADLINE · AUDIO</h1>
+<div>Tap anything to unlock. M = mute. <span id="st"></span></div>
+<h2>Music</h2><div class="row" id="tracks"></div>
+<label>Intensity <input id="int" type="range" min="0" max="1" step=".01" value="0"><span id="iv">0</span></label>
+<label><input id="flow" type="checkbox"> Flow state</label>
+<label><input id="duck" type="checkbox"> Duck (pause)</label>
+<div class="row"><button id="stop">Stop all</button><button id="mute">Mute</button><button id="pan">Pan: 0</button></div>
+<h2>SFX</h2><div class="row" id="sfx"></div>
+<h2>Boss stings</h2><div class="row" id="stings"></div>
+<h2>Dialog</h2><div class="row"><button id="tw">Typewriter line</button></div>
+<h2>Beat</h2><pre id="beat"></pre>
+<script src="js/deadline-audio.js"></script>
+<script>
+  var A = window.DEADLINE_AUDIO, pan = 0;
+  function $(id) { return document.getElementById(id) }
+  addEventListener('pointerdown', function () { A.unlock() }, true);
+  addEventListener('keydown', function (e) { A.unlock(); if (e.key === 'm' || e.key === 'M') stato(A.mute()) });
+  A.tracks.forEach(function (t) {
+    var b = document.createElement('button'); b.textContent = t.name + ' ' + t.bpm; b.dataset.t = t.name;
+    b.onclick = function () { A.music(t.name, { intensity: +$('int').value, flow: $('flow').checked }); segna() };
+    $('tracks').appendChild(b);
+  });
+  A.sfxNames.forEach(function (n) {
+    var b = document.createElement('button'); b.textContent = n;
+    b.onclick = function () { A.sfx(n, { pan: pan }) };
+    $('sfx').appendChild(b);
+  });
+  A.stings.forEach(function (n) {
+    var b = document.createElement('button'); b.textContent = n;
+    b.onclick = function () { A.sting(n) };
+    $('stings').appendChild(b);
+  });
+  $('tw').onclick = function () { var s = 'Per my last email...', i = 0; (function k() { if (i++ < s.length) { if (s[i - 1] !== ' ') A.sfx('typewriter'); setTimeout(k, 38) } })() };
+  $('int').oninput = function () { A.intensity(+this.value); $('iv').textContent = this.value };
+  $('flow').onchange = function () { A.flow(this.checked) };
+  $('duck').onchange = function () { A.duck(this.checked) };
+  $('stop').onclick = function () { A.stopAll(); segna() };
+  $('mute').onclick = function () { stato(A.mute()) };
+  $('pan').onclick = function () { pan = pan === 0 ? -1 : pan === -1 ? 1 : 0; this.textContent = 'Pan: ' + pan };
+  function segna() { [].forEach.call(document.querySelectorAll('[data-t]'), function (b) { b.classList.toggle('on', b.dataset.t === A.track()) }) }
+  function stato() { $('st').textContent = A.muted ? '(muted)' : ''; $('mute').classList.toggle('on', A.muted) }
+  stato();
+  setInterval(function () { var b = A.beat(); $('beat').textContent = 'track ' + A.track() + ' · bpm ' + b.bpm.toFixed(1) + ' · beat ' + b.beat + ' · phase ' + b.phase.toFixed(2) }, 100);
+
+  /* misure: rende offline e calcola picco e RMS (dBFS) */
+  function db(x) { return x > 0 ? 20 * Math.log10(x) : -120 }
+  window.misura = function (kind, name, secs, plan) {
+    return A._render(kind, name, secs, plan).then(function (buf) {
+      var pk = 0, sum = 0, n = 0, L = buf.getChannelData(0), R = buf.getChannelData(1), win = Math.round(buf.sampleRate * .05), wmax = 0, ws = 0;
+      var jump = 0;
+      for (var i = 0; i < L.length; i++) {
+        var a = Math.max(Math.abs(L[i]), Math.abs(R[i])); if (a > pk) pk = a;
+        var m = (L[i] * L[i] + R[i] * R[i]) / 2; sum += m; n++; ws += m;
+        if (i >= win) { var o = (L[i - win] * L[i - win] + R[i - win] * R[i - win]) / 2; ws -= o }
+        if (ws / win > wmax) wmax = ws / win;
+        if (i && Math.abs(L[i] - L[i - 1]) > jump) jump = Math.abs(L[i] - L[i - 1]);
+      }
+      return { name: name, peak: +db(pk).toFixed(1), rms: +db(Math.sqrt(sum / n)).toFixed(1), rms50max: +db(Math.sqrt(wmax)).toFixed(1), maxStep: +jump.toFixed(3) };
+    });
+  };
+  /* energia per finestre (per controllare tempo e giunte del loop) */
+  window.inviluppo = function (name, secs, plan, step) {
+    return A._render('music', name, secs, plan).then(function (buf) {
+      var L = buf.getChannelData(0), w = Math.round(buf.sampleRate * (step || .05)), out = [];
+      for (var i = 0; i + w <= L.length; i += w) { var s = 0; for (var j = i; j < i + w; j++) s += L[j] * L[j]; out.push(+db(Math.sqrt(s / w)).toFixed(1)) }
+      return out;
+    });
+  };
+</script>
+</body>
+</html>
