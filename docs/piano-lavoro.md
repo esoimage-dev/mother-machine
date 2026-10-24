@@ -80,10 +80,10 @@ Regole che restano: testata, logo, pulsantiera, cursore, vetro non si toccano; p
   Systems e quella con le sei animazioni.
 - [ ] **Safari: il cambio piano (ascensore) flasha**: per un istante si vede il piano nuovo, sparisce e ricompare.
 - [ ] **Safari, LG: zoomando la pagina a volte sparisce la testata.**
-- [ ] **Chrome e Safari, home: il selettore dei lavori sale troppo presto**: gia' quando si e' quasi ancora sulla hero
+- [x] **Chrome e Safari, home: il selettore dei lavori sale troppo presto**: gia' quando si e' quasi ancora sulla hero
   sta in alto e segue lo scroll. Su computer deve restare fermo sotto la striscia dei lavori, non seguire; valutare
   lo stesso su telefono (dove copre i progetti). Nota di Eso: trascinamento + selettore insieme sono un po' ridondanti.
-- [ ] **Chrome e Safari, LG: il giradischi non apre piu' la finestra del lettore** (cliccandolo non succede niente;
+- [x] **Chrome e Safari, LG: il giradischi non apre piu' la finestra del lettore** (cliccandolo non succede niente;
   il mini player non c'entra). Probabile conflitto con il cabinato/DEADLINE o con l'ordine degli script: verificare.
 - [x] **Home, trascinamento della striscia dei lavori** (soprattutto su computer): scatta, glitcha, lento e macchinoso.
   Mentre trascini **seleziona il testo delle schede** (tutto pomodoro): durante il trascinamento la selezione va

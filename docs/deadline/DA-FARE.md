@@ -5,7 +5,7 @@
 - [ ] **Cosa sparano i nemici**: i colpi nemici vanno ripensati (piu' belli, piu' a tema, piu' leggibili).
 - [ ] **I palazzi della CITY per le insegne (ristorante, hotel, ecc.) sono brutti**: rifarli; Eso vuole rivederli uno
   per uno con Claude (veloce) prima di chiuderli.
-- [ ] **Dialoghi troppo veloci**: entrata dei boss e ogni scambio di battute M8/boss non si fanno in tempo a leggere.
+- [~] **Dialoghi troppo veloci** (primo giro fatto il 24 ottobre: scrittura a 20 lettere/s, ogni riga resta 1,6 s + il tempo di leggerla, carta del boss 2,2 s; da riprovare): entrata dei boss e ogni scambio di battute M8/boss non si fanno in tempo a leggere.
   Rallentare: piu' tempo per riga, pause piu' lunghe tra un messaggio e l'altro, il giocatore deve potersi godere le
   battute (il gioco resta veloce, ma qui ci vuole respiro). Le battute possono diventare ancora piu' buffe.
 
