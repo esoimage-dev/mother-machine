@@ -30,7 +30,7 @@ record DNS di Resend su Cloudflare.
 - [ ] **La stanza della call:** pagina nostra con Daily dentro, vestita Mother Machine (anteprima camera, Mic, Camera,
   Share screen, Leave, "On the table" con l'ordine). Link solo per mail. Le call non si registrano.
 - [ ] **Cron del Worker:** promemoria e orari non confermati liberati dopo 24 ore.
-- [ ] Da decidere con Eso: la **riga privacy sotto il bottone d'invio**.
+- [x] Riga privacy sotto il modulo: "We only use this to answer you. Privacy." (24 ottobre).
 
 ## A2 · Sicurezza nostra (prima del lancio; non si racconta sul sito)
 **Fa Eso, con Claude che guida passo passo (circa un'ora):**
@@ -63,8 +63,8 @@ Regole che restano: testata, logo, pulsantiera, cursore, vetro non si toccano; p
   Idea di Eso da valutare nell'audit: **unire Brand e Systems in una pagina "Services"** concentrata sui sistemi
   (sul brand c'e' meno da dire).
 - [ ] **Decisioni aperte da chiudere nell'audit:**
-  - Studio, regola 03 "One number to move." ripete il titolo della home: cambiarla?
-  - LG, frase sotto la stanza: "You can watch. Only we touch." oppure "Look around. Touch what glows."
+  - [x] Studio, regola 03: diventata "We measure what matters." (24 ottobre).
+  - [x] LG, frase sotto la stanza: resta "You can watch. Only we touch." (24 ottobre).
   - Brand apre al buio, il manuale lo vuole bianco.
   - Home: apertura con il citofono su telefono e versione B su computer, da rivedere.
   - Testi di LG e Systems dopo la fusione.
@@ -102,12 +102,12 @@ File: `public/js/stanza.js` (motore e stanza), `public/js/stanza-oggetti.js` (og
 - [x] Togliere i puntini bianchi a bassa opacita' al centro della pagina (sembrano bollicine, ci cade l'occhio).
 
 ### Oggetti
-- [ ] **Mobiletto dei vinili:** al passaggio si illumina tutto (mobiletto, giradischi, dischi). Spostarlo ancora piu' a sinistra.
+- [x] **Mobiletto dei vinili:** al passaggio si illumina tutto (mobiletto, giradischi, dischi). Spostarlo ancora piu' a sinistra.
 - [ ] **Cassa "AUDIO" con il synth:** piu' a sinistra e piu' in basso (verso l'angolo in basso a sinistra). Poi
   sostituirla con un'idea piu' intelligente (da proporre a Eso prima).
 - [ ] **Telefono:** ancora brutto, da rifare. Anche il suo filo (strano, brutto).
 - [ ] **Cavi della console** attorno alla cassa e dietro la TV: ancora spigolosi e strani, piu' morbidi e naturali.
-- [ ] **Fili che vanno ai server:** togliere i quadratini/cubetti dove finiscono sotto i server. Solo il filo.
+- [x] **Fili che vanno ai server:** togliere i quadratini/cubetti dove finiscono sotto i server. Solo il filo.
 - [ ] **Spina della macchinetta del caffe':** filo da pulire e tagliare bene.
 - [ ] **Bobina/prolunga accanto al banco:** il filo passa sopra la bobina, sistemarlo.
 - [ ] **Trasformatore a terra** tra bobina e cabinato: il filo che parte dal cabinato entra troppo dentro, tagliarlo.

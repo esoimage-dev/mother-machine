@@ -603,7 +603,6 @@
       var cv = part({ cls: 'tv' }); zz(cv, 4.9);
       cv.curve(T([.07, .665, .33]), T([.12, .55, .5]), T([.16, .01, .44]), { cls: 'cable' });
       cv.curve(T([.16, .01, .44]), [-3.6, .01, 5.6], [-4.5, .01, 5.15], { cls: 'cable' });
-      cv.box([-4.55, .02, 5.12, -4.49, .07, 5.2], ID, {});
     }
 
     /* la console di casa, la nostra: la Mother 8. Una scatola anni '80 con la cartuccia infilata, la spia accesa e la m
@@ -766,7 +765,6 @@
       var Tp = frame(T([.38, .42, -.02]), -.42), fa = part({ cls: 'ctable' }), fp = part({ cls: 'ctable' }); zz(fa, 3.565); zz(fp, 5.2);
       fa.line(liscio([Tp([0, .02, .108]), Tp([-.02, .006, .2]), T([.15, .424, -.19]), T([.17, .421, -.336]), T([.18, .3, -.39]), T([.16, .12, -.41]), T([.1, .006, -.48])], .004), { cls: 'cable' });
       fp.line(liscio([T([.1, .006, -.48]), T([.0, .004, -.62]), [-1.05, .004, 4.25], [-1.6, .004, 4.95], [-2.15, .004, 5.32], [-2.75, .004, 5.42], [-3.35, .004, 5.78], [-3.9, .004, 5.92], [-4.3, .004, 6.12], [-4.52, .03, 6.15]], .004), { cls: 'cable' });
-      fp.box([-4.56, .02, 6.11, -4.5, .07, 6.19], ID, {});
       /* la tazzina con il piattino: il piattino svasato con l'incavo, la tazzina sul suo piede, il caffe' con la crema,
          il manico di lato, due fili di vapore, il cucchiaino */
       var c = part({ cls: 'mug' }); zz(c, 3.58);
@@ -838,8 +836,9 @@
     /* ---------- il giradischi, in mezzo alla stanza: un mobile basso per i dischi sulle gambe a matita, il giradischi
        acceso sopra, la copertina del disco che suona appoggiata accanto (il fulmine dei Dead Pixels) ---------- */
     function giradischi() {
-      var T = frame([-1.12, 0, 6.75], -.37);
-      var p = part({ cls: 'vinyl' }); zz(p, 6.33);
+      var T = frame([-1.42, 0, 6.75], -.37);
+      /* tutto il mobiletto si accende al passaggio, insieme al giradischi e ai dischi */
+      var p = part({ cls: 'vinyl', hot: 'music', label: 'Record player. Pick a record' }); zz(p, 6.33);
       var b = p.box([-.62, .16, -.21, .62, .56, .21], T, { hatch: { l: 3 } });
       p.box([-.64, .56, -.23, .64, .59, .23], T, {});
       [[-.56, -.16], [.56, -.16], [-.56, .16], [.56, .16]].forEach(function (q) { gamba(p, T([q[0], .16, q[1]]), T([q[0] * 1.05, 0, q[1] * 1.2]), .018, .01) });
@@ -1238,7 +1237,6 @@
       /* la corrente: dal retro della cassetta per terra, morbida, fino alla presa sotto il primo armadio */
       var cw = part({ cls: 'scope' }); cw.P.zf = 1e3;
       cw.line(liscio([T([.17, .05, .245]), T([.22, .006, .4]), [-3.45, .006, 3.85], [-3.95, .006, 4.05], [-4.35, .006, 4.35], [-4.52, .02, 4.5]], .004), { cls: 'cable' });
-      var pg = part({ cls: 'scope' }); zz(pg, 4.5); pg.box([-4.58, .02, 4.46, -4.5, .07, 4.54], ID, {});
     }
 
     /* il biglietto sul secondo armadio: DON'T TOUCH - E. */
