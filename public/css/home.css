@@ -298,6 +298,8 @@ html .mmc.wdr:not(.hit) i::after{width:0;height:0}
 }
 .wsx button .sh{display:none}
 @media (max-width:860px){.wsx button .sh{display:inline}}
+/* il selettore resta fermo sotto la striscia: non sale e non segue lo scroll (Eso, 24 ottobre) */
+.wsel{position:relative;bottom:auto}
 .wst-cut .mx{width:min(370px,60%)}
 /* su computer la Control Room del truck piu' stretta e bassa: si vede di piu' il truck */
 @media (min-width:861px){.wst-cut .mx{width:min(310px,48%)}.wst-cut .mxc i{aspect-ratio:1.85}}

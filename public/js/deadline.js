@@ -846,8 +846,8 @@
     for (var i = 0; i < 3; i++) R(x + rnd(0, HZ.w), rnd(130, CITY_Y), 1, 2, C.cream);
   }
   /* il dialogo del boss: ritratto, macchina da scrivere, si salta con un tasto o un tocco */
-  function say(who, text, mood) { Gm.dlg = { who: who, text: text, t: 0, hold: 1.1, mood: mood || '' }; sfx('blip') }
-  function dlgLen(d) { return d.text.length / 30 }
+  function say(who, text, mood) { Gm.dlg = { who: who, text: text, t: 0, hold: 1.4 + text.length * .03, mood: mood || '' }; sfx('blip') }
+  function dlgLen(d) { return d.text.length / 20 }   /* scrittura piu' lenta: si legge con calma (Eso) */
   function dlgUpdate(dt) {
     var d = Gm.dlg; if (!d) return; d.t += dt;
     if (d.t > dlgLen(d) + d.hold) Gm.dlg = null;
@@ -862,7 +862,7 @@
   }
   function drawDialog(t) {
     var d = Gm.dlg; if (!d) return;
-    var n0 = Math.min(d.text.length, Math.floor(d.t * 30)), ad = canPortrait(d.who) && art('dialog');
+    var n0 = Math.min(d.text.length, Math.floor(d.t * 20)), ad = canPortrait(d.who) && art('dialog');
     if (ad) { hd0(); try { ad.dialog(g, 60, 108, 360, 60, t, { name: BOSS[d.who] ? BOSS[d.who].name : '', portrait: d.who, mood: d.mood || (d.who === 'm8' ? (n0 < d.text.length ? 'focus' : 'happy') : n0 < d.text.length ? 'angry' : 'idle'), color: d.who === 'm8' ? C.tom : undefined, text: d.text, chars: n0 }); hd1(); return } catch (e) { hd1(); fail('dialog', e) } }
     var x = 70, y = 112, w = 340, h = 38, n = n0, mon = d.who === 'monday';
     R(x, y, w, h, 'rgba(15,15,14,.9)'); panel(x, y, w, h);
@@ -1244,12 +1244,12 @@
   /* il copione dell'entrata: ogni riga 1,6-2 s, un tasto o un tocco la accorcia */
   function entUpdate(dt) {
     var E = Gm.ent; if (!E) return; E.t += dt; var b = Gm.boss;
-    if (E.step === 'siren' && E.t > .5) { E.step = 'card'; E.t = 0; sfx('blip') }
-    else if (E.step === 'card' && E.t > (E.fast ? .4 : 1.4)) { E.step = 'talk'; E.t = 0; E.i = 0; E.fast = false }
+    if (E.step === 'siren' && E.t > .8) { E.step = 'card'; E.t = 0; sfx('blip') }
+    else if (E.step === 'card' && E.t > (E.fast ? .4 : 2.2)) { E.step = 'talk'; E.t = 0; E.i = 0; E.fast = false }
     else if (E.step === 'talk') {
       if (!Gm.dlg) {
         var L = b && BOSS[b.kind].talk; if (!L || E.i >= L.length) { E.step = 'clockin'; E.t = 0; sfx('combo'); return }
-        say(L[E.i][0], L[E.i][1], L[E.i][0] === 'monday' && E.i === 0 ? 'smug' : ''); Gm.dlg.hold = clamp(1.75 - Gm.dlg.text.length / 30, .5, 1.1); E.i++;
+        say(L[E.i][0], L[E.i][1], L[E.i][0] === 'monday' && E.i === 0 ? 'smug' : ''); Gm.dlg.hold = 1.6 + Gm.dlg.text.length * .035; E.i++;   /* tempo di leggere e ridere, poi la riga dopo */
       }
     } else if (E.step === 'clockin' && E.t > .7) { Gm.ent = null; aucall('duck', false); music('boss', true) }
   }
