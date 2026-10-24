@@ -255,7 +255,7 @@
   }
 
   /* ---------- i ponti verso ART: ogni chiamata ha il suo segnaposto ---------- */
-  var SS = { bank: 0, thrust: 0, shield: 0, flash: false, power: null, bg: null };
+  var SS = { bank: 0, thrust: 0, shield: 0, flash: false, power: null, bg: null, mood: undefined, night: false, fire: 0 };
   var SE = { hit: 0, phase: 0, fade: 1, base: null, marked: false, dead: false };
   var SB = { phase: 1, hp: 1, hit: 0, rage: 0, pagesTorn: 0, mouth: 0, scale: 1 };
   function dShip(x, y, t) { var a = art('ship'); if (a) { hd0(); try { a.ship(g, Math.round(x), Math.round(y), t, SS); hd1(); return } catch (e) { hd1(); fail('ship', e) } } fbShip(x, y, t, SS) }
@@ -342,14 +342,30 @@
   };
   /* i boss parlano: una frase all'arrivo, una a meta', una alla fine */
   var BOSS = {
-    voicemail: { name: 'THE VOICEMAIL', hp: 32, w: 74, h: 40, say: 'You have... 47 new messages.', half: 'Press 1 to... ow.', die: 'End of messages.' },
-    replyall: { name: 'REPLY ALL', hp: 38, w: 70, h: 46, say: 'Per my last email...', half: 'Looping in more people.', die: '...unsubscribe.' },
-    paperjam: { name: 'PAPER JAM', hp: 48, w: 80, h: 44, say: 'Paper jam. Again.', half: 'PC LOAD LETTER?', die: 'Out of toner.' },
-    urgent: { name: 'URGENT', hp: 50, w: 66, h: 38, say: 'Before you leave... one quick thing.', half: 'It is URGENT urgent.', die: 'Never mind. Monday.' },
-    onestar: { name: 'ONE STAR', hp: 72, w: 72, h: 46, say: 'Terrible service. Would not recommend.', half: 'I want the manager!', die: 'Fine. Two stars.' },
-    scaries: { name: 'SUNDAY SCARIES', hp: 64, w: 86, h: 52, say: 'Tomorrow is Monday...', half: 'Did you reply to that email?', die: '...it is only Sunday.' },
-    monday: { name: 'MONDAY', hp: 300, w: 156, h: 118, say: 'Good morning. I am MONDAY.', half: 'Let us circle back.', die: 'See you next week.' }
+    voicemail: { name: 'THE VOICEMAIL', nick: 'Destroyer of mornings', hp: 32, w: 74, h: 40,
+      talk: [['voicemail', 'You have... forty-seven... new messages.'], ['m8', "I'll call you back. Never."], ['voicemail', 'Message one. Received. Yesterday. 4:58 PM...']],
+      half: 'Press one to... to... *static*', die: 'End of messages.', m8: 'Inbox zero, mate.' },
+    replyall: { name: 'REPLY ALL', nick: 'The one who adds everyone', hp: 38, w: 70, h: 46,
+      talk: [['replyall', 'Per my last email...'], ['m8', 'Which one? You sent nine.'], ['replyall', 'Adding the whole company. And their mums.']],
+      half: 'Looping in... MORE PEOPLE.', die: 'Please remove me from this thread.', m8: '' },
+    paperjam: { name: 'PAPER JAM', nick: 'Prints only on Thursdays', hp: 48, w: 80, h: 44,
+      talk: [['paperjam', 'PC LOAD... no. PAPER JAM. Again.'], ['m8', "It's 2026. Who prints?"], ['paperjam', 'Accounting does. Accounting ALWAYS does.']],
+      half: 'Low toner. High rage.', die: '...ready to print.', m8: 'Recycled.' },
+    urgent: { name: 'URGENT', nick: 'Arrives at 4:59 PM. Always.', hp: 50, w: 66, h: 38,
+      talk: [['urgent', 'Before you leave... one QUICK thing.'], ['m8', "It's 4:59."], ['urgent', "It's URGENT. In capitals. With three exclamation marks!!!"]],
+      half: 'Did you see my follow-up? And the follow-up to my follow-up?', die: '...it could wait till Monday.', m8: 'Funny you say that.' },
+    onestar: { name: 'ONE STAR', nick: 'Never visited. Has opinions.', hp: 72, w: 72, h: 46,
+      talk: [['onestar', 'Terrible service. One star.'], ['m8', "We're closed on Saturdays."], ['onestar', "EXACTLY. One star. Would not recommend. Didn't come."]],
+      half: 'My cousin also says one star!', die: '...updated to five stars. Lovely staff.', m8: '' },
+    scaries: { name: 'SUNDAY SCARIES', nick: 'Lives in your to-do list', hp: 64, w: 86, h: 52,
+      talk: [['scaries', "Relax... it's Sunday..."], ['scaries', '...but have you checked your email? Just a peek.'], ['m8', "Nope. I'm automated."]],
+      half: 'Tomorrow... is... Monday...', die: 'Fine. Enjoy your evening. While it lasts.', m8: '' },
+    monday: { name: 'MONDAY', nick: 'The final boss. Of every week.', hp: 300, w: 156, h: 118,
+      talk: [['monday', "Good morning. It's 9:00. You're late."], ['m8', "It's 8:59."], ['monday', "Then you're early. I hate that MORE."], ['monday', 'Seven days. Six bosses. And still... I come back. Every. Single. Week.'], ['m8', 'Not if the machine runs itself.']],
+      half: '', die: '...see you next week.', m8: 'We\'ll be ready. Automatically.', ph2: 'All hands meeting. Mandatory. No agenda.', ph3: 'Snooze is DISABLED.' },
+    m8: { name: 'M8' }
   };
+
   var PTS = { call: 1, invoice: 2, receipt: 1, noshow: 3, spam: 1, double: 3, gold: 5 };
   /* hitbox (meta' larghezza, meta' altezza), piu' piccole degli sprite */
   var HB = { call: [5, 6], invoice: [7, 5], receipt: [5, 3], noshow: [8, 5], spam: [3, 4], double: [5, 5] };
@@ -584,7 +600,7 @@
     if (!quiet) sfx(e.type === 'invoice' ? 'split' : 'kill', e.x);
     if (e.type === 'invoice') {
       quip(e, 'sigh.', .35);
-      for (var s = -1; s < 2; s += 2) { var r = spawnEnemy('receipt', e.x + s * 4, e.y); if (r) { r.st = 'fall'; r.x0 = e.x + s * 4; r.vx = s * 46; r.vy = 18; r.y0 = e.y } }
+      for (var s = -1; s < 2; s += 2) { var r = spawnEnemy('receipt', e.x + s * 6, e.y); if (r) { r.st = 'fall'; r.x0 = e.x + s * 10; r.vx = 0; r.vy = s * 30; r.y0 = e.y } }
     }
     if (e.type === 'gold') dropPower(e.x, e.y, e.power);
     else if (!Gm.coinDay && Gm.day > 0 && Math.random() < .012) { Gm.coinDay = true; var c = take(PU); if (c) { c.kind = 'coin'; c.x = e.x; c.y = e.y; c.t = 0 } }
@@ -670,7 +686,8 @@
     formationUpdate(wdt);
     enemiesUpdate(wdt);
     if (Gm.boss) bossUpdate(Gm.boss, wdt);
-    dlgUpdate(dt); quipUpdate(dt); tipsUpdate(dt); sysUpdate(dt); flyUpdate(dt); if (Gm.edgeT > 0) Gm.edgeT -= dt;
+    entUpdate(dt); dlgUpdate(dt);
+    if (Gm.m8later) { Gm.m8later.t -= dt; if (Gm.m8later.t <= 0) { quipAt(Gm.ship.x - 16, Gm.ship.y, Gm.m8later.s); Gm.m8later = null } } quipUpdate(dt); tipsUpdate(dt); sysUpdate(dt); flyUpdate(dt); if (Gm.edgeT > 0) Gm.edgeT -= dt;
     Gm.scroll += dt * (Gm.def.virus && Gm.phase !== 'boss' ? 6 : 42); if (Gm.bizT > 0) Gm.bizT -= dt;
     hazUpdate(wdt);
     blocksUpdate(wdt);
@@ -772,7 +789,7 @@
     if (p === 'virus') virusUpdate(dt);
     if (d.delivery && (p === 'intro' || p === 'fight')) {
       deliveryUpdate(dt);
-      if (Gm.deliv >= DGOAL) { for (var z = 0; z < EN.length; z++) if (EN[z].on) { spark(EN[z].x, EN[z].y, 4, C.cream, C.cream, 40); EN[z].on = false } clearPool(PK); Gm.phase = 'boss'; Gm.phaseT = 0; Gm.clock = 479 / 480; spawnBoss(d.boss); return }
+      if (Gm.deliv >= DGOAL) { for (var z = 0; z < EN.length; z++) if (EN[z].on) { spark(EN[z].x, EN[z].y, 4, C.cream, C.cream, 40); EN[z].on = false } clearPool(PK); bossEntrance(d.boss); return }
     }
     if (p === 'intro' || p === 'fight') {
       var wd = Gm.wdef;
@@ -786,7 +803,7 @@
         if (d.delivery) { Gm.clock = Math.max(Gm.clock, Math.min(.99, Gm.deliv / DGOAL)); if (left === 0 && !pending && Gm.waveT > 1 && Gm.wave < 9) { Gm.wave = 9; Gm.F.on = false } }
         else if (left === 0 && !pending && Gm.waveT > 1) {
           if (Gm.wave < d.waves.length - 1) { startWave(Gm.wave + 1) }
-          else { Gm.phase = 'boss'; Gm.phaseT = 0; Gm.clock = 479 / 480; spawnBoss(d.boss) }
+          else bossEntrance(d.boss)
         }
       }
     } else if (p === 'cameo') {
@@ -795,10 +812,10 @@
       /* l'entrata di MONDAY: la musica si ferma, la sveglia, il calendario scende e strappa SUNDAY */
       if (!Gm.boss) spawnBoss('monday');
       var b = Gm.boss, k = Gm.phaseT;
-      b.y = -90 + easeOut(k / 2.2) * 182; b.x = LC;
-      if (k > 1.2 && Gm.monIn === 0) { Gm.monIn = 1; sfx('alarm') }
-      if (k > 2.6 && Gm.monIn === 1) { Gm.monIn = 2; sfx('rip'); Gm.glitch = .25; shake(4); Gm.ripT = T }
-      if (k > 4.6) { Gm.phase = 'boss'; Gm.phaseT = 0; music('boss'); b.t = 0 }
+      b.y = -90 + easeOut(k / 1.9) * 182; b.x = LC;
+      if (k > .8 && Gm.monIn === 0) { Gm.monIn = 1; sfx('alarm') }
+      if (k > 2.2 && Gm.monIn === 1) { Gm.monIn = 2; sfx('rip'); Gm.glitch = .25; shake(4); Gm.ripT = T }
+      if (k > 3.8) { Gm.phase = 'boss'; Gm.phaseT = 0; b.t = 0; Gm.ent = { step: 'card', t: 0, i: 0 } }
     } else if (p === 'boss') {
       if (Gm.boss && Gm.boss.kind === 'monday') { var bb = Gm.boss; Gm.clock = Math.min(.999, 1 - bb.hp / bb.max) }
       else if (!Gm.boss) { if (Gm.day === 2 && !Gm.cameoDone) { Gm.phase = 'cameo'; Gm.phaseT = 0; Gm.cam = { t: 0, y: -80, st: 'in', shots: 0 } } else clockOut() }
@@ -836,22 +853,32 @@
     if (d.t > dlgLen(d) + d.hold) Gm.dlg = null;
     else if (d.t < dlgLen(d) && ((d.t * 10) | 0) !== (((d.t - dt) * 10) | 0)) sfx('type');
   }
-  function dlgSkip() { var d = Gm && Gm.dlg; if (!d) return false; if (d.t < dlgLen(d)) d.t = dlgLen(d); else Gm.dlg = null; return true }
+  function dlgSkip() { if (Gm && Gm.ent && Gm.ent.step === 'card') { Gm.ent.fast = true; return true } var d = Gm && Gm.dlg; if (!d) return false; if (d.t < dlgLen(d)) d.t = dlgLen(d); else Gm.dlg = null; return true }
+  var PORTOK = {}, ptmp = null;
+  function canPortrait(name) {
+    if (PORTOK[name] != null) return PORTOK[name]; var a = art('portrait'); if (!a) return PORTOK[name] = false;
+    try { if (!ptmp) { ptmp = document.createElement('canvas'); ptmp.width = 120; ptmp.height = 100 } a.portrait(ptmp.getContext('2d'), name, 0, 0, 0, 'idle'); PORTOK[name] = true } catch (e) { PORTOK[name] = false }
+    return PORTOK[name];
+  }
   function drawDialog(t) {
     var d = Gm.dlg; if (!d) return;
-    var n0 = Math.min(d.text.length, Math.floor(d.t * 30)), ad = art('dialog');
-    if (ad) { hd0(); try { ad.dialog(g, 60, 108, 360, 60, t, { name: BOSS[d.who] ? BOSS[d.who].name : '', portrait: d.who, mood: d.mood || (n0 < d.text.length ? 'angry' : 'idle'), text: d.text, chars: n0 }); hd1(); return } catch (e) { hd1(); fail('dialog', e) } }
+    var n0 = Math.min(d.text.length, Math.floor(d.t * 30)), ad = canPortrait(d.who) && art('dialog');
+    if (ad) { hd0(); try { ad.dialog(g, 60, 108, 360, 60, t, { name: BOSS[d.who] ? BOSS[d.who].name : '', portrait: d.who, mood: d.mood || (d.who === 'm8' ? (n0 < d.text.length ? 'focus' : 'happy') : n0 < d.text.length ? 'angry' : 'idle'), color: d.who === 'm8' ? C.tom : undefined, text: d.text, chars: n0 }); hd1(); return } catch (e) { hd1(); fail('dialog', e) } }
     var x = 70, y = 112, w = 340, h = 38, n = n0, mon = d.who === 'monday';
     R(x, y, w, h, 'rgba(15,15,14,.9)'); panel(x, y, w, h);
     /* il ritratto */
     var px = x + 4, py = y + 4, done = false, a = art('portrait');
-    if (a) { hd0(); try { a.portrait(g, d.who, px, py, t, n < d.text.length); done = true } catch (e) { fail('portrait', e) } hd1() }
+    if (a && canPortrait(d.who)) { hd0(); try { a.portrait(g, d.who, px, py, t, n < d.text.length); done = true } catch (e) { } hd1() }
+    if (!done && d.who === 'm8') { /* M8: testa crema tonda, occhio-schermo */
+      R(px, py, 30, 30, C.night); R(px + 3, py + 3, 24, 24, C.cream); R(px + 1, py + 6, 28, 18, C.cream); R(px + 6, py + 9, 18, 10, C.ink);
+      var tk = n < d.text.length && ((t * 10) | 0) % 2; R(px + 9, py + 12, 4, tk ? 2 : 3, C.tom); R(px + 17, py + 12, 4, tk ? 2 : 3, C.tom); R(px + 12, py + 22, 6, 2, C.tomD); done = true;
+    }
     if (!done) {
       R(px, py, 30, 30, C.night); R(px + 1, py + 1, 28, 28, mon ? '#3A0E13' : '#1A1D24');
       R(px + 7, py + 9, 5, 4, mon ? C.crim : C.cream); R(px + 18, py + 9, 5, 4, mon ? C.crim : C.cream);
       R(px + 9, py + 20, 12, n < d.text.length && ((t * 12) | 0) % 2 ? 4 : 2, C.night);
     }
-    txt(BOSS[d.who] ? BOSS[d.who].name : '', x + 40, y + 5, mon ? C.crim : accent(DAYS[Gm.day]), 1);
+    txt(BOSS[d.who] ? BOSS[d.who].name : '', x + 40, y + 5, mon ? C.crim : d.who === 'm8' ? C.tom : accent(DAYS[Gm.day]), 1);
     var lines = wrap(d.text.slice(0, n), w - 48, 1);
     for (var i = 0; i < lines.length && i < 2; i++) txt(lines[i], x + 40, y + 16 + i * 10, C.cream, 1);
     if (n < d.text.length && ((t * 6) | 0) % 2) { var lw = tw(lines[lines.length - 1] || '', 1); R(x + 41 + lw, y + 16 + (lines.length - 1) * 10, 3, lh(1), C.tom) }
@@ -918,12 +945,12 @@
   function mapDur() { return Gm.mapFrom < 0 ? 2.2 : 3.6 }
   function nextDay() { startDay(Math.min(6, Gm.mapFrom + 1)) }
   /* l'intro che scorre, una volta per sessione */
-  var CRAWL = ['Not long ago, in an office', 'not so far away...', '', 'Missed calls. Paper invoices.', 'No-shows. Spam. Per my last email.', '',
-    'Every chore steals an hour.', 'Every week steals more.', '', 'One machine fights back.', 'Beat a chore, keep its system.', '', 'Install the machine.', 'Beat MONDAY.'];
+  var CRAWL = ['Not long ago, in an office', 'not so far away...', '', 'Small businesses were drowning.', '', 'Missed calls. Paper invoices.', 'No-shows. Spam.', '',
+    'Then came the worst of them all:', 'MONDAY.', '', 'One little robot was built', 'to fight back. Its name is M8.', '', 'Install the systems. Save the hours.', 'Beat MONDAY.'];
   var CRAWL_SP = 26, CRAWL_DUR = (236 + CRAWL.length * 15 - 30) / CRAWL_SP;
   function crawlSeen() { try { return sessionStorage.getItem('mm-deadline-crawl') === '1' } catch (e) { return false } }
-  var CRAWL_ART = ['Not long ago, in an office not so far away...', 'Missed calls. Paper invoices. No-shows. Spam. Per my last email.', 'Every chore steals an hour. Every week steals more.',
-    'One machine fights back. Beat a chore, keep its system: Booking, Automation, AI, Night shift.', 'The week ends with the worst of them all.', 'Install the machine. Beat MONDAY.'];
+  var CRAWL_ART = ['Not long ago, in an office not so far away...', 'Small businesses were drowning.', 'Missed calls. Paper invoices. No-shows. Spam.', 'Then came the worst of them all: MONDAY.',
+    'One little robot was built to fight back. Its name is M8.', 'Install the systems. Save the hours. Beat MONDAY.'];
   var crawlK = 0;
   function drawCrawl() {
     if (art('intro')) { try { crawlK = AR.intro(g, stT, CRAWL_ART, { speed: 15 }); txt(touchMode ? 'Tap to skip' : 'Any key to skip', W - 6, H - 10, C.p3, 1, 'r'); hot.push({ x: 0, y: 0, w: W, h: H, id: 'cont' }); return } catch (e) { fail('intro', e) } }
@@ -971,20 +998,20 @@
     if (!drawn) { SS.bank = 0; SS.thrust = .6; SS.shield = 0; SS.flash = false; SS.power = null; dShip(A[0] + (B[0] - A[0]) * f, A[1] + (B[1] - A[1]) * f - 16, T) }
     /* il riepilogo del giorno finito, compatto, in alto */
     var nd = DAYS[to];
+    /* un solo riquadro: com'e' andata oggi, poi il giorno dopo (righe a passo fisso, niente sovrapposizioni) */
+    var X0 = 10, PW = 196, XC = X0 + PW / 2, LH1 = lh(1) + 4, y = 10, rows = [];
     if (from >= 0) {
-      var y0 = 12, X0 = 14, X1 = 214, XC = 114; panel(X0, y0, 200, 62);
-      txt('CLOCKED OUT 17:00', XC, y0 + 6, C.cream, 1, 'c');
-      txt(DAYNAME[DAYS[from]] + ' DONE', XC, y0 + 17, accent(DAYS[from]), 1, 'c');
-      txt('Hours +' + Math.round(Gm.score - Gm.ds.h0), X0 + 8, y0 + 31, C.p2, 1); txt('Business ' + Math.round(100 - Gm.cityHits / Gm.cityMax * 100) + '%', X1 - 8, y0 + 31, C.p2, 1, 'r');
-      var sl = DEF[DAYS[from]].silly, sv = sl[1] === '*' ? Gm.ds.kills : (Gm.ds.k[sl[1]] || 0) + (sl[2] ? Gm.ds.k[sl[2]] || 0 : 0);
-      txt(sl[0] + ' ' + sv, XC, y0 + 43, C.p2, 1, 'c');
-      if (Gm.ds.bonus && !Gm.ds.rest) txt('+' + Gm.ds.bonus + ' on time', XC, y0 + 52, C.p3, 1, 'c');
-      if (Gm.ds.rest) txt((from === 1 ? 'Coffee break' : 'Rested') + ': +1 coffee', XC, y0 + 52, C.pink, 1, 'c');
+      var sl = DEF[DAYS[from]].silly, sv = sl[1] === '*' ? Gm.ds.kills : (Gm.ds.k[sl[1]] || 0) + (sl[2] ? Gm.ds.k[sl[2]] || 0 : 0), ni = 0; for (var si = 0; si < 4; si++) if (Gm.sys[SYSORD[si]]) ni++;
+      rows.push(['17:00. You\'re free.', C.cream, 'c']); rows.push([DAYNAME[DAYS[from]] + ' DONE', accent(DAYS[from]), 'c']);
+      rows.push(['Hours +' + Math.round(Gm.score - Gm.ds.h0) + '   Business ' + Math.round(100 - Gm.cityHits / Gm.cityMax * 100) + '%', C.p2, 'c']);
+      rows.push([sl[0] + ': ' + sv, C.p2, 'c']); rows.push(['Systems installed: ' + ni + '/4', C.p2, 'c']);
+      if (Gm.ds.rest) rows.push([(from === 1 ? 'Coffee break' : 'Rested') + ': +1 coffee', C.pink, 'c']);
+      rows.push(['', 0, 'c']);
     }
-    var ky = from >= 0 ? 80 : 16, ka = clamp((stT - (from >= 0 ? 1.8 : .3)) * 3, 0, 1);
-    g.globalAlpha = ka; panel(14, ky, 200, 26);
-    txt(nd === 'mon' ? 'MONDAY' : DAYNAME[nd], 114, ky + 5, nd === 'mon' ? C.crim : C.cream, 1, 'c');
-    txt(DEF[nd].teaser, 114, ky + 15, C.p3, 1, 'c'); g.globalAlpha = 1;
+    var ka = clamp((stT - (from >= 0 ? 1.4 : .2)) * 3, 0, 1);
+    rows.push(['NEXT: ' + (nd === 'mon' ? 'MONDAY' : DAYNAME[nd]), nd === 'mon' ? C.crim : C.tom, 'c', ka]); var tl = wrap(DEF[nd].teaser, PW - 12, 1); for (var tli = 0; tli < tl.length; tli++) rows.push([tl[tli], C.p3, 'c', ka]);
+    var ph = rows.length * LH1 + 8; R(X0, y, PW, ph, 'rgba(10,10,12,.88)'); panel(X0, y, PW, ph);
+    for (var ri = 0; ri < rows.length; ri++) { var rw = rows[ri]; if (!rw[0]) continue; g.globalAlpha = rw[3] == null ? 1 : rw[3]; var line = rw[0]; while (tw(line, 1) > PW - 8 && line.length > 4) line = line.slice(0, -1); txt(line, XC, y + 5 + ri * LH1, rw[1], 1, 'c'); g.globalAlpha = 1 }
     if (stT > .6) hot.push({ x: 0, y: 0, w: W, h: H, id: 'cont' });
   }
 
@@ -1069,8 +1096,9 @@
           if (e.y > LH + 20 || e.x < -20 || e.x > LW + 20) { e.on = false; if (e.counts) Gm.waveDone++ }
           break;
         case 'fall': /* la ricevuta cade come una foglia */
-          e.vx *= Math.pow(.2, dt); e.x0 = clamp(e.x0 + e.vx * dt, 12, LW - 12); e.y += (e.vy + 10 * sp) * dt; e.x = e.x0 + Math.sin(e.t * 2.6) * 9; e.vy = 34;
-          if (e.y > EXIT) { if (!e.todo) cityHit(e.x, 1, e.type); e.on = false; if (e.counts) Gm.waveDone++ }
+          /* cade verso la strada ondeggiando e scivola piano a sinistra: se tocca terra, si perde (nessun danno) */
+          e.vx *= Math.pow(.2, dt); e.x0 += (26 + e.t * 6) * dt; e.y += (e.vy * Math.pow(.3, e.t) + 14 * sp) * dt; e.x = e.x0 + Math.sin(e.t * 2.6) * 7;
+          if (e.x > LAT_MAX + 14 || e.y > EXIT) { e.on = false; if (e.counts) Gm.waveDone++; spark(e.x, e.y, 3, C.p2, C.cream, 20) }
           break;
         case 'swarm': {
           var u = e.t - e.delay; if (u < 0) { e.x = -60; e.y = -60; break }
@@ -1209,6 +1237,38 @@
   }
 
   /* ---------- i boss: URGENT (venerdi' 16:59) e MONDAY ---------- */
+  function bossEntrance(kind) {
+    Gm.phase = 'boss'; Gm.phaseT = 0; Gm.clock = 479 / 480; spawnBoss(kind);
+    Gm.ent = { step: 'siren', t: 0, i: 0 }; aucall('duck', true); sfx(kind === 'urgent' ? 'urgent' : 'alarm');
+  }
+  /* il copione dell'entrata: ogni riga 1,6-2 s, un tasto o un tocco la accorcia */
+  function entUpdate(dt) {
+    var E = Gm.ent; if (!E) return; E.t += dt; var b = Gm.boss;
+    if (E.step === 'siren' && E.t > .5) { E.step = 'card'; E.t = 0; sfx('blip') }
+    else if (E.step === 'card' && E.t > (E.fast ? .4 : 1.4)) { E.step = 'talk'; E.t = 0; E.i = 0; E.fast = false }
+    else if (E.step === 'talk') {
+      if (!Gm.dlg) {
+        var L = b && BOSS[b.kind].talk; if (!L || E.i >= L.length) { E.step = 'clockin'; E.t = 0; sfx('combo'); return }
+        say(L[E.i][0], L[E.i][1], L[E.i][0] === 'monday' && E.i === 0 ? 'smug' : ''); Gm.dlg.hold = clamp(1.75 - Gm.dlg.text.length / 30, .5, 1.1); E.i++;
+      }
+    } else if (E.step === 'clockin' && E.t > .7) { Gm.ent = null; aucall('duck', false); music('boss', true) }
+  }
+  function drawEntrance(t) {
+    var E = Gm.ent; if (!E || !Gm.boss) return; var B = BOSS[Gm.boss.kind];
+    if (E.step === 'card') {
+      var k = easeOut(E.t / .35), a = art('bossCard');
+      if (a) { hd0(); try { a.bossCard(g, Gm.boss.kind, E.t, { name: B.name, nick: B.nick }); hd1(); return } catch (e) { hd1(); fail('bossCard', e) } }
+      var y = 86, h = 72, ac = Gm.boss.kind === 'monday' || Gm.boss.kind === 'urgent' ? C.crim : accent(DAYS[Gm.day]);
+      R(0, y, W, h, 'rgba(8,8,10,.94)');
+      for (var i = -40; i < W; i += 14) R(i + ((E.t * 60) | 0) % 14, y, 6, 2, ac), R(i - ((E.t * 60) | 0) % 14, y + h - 2, 6, 2, ac);
+      var off = Math.round((1 - k) * 160);
+      txt(B.name, 240 - off, y + 18, C.cream, 3, 'c', C.night);
+      txt(B.nick, 240 + off, y + 46, ac, 1, 'c');
+      txt('16:59  OVERTIME', 240, y + 6, C.p3, 1, 'c');
+    } else if (E.step === 'clockin') {
+      if (((E.t * 10) | 0) % 2 === 0 || RM()) txt('CLOCK IN!', 240, 112, C.tom, 3, 'c', C.night);
+    }
+  }
   function spawnBoss(kind) {
     var b = { on: true, kind: kind, x: LC, y: -60, hp: 0, max: 0, t: 0, ph: 1, pt: 0, pi: 0, hit: 0, rage: 0, torn: 0, mouth: 0, hw: 0, hh: 0, vuln: false, dir: 1, dead: false, dieT: 0, sp: 0, spawned: false };
     var D0 = BOSS[kind], z = window.DEADLINE_ART && AR && AR.size && AR.size[kind];
@@ -1223,11 +1283,11 @@
       var torn = Math.floor((1 - b.hp / b.max) * 12);
       while (b.torn < torn) { b.torn++; tearPage(b); }
       var ph = b.hp > 200 ? 1 : b.hp > 100 ? 2 : 3;
-      if (ph !== b.ph && b.hp > 0) { b.ph = ph; b.pt = 0; b.pi = 0; Gm.hitStop = .15; shake(6); Gm.glitch = .3; sfx('rip'); clearEB(); if (ph === 3) clearBlocks(); say('monday', ph === 2 ? 'Let us circle back. Meetings!' : 'It is 9:00. Forever.') }
+      if (ph !== b.ph && b.hp > 0) { b.ph = ph; b.pt = 0; b.pi = 0; Gm.hitStop = .15; shake(6); Gm.glitch = .3; sfx('rip'); clearEB(); if (ph === 3) clearBlocks(); say('monday', ph === 2 ? BOSS.monday.ph2 : BOSS.monday.ph3, 'angry') }
     }
-    if (!b.halfSaid && b.hp < b.max / 2 && b.kind !== 'monday') { b.halfSaid = true; quipAt(b.x + b.hw + 10, b.y, BOSS[b.kind].half) }
+    if (!b.halfSaid && b.hp < b.max / 2 && BOSS[b.kind].half) { b.halfSaid = true; quipAt(b.x + b.hw + 10, b.y, BOSS[b.kind].half) }
     if (b.hp <= 0) {
-      quipAt(b.x + b.hw + 10, b.y, BOSS[b.kind].die); if (b.kind !== 'monday') install(b.kind);
+      quipAt(b.x + b.hw + 10, b.y, BOSS[b.kind].die); if (BOSS[b.kind].m8) Gm.m8later = { t: 1.4, s: BOSS[b.kind].m8 }; if (b.kind !== 'monday') install(b.kind);
       b.hp = 0; b.dead = true; b.vuln = false; b.dieT = 0; Gm.hitStop = .25; shake(8); sfx('bossDie'); clearEB(); clearBlocks();
       addScore(b.kind === 'monday' ? 150 : 40, b.x, b.y); comboKill(); Gm.darkT = 0;
     }
@@ -1252,17 +1312,16 @@
     }
     if (b.kind !== 'monday') {
       /* entra, parla, poi attacca (mentre parla e' intoccabile) */
+      if (Gm.ent && Gm.ent.step === 'siren') { b.t = 0; b.vuln = false; return }
       if (b.t < 1.4) { b.y = -60 + easeOut(b.t / 1.4) * (60 + b.home); b.vuln = false; return }
-      if (!b.said) { b.said = true; say(b.kind, BOSS[b.kind].say); return }
-      if (Gm.dlg) { b.vuln = false; return }
+      if (Gm.ent || Gm.dlg) { b.vuln = false; return }
       b.vuln = true; b.pt += dt; b.mouth = .3 + .7 * Math.abs(Math.sin(b.t * 4));
       bossPattern(b, dt, s);
       return;
     }
     /* MONDAY */
     if (Gm.phase === 'monin') { b.vuln = false; return }
-    if (!b.said) { b.said = true; say('monday', BOSS.monday.say); return }
-    if (Gm.dlg) { b.vuln = false; return }
+    if (Gm.ent || Gm.dlg) { b.vuln = false; return }
     b.vuln = true; b.pt += dt;
     var ph = b.ph; b.rage = ph === 3 ? 1 : ph === 2 ? .4 : 0; b.mouth = .3 + .7 * Math.abs(Math.sin(b.t * (ph === 3 ? 9 : 3)));
     if (ph === 1) {
@@ -1324,7 +1383,7 @@
   function virusUpdate(dt) {
     if (!VX.on) return;
     if (VX.hitT > 0) VX.hitT -= dt * 6;
-    if (VX.dead) { VX.dead += dt; if (VX.dead > 1.2) { VX.on = false; Gm.phase = 'boss'; Gm.phaseT = 0; Gm.clock = 479 / 480; spawnBoss('paperjam') } return }
+    if (VX.dead) { VX.dead += dt; if (VX.dead > 1.2) { VX.on = false; bossEntrance('paperjam') } return }
     var k = 1 - VX.hp / VX.max, n = VX.cells.length, i;
     VX.spread -= dt;
     if (VX.spread <= 0) {
@@ -1413,18 +1472,18 @@
     for (i = 0; i < PK.length; i++) { p = PK[i]; if (!p.on) continue; if (p.carried) carrying = p; else falling++ }
     Gm.pkT -= dt;
     if (Gm.pkT <= 0 && falling < 2 && Gm.deliv + falling + (carrying ? 1 : 0) < DGOAL + 1) {
-      Gm.pkT = 2.4; p = take(PK); if (p) { p.x = -8; p.y = rnd(80, 300); p.shop = Math.random() * 3 | 0; p.t = 0; p.carried = false; p.tgt = -1; p.kind = 'shop'; tip('grab', 'An order! Fly over it.', SX(p.y), 30, 3.5) }
+      Gm.pkT = 2.4; p = take(PK); if (p) { sfx('blip'); p.x = -8; p.y = rnd(80, 300); p.shop = Math.random() * 3 | 0; p.t = 0; p.carried = false; p.tgt = -1; p.kind = 'shop'; tip('grab', 'An order! Fly over it.', SX(p.y), 30, 3.5) }
     }
     for (i = 0; i < PK.length; i++) {
       p = PK[i]; if (!p.on) continue; p.t += dt;
       if (p.carried) {
         p.x = s.x + 10; p.y = s.y + 4;
         var ts = targetShop(p), sx = ts ? ts.cx : shopX(p.shop), near = ts ? s.x > ts.top - 30 && SX(s.y) > ts.x - 10 && SX(s.y) < ts.x + ts.w + 10 : s.x > STREET - 18 && Math.abs(SX(s.y) - sx) < 26;
-        if (near) { p.on = false; Gm.deliv++; addScore(6, s.x, s.y); sfx('coin', sx); quipS(sx, ts ? ts.top - 34 : STREET - 8, THANKS[Math.random() * THANKS.length | 0]); for (var q = 0; q < 10; q++) sparkS(sx, STREET + 4, SHOPS[p.shop].col); Gm.ds.k.deliv = Gm.deliv; Gm.clock = Math.max(Gm.clock, Math.min(.99, Gm.deliv / DGOAL)) }
+        if (near) { p.on = false; Gm.deliv++; addScore(6, s.x, s.y); if (T - p.pick < 6) { addScore(3, s.x, s.y); quipAt(s.x - 16, s.y, 'Express delivery!') } sfx('coin', sx); quipS(sx, ts ? ts.top - 34 : STREET - 8, THANKS[Math.random() * THANKS.length | 0]); for (var q = 0; q < 10; q++) sparkS(sx, STREET + 4, SHOPS[p.shop].col); Gm.ds.k.deliv = Gm.deliv; Gm.clock = Math.max(Gm.clock, Math.min(.99, Gm.deliv / DGOAL)) }
         continue;
       }
       p.x += 30 * dt; p.y += 8 * dt + Math.sin(p.t * 2) * 6 * dt;
-      if (!carrying && !s.dead && Math.abs(p.x - s.x) < 14 && Math.abs(p.y - s.y) < 18) { p.carried = true; carrying = p; sfx('power', SX(p.y));
+      if (!carrying && !s.dead && Math.abs(p.x - s.x) < 14 && Math.abs(p.y - s.y) < 18) { p.carried = true; p.pick = T; carrying = p; sfx('power', SX(p.y));
         var L2 = artShops(); if (L2 && L2.length) { var bestS = L2[0]; for (var j = 0; j < L2.length; j++) if (L2[j].cx > bestS.cx) bestS = L2[j]; p.tgt = bestS.i; p.kind = bestS.kind } tip('deliver', 'Take it to the lit shop. Fly low.', 240, STREET - 4, 3.5) }
       else if (p.x > STREET + 6) { p.on = false; quipS(SX(p.y), STREET - 8, 'Where is my order?') }
     }
@@ -1492,10 +1551,11 @@
   /* MONDAY passa a meta' settimana: si affaccia, dice la sua, lascia quattro mail e se ne va */
   function cameoUpdate(dt) {
     var c = Gm.cam; c.t += dt;
-    if (c.st === 'in') { c.y = -90 + easeOut(c.t / 1.2) * 150; if (c.t > 1.2) { c.st = 'talk'; say('monday', 'See you on Monday.', 'smug') } }
+    if (c.st === 'in') { c.y = -90 + easeOut(c.t / 1.2) * 150; if (c.t > 1.2) { c.st = 'talk'; say('monday', 'Cute. See you on Monday, mate.', 'smug') } }
     else if (c.st === 'talk') { if (!Gm.dlg) { c.st = 'drop'; c.t = 0 } }
-    else if (c.st === 'drop') { if (c.t > .3 * (c.shots + 1) && c.shots < 4) { c.shots++; var v = aimAt(LC, c.y + 40, 60, (c.shots - 2.5) * .25); ebullet('mail', LC, c.y + 40, v[0], v[1], 20) } if (c.t > 1.6) { c.st = 'out'; c.t = 0; sfx('blip') } }
-    else if (c.st === 'out') { c.y -= dt * 200; if (c.y < -110) { Gm.cameoDone = true; clockOut() } }
+    else if (c.st === 'drop') { if (c.t > .3 * (c.shots + 1) && c.shots < 3) { c.shots++; var v = aimAt(LC, c.y + 40, 60, (c.shots - 2) * .3); ebullet('mail', LC, c.y + 40, v[0], v[1], 20) } if (c.t > 1.4) { c.st = 'out'; c.t = 0; sfx('blip'); quipAt(LC + 30, c.y, 'Ha. Ha. Ha.') } }
+    else if (c.st === 'out') { c.y -= dt * 200; if (c.y < -110) { c.st = 'who'; c.t = 0; say('m8', '...who was that?') } }
+    else if (c.st === 'who') { if (!Gm.dlg) { Gm.cameoDone = true; clockOut() } }
   }
   var LABELS = ['MEETING', 'SYNC', '1:1', 'STANDUP', 'ALL HANDS', 'CATCH-UP', 'REVIEW'];
   var wallGap = LC;
@@ -1524,7 +1584,7 @@
     music('over');
   }
   function winGame() { st = 'win'; stT = 0; LAST = { score: Math.floor(Gm.score), day: 'MON', di: 6, cause: '', win: true }; sfx('win') }
-  var OVERLINE = ['Rough start to the week.', 'Hump day: 1. You: 0.', 'The printer always wins on Thursday.', 'So close to the weekend.', 'Working Saturdays? Really?', 'Even Sunday was too much.', 'MONDAY wins. For now.'];
+  var OVERLINE = ['Burnout before lunch on a Tuesday. Impressive.', 'Lost in the thread.', 'Paper won. Paper never wins.', 'Burnout at 4:59. So close.', 'One star for this run.', 'The scaries got you.', 'MONDAY wins. As usual. Not for long.'];
   /* riprova dal giorno raggiunto: i sistemi di prima restano, niente classifica e niente premio */
   function retryDay() {
     var d = Gm.day, sys = Gm.sys; weekendUI(); newGame(); Gm.cont0 = true; Gm.log.weekend = true;
@@ -1740,7 +1800,7 @@
     /* la nave */
     var s = Gm.ship;
     if (!s.dead && !(s.inv > 0 && Gm.phase !== 'out' && ((RT * 14) | 0) % 2 && Gm.nightT <= 0)) {
-      SS.bank = s.bank; SS.thrust = clamp(.4 + (-s.vy / 120) + Math.abs(s.vx) / 300, 0, 1); SS.dir = 'right'; SS.shield = Gm.shield / 3; SS.flash = s.inv > 1.8; SS.power = Gm.power; SS.bg = pcv;
+      SS.bank = s.bank; SS.thrust = clamp(.4 + (-s.vy / 120) + Math.abs(s.vx) / 300, 0, 1); SS.dir = 'right'; SS.shield = Gm.shield / 3; SS.flash = s.inv > 1.8; SS.power = Gm.power; SS.bg = pcv; SS.mood = s.inv > 1.4 ? 'hurt' : Gm.plab && T - Gm.plab.t0 < 1.2 ? 'happy' : Gm.dlg && Gm.dlg.who === 'm8' ? 'happy' : Gm.ent ? 'surprised' : undefined; SS.night = Gm.nightT > 0; SS.fire = s.cool > .12 ? 1 : 0;
       dShip(SX(s.y), s.x, t);
       if (!art('ship') && Gm.shield > 0) { g.globalAlpha = .35; ringPx(SX(s.y), s.x, 12, C.pink); g.globalAlpha = 1 }
     }
@@ -1755,7 +1815,7 @@
     drawQuips(); drawTips(t);
     drawHUD(t);
     drawInstalled(t);
-    if (st === 'play') drawDialog(t);
+    if (st === 'play') { drawEntrance(t); drawDialog(t) }
     drawBanners(t);
     if (st === 'over' || st === 'win') drawEnd(t);
     if (st === 'init') drawInit(t);
@@ -1950,13 +2010,13 @@
       txt('17:00', 240, 58, C.p3, 1, 'c');
       txt('MONDAY IS OVER.', 240, 74, C.cream, 2, 'c');
       if (stT > 1.2) txt('Your sign goes up in the city.', 240, 104, C.gold, 1, 'c');
-      if (stT > 1.8) txt(Math.round(Gm.score) + ' hours saved. The business runs itself now.', 240, 124, C.cream, 1, 'c');
-      if (stT > 2.4) txt('Meetings that could have been an email: ' + (Gm.ds.k.meet || 0), 240, 138, C.p3, 1, 'c');
+      if (stT > 1.8) txt(Math.round(Gm.score) + ' hours saved.', 240, 124, C.cream, 1, 'c');
+      if (stT > 2.4) txt('The machine behind your business. Built by Mother Machine.', 240, 138, C.p3, 1, 'c');
     } else {
       txt(Gm.cause === 'closed' ? 'The business closed early.' : 'Out of coffee.', 240, 62, C.p3, 1, 'c');
       txt('BURNOUT.', 240, 78, C.tom, 3, 'c');
-      if (stT > .9) txt('Burnout. ' + Math.round(Gm.score) + ' hours saved.', 240, 110, C.cream, 1, 'c');
-      if (stT > 1.3) txt(OVERLINE[Gm.day], 240, 124, C.p3, 1, 'c');
+      if (stT > .9) txt(OVERLINE[Gm.day], 240, 110, C.cream, 1, 'c');
+      if (stT > 1.3) txt(Math.round(Gm.score) + ' hours saved before burnout.', 240, 124, C.p3, 1, 'c');
     }
     if (stT > 1.6) {
       var a2 = ((RT * 2) | 0) % 2 ? C.cream : C.p3;
@@ -1984,7 +2044,7 @@
   function drawPause() {
     R(0, 0, W, H, 'rgba(15,15,14,.78)');
     txt('OUT OF OFFICE', 240, 92, C.cream, 3, 'c');
-    txt('Back in five. The chores will wait. They always do.', 240, 120, C.p3, 1, 'c');
+    txt('Back in 5.', 240, 120, C.p3, 1, 'c');
     R(190, 140, 100, 15, C.tom); txt('RESUME', 240, 144, C.night, 1, 'c'); hot.push({ x: 190, y: 140, w: 100, h: 15, id: 'resume' });
     R(190, 162, 100, 15, C.g4); txt('GO HOME', 240, 166, C.cream, 1, 'c'); hot.push({ x: 190, y: 162, w: 100, h: 15, id: 'quit' });
     txt(touchMode ? '' : 'P to resume.  Q to quit.', 240, 188, C.p3, 1, 'c');
@@ -2153,7 +2213,7 @@
     if (isT) { tps[e.pointerId] = { t: performance.now(), x: e.clientX, y: e.clientY }; tpN++; if (tpN === 2) twoT = performance.now() }
     var onPad = false;
     if (gbCv && (e.target === gbCv)) return;
-    if (st === 'play' && !paused && Gm && Gm.dlg && p.in) dlgSkip();
+    if (st === 'play' && !paused && Gm && (Gm.dlg || Gm.ent) && p.in) dlgSkip();
     if (st === 'play' && !paused && (isT || onPad)) {
       if (tpN >= 2) return;
       if (p.in || onPad) {
@@ -2216,11 +2276,11 @@
     if (e.pointerType === undefined) touchMode = false;
     /* codice Konami: Weekend mode */
     konami.push(low); if (konami.length > 10) konami.shift();
-    if ((st === 'title' || st === 'boot') && konami.join(',') === KONAMI) { weekend = !weekend; konami = []; sfx('coin'); ftextT(weekend ? 'WEEKEND MODE' : 'WEEKDAYS AGAIN'); return }
+    if ((st === 'title' || st === 'boot') && konami.join(',') === KONAMI) { weekend = !weekend; konami = []; sfx('coin'); ftextT(weekend ? 'Weekend mode. No leaderboard. No guilt.' : 'Weekdays again.'); return }
     if (st === 'form') return;
     if (st === 'crawl' && k !== 'Escape' && !e.repeat) { e.preventDefault(); toMap(-1); return }
     if (k === 'Escape') { e.preventDefault(); if (st === 'play') { paused ? resume() : pause() } else close(); return }
-    if (st === 'play' && Gm && Gm.dlg && !e.repeat && !paused && k.indexOf('Arrow') < 0) dlgSkip();
+    if (st === 'play' && Gm && (Gm.dlg || Gm.ent) && !e.repeat && !paused && k.indexOf('Arrow') < 0) dlgSkip();
     if (st === 'play') {
       var m = keyMap(low);
       if (m) { keys[m] = 1; e.preventDefault(); return }
@@ -2311,7 +2371,7 @@
     if (st !== lastSt) { lastSt = st; syncUI(); if (st === 'form') {} }
     render(); gbDraw();
     if (nbEl) nbEl.classList.toggle('on', !!(st === 'play' && Gm && Gm.night && !Gm.nightT));
-    if (ttT > 0) { g.globalAlpha = clamp(ttT, 0, 1); txt(ttS, 240, 60, C.pink, 2, 'c', C.night); g.globalAlpha = 1 }
+    if (ttT > 0) { g.globalAlpha = clamp(ttT, 0, 1); txt(ttS, 240, 60, C.pink, 1, 'c', C.night); g.globalAlpha = 1 }
     if (st === 'form') formPreview();
   }
 
@@ -2446,12 +2506,12 @@
         var s = 0, mx = 0; for (var i = 0; i < 120; i++) { s += ft[i]; if (ft[i] > mx) mx = ft[i] }
         return { st: st, paused: paused, phase: Gm && Gm.phase, day: Gm ? DAYS[Gm.day] : null, wave: Gm && Gm.wave, score: Gm ? Math.round(Gm.score) : 0, coffee: Gm && Gm.coffee,
           lit: Gm ? countLit() : 0, cityHits: Gm && Gm.cityHits, enemies: Gm ? aliveCount() : 0, ebullets: Gm ? ebCount() : 0, boss: Gm && Gm.boss ? { kind: Gm.boss.kind, hp: Gm.boss.hp, ph: Gm.boss.ph } : null,
-          clock: Gm ? clockStr(Gm.clock) : '', playT: Gm ? Math.round(Gm.playT * 10) / 10 : 0, frameMs: Math.round(s / 120 * 10000) / 10, maxFrameMs: Math.round(mx * 10000) / 10, fpsN: fpsN,
+          clock: Gm ? clockStr(Gm.clock) : '', ent: Gm && Gm.ent ? Gm.ent.step + (Gm.ent.i || '') : null, playT: Gm ? Math.round(Gm.playT * 10) / 10 : 0, frameMs: Math.round(s / 120 * 10000) / 10, maxFrameMs: Math.round(mx * 10000) / 10, fpsN: fpsN,
           scale: cssScale, virus: VX.on ? [VX.hp, vCount(), VX.cc, VX.cr] : null, deliv: Gm && Gm.deliv, sys: Gm && Gm.sys, weekend: weekend, hurtBy: Gm && Gm.dbgHurt, kills: Gm ? Gm.log.kills.reduce(function (a, b) { return a + b }, 0) : 0, cityHits2: Gm && Gm.cityHits, touch: touchMode, power: Gm && Gm.power, shield: Gm && Gm.shield, night: Gm && Gm.night, log: Gm && Gm.log, last: LAST, top: TOP, art: !!window.DEADLINE_ART, broken: Object.keys(broken) };
       },
       day: function (n) { if (!Gm) newGame(); startDay(n | 0); paused = false; syncUI() },
       god: function (on) { god = on !== false }, scale: function (v) { timeScale = +v || 1 }, bot: function (on) { botOn = on !== false },
-      spawn: function (type, x, y) { if (!Gm) return; if (BOSS[type]) { clearPool(EN); spawnBoss(type); Gm.phase = 'boss'; return } var e = spawnEnemy(type, x || 240, y || 60); if (e) { if (type === 'gold') { e.st = 'cross'; e.vx = 60; e.y0 = 24; e.base = 'call' } else if (type === 'double') { runEvent({ k: 'double', x: x }); e.on = false } else if (type === 'spam') { e.on = false; runEvent({ k: 'swarm', n: 8, path: 'sine', side: -1, y: y || 60 }) } else { e.st = 'fall'; e.x0 = e.x; e.vx = 0; e.vy = 10 } } },
+      spawn: function (type, x, y) { if (!Gm) return; if (BOSS[type] && type !== 'm8') { clearPool(EN); Gm.wdef = null; bossEntrance(type); return } var e = spawnEnemy(type, x || 240, y || 60); if (e) { if (type === 'gold') { e.st = 'cross'; e.vx = 60; e.y0 = 24; e.base = 'call' } else if (type === 'double') { runEvent({ k: 'double', x: x }); e.on = false } else if (type === 'spam') { e.on = false; runEvent({ k: 'swarm', n: 8, path: 'sine', side: -1, y: y || 60 }) } else { e.st = 'fall'; e.x0 = e.x; e.vx = 0; e.vy = 10 } } },
       give: function (k) { if (!Gm) return; if (k === 'night') Gm.night = true; else if (k === 'booking') Gm.shield = 3; else { Gm.power = k; Gm.powerT = 10 } },
       win: function () { if (Gm && Gm.boss) bossDamage(Gm.boss, Gm.boss.hp, Gm.boss.x, Gm.boss.y) },
       bossHp: function (v) { if (Gm && Gm.boss) bossDamage(Gm.boss, Gm.boss.hp - v, Gm.boss.x, Gm.boss.y) },
