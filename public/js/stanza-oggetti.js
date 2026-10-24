@@ -91,7 +91,7 @@
     return function (a, b) { var A = a * co - b * si, B = a * si + b * co; return [x, yc + B, zc + sg * A] } }
   function su(M, pts) { return pts.map(function (q) { return M(q[0], q[1]) }) }
   /* le lettere a pixel (3x5) */
-  var GL = { R: [[0, 0], [0, 4], [2, 4], [2, 2], [0, 2], [2, 0]], U: [[0, 4], [0, 0], [2, 0], [2, 4]], S: [[2, 4], [0, 4], [0, 2], [2, 2], [2, 0], [0, 0]],
+  var GL = { D: [[0, 0], [0, 4], [1.4, 4], [2, 3.3], [2, .7], [1.4, 0], [0, 0]], R: [[0, 0], [0, 4], [2, 4], [2, 2], [0, 2], [2, 0]], U: [[0, 4], [0, 0], [2, 0], [2, 4]], S: [[2, 4], [0, 4], [0, 2], [2, 2], [2, 0], [0, 0]],
     H: [[0, 0], [0, 4], [0, 2], [2, 2], [2, 4], [2, 0]], O: [[0, 0], [0, 4], [2, 4], [2, 0], [0, 0]], M: [[0, 0], [0, 4], [1, 2.2], [2, 4], [2, 0]],
     E: [[2, 4], [0, 4], [0, 2], [1.5, 2], [0, 2], [0, 0], [2, 0]], N: [[0, 0], [0, 4], [2, 0], [2, 4]], P: [[0, 0], [0, 4], [2, 4], [2, 2], [0, 2]],
     I: [[1, 0], [1, 4]], Z: [[0, 4], [2, 4], [0, 0], [2, 0]], A: [[0, 0], [0, 4], [2, 4], [2, 0], [2, 2], [0, 2]],
@@ -266,9 +266,9 @@
   window.STANZA_OGGETTI = function (L) {
     var part = L.part, frame = L.frame, ID = L.ID, Z1 = L.Z1;
 
-    /* ---------- il cabinato: Rush hour, contro la parete di destra, girato verso il centro ---------- */
+    /* ---------- il cabinato: DEADLINE, contro la parete di destra, girato verso il centro ---------- */
     function cabinato() {
-      var p = part({ cls: 'arc', hot: 'arcade', label: 'Arcade cabinet. Play Rush hour' });
+      var p = part({ cls: 'arc', hot: 'arcade', label: 'Arcade cabinet. Play Deadline' });
       /* girato a sinistra: il davanti guarda il centro della stanza, si vede il fianco destro. Vicino, alto, imponente;
          spostato verso la parete di destra */
       var yw = .95, T = frame([4.03 - .32 * Math.sin(yw), 0, 4.72 - .32 * Math.cos(yw)], yw), w = .34;
@@ -287,20 +287,18 @@
         for (var v = 0; v < 4; v++) p.line([F2(.56, 1.42 + v * .07), F2(.7, 1.42 + v * .07)], { cls: 'dt', on: f });
         for (var hh = 0; hh < 5; hh++) p.line([F2(.1 + hh * .14, .04), F2(.18 + hh * .14, .14)], { cls: 'dt', on: f });
       });
-      /* l'insegna: RUSH HOUR a pixel, accesa */
+      /* l'insegna: DEADLINE a pixel, accesa */
       ret(4, -w + .035, .035, w - .035, .265, { cls: 'dt' });
-      var u = .0172, x0 = -(9 * 3.2 - 1.2) * u / 2, at4 = lato(T, pr, 4);
-      scritta(p, 'RUSH HOUR', function (gx, gy) { return at4(x0 + gx * u, .15 - (gy - 2) * u) }, { cls: 'px mq', on: S[4] });
-      /* lo schermo: la cornice, il vetro, e il gioco dentro (un palazzo, l'ascensore, la gente che aspetta) */
+      var u = .019, x0 = -(8 * 3.2 - 1.2) * u / 2, at4 = lato(T, pr, 4);
+      scritta(p, 'DEADLINE', function (gx, gy) { return at4(x0 + gx * u, .15 - (gy - 2) * u) }, { cls: 'px mq', on: S[4] });
+      /* lo schermo: la cornice, il vetro, e il gioco dentro (le seccature in fila, la nave, il colpo, la citta') */
       var L6 = lato(T, pr, 6), sc = L6.len / 2;
       su2(6, rr(0, sc, .27, .225, .02, 2), { closed: true, cls: 'dt' });
       su2(6, rr(0, sc, .24, .19, .035, 3), { closed: true });
-      [.13, .2, .27, .34, .41].forEach(function (s) { su2(6, [[-.2, s], [-.045, s]], { cls: 'scr dt' }); su2(6, [[.045, s], [.2, s]], { cls: 'scr dt' }) });
-      su2(6, [[-.04, .1], [-.04, .43]], { cls: 'scr dt' }); su2(6, [[.04, .1], [.04, .43]], { cls: 'scr dt' });
-      ret(6, -.028, .275, .028, .335, { cls: 'scr cab', fill: 'or' });
-      [[-.16, .2], [-.12, .2], [.15, .34], [-.09, .41], [.18, .13]].forEach(function (q) { su2(6, [[q[0], q[1] - .003], [q[0], q[1] - .03]], { cls: 'scr' }) });
-      su2(6, [[-.2, .075], [-.14, .075]], { cls: 'scr' }); su2(6, [[.12, .075], [.2, .075]], { cls: 'scr dt' });
-      su2(6, [[-.22, .16], [-.22, .08], [-.17, .06]], { cls: 'dt' });
+      for (var er = 0; er < 3; er++) for (var ec = 0; ec < 6; ec++) { var ex = -.15 + ec * .06 + (er % 2) * .02, es = .13 + er * .05; ret(6, ex - .013, es - .011, ex + .013, es + .011, { cls: 'scr dt' }) }
+      su2(6, [[0, .33], [-.026, .38], [.026, .38]], { closed: true, cls: 'scr cab', fill: 'or' });
+      su2(6, [[0, .26], [0, .3]], { cls: 'scr' });
+      su2(6, [[-.21, .42], [-.15, .42], [-.15, .4], [-.08, .4], [-.08, .415], [.02, .415], [.02, .395], [.1, .395], [.1, .42], [.21, .42]], { cls: 'scr dt' });
       /* la pulsantiera: la leva con la pallina, due bottoni pomodoro, lo start */
       ell(7, -.17, .15, .045, .003, 14, { cls: 'dt' });
       var A7 = lato(T, pr, 7), base = A7(-.17, .15, .003), top = A7(-.165, .17, .11);

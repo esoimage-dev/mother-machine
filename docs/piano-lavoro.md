@@ -119,6 +119,18 @@ File: `public/js/stanza.js` (motore e stanza), `public/js/stanza-oggetti.js` (og
   lato**, piu' in alto, lasciando solo una linguetta da cui volendo lo tiri fuori.
 - [ ] Da ridisegnare (lista vecchia di Eso): tazzina e tazza, divano nel complesso.
 
+### Aggiunte di Eso (dopo l'inizio di DEADLINE)
+- [x] Cabinato: insegna DEADLINE e schermo con le seccature in fila, la nave e la citta' (fatto).
+- [ ] **Logo DEADLINE da pensare bene** (alla fine, quando il gioco c'e'): come farlo figo; poi riportarlo sull'insegna
+  del cabinato nella stanza (la cassa da fuori va ritoccata di poco per accoglierlo).
+- [ ] Sul cabinato o vicino, da fuori: magari un nemico o il boss principale (MONDAY) e il protagonista. Alla fine.
+- [ ] **L'astronave di Mother Machine in 3D come oggetto nella stanza** (un modellino, appeso o su una mensola), dopo che
+  la nave del gioco e' decisa (nave o altro mezzo, da confermare con Eso).
+- [ ] **Audit completo di LG fatto da Claude**, prima di rifare la stanza: linee, cavi e fili, oggetti da rifare, da
+  spostare, da mettere piu' armoniosi; se c'e' troppa roba; ogni elemento singolo da migliorare (rack e server compresi;
+  l'oggetto in basso a sinistra, oggi la cassa AUDIO con il synth: cambiarlo e/o metterlo meglio, o toglierlo se e'
+  troppo). Il risultato e' una lista con priorita' da approvare con Eso, poi si fa tutto insieme.
+
 ## A5b · Note rimaste aperte nei piani vecchi (`docs/archivio/`), da verificare nell'audit
 Alcune potrebbero essere gia' fatte: nell'audit si controlla e si spunta. Fonti: `DA-FARE-vecchio.md`, `AUDIT.md`.
 - [ ] Home: frase sotto il titolo piu' corta (proposta vecchia: "Software your company runs on. A brand it's known by.").
@@ -205,6 +217,9 @@ Move call, Make quote; stato delle mail; notifica "New work order" sul telefono)
 - [ ] Lavori nuovi in Work appena arrivano (sostituiscono Birrificio Mare e Forno Nove).
 - [ ] Piu' avanti, se serve: Instagram/LinkedIn con contenuti dal sito (stanza, demo, gioco) e poche sponsorizzate. Non ora.
 
+> **Stato al 24 ottobre:** il gioco gira (scorrimento laterale, M8, sette boss che parlano, sistemi, virus, consegne,
+> plancia, Game Boy su telefono, audio). Progetto e cosa resta: **`docs/deadline/`** (DA-FARE.md per ripartire).
+
 ## B5 · DEADLINE, il gioco del cabinato (al posto di Rush hour, `public/js/rush.js`) · piano intero
 Tutto quello che abbiamo deciso, per intero (in ordine di come e' nato nella discussione).
 
@@ -290,6 +305,17 @@ Tutto quello che abbiamo deciso, per intero (in ordine di come e' nato nella dis
   strappa la pagina SUNDAY.
 - **Un gioco solo, fatto bene.** Idee per dopo, forse: Night Shift (scorrimento), Night Drive (stile OutRun, mai il truck
   di Vitalia's: e' un lavoro per un cliente).
+
+**Aggiunte di Eso (dopo i primi screenshot).** Mappa del mondo tra i giorni (la citta' dall'alto con sette quartieri e
+la torre di MONDAY, la nave che avanza e sblocca il giorno dopo, come Super Mario Bros; non un calendario). Intro
+narrativa corta e buffa che scorre come Star Wars, saltabile ("Not long ago, in an office not so far away..."). MONDAY
+un pizzico piu' cattivo. Nave da rifare molto piu' figa; nemici, colpi, potenziamenti e interfaccia piu' fighi; valutare
+personaggi con piu' dettaglio dello sfondo. Livelli diversi tra loro (meccanica o sorpresa per giorno). Piu' giri di
+verifica e miglioramento con gli agenti.
+
+**Ordine di lavoro deciso da Eso (notte del 23 ottobre):** DEADLINE con piu' giri di revisione completa (vedi le
+liste in scratch DESIGN-V2.md, riportate qui a fine lavoro) -> poi LG (A5 e aggiunte) con piu' giri -> poi l'audit
+completo del sito (A3).
 
 ## B6 · Altre cose belle (quando c'e' tempo)
 - [ ] Animazioni allo scroll, film nuovo, footer ripensato (se non fatto in A3).

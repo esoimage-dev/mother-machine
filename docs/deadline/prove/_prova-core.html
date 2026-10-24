@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DEADLINE prova core</title>
+<style>:root{--f-mono:"DM Mono",ui-monospace,monospace;--f-body:"Hanken Grotesk",system-ui,sans-serif}html,body{margin:0;background:#0F0F0E;color:#F4F2EC;font:14px var(--f-body)}
+main{max-width:720px;margin:0 auto;padding:40px 16px}p,div,canvas,button{max-width:640px;margin:0 auto}button.apri{padding:12px 18px;margin:12px 0}</style>
+<link rel="stylesheet" href="/css/deadline.css">
+</head><body><main><h1>DEADLINE · prova core</h1><p>Pagina di prova (da togliere). Il sito mette max-width e margini: qui li simulo.</p>
+<button class="apri" type="button" onclick="DEADLINE.open(innerWidth/2,innerHeight/2)">Open the cabinet</button></main>
+<script src="/js/deadline-art.js"></script>
+<script src="/js/deadline-audio.js"></script>
+<script src="/js/deadline-sign.js"></script>
+<script src="/js/deadline-net.js"></script>
+<script src="/js/deadline.js"></script>
+<script>if(!/noopen/.test(location.search))addEventListener('load',function(){DEADLINE.open(innerWidth/2,innerHeight/2)})</script>
+</body></html>

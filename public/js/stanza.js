@@ -452,7 +452,7 @@
     function azione(h) {
       var k = h.getAttribute('data-hot'), r = h.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
       tip.classList.remove('on');
-      if (k === 'arcade' && window.RUSH) window.RUSH.open(x, r.top + r.height / 3);
+      if (k === 'arcade' && (window.DEADLINE || window.RUSH)) (window.DEADLINE || window.RUSH).open(x, r.top + r.height / 3);
       /* l'ascensore apre la pulsantiera del sito */
       else if (k === 'lift') porte(true, function () { var d = document.getElementById('dispB'); if (d && d.getAttribute('aria-expanded') !== 'true') d.click() });
       else if (k === 'luce') { var giu = !st.classList.contains('dark'), s0 = LEVA.s, t0 = performance.now();
