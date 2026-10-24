@@ -1957,6 +1957,7 @@
   }
   function itree(B, wx, wy, r, h, cols) { var p = P3(wx, wy, 0); bpoly(B, [[p[0] - 1, p[1]], [p[0] + 1, p[1]], [p[0] + 1, p[1] - h], [p[0] - 1, p[1] - h]], u32('#2A2018')); for (var y = -r; y <= r; y++) for (var x = -r * 1.4; x <= r * 1.4; x++) { var dd = (x / 1.4) * (x / 1.4) + y * y; if (dd <= r * r) bpx(B, p[0] + x, p[1] - h - r + y, u32(dd < r * r * .35 && x < 0 && y < 0 ? cols[2] : x + y > r * .3 ? cols[0] : cols[1])) } }
   // i quartieri: posizione nel mondo, stile, contenuto
+  var SYM5 = null; // aggancio del giro 5: l'oggetto simbolo di ogni quartiere
   var DIST = [
     { day: 'tue', w: [196, 196], top: '#1C2A44', side: '#0E1626', T: { top: '#3A5078', left: '#1A2440', right: '#121A2E', win: '#F4F2EC', dark: '#0C1220' } },
     { day: 'wed', w: [116, 196], top: '#251C38', side: '#130E20', T: { top: '#5A4880', left: '#2C2142', right: '#1D152E', win: '#F2CDBE', dark: '#120D1C' } },
@@ -2038,7 +2039,7 @@
       fx.push({ k: 'birds', p: P3(cx, cy, 30) });
     } else {
       var hmax = { tue: 34, wed: 26, thu: 30, fri: 22, sat: 28 }[D0.day];
-      q.forEach(function (o, j) { for (var m = 0; m < 4; m++) { var w = 7 + R() * 4, d = 7 + R() * 4, h = 8 + R() * hmax * (j === 0 ? 1.5 : 1), ox = cx + o[0] + (m % 2) * 11 + R() * 1.5, oy = cy + o[1] + (m > 1 ? 11 : 0) + R() * 1.5; if (D0.day === 'fri' && j === 3) continue; if (R() < .15) continue; box(ox, oy, w, d, h) } });
+      q.forEach(function (o, j) { for (var m = 0; m < 4; m++) { var w = 7 + R() * 4, d = 7 + R() * 4, h = 8 + R() * hmax * (j === 0 ? 1.5 : 1), ox = cx + o[0] + (m % 2) * 11 + R() * 1.5, oy = cy + o[1] + (m > 1 ? 11 : 0) + R() * 1.5; if (D0.day === 'fri' && j === 3) continue; if (SYM5 && j === 3 && 'tue thu sat'.indexOf(D0.day) >= 0) h = Math.min(h, 9); if (R() < .15) continue; box(ox, oy, w, d, h) } });
       if (D0.day === 'fri') { // il club: cupola rosa con le luci
         objs.push({ k: cx + cy + 30, f: function () { var p = P3(cx + 11, cy + 11, 0); for (var y = -12; y <= 0; y++) for (var x = -16; x <= 16; x++) { var dd = (x / 16) * (x / 16) + (y / 12) * (y / 12); if (dd <= 1) bpx(B, p[0] + x, p[1] + y - 4, u32(dd < .3 && x < 0 ? '#FF86CF' : x > 6 ? '#3A1838' : '#6A2E62')) } bpoly(B, [[p[0] - 16, p[1] - 4], [p[0] + 16, p[1] - 4], [p[0] + 16, p[1]], [p[0] - 16, p[1]]], u32('#271329')) } });
         fx.push({ k: 'lasers', p: P3(cx + 11, cy + 11, 16) }); fx.push({ k: 'party', p: P3(cx + 11, cy + 11, 4) });
@@ -2051,6 +2052,7 @@
         fx.push({ k: 'glow', p: P3(cx, cy, 20) });
       }
     }
+    if (SYM5) SYM5(D0, cx, cy, objs, B, fx);
     objs.sort(function (a, b) { return a.k - b.k }).forEach(function (o) { o.f() });
     var lp = P3(cx, cy + hs, 0);
     return { c: bcan(B), x: bx, y: by, fx: fx, node: [P3(cx + hs - 4, cy + hs - 4, 0)[0], P3(cx + hs - 4, cy + hs - 4, 0)[1] + 2], center: P3(cx, cy, 0) };
@@ -2123,7 +2125,7 @@
       }
     }
     // la nave che viaggia (sprite della nave, piccolo)
-    if (s.ship !== false) { var sp2 = ART.mapPoint(s.shipPos == null ? cur : s.shipPos), bob = Math.sin(t * 5) * 2;  var sv = ART.actorScale; ART.actorScale = 1; ART.ship(ctx, sp2.x * 2, sp2.y * 2 - 14 + bob, t, { thrust: .8 }); ART.actorScale = sv }
+    if (s.ship !== false) { var sp2 = ART.mapPoint(s.shipPos == null ? cur : s.shipPos), bob = Math.sin(t * 5) * 2;  var sv = ART.actorScale; ART.actorScale = 2; ART.ship(ctx, sp2.x, sp2.y - 12 + bob / 2, t, { thrust: .8, still: 1 }); ART.actorScale = sv }
     ctx.restore();
   };
   function fx3(ctx, e, t, D0) {
@@ -2303,6 +2305,8 @@
   function portraitCanvas(name, mood) {
     var key = name + mood; if (PORT[key]) return PORT[key];
     var src, fx, fy;
+    if (mood === 'talk') mood = name === 'monday' ? 'smug' : 'idle';
+    if (name === 'm8') { PORT[key] = m8Portrait(mood); return PORT[key] }
     if (name === 'monday') { src = mondayPortrait(mood); fx = 56; fy = 48 }
     else if (name === 'urgent') { src = URG2[mood === 'angry' ? 4 : 0]; fx = 66; fy = 44 }
     else { var st = mood === 'angry' ? 'attack' : mood === 'hurt' ? 'hurt' : 'idle', F = bossFrames(name, st); src = F.f[0]; fx = BDEF[name].face[0]; fy = BDEF[name].face[1] }
@@ -2928,4 +2932,290 @@
     ctx.restore();
   };
   ART.size.ship = { w: 45, h: 17 };
+
+  // ======================================================================================
+  // M8 ("mate"): il robottino di Mother Machine, l'eroe. Corpo crema arrotondato (mother), dettagli squadrati
+  // (machine), occhio-schermo con le espressioni, braccino con la chiave-blaster, la m sulla pancia, jetpack = le tre
+  // gambe della m con i tre razzetti pomodoro. Vola verso destra, un po' inclinato in avanti.
+  // ART.hero = 'm8' (default): ART.ship disegna M8. s = {bank, thrust, flash, fire (0..1 rinculo), mood
+  // ('happy'|'hurt'|'focus'|'surprised'|'sleep'), night (cappellino), shield, power}.
+  ART.hero = 'm8'; ART.m8Variant = 'a';
+  var M8V = {
+    a: { body: [27, 26, 13, 12.5], head: null, visor: [25, 17, 18, 12], pack: { x: 6, y: 18, len: 6, th: 16 } },
+    b: { body: [26, 30, 11.5, 10], head: [28, 16, 11, 9], visor: [26, 11, 15, 10], pack: { x: 7, y: 22, len: 6, th: 15 } },
+    c: { body: [27, 25, 14, 14], head: null, visor: [24, 15, 19, 13], pack: { x: 4, y: 16, len: 7, th: 18 }, ears: 1 }
+  };
+  var M8W = 60, M8H = 52;
+  var M8PAL = { o: C.night, '0': C.hot, '1': '#ECE8DE', '2': '#D2CDC0', '3': '#A29D90', '4': '#55524B', c: C.cream, n: '#0C1418', N: '#1A2A32', e: C.cream, E: '#9FE8F4',
+    m: C.g1, M: C.g2, K: C.g3, L: C.g4, r: C.tomato, d: C.t1, D: C.t0, h: C.t3, H: C.t4, k: C.ink, b: '#3A5078', B: '#8FB4FF' };
+  function m8Grid(vk, pitch, opt) {
+    var V = M8V[vk], Q = 4, big = mk(M8W * Q, M8H * Q), b = big.g, cx = M8W / 2, cy = M8H / 2, rec = opt.fire ? -1.5 : 0;
+    b.setTransform(Q, 0, 0, Q, 0, 0); b.translate(cx, cy); b.rotate(.12 - pitch * .18); b.translate(-cx, -cy);
+    function el(x, y, rx, ry, col) { b.fillStyle = col; b.beginPath(); b.ellipse(x, y, rx, ry, 0, 0, 7); b.fill() }
+    function rr(x, y, w, h, r, col) { b.fillStyle = col; b.beginPath(); b.moveTo(x + r, y); b.lineTo(x + w - r, y); b.quadraticCurveTo(x + w, y, x + w, y + r); b.lineTo(x + w, y + h - r); b.quadraticCurveTo(x + w, y + h, x + w - r, y + h); b.lineTo(x + r, y + h); b.quadraticCurveTo(x, y + h, x, y + h - r); b.lineTo(x, y + r); b.quadraticCurveTo(x, y, x + r, y); b.fill() }
+    // jetpack: blocco squadrato + la m coricata (tre ugelli)
+    var P = V.pack, s = P.len / 528, s2 = P.th / 680;
+    b.fillStyle = '#ff00ff'; b.fillRect(P.x + P.len - 1, P.y + 1, 10, P.th - 2);
+    b.save(); b.beginPath(); b.rect(P.x - 1, P.y - 2, P.len + 1.5, P.th + 4); b.clip(); b.transform(0, s2, -s, 0, P.x, P.y); b.fill(M_SUB[0]); b.restore();
+    // braccino dietro
+    rr(V.body[0] - 4, V.body[1] + V.body[3] - 3, 5, 6, 2, '#00ffff');
+    // corpo e testa
+    el(V.body[0], V.body[1], V.body[2], V.body[3], '#ff0000');
+    if (V.head) { rr(V.head[0] - V.head[2], V.head[1] - V.head[3], V.head[2] * 2, V.head[3] * 2, 5, '#ff0000'); rr(V.head[0] - 4, V.head[1] + V.head[3] - 2, 8, 5, 1, '#ffff00') }
+    if (V.ears) { rr(V.body[0] - 3, V.body[1] - V.body[3] - 3, 6, 4, 1, '#ffff00') }
+    // antenna
+    b.fillStyle = '#ffff00'; b.fillRect((V.head ? V.head[0] : V.body[0]) - 4.5, (V.head ? V.head[1] - V.head[3] : V.body[1] - V.body[3]) - 6, 1.5, 6);
+    // schermo (squadrato, angoli appena smussati)
+    rr(V.visor[0], V.visor[1], V.visor[2], V.visor[3], 2.5, '#00ff00');
+    // braccino davanti con la chiave-blaster
+    var ax = V.body[0] + V.body[2] - 6 + rec, ay = V.body[1] + V.body[3] - 6;
+    rr(ax, ay, 7, 5, 2, '#00ffff'); b.fillStyle = '#0000ff'; b.fillRect(ax + 5, ay - 1, 10, 4); b.fillRect(ax + 13, ay - 3, 3, 3); b.fillRect(ax + 13, ay + 2, 3, 3);
+    var D = b.getImageData(0, 0, M8W * Q, M8H * Q).data, g = grid(M8W, M8H), x, y, REG = [['B', 255, 0, 0], ['V', 0, 255, 0], ['W', 0, 0, 255], ['T', 255, 255, 0], ['J', 255, 0, 255], ['A', 0, 255, 255]];
+    for (y = 0; y < M8H; y++) for (x = 0; x < M8W; x++) { var i = ((y * Q + 2) * M8W * Q + x * Q + 2) * 4; if (D[i + 3] < 128) continue; var best = 'B', bd = 1e9; REG.forEach(function (R) { var dd = Math.abs(D[i] - R[1]) + Math.abs(D[i + 1] - R[2]) + Math.abs(D[i + 2] - R[3]); if (dd < bd) { bd = dd; best = R[0] } }); g.a[y][x] = best }
+    var src = gclone(g), out = grid(M8W, M8H), vx0 = 1e9, vx1 = -1, vy0 = 1e9, vy1 = -1;
+    for (y = 0; y < M8H; y++) for (x = 0; x < M8W; x++) {
+      var r = src.a[y][x]; if (r === '.') continue; var up = gg(src, x, y - 1) === '.', dn = gg(src, x, y + 1) === '.', lf = gg(src, x - 1, y) === '.', c;
+      if (r === 'B') { var du = 0, dd2 = 0; while (gg(src, x, y - du - 1) !== '.' && gg(src, x, y - du - 1) !== 'T' && du < 30) du++; while (gg(src, x, y + dd2 + 1) !== '.' && dd2 < 30) dd2++; var tt = du / (du + dd2 + 1); c = ['0', '1', '1', '1', '2', '2', '3', '3'][Math.min(7, (tt * 8) | 0)]; if (up) c = '0'; if (dn) c = 'c' }
+      else if (r === 'V') { vx0 = Math.min(vx0, x); vx1 = Math.max(vx1, x); vy0 = Math.min(vy0, y); vy1 = Math.max(vy1, y); c = 'n' }
+      else if (r === 'W') c = up ? 'm' : dn ? 'L' : 'K';
+      else if (r === 'T') c = up ? 'm' : 'M';
+      else if (r === 'A') c = up ? '1' : dn ? 'c' : '2';
+      else { var eu = 0, ed = 0; while (gg(src, x, y - eu - 1) === 'J' && eu < 20) eu++; while (gg(src, x, y + ed + 1) === 'J' && ed < 20) ed++; c = up ? 'm' : dn ? 'c' : ['M', 'M', 'K', 'K', 'L'][Math.min(4, (eu / (eu + ed + 1) * 5) | 0)]; if (lf) c = 'L' }
+      out.a[y][x] = c;
+    }
+    // bordo dello schermo e riflesso
+    for (y = vy0; y <= vy1; y++) for (x = vx0; x <= vx1; x++) if (src.a[y][x] === 'V' && (y === vy0 || src.a[y - 1][x] !== 'V')) out.a[y][x] = 'N';
+    gs(out, vx1 - 2, vy0 + 2, 'N'); gs(out, vx1 - 3, vy0 + 2, 'N');
+    // espressione sullo schermo
+    var mood = { idle: 'happy', smug: 'happy', talk: 'happy', angry: 'focus', rage: 'focus' }[opt.mood] || opt.mood || 'happy'; if (['happy', 'hurt', 'focus', 'surprised', 'sleep'].indexOf(mood) < 0) mood = 'happy'; var ecx = Math.round((vx0 + vx1) / 2) + 1, ecy = Math.round((vy0 + vy1) / 2), L = ecx - 4, Rx = ecx + 3, col = mood === 'hurt' ? 'H' : 'e';
+    var EYES = {
+      happy: [[-1, 1], [0, 0], [1, 1]],
+      focus: [[-1, 0], [0, 0], [1, 0]],
+      sleep: [[-1, 0], [0, 1], [1, 0]],
+      surprised: null, hurt: null
+    };
+    [L, Rx].forEach(function (ex, side) {
+      if (mood === 'surprised') { gr(out, ex - 1, ecy - 2, 3, 1, col); gr(out, ex - 1, ecy + 1, 3, 1, col); gs(out, ex - 2, ecy - 1, col); gs(out, ex - 2, ecy, col); gs(out, ex + 2, ecy - 1, col); gs(out, ex + 2, ecy, col) }
+      else if (mood === 'hurt') { var dir = side ? -1 : 1; for (var k2 = -2; k2 <= 2; k2++) gs(out, ex + dir * (2 - Math.abs(k2)) - dir, ecy + k2, col) }
+      else { EYES[mood].forEach(function (p) { gs(out, ex + p[0], ecy - 1 + p[1], col); gs(out, ex + p[0], ecy + p[1], col) }) }
+    });
+    if (mood === 'happy') { gs(out, ecx - 1, ecy + 3, 'E'); gs(out, ecx, ecy + 4, 'E'); gs(out, ecx + 1, ecy + 3, 'E') }
+    if (mood === 'focus') gr(out, ecx - 1, ecy + 3, 3, 1, 'E');
+    if (mood === 'hurt' || mood === 'surprised') { gr(out, ecx - 1, ecy + 3, 2, 2, 'E') }
+    // la m sulla pancia (7x7, inchiostro)
+    var MM = ['##.##..', '#.#.#..', '#.#.#..', '#.#.#..'], bx = Math.round(V.body[0] - 6), by = Math.round(V.body[1] + V.body[3] * .25);
+    for (y = 0; y < 4; y++) for (x = 0; x < 7; x++) if (MM[y][x] === '#' && 'B'.indexOf(gg(src, bx + x, by + y)) === 0) out.a[by + y][bx + x] = '4';
+    // bocca del blaster pomodoro
+    var mz = []; for (y = 0; y < M8H; y++) for (x = M8W - 1; x >= 0; x--) if (src.a[y][x] === 'W') { mz.push([x, y]); break }
+    var mzx = 0, mzy = 0; mz.forEach(function (p) { if (p[0] > mzx) { mzx = p[0]; mzy = p[1] } }); gs(out, mzx, mzy, 'r'); gs(out, mzx, mzy + 1, 'r');
+    // ugelli del jetpack
+    var eng = [], ang = .12 - pitch * .18, ca = Math.cos(ang), sa = Math.sin(ang);
+    [45, 340, 635].forEach(function (lx) { var px0 = P.x, py0 = P.y + lx * s2, rx = cx + (px0 - cx) * ca - (py0 - cy) * sa, ry = cy + (px0 - cx) * sa + (py0 - cy) * ca, ex = Math.round(rx), ey = Math.round(ry), hh = Math.max(1, Math.round(90 * s2 / 2));
+      for (var yy3 = ey - hh; yy3 <= ey + hh; yy3++) { var edge = yy3 === ey - hh || yy3 === ey + hh; gs(out, ex - 1, yy3, edge ? 'd' : 'r'); gs(out, ex - 2, yy3, edge ? 'D' : 'h') }
+      eng.push([ex - 2, ey - hh, ey + hh]) });
+    // punta dell'antenna (pomodoro: risponde)
+    var tip = null; for (y = 0; y < M8H && !tip; y++) for (x = 0; x < M8W; x++) if (src.a[y][x] === 'T') { tip = [x, y]; break }
+    // cappellino della notte
+    if (opt.night) { // il berretto si appoggia sulla testa: tesa che segue la curva, punta all'indietro col pompon
+      var cx0 = Math.round(V.body[0] - 9), cx1 = Math.round(V.body[0] + 6), topY = [], xx7, yy7;
+      for (xx7 = cx0; xx7 <= cx1; xx7++) { yy7 = 0; while (yy7 < M8H && 'B'.indexOf(gg(src, xx7, yy7)) !== 0 && gg(src, xx7, yy7) !== 'V') yy7++; topY.push(yy7) }
+      var ty = Math.min.apply(null, topY);
+      for (xx7 = cx0; xx7 <= cx1; xx7++) { var t0 = topY[xx7 - cx0]; for (yy7 = ty - 9; yy7 < t0 + 1; yy7++) { var k7 = (xx7 - cx0) / (cx1 - cx0), lim = ty - 1 - Math.round(8 * Math.sin(Math.PI * Math.min(1, k7 * 1.15))); if (yy7 >= lim && yy7 < t0 - 1) gs(out, xx7, yy7, k7 > .6 ? 'B' : 'b') } gs(out, xx7, t0 - 1, 'c'); gs(out, xx7, t0, 'c'); }
+      var pmx = Math.round(cx0 + (cx1 - cx0) * .43); gr(out, pmx - 1, ty - 11, 3, 3, 'c'); gs(out, pmx, ty - 12, 'c');
+    }
+    // contorno notte tranne sotto
+    var f2 = gclone(out); function Af(xx, yy) { var v = gg(f2, xx, yy); return v !== '.' && 'rdDhH'.indexOf(v) < 0 }
+    for (y = 0; y < M8H; y++) for (x = 0; x < M8W; x++) if (f2.a[y][x] === '.' && !Af(x, y - 1) && (Af(x - 1, y) || Af(x + 1, y) || Af(x, y + 1))) out.a[y][x] = 'o';
+    var core = [Math.round(V.body[0]), Math.round(V.body[1])];
+    return { c: can(out, M8PAL), eng: eng, tip: tip, muzzle: [mzx, mzy], hit: [core[0] - M8W / 2, core[1] - M8H / 2] };
+  }
+  var M8C = {};
+  function m8(vk, pitch, mood, fire, night) { var k = vk + pitch + mood + (fire ? 1 : 0) + (night ? 1 : 0); if (!M8C[k]) { M8C[k] = m8Grid(vk, pitch, { mood: mood, fire: fire, night: night }); M8C[k].f = solid(M8C[k].c, C.cream) } return M8C[k] }
+  ART.prepareHero = function () { ['happy', 'hurt', 'focus', 'surprised'].forEach(function (m) { [-1, 0, 1].forEach(function (p) { m8(ART.m8Variant, p, m, false, false); m8(ART.m8Variant, p, 'focus', true, false) }) }); m8(ART.m8Variant, 0, 'sleep', false, true) };
+  var SHIP_PREV = ART.ship;
+  ART.ship = function (ctx, x, y, t, s) {
+    s = s || {}; if (ART.hero !== 'm8' || s.view) return SHIP_PREV(ctx, x, y, t, s);
+    var S = SC(ctx), vk = s.variant || ART.m8Variant, p = Math.max(-1, Math.min(1, Math.round(-(s.bank || 0) * 1.4))), fire = s.fire > 0, mood = s.mood || (s.flash ? 'hurt' : s.night ? 'sleep' : fire ? 'focus' : 'happy');
+    if (!s.mood && mood === 'happy' && (t % 3.7) < .12) mood = 'focus'; // ammicca
+    var I = m8(vk, p, mood, fire, !!s.night); ART.hitbox = { dx: I.hit[0] / 2, dy: I.hit[1] / 2 };
+    if (s.shield > 0) { shieldGrab(ctx, x, y, t); shieldGlass(ctx, x, y, t, s.shield, S) }
+    var bob = s.still ? 0 : Math.round(Math.sin(t * 5) * 1.5) / 2; putC(ctx, I.c, x, y + bob, S);
+    var k = S === 2 ? 1 : .5, ox = Math.round(x * S) - M8W * k / 2, oy = Math.round((y + bob) * S) - M8H * k / 2;
+    var th = s.thrust == null ? .5 : s.thrust, fr = (t * 24) | 0, auto = s.power === 'auto';
+    for (var i = 0; i < I.eng.length; i++) { var e = I.eng[i], len = 4 + Math.round(th * 7) + (auto ? 6 : 0) - ((fr + i) % 3 === 0 ? 2 : 0), h0 = e[2] - e[1] + 1;
+      for (var j = 0; j < len; j++) { var col = j < 2 ? ((fr + i) % 2 ? C.t4 : C.t3) : j < 4 ? C.tomato : j < 7 ? C.t1 : C.t0, hh = Math.max(1, h0 - (j > 3 ? 1 : 0)); if (j > 6 && (j + fr) % 2) continue; ctx.fillStyle = col; ctx.fillRect(Math.round(ox + (e[0] - j) * k), Math.round(oy + (e[1] + ((h0 - hh) >> 1) + j * .35) * k), Math.max(1, Math.round(k)), Math.max(1, Math.round(hh * k))) } }
+    if (I.tip && !s.night && ((t * 2) | 0) % 2) { ctx.fillStyle = C.tomato; ctx.fillRect(Math.round(ox + I.tip[0] * k - k), Math.round(oy + I.tip[1] * k - k), Math.max(1, Math.round(2 * k)), Math.max(1, Math.round(2 * k))) }
+    if (fire && s.fire > .5) { ctx.fillStyle = C.t4; ctx.fillRect(Math.round(ox + (I.muzzle[0] + 1) * k), Math.round(oy + (I.muzzle[1] - 1) * k), Math.max(1, Math.round(3 * k)), Math.max(1, Math.round(3 * k))); ctx.fillStyle = C.tomato; ctx.fillRect(Math.round(ox + (I.muzzle[0] + 4) * k), Math.round(oy + I.muzzle[1] * k), Math.max(1, Math.round(2 * k)), Math.max(1, Math.round(1 * k))) }
+    if (s.night) { var zt = (t * .8) % 1; ART.tinyScaled ? 0 : 0; ctx.globalAlpha = 1 - zt; ctx.save(); if (S === 2) ctx.scale(2, 2); tiny(ctx, 'Z', Math.round(x + 8 + zt * 6), Math.round(y - 16 - zt * 8), '#8FB4FF'); ctx.restore(); ctx.globalAlpha = 1 }
+    if (s.flash && !reduced) { ctx.globalAlpha = .7; putC(ctx, I.f, x, y + bob, S); ctx.globalAlpha = 1 }
+    if (s.power === 'ai') { ctx.fillStyle = '#7FD8FF'; var q = ((t * 6) | 0) % 2; if (q) ctx.fillRect(Math.round(ox + I.tip[0] * k), Math.round(oy + (I.tip[1] - 3) * k), Math.max(1, Math.round(2 * k)), Math.max(1, Math.round(2 * k))) }
+    if (s.shield > 0) shieldDraw(ctx, x, y, t, s.shield, S);
+  };
+  var SHIPFX_PREV = ART.shipFx;
+  ART.shipFx = function (ctx, x, y, t, s) {
+    s = s || {}; if (ART.hero !== 'm8' || s.view) return SHIPFX_PREV(ctx, x, y, t, s);
+    var I = m8(s.variant || ART.m8Variant, 0, 'happy', false, false), th = s.thrust == null ? .5 : s.thrust, len = (.5 + th) * (s.power === 'auto' ? 1.8 : 1), f = GLOWS.flame[2];
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for (var i = 0; i < I.eng.length; i++) { var e = I.eng[i], ex = (e[0] - M8W / 2) / 2, ey = ((e[1] + e[2]) / 2 - M8H / 2) / 2, fl = .8 + .2 * Math.sin(t * 40 + i * 2.1), ww = f.gh * len * fl * .8, hh = f.gw * .6; ctx.globalAlpha = .9; ctx.drawImage(f, x + ex - ww, y + ey - hh / 2, ww, hh) }
+    ctx.restore();
+  };
+  // colpi di M8: ingranaggi pomodoro (giro di 2 fotogrammi); 'gearAI' con la scia ciano
+  var GEARS = null;
+  function buildGears() {
+    GEARS = [0, 1].map(function (f) { var g = grid(11, 11); for (var k2 = 0; k2 < 8; k2++) { var a = k2 * Math.PI / 4 + f * Math.PI / 8; gs(g, Math.round(5 + Math.cos(a) * 4.6), Math.round(5 + Math.sin(a) * 4.6), 'r') } gell(g, 5.5, 5.5, 3.8, 3.8, 'r'); gell(g, 5.5, 5.5, 3, 3, 'h'); gell(g, 5.5, 5.5, 1.3, 1.3, 'o'); gs(g, 4, 3, 'H'); return can(outl(g), { o: C.night, r: C.tomato, h: C.t3, H: C.t4 }) });
+  }
+  var BULLET_PREV = ART.bullet;
+  ART.bullet = function (ctx, kind, x, y, t, a) {
+    if (ART.hero === 'm8' && (kind === 'player' || kind === 'gearAI')) {
+      if (!GEARS) buildGears(); var S = SC(ctx), c = GEARS[((t * 16) | 0) % 2];
+      if (kind === 'gearAI') { ctx.fillStyle = '#7FD8FF'; for (var i = 1; i < 6; i++) { ctx.globalAlpha = .6 - i * .1; ctx.fillRect(Math.round((x - i * 3) * S), Math.round((y + Math.sin(t * 20 - i) * 1.5) * S), S, S) } ctx.globalAlpha = 1 }
+      else { ctx.fillStyle = C.t1; ctx.globalAlpha = .7; ctx.fillRect(Math.round((x - 7) * S), Math.round(y * S), 4 * S, Math.max(1, S >> 1)); ctx.globalAlpha = 1 }
+      putC(ctx, c, x, y, S); return;
+    }
+    return BULLET_PREV(ctx, kind, x, y, t, a);
+  };
+  ART.size.ship = { w: 30, h: 26 }; ART.size.gear = { w: 6, h: 6 };
+  // ritratto di M8: lo stesso robot ingrandito x2 nella cornice (pixel doppi, voluto: primo piano)
+  var PORT_M8 = {};
+  function m8Portrait(mood) {
+    if (PORT_M8[mood]) return PORT_M8[mood];
+    var src = m8Grid(ART.m8Variant, 0, { mood: mood === 'talk' ? 'happy' : mood === 'angry' ? 'focus' : mood }), s2 = mk(112, 96), g = s2.g;
+    g.fillStyle = '#121A2E'; g.fillRect(0, 0, 112, 96); for (var y = 0; y < 96; y += 3) { g.fillStyle = 'rgba(0,0,0,0.12)'; g.fillRect(0, y, 112, 1) }
+    g.imageSmoothingEnabled = false; g.drawImage(src.c, 13, 6, 38, 32, -1, 0, 114, 96); // primo piano x3 sulla testa
+    return (PORT_M8[mood] = s2.c);
+  }
+
+  // ======================================================================================
+  // CARD DEL BOSS (giro 5): bande scure come un film di lotta, il ritratto grande, il nome enorme, il soprannome.
+  // ART.bossCard(ctx, t, name, nickname, k): k 0..1 = tutta la card (entra fino a .15, resta, esce da .85).
+  var BOSSI = {
+    voicemail: { day: 'tue', title: 'THE VOICEMAIL', nick: 'Destroyer of mornings' },
+    replyall: { day: 'wed', title: 'REPLY ALL', nick: 'The one who adds everyone' },
+    paperjam: { day: 'thu', title: 'PAPER JAM', nick: 'Prints only on Thursdays' },
+    urgent: { day: 'fri', title: 'URGENT', nick: 'Arrives at 4:59 PM. Always.' },
+    onestar: { day: 'sat', title: 'ONE STAR', nick: 'Never visited. Has opinions.' },
+    scaries: { day: 'sun', title: 'SUNDAY SCARIES', nick: 'Lives in your to-do list' },
+    monday: { day: 'mon', title: 'MONDAY', nick: 'The final boss. Of every week.' }
+  };
+  ART.bossInfo = BOSSI;
+  function bossKey(name) { var k = String(name || '').toLowerCase().replace(/^the /, '').replace(/[^a-z]/g, ''); if (k === 'sundayscaries') k = 'scaries'; return BOSSI[k] ? k : 'voicemail' }
+  function ease(x) { x = Math.max(0, Math.min(1, x)); return 1 - Math.pow(1 - x, 3) }
+  ART.bossCard = function (ctx, t, name, nickname, k) {
+    var key = bossKey(name), I = BOSSI[key], evil = key === 'monday' || key === 'urgent', acc = evil ? C.crim3 : D(I.day)[7];
+    var title = name && /\s/.test(name) ? String(name).toUpperCase() : I.title, nick = nickname || I.nick;
+    k = Math.max(0, Math.min(1, k == null ? .5 : k)); var inK = ease(k / .15), out = k > .85 ? ease((k - .85) / .15) : 0, S = SC(ctx);
+    hudBegin(ctx);
+    ctx.fillStyle = 'rgba(6,6,8,' + (.62 * inK * (1 - out)).toFixed(3) + ')'; ctx.fillRect(0, 0, 480, 270);
+    var oL = Math.round(-480 * (1 - inK) - 480 * out), oR = Math.round(480 * (1 - inK) + 480 * out), i;
+    // banda sopra: il nastro che scorre
+    var tk = (ART.dayName(I.day) + '  ·  BOSS FIGHT  ·  ').toUpperCase(), tw = tinyWidth(tk) + 6, sh = Math.round(t * 30) % tw;
+    ctx.fillStyle = acc; ctx.fillRect(oL, 62, 480, 13); ctx.save(); ctx.beginPath(); ctx.rect(oL, 62, 480, 13); ctx.clip();
+    for (i = -1; i < 480 / tw + 1; i++) tiny(ctx, tk, oL + i * tw - sh, 66, C.ink); ctx.restore();
+    // banda grande
+    ctx.fillStyle = '#0B0B0D'; ctx.fillRect(oR, 78, 480, 108); ctx.save(); ctx.beginPath(); ctx.rect(oR, 78, 480, 108); ctx.clip();
+    ctx.fillStyle = 'rgba(244,242,236,0.045)'; for (i = 0; i < 26; i++) { var sx = oR + ((i * 37 - t * 160) % 560 + 560) % 560 - 60; for (var q = 0; q < 108; q += 2) ctx.fillRect(Math.round(sx + q * .45), 78 + q, 10 + (i % 3) * 6, 2) }
+    ctx.restore();
+    ctx.fillStyle = acc; ctx.fillRect(oR, 78, 480, 2); ctx.fillRect(oR, 184, 480, 2);
+    // banda sotto: righe di pericolo
+    ctx.fillStyle = C.ink; ctx.fillRect(oL, 189, 480, 9); ctx.fillStyle = acc; for (i = -2; i < 50; i++) { var hx = oL + i * 12 + (Math.round(t * 20) % 12); for (var r = 0; r < 9; r++) ctx.fillRect(hx + r, 189 + r, 5, 1) }
+    // ritratto grande (x2) con gli angoli
+    var px = 20 + oR, py = 84, pc = portraitCanvas(key, k > .3 && k < .8 && ((t * 2) | 0) % 3 === 0 ? 'talk' : 'angry');
+    ctx.drawImage(pc, px, py, 112, 96);
+    ctx.fillStyle = acc; [[px - 2, py - 2, 1, 1], [px + 113, py - 2, -1, 1], [px - 2, py + 97, 1, -1], [px + 113, py + 97, -1, -1]].forEach(function (c) { ctx.fillRect(c[2] > 0 ? c[0] : c[0] - 7, c[1], 8, 1); ctx.fillRect(c[0], c[3] > 0 ? c[1] : c[1] - 7, 1, 8) });
+    // nome enorme: arriva da destra con un colpo, poi il soprannome si scrive
+    var nk = ease((k - .1) / .1), sz = Math.max(2, Math.min(5, Math.floor(318 / Math.max(1, textWidth(title, 1))))), nx = 146 + Math.round(60 * (1 - nk)) + oR, ny = 100, nyk = ny + sz * 9 + 7;
+    if (nk > 0) {
+      ctx.globalAlpha = nk; tiny(ctx, (evil ? 'FINAL OPPONENT' : 'TODAY\'S PROBLEM'), nx, ny - 11, acc);
+      text(ctx, title, nx + 2, ny + 2, { size: sz, color: acc }); text(ctx, title, nx, ny, { size: sz, color: C.cream }); ctx.globalAlpha = 1;
+      var nc = Math.round(nick.length * Math.max(0, Math.min(1, (k - .2) / .25))), ns = '"' + nick.slice(0, nc) + (nc < nick.length ? '' : '"');
+      text(ctx, ns, nx, nyk, { size: 2, color: acc });
+      if (nc < nick.length && ((t * 8) | 0) % 2) { ctx.fillStyle = acc; ctx.fillRect(nx + textWidth(ns, 2) + 3, nyk, 6, 14) }
+      ctx.fillStyle = 'rgba(244,242,236,0.35)'; ctx.fillRect(nx, nyk + 22, Math.round(310 * ease((k - .25) / .3)), 1);
+    }
+    // lampo quando il nome atterra
+    if (k > .18 && k < .24 && !reduced) { ctx.fillStyle = 'rgba(244,242,236,' + (.5 * (1 - (k - .18) / .06)).toFixed(3) + ')'; ctx.fillRect(0, 78, 480, 108) }
+    ctx.restore();
+  };
+
+  // ======================================================================================
+  // MAPPA giro 5: ogni quartiere ha UN oggetto grande che dice il suo problema.
+  // TUE telefono gigante sul tetto, WED nuvola di mail, THU server col virus, FRI furgone + pacchi,
+  // SAT stella sull'insegna, SUN panchine e alberi, MON la torre. M8 viaggia sulla rotta.
+  function ol5(g) { var g0 = gclone(g); for (var y = 0; y < g.h; y++) for (var x = 0; x < g.w; x++) if (g0.a[y][x] === '.' && (gg(g0, x - 1, y) !== '.' || gg(g0, x + 1, y) !== '.' || gg(g0, x, y - 1) !== '.' || gg(g0, x, y + 1) !== '.')) g.a[y][x] = 'o'; return g }
+  var SYMP = { o: '#05070C', c: C.cream, C: '#C9C5BA', s: '#8E8A80', S: '#55524B', k: '#1A1C22' };
+  function symPal(x) { var p = {}; for (var k in SYMP) p[k] = SYMP[k]; for (var k2 in x) p[k2] = x[k2]; return p }
+  var SYM = null;
+  function buildSym() {
+    var sk = GK; GK = 1; SYM = {}; var g, x, y;
+    // telefono da scrivania gigante: cornetta a osso sopra le forcelle, disco rotante davanti
+    g = grid(36, 31);
+    gpoly(g, [[8, 14], [27, 14], [32, 29], [3, 29]], 'c'); for (y = 14; y < 30; y++) { var ex = Math.round(27 + (y - 14) * 5 / 15); gs(g, ex, y, 'C'); gs(g, ex - 1, y, 'C') } gr(g, 4, 28, 28, 2, 's');
+    gr(g, 9, 11, 3, 3, 'C'); gr(g, 24, 11, 3, 3, 'C');
+    gr(g, 2, 4, 9, 7, 'A'); gr(g, 25, 4, 9, 7, 'A'); gr(g, 8, 3, 20, 4, 'A'); gr(g, 3, 3, 7, 1, 'a'); gr(g, 26, 3, 7, 1, 'a'); gr(g, 9, 2, 18, 1, 'a'); gr(g, 2, 10, 9, 1, 'd'); gr(g, 25, 10, 9, 1, 'd'); gr(g, 11, 7, 14, 1, 'd');
+    gell(g, 17.5, 21.5, 6.5, 5.5, 'C'); for (var an2 = 0; an2 < 8; an2++) { var aa = -2.4 + an2 * .62; gs(g, Math.round(17.5 + Math.cos(aa) * 4.3), Math.round(21.5 + Math.sin(aa) * 3.4), 'A') } gell(g, 17.5, 21.5, 1.6, 1.4, 'a');
+    for (y = 13; y < 27; y++) gs(g, 1 + ((y >> 1) & 1), y, 's');
+    SYM.phone = can(ol5(g), symPal({ A: '#3A5078', a: '#5FD3FF', d: '#1A2440' }));
+    // nuvola di mail
+    g = grid(58, 34);
+    gell(g, 29, 22, 24, 9, 'A'); gell(g, 18, 15, 11, 9, 'A'); gell(g, 34, 12, 13, 10, 'A'); gell(g, 47, 18, 9, 7, 'A');
+    for (y = 0; y < 34; y++) for (x = 0; x < 58; x++) { if (g.a[y][x] !== 'A') continue; if (gg(g, x, y - 2) === '.' || gg(g, x - 2, y - 1) === '.') g.a[y][x] = 'a'; else if (gg(g, x, y + 2) === '.') g.a[y][x] = 'd' }
+    [[7, 18], [21, 22], [37, 19], [28, 6], [44, 10]].forEach(function (e) { gr(g, e[0], e[1], 11, 8, 'c'); gr(g, e[0], e[1] + 7, 11, 1, 'C'); for (var q = 0; q < 5; q++) { gs(g, e[0] + q, e[1] + q, 's'); gs(g, e[0] + 10 - q, e[1] + q, 's') } gs(g, e[0] + 5, e[1] + 5, 's') });
+    SYM.mails = can(ol5(g), symPal({ A: '#5A4880', a: '#8A78B8', d: '#2C2142' }));
+    // server col virus attaccato
+    g = grid(32, 50);
+    gpoly(g, [[2, 7], [8, 2], [29, 2], [23, 7]], 't'); gpoly(g, [[23, 7], [29, 2], [29, 44], [23, 49]], 'D'); gr(g, 2, 7, 21, 42, 'B');
+    for (y = 10; y < 46; y += 4) { gr(g, 4, y, 17, 2, 'L'); gs(g, 18, y, (y >> 2) % 3 ? 'g' : 'G'); gs(g, 20, y, (y >> 2) % 2 ? 'g' : 'G') }
+    gell(g, 11, 28, 6, 6, 'v'); [[11, 20], [11, 36], [3, 28], [19, 28], [5, 22], [17, 22], [5, 34], [17, 34]].forEach(function (p) { gs(g, p[0], p[1], 'v') });
+    gell(g, 11, 28, 3, 3, 'V'); gs(g, 9, 27, 'c'); gs(g, 13, 27, 'c'); gr(g, 10, 30, 3, 1, 'k');
+    SYM.server = can(ol5(g), symPal({ t: '#8A9A4A', D: '#2F3A1F', B: '#4E5C34', L: '#2A3420', g: '#C6EE48', G: '#6F7F33', v: '#A6F04A', V: '#4A7A1E' }));
+    // furgone di lato (verso destra) e pila di pacchi
+    g = grid(48, 27);
+    gr(g, 1, 3, 33, 18, 'c'); gr(g, 1, 3, 33, 1, 'C'); gr(g, 1, 19, 33, 2, 'C'); gr(g, 1, 13, 33, 2, 'A');
+    gpoly(g, [[33, 8], [40, 8], [46, 14], [46, 21], [33, 21]], 'c'); gpoly(g, [[35, 9], [40, 9], [44, 14], [35, 14]], 'w'); gs(g, 37, 10, 'W'); gs(g, 38, 10, 'W'); gr(g, 33, 13, 13, 2, 'A'); gr(g, 33, 19, 13, 2, 'C');
+    gr(g, 45, 17, 2, 2, 'y'); gr(g, 1, 9, 2, 3, 'r'); gl(g, 33, 3, 33, 20, 'C');
+    gtext(g, 'MM', 8, 6, 'k');
+    [[9, 22], [38, 22]].forEach(function (w) { gell(g, w[0], w[1], 4, 4, 'k'); gell(g, w[0], w[1], 1.6, 1.6, 's') });
+    SYM.van = can(ol5(g), symPal({ A: '#FF86CF', w: '#2A3550', W: '#9ED8E6', y: '#FFE0A0', r: '#C2627A' }));
+    g = grid(24, 19);
+    [[1, 9, 12, 9], [11, 10, 11, 8], [5, 1, 11, 9]].forEach(function (b) { gr(g, b[0], b[1], b[2], b[3], 'p'); gr(g, b[0], b[1], b[2], 1, 'P'); gr(g, b[0] + b[2] - 2, b[1], 2, b[3], 'q'); gr(g, b[0] + (b[2] >> 1) - 1, b[1], 2, b[3], 'T') });
+    SYM.parcels = can(ol5(g), symPal({ p: '#B5713E', P: '#D9965A', q: '#8A5230', T: '#E8C890' }));
+    // insegna con la stella (lampadine intorno)
+    g = grid(38, 54);
+    gr(g, 17, 30, 3, 23, 'S'); gr(g, 17, 30, 1, 23, 's'); gr(g, 12, 51, 13, 2, 'S');
+    gr(g, 1, 1, 36, 30, 'b'); gbox(g, 1, 1, 36, 30, 'B');
+    var st = []; for (var a = 0; a < 10; a++) { var r = a % 2 ? 6 : 13, an = -Math.PI / 2 + a * Math.PI / 5; st.push([19 + Math.cos(an) * r, 16.5 + Math.sin(an) * r]) } gpoly(g, st, 'y');
+    for (y = 0; y < 54; y++) for (x = 0; x < 38; x++) if (g.a[y][x] === 'y') { if (gg(g, x, y + 1) !== 'y' || gg(g, x + 1, y) !== 'y') g.a[y][x] = 'Y'; else if (gg(g, x, y - 1) !== 'y' || gg(g, x - 1, y) !== 'y') g.a[y][x] = 'c' }
+    SYM.star = can(ol5(g), symPal({ b: '#3A201C', B: '#7A4434', y: '#FFC56A', Y: '#B5713E' }));
+    // panchina del parco
+    g = grid(14, 8); gr(g, 1, 1, 12, 2, 'w'); gr(g, 1, 4, 12, 1, 'w'); gr(g, 1, 3, 12, 1, 'W'); gr(g, 2, 5, 1, 3, 'S'); gr(g, 11, 5, 1, 3, 'S');
+    SYM.bench = can(ol5(g), symPal({ w: '#9A6A44', W: '#6E4A2E' }));
+    GK = sk;
+  }
+  function bimg(B, c, x, y, K) { K = K || 1; var d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; x = Math.round(x); y = Math.round(y); for (var j = 0; j < c.height; j++) for (var i = 0; i < c.width; i++) { var o = (j * c.width + i) * 4; if (d[o + 3] > 0) { var u = (255 << 24) | (d[o + 2] << 16) | (d[o + 1] << 8) | d[o]; for (var b = 0; b < K; b++) for (var a = 0; a < K; a++) bpx(B, x + i * K + a, y + j * K + b, u) } } }
+  // l'aggancio dentro district3: aggiunge l'oggetto al centro (incrocio), con la giusta profondita'
+  SYM5 = function (D0, cx, cy, objs, B, fx) {
+    if (!SYM) buildSym(); var p0 = P3(cx, cy, 0), T = D0.T;
+    function plinth(h, T2) { objs.push({ k: cx + cy + 9, f: function () { ibox(B, cx - 5, cy - 5, 10, 10, h, T2 || T, rnd(7)) } }) }
+    function tl(c, z, dx) { var p = P3(cx, cy, z); return [Math.round(p[0] - c.width + (dx || 0)), Math.round(p[1] - c.height * 2 + 3)] }
+    function put(c, z, k, dx) { var q = tl(c, z, dx); objs.push({ k: k == null ? cx + cy + 10 : k, f: function () { bimg(B, c, q[0], q[1], 2) } }); return q }
+    var d = D0.day, q;
+    if (d === 'tue') { plinth(12); q = put(SYM.phone, 17); fx.push({ k: 'ring5', p: [q[0] + 36, q[1] + 14] }) }
+    else if (d === 'wed') { q = put(SYM.mails, 46, 9999); fx.push({ k: 'mails5', p: [q[0] + 58, q[1] + 10] }) }
+    else if (d === 'thu') { plinth(3, { top: '#2F3A1F', left: '#1E2816', right: '#151B10', win: '#C6EE48', dark: '#0A0D08', lit: .4 }); q = put(SYM.server, 6); fx.push({ k: 'virus5', p: [q[0] + 22, q[1] + 56] }) }
+    else if (d === 'fri') { put(SYM.van, 0, null, -14); put(SYM.parcels, 0, cx + cy + 11, 44) }
+    else if (d === 'sat') { q = put(SYM.star, 0); fx.push({ k: 'bulbs5', p: [q[0] + 2, q[1] + 2] }) }
+    else if (d === 'sun') { [[-8, 8], [8, -8], [0, 14]].forEach(function (b) { objs.push({ k: cx + cy + b[0] + b[1] + 2, f: function () { var p = P3(cx + b[0], cy + b[1], 0); bimg(B, SYM.bench, p[0] - 7, p[1] - 7) } }) }); objs.push({ k: cx + cy + 1, f: function () { itree(B, cx + 2, cy - 2, 9, 9, ['#2E4A2C', '#4E7A44', '#8AA870']) } }) }
+  };
+  var FX3_PREV = fx3;
+  fx3 = function (ctx, e, t, D0) {
+    var p = e.p, i;
+    if (e.k === 'ring5') { if (((t * 3) | 0) % 2 === 0) { ctx.fillStyle = '#5FD3FF'; for (i = 0; i < 3; i++) { var r = 42 + i * 8, hh = 12 - i * 3; ctx.fillRect(p[0] - r, p[1] - hh / 2, 2, hh); ctx.fillRect(p[0] + r - 2, p[1] - hh / 2, 2, hh) } } }
+    else if (e.k === 'mails5') { for (i = 0; i < 3; i++) { var f = (t * .35 + i / 3) % 1, mx = Math.round(p[0] - 34 + i * 30 + Math.sin(f * 6 + i) * 8), my = Math.round(p[1] - f * 40); ctx.globalAlpha = 1 - f; ctx.fillStyle = '#05070C'; ctx.fillRect(mx - 2, my - 2, 18, 14); ctx.fillStyle = C.cream; ctx.fillRect(mx, my, 14, 10); ctx.fillStyle = '#8E8A80'; ctx.fillRect(mx + 2, my + 2, 2, 2); ctx.fillRect(mx + 4, my + 4, 6, 2); ctx.fillRect(mx + 10, my + 2, 2, 2) } ctx.globalAlpha = 1 }
+    else if (e.k === 'virus5') { var k = .5 + .5 * Math.sin(t * 4); ctx.globalAlpha = .08 + .1 * k; ctx.fillStyle = '#A6F04A'; ctx.fillRect(p[0] - 34, p[1] - 30, 68, 60); ctx.fillRect(p[0] - 24, p[1] - 44, 48, 88); ctx.globalAlpha = 1; ctx.fillStyle = '#C6EE48'; for (i = 0; i < 8; i++) { var ph = (t * .8 + i / 8) % 1; ctx.fillRect(Math.round(p[0] - 22 + hash(i) * 44), Math.round(p[1] + 10 - ph * 50), 2, 2) } }
+    else if (e.k === 'bulbs5') { var ch = (t * 8) | 0; for (i = 0; i < 68; i += 6) { ctx.fillStyle = ((i / 6 + ch) % 3 === 0) ? '#FFE0A0' : '#7A4434'; ctx.fillRect(p[0] + 2 + i, p[1], 2, 2); ctx.fillRect(p[0] + 2 + i, p[1] + 58, 2, 2) } }
+    else FX3_PREV(ctx, e, t, D0);
+  };
+  // furgone e pacchi anche come attori (FRIDAY): pixel di gioco, x2 sul canvas HD
+  ART.van = function (ctx, x, y, t, o) { if (!SYM) buildSym(); o = o || {}; var S = SC(ctx), c = SYM.van, b = ((t * 10) | 0) % 2 && o.moving ? 1 : 0; ctx.drawImage(c, Math.round((x - c.width / 2) * S), Math.round((y - c.height / 2 - b) * S), c.width * S, c.height * S) };
+  ART.size.van = { w: 48, h: 27 };
 })();
