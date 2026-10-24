@@ -399,6 +399,8 @@ def marchio(t):
     return t
 
 def studio(t):
+    # regola 03: non ripete il titolo della home (deciso da Eso, 24 ottobre)
+    t = una(t, '<b>One number to move.</b>', '<b>We measure what matters.</b>', 'studio: regola 03')
     """01 Studio (ottobre 2026, con Eso). Quattro idee, una per sezione, dentro lo stile del sito:
     1. l'apertura e' un disegno tecnico: il titolo nasce a contorno con le linee di misura e scorrendo si riempie
        (chi disegna e' chi costruisce). Via la targhetta grigia con numero di serie e ore inventate.
@@ -570,6 +572,8 @@ def ritocchi(nome, t):
         assert s > 0 and e > s and '/* 5 · machine room */' in t[s:e], 'script scene 2-5'
         t = t[:s] + t[e:]
         t = una(t, '<b>Book a free call</b>', '<b>Book a call</b>', 'contact: free')
+        # la riga privacy sotto il modulo (deciso da Eso, 24 ottobre)
+        t = una(t, '\n      </footer>\n\n      <div class="wook" hidden>', '\n      </footer>\n      <p class="mo mut fpriv" style="margin:14px 0 0;font-size:11px;letter-spacing:.06em">We only use this to answer you. <a href="/privacy" style="color:inherit;text-decoration:underline;text-underline-offset:3px">Privacy</a>.</p>\n\n      <div class="wook" hidden>', 'contact: privacy')
 
     if nome == 'brand':
         # via la prima sezione (titolo e vetrina): l'apertura diventa la leva "Assembled / Taken apart"

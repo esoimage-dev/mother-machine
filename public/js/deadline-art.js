@@ -2116,7 +2116,7 @@
       ctx.fillStyle = isDone ? C.cream : isOpen ? C.cream : '#4A5266'; ctx.fillRect(rx0 - 2, ry0 - 2, 5, 5); ctx.fillStyle = C.night; ctx.fillRect(rx0 - 1, ry0 - 1, 3, 3); if (isDone || isCur) { ctx.fillStyle = isCur ? C.tomato : C.cream; ctx.fillRect(rx0, ry0, 1, 1) }
       if (isCur) { var pz = s.pulse != null ? s.pulse : (Math.sin(t * 6) * .5 + .5), rr = 9 + Math.round(pz * 4); ctx.fillStyle = C.tomato; for (var cv = 0; cv < 4; cv++) { var v = CORN[cv], x1 = rx0 + v[0] * rr, y1 = ry0 + v[1] * rr; ctx.fillRect(v[0] > 0 ? x1 - 4 : x1, y1, 5, 1); ctx.fillRect(x1, v[1] > 0 ? y1 - 4 : y1, 1, 5) } }
       if (s.labels !== false) {
-        var tw = textWidth(name, 1) * 2 + 10, lx = nx - (tw >> 1), ly = ny + 10;
+        var tw = textWidth(name, 1) * 2 + 10, lx = nx - (tw >> 1), ly = ny + 10 + (n === 6 ? -6 : n === 2 ? 8 : 0);   /* MONDAY e THURSDAY non si toccano */
         ctx.fillStyle = 'rgba(10,12,18,0.88)'; ctx.fillRect(lx, ly, tw, 20); ctx.fillStyle = n === 6 ? C.crim3 : isOpen ? C.cream : C.g3; ctx.fillRect(lx, ly, tw, 1); ctx.fillRect(lx, ly + 19, 4, 1); ctx.fillRect(lx + tw - 4, ly + 19, 4, 1);
         text(ctx, name, nx - (textWidth(name, 1)), ly + 4, { size: 2, color: n === 6 ? C.crim3 : isOpen ? C.cream : C.g3 });
         var sys = (s.installed || { 0: 'booking', 1: 'auto', 2: 'ai', 3: 'night' })[n]; if (isDone && sys && IC2[sys]) { ctx.fillStyle = 'rgba(10,12,18,0.88)'; ctx.fillRect(lx - 22, ly, 20, 20); ctx.fillStyle = C.tomato; ctx.fillRect(lx - 22, ly, 20, 1); ctx.drawImage(IC2[sys][0], lx - 19, ly + 3) }
@@ -2125,7 +2125,7 @@
       }
     }
     // la nave che viaggia (sprite della nave, piccolo)
-    if (s.ship !== false) { var sp2 = ART.mapPoint(s.shipPos == null ? cur : s.shipPos), bob = Math.sin(t * 5) * 2;  var sv = ART.actorScale; ART.actorScale = 2; ART.ship(ctx, sp2.x, sp2.y - 12 + bob / 2, t, { thrust: .8, still: 1 }); ART.actorScale = sv }
+    if (s.ship !== false) { var spp = s.shipPos == null ? cur : s.shipPos, sp2 = ART.mapPoint(spp), bob = Math.sin(t * 5) * 2; if (spp > 5.5) sp2 = { x: sp2.x - 30 * Math.min(1, (spp - 5.5) * 2), y: sp2.y + 10 * Math.min(1, (spp - 5.5) * 2) };   /* alla torre M8 si ferma di lato: la faccia di MONDAY resta libera */  var sv = ART.actorScale; ART.actorScale = 2; ART.ship(ctx, sp2.x, sp2.y - 12 + bob / 2, t, { thrust: .8, still: 1 }); ART.actorScale = sv }
     ctx.restore();
   };
   function fx3(ctx, e, t, D0) {
@@ -3185,7 +3185,7 @@
     gr(g, 1, 1, 36, 30, 'b'); gbox(g, 1, 1, 36, 30, 'B');
     var st = []; for (var a = 0; a < 10; a++) { var r = a % 2 ? 6 : 13, an = -Math.PI / 2 + a * Math.PI / 5; st.push([19 + Math.cos(an) * r, 16.5 + Math.sin(an) * r]) } gpoly(g, st, 'y');
     for (y = 0; y < 54; y++) for (x = 0; x < 38; x++) if (g.a[y][x] === 'y') { if (gg(g, x, y + 1) !== 'y' || gg(g, x + 1, y) !== 'y') g.a[y][x] = 'Y'; else if (gg(g, x, y - 1) !== 'y' || gg(g, x - 1, y) !== 'y') g.a[y][x] = 'c' }
-    SYM.star = can(ol5(g), symPal({ b: '#3A201C', B: '#7A4434', y: '#FFC56A', Y: '#B5713E' }));
+    SYM.star = can(ol5(g), symPal({ b: '#3A201C', B: '#7A4434', y: '#FFC56A', Y: '#B5713E', c: '#FFE29A' }));   /* la luce della stella resta dorata, non crema */
     // panchina del parco
     g = grid(14, 8); gr(g, 1, 1, 12, 2, 'w'); gr(g, 1, 4, 12, 1, 'w'); gr(g, 1, 3, 12, 1, 'W'); gr(g, 2, 5, 1, 3, 'S'); gr(g, 11, 5, 1, 3, 'S');
     SYM.bench = can(ol5(g), symPal({ w: '#9A6A44', W: '#6E4A2E' }));
